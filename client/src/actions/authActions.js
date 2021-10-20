@@ -8,7 +8,7 @@ import {
 
 import axios from 'axios'
 
-const URL = 'https://localhost:3000'
+const URL = 'http://localhost:5000'
 
 export const login = ({ email, password, history }) => async (dispatch) => {
     const config = {
@@ -33,22 +33,23 @@ export const login = ({ email, password, history }) => async (dispatch) => {
     }
 }
 
-export const register = ({ username, email, password, history }) => async (dispatch) => {
+export const signup = ({ name, email, password, history }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
     
-    const body = JSON.stringify({ username, email, password })
+    const body = JSON.stringify({ name, email, password })
     try {
-        const res = await axios.post(`${URL}/api/users/register`, body, config)
+        const res = await axios.post(`${URL}/api/users/signup`, body, config)
         dispatch ({
             type: REGISTER_SUCCESS,
             payload: res.data
         })
         history.push('/')
     } catch (error) {
+        console.log(error.msg)
         dispatch ({
             type: REGISTER_FAIL
         })
