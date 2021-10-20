@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use('api/user', userRoutes);
+app.use('api/users', userRoutes);
 
 mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
