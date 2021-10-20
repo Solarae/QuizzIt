@@ -1,10 +1,11 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const cors = require('cors')
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
 
-import userRoutes from './routes/api/users.js'
+import userRoutes from './routes/user.js'
 
-require('dotenv').config()
+dotenv.config()
 
 const { MONGO_URI } = process.env 
 
