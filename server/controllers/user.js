@@ -2,6 +2,8 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from '../models/User.js'
 
+import { JWT_SECRET } from '../config.js';
+
 export const signin = async (req, res) => {
     const { email, password } = req.body;
 
@@ -29,8 +31,7 @@ export const signin = async (req, res) => {
 }
 
 export const signup = async (req, res) => {
-    const { name, email, password } = req.body
-    console.log(name)
+    const { username, email, password } = req.body
 
     try {
         const user = await User.findOne({ email })
@@ -40,13 +41,13 @@ export const signup = async (req, res) => {
         const hash = await bcrypt.hash(password, salt)
 
         const newUser = new User({
-            name: name,
+            username: username,
             email: email,
             password: hash,
         })
 
-        await newUser.save()
-        if (!user) return res.status(404).json({ msg: "Something went wrong with registering the user" });
+        const resUser = await newUser.save();
+        if (!resUser) return res.status(404).json({ msg: "Something went wrong with registering the user" });
 
         const token = jwt.sign({ id: newUser._id }, JWT_SECRET, {
             expiresIn: 3600

@@ -7,7 +7,7 @@ import userRoutes from './routes/user.js'
 
 dotenv.config()
 
-const { MONGO_URI } = process.env 
+import { MONGO_URI } from './config.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -20,8 +20,9 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use('api/users', userRoutes);
 
 mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
     .catch(error => console.log(error.message));
+
+app.use('/api/users', userRoutes);

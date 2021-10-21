@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 
 require("dotenv").config();
 
-const { JWT_SECRET } = process.env 
+import { JWT_SECRET } from '../config.js';
 
 const auth = (req, res, next) => {
     const token = req.header('x-auth-token');

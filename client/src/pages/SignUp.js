@@ -20,7 +20,7 @@ function SignIn() {
     
         if (!username || !email || !password) return 
         dispatch(signup({ 
-            name: username, 
+            username: username, 
             email: email, 
             password: password, 
             history: history 

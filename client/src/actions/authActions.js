@@ -33,14 +33,13 @@ export const login = ({ email, password, history }) => async (dispatch) => {
     }
 }
 
-export const signup = ({ name, email, password, history }) => async (dispatch) => {
+export const signup = ({ username, email, password, history }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    
-    const body = JSON.stringify({ name, email, password })
+    const body = JSON.stringify({ username, email, password })
     try {
         const res = await axios.post(`${URL}/api/users/signup`, body, config)
         dispatch ({
