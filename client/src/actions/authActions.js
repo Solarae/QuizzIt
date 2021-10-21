@@ -10,7 +10,7 @@ import axios from 'axios'
 
 const URL = 'http://localhost:5000'
 
-export const login = ({ email, password, history }) => async (dispatch) => {
+export const login = ({ email, password, history, callback }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -24,6 +24,7 @@ export const login = ({ email, password, history }) => async (dispatch) => {
             type: LOGIN_SUCCESS,
             payload: res.data
         })
+        callback();
         history.push('/')
     } catch (error) {
         console.log(error.message)
@@ -33,7 +34,7 @@ export const login = ({ email, password, history }) => async (dispatch) => {
     }
 }
 
-export const signup = ({ username, email, password, history }) => async (dispatch) => {
+export const signup = ({ username, email, password, history, callback }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -46,6 +47,7 @@ export const signup = ({ username, email, password, history }) => async (dispatc
             type: REGISTER_SUCCESS,
             payload: res.data
         })
+        callback();
         history.push('/')
     } catch (error) {
         console.log(error.msg)
@@ -55,7 +57,7 @@ export const signup = ({ username, email, password, history }) => async (dispatc
     }
 }
 
-export const logout = (history) => (dispatch) => {
+export const logout = (history) => async (dispatch) => {
     dispatch ({
         type: LOGOUT_SUCCESS
     })
