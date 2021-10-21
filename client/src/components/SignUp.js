@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Form, Button, Modal } from "react-bootstrap";
+import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
 import { signup } from '../actions/authActions'
 import { useHistory } from 'react-router-dom';
@@ -20,16 +20,18 @@ function SignUp({ show, handleClose }) {
     setValues({ ...values, [e.target.name]: e.target.value });
   }
 
-  const closeModal = () => {
+  const closeModal = (err) => {
+    if (err) {
+      setErrors({ ...err });
+      return;
+    }
     setValues({ ...values, username: "", email: "", password: "" });
+    setErrors({});
     handleClose();
   }
 
   const handleSubmit = ((e) => {
     e.preventDefault();
-
-    console.log(values.username);
-    if (!values.username || !values.email || !values.password) return;
 
     dispatch(signup({
       username: values.username,
@@ -51,7 +53,7 @@ function SignUp({ show, handleClose }) {
             <Form.Label>Username</Form.Label>
             <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
           </Form.Group>
-          
+
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control type="email" placeholder="Email" name="email" onChange={onChange} />
@@ -63,6 +65,17 @@ function SignUp({ show, handleClose }) {
           </Form.Group>
         </Form>
       </Modal.Body>
+      {Object.keys(errors).length > 0 && (
+        <Form.Text className="text-muted">
+          <Alert variant={'danger'}>
+            <ul className='list'>
+              {Object.values(errors).map(v => (
+                <li key={v}>{v}</li>
+              ))}
+            </ul>
+          </Alert>
+        </Form.Text>
+      )}
       <Modal.Footer>
         <Button variant="primary" onClick={handleSubmit}>
           Sign Up

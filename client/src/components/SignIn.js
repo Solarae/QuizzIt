@@ -12,7 +12,7 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
     const history = useHistory()
 
     const [values, setValues] = useState({
-        email: "",
+        username: "",
         password: "",
     });
 
@@ -20,22 +20,24 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    const closeModal = () => {
-        setValues({ ...values, email: "", password: "" });
+    const closeModal = (err) => {
+        if (err) {
+            setErrors({...err})
+            return;
+        }
+        setValues({ ...values, username: "", password: "" });
+        setErrors({});
         handleClose();
     }
 
     const handleSubmit = ((e) => {
         e.preventDefault();
 
-        console.log(values.email);
-        if (!values.email || !values.password) return;
-
-        dispatch(login({ email: values.email, password: values.password, history: history, callback: closeModal }))
+        dispatch(login({ username: values.username, password: values.password, history: history, callback: closeModal }))
     })
 
-    const onClickSignUp = () =>{
-        setValues({ ...values, email: "", password: "" });
+    const onClickSignUp = () => {
+        setValues({ ...values, username: "", password: "" });
         handleShowSignUp();
     }
 
@@ -47,9 +49,9 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
             </Modal.Header>
             <Modal.Body>
                 <Form>
-                    <Form.Group className="mb-3" controlId="formBasicEmail">
-                        <Form.Label>Email</Form.Label>
-                        <Form.Control type="email" placeholder="Email" name="email" onChange={onChange} />
+                    <Form.Group className="mb-3" controlId="formBasicUsername">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
                     </Form.Group>
 
                     <Form.Group className="mb-3" controlId="formBasicPassword">
@@ -71,7 +73,7 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
                 </Form.Text>
             )}
             <Modal.Footer className="justify-content-between">
-            <a href="#" onClick={onClickSignUp} class="link-secondary">Don't have an account? Sign Up</a>
+                <a href="#" onClick={onClickSignUp} class="link-secondary">Don't have an account? Sign Up</a>
                 <Button variant="primary" onClick={handleSubmit}>
                     Sign In
                 </Button>
