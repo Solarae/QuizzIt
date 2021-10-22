@@ -1,9 +1,11 @@
-import { 
-    LOGIN_SUCCESS, 
-    LOGIN_FAIL, 
-    LOGOUT_SUCCESS, 
-    REGISTER_SUCCESS, 
-    REGISTER_FAIL 
+import {
+    LOGIN_SUCCESS,
+    LOGIN_FAIL,
+    LOGOUT_SUCCESS,
+    REGISTER_SUCCESS,
+    REGISTER_FAIL,
+    EDIT_PROFILE_SUCCESS,
+    EDIT_PROFILE_FAIL
 } from '../actions/types'
 
 const initialState = {
@@ -14,7 +16,7 @@ const initialState = {
 }
 
 const authReducer = (state = initialState, action) => {
-    switch(action.type) {
+    switch (action.type) {
         case LOGIN_SUCCESS:
             localStorage.setItem('token', action.payload.token);
             return {
@@ -38,7 +40,7 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: null,
                 user: null
             }
-        case REGISTER_FAIL: 
+        case REGISTER_FAIL:
             localStorage.removeItem('token')
             return {
                 ...state,
@@ -46,6 +48,14 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: null,
                 user: null
             }
+        case EDIT_PROFILE_SUCCESS:
+            localStorage.setItem('token', action.payload.token);
+            return {
+                ...state,
+                ...action.payload,
+                isAuthenticated: true
+            }
+        case EDIT_PROFILE_FAIL:
         default:
             return state
     }
