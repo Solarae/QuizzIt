@@ -94,18 +94,17 @@ export const editAccount = async (req, res) => {
         const user = await User.findById(req.params.id)
         if (!user) return res.status(404).json({ msg: "User doesn't exist" });
 
-        const newUser;
         if (name) {
-            newUser = await User.findByIdAndUpdate(req.params.id, { name: name }, { new : true })
+            const newUser = await User.findByIdAndUpdate(req.params.id, { name: name }, { new : true })
         } else if (password) {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
-            newUser = await User.findByIdAndUpdate(req.params.id, { password: hash }, { new : true })
+            const newUser = await User.findByIdAndUpdate(req.params.id, { password: hash }, { new : true })
         } else {
-            newUser = await User.findByIdAndUpdate(req.params.id, { email: email }, { new : true })
+            const newUser = await User.findByIdAndUpdate(req.params.id, { email: email }, { new : true })
         }
         if (!newUser) return res.status(200).json({ success: false})
-        return res.status(200).json({ success: true })
+        return res.status(200).json({ success: true, data: newUser })
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
