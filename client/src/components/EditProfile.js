@@ -4,16 +4,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { signup } from '../actions/authActions'
 import { useHistory } from 'react-router-dom';
 
-function EditProfile({ show, handleClose }) {
+function EditProfile({ type, show, handleClose }) {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [values, setValues] = useState({
-    username: auth.user.username,
-    email: auth.user.email,
-    password: "",
+    field: auth.user.username,
   });
 
   const onChange = (e) => {
@@ -25,7 +23,7 @@ function EditProfile({ show, handleClose }) {
       setErrors({ ...err });
       return;
     }
-    setValues({ ...values, username: auth.user.username ,email: auth.user.email, password: ""});
+    setValues({ ...values, field: ""});
     setErrors({});
     handleClose();
   }
@@ -45,23 +43,13 @@ function EditProfile({ show, handleClose }) {
   return (
     <Modal style={{ color: "black" }} show={show} onHide={closeModal} >
       <Modal.Header closeButton>
-        <Modal.Title>Edit Profile</Modal.Title>
+        <Modal.Title>Edit {type}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
-          <Form.Group className="mb-3" controlId="formBasicUsername">
-            <Form.Label>Username</Form.Label>
-            <Form.Control type="username" defaultValue={values.username} name="username" onChange={onChange} />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" defaultValue={values.email} name="email" onChange={onChange} />
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>New Password</Form.Label>
-            <Form.Control type="password" placeholder="New Password" name="password" onChange={onChange} />
+          <Form.Group className="mb-3" controlId="formBasicField">
+            <Form.Label>Enter New {type} </Form.Label>
+            <Form.Control type="field" placeholder={type} name="field" onChange={onChange} />
           </Form.Group>
         </Form>
       </Modal.Body>
