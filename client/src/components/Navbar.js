@@ -26,9 +26,20 @@ function AppNavbar() {
   const handleShowSignUp = () => { setValues({ ...values, showSignUp: true, showSignIn: false }) };
 
   return (
-    <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
+    <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{minWidth: "1300px !important;"}}>
       <Container>
-        <LinkContainer to='/'><Navbar.Brand>QuizzIt</Navbar.Brand></LinkContainer>
+        <LinkContainer to='/'>
+          <Navbar.Brand >
+            <img
+              alt=""
+              src="/quizzit_logo.png"
+              width="30px"
+              height="30px"
+              className="d-inline-block align-top"
+            />{' '}
+            Quizzit
+          </Navbar.Brand>
+        </LinkContainer>
         <Navbar.Collapse id="responsive-navbar-nav" class='ml-auto'>
           {auth.isAuthenticated ?
             (

@@ -1,3 +1,7 @@
 .dropdown-toggle::after {
   display: none;
 }
+
+.navbar-custom {
+  height: 70px;
+}
