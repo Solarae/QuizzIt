@@ -4,15 +4,15 @@ import { useSelector, useDispatch } from 'react-redux'
 import { signup } from '../actions/authActions'
 import { useHistory } from 'react-router-dom';
 
-function SignUp({ show, handleClose }) {
+function EditProfile({ show, handleClose }) {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [values, setValues] = useState({
-    username: "",
-    email: "",
+    username: auth.user.username,
+    email: auth.user.email,
     password: "",
   });
 
@@ -25,7 +25,7 @@ function SignUp({ show, handleClose }) {
       setErrors({ ...err });
       return;
     }
-    setValues({ ...values, username: "", email: "", password: "" });
+    setValues({ ...values, username: auth.user.username ,email: auth.user.email, password: ""});
     setErrors({});
     handleClose();
   }
@@ -33,35 +33,35 @@ function SignUp({ show, handleClose }) {
   const handleSubmit = ((e) => {
     e.preventDefault();
 
-    dispatch(signup({
-      username: values.username,
-      email: values.email,
-      password: values.password,
-      history: history,
-      callback: closeModal
-    }))
+    // dispatch(signup({
+      // username: values.username,
+      // email: values.email,
+      // password: values.password,
+      // history: history,
+      // callback: closeModal
+    // }))
   })
 
   return (
     <Modal style={{ color: "black" }} show={show} onHide={closeModal} >
       <Modal.Header closeButton>
-        <Modal.Title>Sign Up</Modal.Title>
+        <Modal.Title>Edit Profile</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label>Username</Form.Label>
-            <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
+            <Form.Control type="username" defaultValue={values.username} name="username" onChange={onChange} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Email" name="email" onChange={onChange} />
+            <Form.Control type="email" defaultValue={values.email} name="email" onChange={onChange} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
-            <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
+            <Form.Label>New Password</Form.Label>
+            <Form.Control type="password" placeholder="New Password" name="password" onChange={onChange} />
           </Form.Group>
         </Form>
       </Modal.Body>
@@ -78,7 +78,7 @@ function SignUp({ show, handleClose }) {
       )}
       <Modal.Footer>
         <Button variant="primary" onClick={handleSubmit}>
-          Sign Up
+          Save
         </Button>
       </Modal.Footer>
     </Modal>
@@ -87,4 +87,4 @@ function SignUp({ show, handleClose }) {
 }
 
 
-export default SignUp;
+export default EditProfile;
