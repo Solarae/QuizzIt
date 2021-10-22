@@ -95,17 +95,25 @@ export const editAccount = async (req, res) => {
         if (!user) return res.status(404).json({ msg: "User doesn't exist" });
 
         var newUser;
-        if (username) {
+        if (username && username.trim()!=="") {
+            console.log(username)
             newUser = await User.findByIdAndUpdate(id, { username: username }, { new: true })
-        } else if (password) {
+        } else if (password && password.trim()!=="") {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
             newUser = await User.findByIdAndUpdate(id, { password: hash }, { new: true })
-        } else if (email) {
+        } else if (email && email.trim()!=="" && email.includes("@")) {
             newUser = await User.findByIdAndUpdate(id, { email: email }, { new: true })
         }
         if (!newUser) return res.status(200).json({ success: false })
-        return res.status(200).json({ success: true, data: newUser })
+        return res.status(200).json({
+            success: true,
+            user: {
+                id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+            }
+        })
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
