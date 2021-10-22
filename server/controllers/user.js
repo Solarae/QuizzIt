@@ -6,7 +6,7 @@ import { JWT_SECRET } from '../config.js';
 import { validateSignUpInput, validateSignInInput } from '../util/validators.js';
 
 export const signin = async (req, res) => {
-    const { username , password } = req.body;
+    const { username, password } = req.body;
     const { errors, valid } = validateSignInInput(username, password);
 
     if (!valid) {
@@ -78,7 +78,7 @@ export const signup = async (req, res) => {
             token,
             user: {
                 id: newUser._id,
-                name: newUser.name,
+                username: newUser.username,
                 email: newUser.email,
             }
         })
@@ -88,22 +88,23 @@ export const signup = async (req, res) => {
 }
 
 export const editAccount = async (req, res) => {
-    const { name, email, password } = req.body
+    const { id, username, email, password } = req.body
 
     try {
-        const user = await User.findById(req.params.id)
+        const user = await User.findById(id)
         if (!user) return res.status(404).json({ msg: "User doesn't exist" });
 
-        if (name) {
-            const newUser = await User.findByIdAndUpdate(req.params.id, { name: name }, { new : true })
+        var newUser;
+        if (username) {
+            newUser = await User.findByIdAndUpdate(id, { username: username }, { new: true })
         } else if (password) {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
-            const newUser = await User.findByIdAndUpdate(req.params.id, { password: hash }, { new : true })
-        } else {
-            const newUser = await User.findByIdAndUpdate(req.params.id, { email: email }, { new : true })
+            newUser = await User.findByIdAndUpdate(id, { password: hash }, { new: true })
+        } else if (email) {
+            newUser = await User.findByIdAndUpdate(id, { email: email }, { new: true })
         }
-        if (!newUser) return res.status(200).json({ success: false})
+        if (!newUser) return res.status(200).json({ success: false })
         return res.status(200).json({ success: true, data: newUser })
     } catch (error) {
         res.status(404).json({ msg: error.message })
