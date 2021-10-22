@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
-import { signup } from '../actions/authActions'
+import { editProfile } from '../actions/profileActions'
 import { useHistory } from 'react-router-dom';
 
 function EditProfile({ type, show, handleClose }) {
@@ -11,7 +11,7 @@ function EditProfile({ type, show, handleClose }) {
   const history = useHistory()
 
   const [values, setValues] = useState({
-    field: auth.user.username,
+    field: "",
   });
 
   const onChange = (e) => {
@@ -23,7 +23,7 @@ function EditProfile({ type, show, handleClose }) {
       setErrors({ ...err });
       return;
     }
-    setValues({ ...values, field: ""});
+    setValues({ ...values, field: "" });
     setErrors({});
     handleClose();
   }
@@ -31,13 +31,36 @@ function EditProfile({ type, show, handleClose }) {
   const handleSubmit = ((e) => {
     e.preventDefault();
 
-    // dispatch(signup({
-      // username: values.username,
-      // email: values.email,
-      // password: values.password,
-      // history: history,
-      // callback: closeModal
-    // }))
+    console.log(type + ", " + values.field);
+
+    if (type === "Username") {
+      dispatch(editProfile({
+        id: auth.user.id,
+        username: values.field,
+        history: history,
+      }))
+
+    }
+    else if (type === "Email") {
+      dispatch(editProfile({
+        id: auth.user.id,
+        email: values.field,
+        history: history,
+      }))
+
+    }
+    else if (type === "Password"){
+      dispatch(editProfile({
+        id: auth.user.id,
+        password: values.field,
+        history: history,
+      }))
+    }
+    else{
+      console.log("Error")
+    }
+
+    closeModal()
   })
 
   return (
@@ -49,7 +72,7 @@ function EditProfile({ type, show, handleClose }) {
         <Form>
           <Form.Group className="mb-3" controlId="formBasicField">
             <Form.Label>Enter New {type} </Form.Label>
-            <Form.Control type="field" placeholder={type} name="field" onChange={onChange} />
+            <Form.Control type="field" defaultValue="" placeholder={type} name="field" onChange={onChange} />
           </Form.Group>
         </Form>
       </Modal.Body>
