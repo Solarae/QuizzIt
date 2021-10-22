@@ -8,7 +8,8 @@ import {
 
 import axios from 'axios'
 
-const URL = 'http://localhost:5000'
+import {SERVER_URL} from '../config.js'
+const URL = SERVER_URL ;
 
 export const login = ({ username, password, history, callback }) => async (dispatch) => {
     const config = {
