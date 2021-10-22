@@ -8,8 +8,7 @@ import {
 
 import axios from 'axios'
 
-import {SERVER_URL} from '../config.js'
-const URL = SERVER_URL ;
+import { URL } from '../config.js'
 
 export const login = ({ username, password, history, callback }) => async (dispatch) => {
     const config = {

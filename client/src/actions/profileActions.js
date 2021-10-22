@@ -1,4 +1,3 @@
-
 import {
     EDIT_PROFILE_SUCCESS,
     EDIT_PROFILE_FAIL
@@ -6,9 +5,7 @@ import {
 
 import axios from 'axios'
 
-import {SERVER_URL} from '../config.js'
-
-const URL = SERVER_URL ;
+import { URL } from '../config.js'
 
 export const editProfile = ({ id, username, email, password, history}) => async (dispatch) => {
     const config = {
