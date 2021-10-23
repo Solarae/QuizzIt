@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from '../models/User.js'
 
 import { JWT_SECRET } from '../config.js';
-import { validateSignUpInput, validateSignInInput } from '../util/validators.js';
+import { validateSignUpInput, validateSignInInput, validateEmail } from '../util/validators.js';
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -96,10 +96,31 @@ export const editAccount = async (req, res) => {
         if (!user) return res.status(404).json({ msg: "User doesn't exist" });
 
         var newUser;
-        if (username && username.trim() !== "") {
-            console.log(username)
+        if (username!=null) {
+            if (username.trim() == "") {
+                errors.emptyUsername = "Username cannot be empty"
+                return res.status(200).json({ errors: errors });
+            }
+
+            // check if user with username already exists
+            const existingUser = await User.findOne({ username: username })
+            if (existingUser) {
+                errors.existingUser = "User with username already exists"
+                return res.status(200).json({ errors: errors });
+            }
+
+            // update user 
             newUser = await User.findByIdAndUpdate(id, { username: username }, { new: true })
-        } else if (password && password.trim() !== "") {
+        } else if (password!=null) {
+            if (currentPassword.trim() == "") {
+                errors.emptyCurrentPassword = "Fields cannot be empty"
+                return res.status(200).json({ errors: errors });
+            }
+            if (password.trim() == "") {
+                errors.emptyNewPassword= "Fields cannot be empty"
+                return res.status(200).json({ errors: errors });
+            }
+
             // password confirmation before changing password
             const isMatch = await bcrypt.compare(currentPassword, user.password);
             if (!isMatch) {
@@ -107,10 +128,18 @@ export const editAccount = async (req, res) => {
                 return res.status(200).json({ errors: errors });
             }
 
+            // update user with new password
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
             newUser = await User.findByIdAndUpdate(id, { password: hash }, { new: true })
-        } else if (email && email.trim() !== "" && email.includes("@")) {
+        } else if (email!=null) {
+            // check if new email is valid 
+            if (!validateEmail(email)){
+                errors.invalidEmail = "Invalid Email Address";
+                return res.status(200).json({ errors: errors });
+            }
+
+            // update user with new email 
             newUser = await User.findByIdAndUpdate(id, { email: email }, { new: true })
         }
 

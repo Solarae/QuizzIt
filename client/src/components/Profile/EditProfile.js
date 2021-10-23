@@ -20,10 +20,13 @@ function EditProfile({ type, show, handleClose }) {
   }
 
   const closeModal = (err) => {
+    // check if our request sent back any input errors and display it to user
     if (err) {
       setErrors({ ...err });
       return;
     }
+
+    // else reset state values and close modal 
     setValues({ ...values, field: "", currentPassword: "" });
     setErrors({});
     handleClose();
@@ -39,6 +42,7 @@ function EditProfile({ type, show, handleClose }) {
         id: auth.user.id,
         username: values.field,
         history: history,
+        callback: closeModal
       }))
 
     }
@@ -47,6 +51,7 @@ function EditProfile({ type, show, handleClose }) {
         id: auth.user.id,
         email: values.field,
         history: history,
+        callback: closeModal
       }))
 
     }
@@ -75,13 +80,13 @@ function EditProfile({ type, show, handleClose }) {
           {type === "Password" && (
             <Form.Group className="mb-3" controlId="formBasicField">
               <Form.Label>Current {type} </Form.Label>
-              <Form.Control type="currentPassword" defaultValue="" placeholder="Current Password" name="currentPassword" onChange={onChange} />
+              <Form.Control type="password" defaultValue="" placeholder="Current Password" name="currentPassword" onChange={onChange} />
             </Form.Group>
 
           )}
           <Form.Group className="mb-3" controlId="formBasicField">
             <Form.Label>New {type} </Form.Label>
-            <Form.Control type="field" defaultValue="" placeholder={type} name="field" onChange={onChange} />
+            <Form.Control type={type==="Password" ? "password" : "field"} defaultValue="" placeholder={type} name="field" onChange={onChange} />
           </Form.Group>
         </Form>
       </Modal.Body>

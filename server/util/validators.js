@@ -10,8 +10,7 @@ export const validateSignUpInput = (
     if (email.trim() === '') {
         errors.email = 'Email must not be empty';
     } else {
-        const regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
-        if (!email.match(regEx)) {
+        if (!validateEmail(email)) {
             errors.email = 'Email must be a valid email address';
         }
     }
@@ -39,4 +38,9 @@ export const validateSignInInput = (username, password) => {
         errors,
         valid: Object.keys(errors).length < 1
     }
+}
+
+export const validateEmail = (email) => {
+    const regEx = /^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/;
+    return email.match(regEx);
 }

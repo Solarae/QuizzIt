@@ -9,7 +9,7 @@ import axios from 'axios'
 
 import { URL } from '../config.js'
 
-export const editProfile = ({ id, username, email, password, currentPassword, history, callback}) => async (dispatch) => {
+export const editProfile = ({ id, username, email, password, currentPassword, history, callback }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -30,7 +30,10 @@ export const editProfile = ({ id, username, email, password, currentPassword, hi
             })
 
         }
+
+        // send any request errors to callback function
         callback(res.data.errors);
+
         history.push('/profile')
     } catch (error) {
         console.log(error.message)
@@ -62,6 +65,7 @@ export const deleteProfile = ({ id, password, history, callback }) => async (dis
 
         }
 
+        // send any request errors to callback function
         callback(res.data.errors);
 
         // redirect to home page if no errors 
