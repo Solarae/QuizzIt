@@ -47,40 +47,40 @@ function SignUp({ show, handleClose }) {
       <Modal.Header closeButton>
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label>Username</Form.Label>
             <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Label>Email address</Form.Label>
-            <Form.Control type="email" placeholder="Email" name="email" onChange={onChange} />
+            <Form.Label>Email Address</Form.Label>
+            <Form.Control type="field" placeholder="Email" name="email" onChange={onChange} />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
             <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
           </Form.Group>
-        </Form>
-      </Modal.Body>
-      {Object.keys(errors).length > 0 && (
-        <Form.Text className="text-muted">
-          <Alert variant={'danger'}>
-            <ul className='list'>
-              {Object.values(errors).map(v => (
-                <li key={v}>{v}</li>
-              ))}
-            </ul>
-          </Alert>
-        </Form.Text>
-      )}
-      <Modal.Footer>
-        <Button variant="primary" onClick={handleSubmit}>
-          Sign Up
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+        {Object.keys(errors).length > 0 && (
+          <Form.Text className="text-muted">
+            <Alert variant={'danger'}>
+              <ul className='list'>
+                {Object.values(errors).map(v => (
+                  <li key={v}>{v}</li>
+                ))}
+              </ul>
+            </Alert>
+          </Form.Text>
+        )}
+        <Modal.Footer>
+          <Button variant="primary" type="submit">
+            Sign Up
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 

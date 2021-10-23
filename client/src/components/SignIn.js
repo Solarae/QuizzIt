@@ -22,7 +22,7 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
 
     const closeModal = (err) => {
         if (err) {
-            setErrors({...err})
+            setErrors({ ...err })
             return;
         }
         setValues({ ...values, username: "", password: "" });
@@ -48,8 +48,8 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
             <Modal.Header closeButton>
                 <Modal.Title>Sign In</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Form>
+            <Form onSubmit={handleSubmit}>
+                <Modal.Body>
                     <Form.Group className="mb-3" controlId="formBasicUsername">
                         <Form.Label>Username</Form.Label>
                         <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
@@ -59,26 +59,26 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
                         <Form.Label>Password</Form.Label>
                         <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
                     </Form.Group>
-                </Form>
 
-            </Modal.Body>
-            {Object.keys(errors).length > 0 && (
-                <Form.Text className="text-muted">
-                    <Alert variant={'danger'}>
-                        <ul className='list'>
-                            {Object.values(errors).map(v => (
-                                <li key={v}>{v}</li>
-                            ))}
-                        </ul>
-                    </Alert>
-                </Form.Text>
-            )}
-            <Modal.Footer className="justify-content-between">
-                <a href="#" onClick={onClickSignUp} class="link-secondary">Don't have an account? Sign Up</a>
-                <Button variant="primary" onClick={handleSubmit}>
-                    Sign In
-                </Button>
-            </Modal.Footer>
+                </Modal.Body>
+                {Object.keys(errors).length > 0 && (
+                    <Form.Text className="text-muted">
+                        <Alert variant={'danger'}>
+                            <ul className='list'>
+                                {Object.values(errors).map(v => (
+                                    <li key={v}>{v}</li>
+                                ))}
+                            </ul>
+                        </Alert>
+                    </Form.Text>
+                )}
+                <Modal.Footer className="justify-content-between">
+                    <a href="#" onClick={onClickSignUp} class="link-secondary">Don't have an account? Sign Up</a>
+                    <Button variant="primary" type="submit">
+                        Sign In
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     );
 

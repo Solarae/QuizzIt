@@ -47,30 +47,30 @@ function CreatePlatform({ show, handleClose }) {
             <Modal.Header closeButton>
                 <Modal.Title>Create Platform</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Form>
+            <Form onSubmit={handleSubmit}>
+                <Modal.Body>
                     <Form.Group className="mb-3" controlId="formBasicField">
                         <Form.Label>Platform Name</Form.Label>
                         <Form.Control type="platformName" defaultValue="" placeholder="Platform Name" name="platformName" onChange={onChange} />
                     </Form.Group>
-                </Form>
-            </Modal.Body>
-            {Object.keys(errors).length > 0 && (
-                <Form.Text className="text-muted">
-                    <Alert variant={'danger'}>
-                        <ul className='list'>
-                            {Object.values(errors).map(v => (
-                                <li key={v}>{v}</li>
-                            ))}
-                        </ul>
-                    </Alert>
-                </Form.Text>
-            )}
-            <Modal.Footer>
-                <Button variant="primary" onClick={handleSubmit}>
-                    Create
-                </Button>
-            </Modal.Footer>
+                </Modal.Body>
+                {Object.keys(errors).length > 0 && (
+                    <Form.Text className="text-muted">
+                        <Alert variant={'danger'}>
+                            <ul className='list'>
+                                {Object.values(errors).map(v => (
+                                    <li key={v}>{v}</li>
+                                ))}
+                            </ul>
+                        </Alert>
+                    </Form.Text>
+                )}
+                <Modal.Footer>
+                    <Button variant="primary" type="submit">
+                        Create
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     );
 

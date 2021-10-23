@@ -75,10 +75,10 @@ function EditProfile({ type, show, handleClose }) {
       <Modal.Header closeButton>
         <Modal.Title>Edit {type}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
+      <Form onSubmit={handleSubmit}>
+        <Modal.Body>
           {type === "Password" && (
-            <Form.Group className="mb-3" controlId="formBasicField">
+            <Form.Group className="mb-3" controlId="formConfirmPassword">
               <Form.Label>Current {type} </Form.Label>
               <Form.Control type="password" defaultValue="" placeholder="Current Password" name="currentPassword" onChange={onChange} />
             </Form.Group>
@@ -86,26 +86,26 @@ function EditProfile({ type, show, handleClose }) {
           )}
           <Form.Group className="mb-3" controlId="formBasicField">
             <Form.Label>New {type} </Form.Label>
-            <Form.Control type={type==="Password" ? "password" : "field"} defaultValue="" placeholder={type} name="field" onChange={onChange} />
+            <Form.Control type={type === "Password" ? "password" : "field"} defaultValue="" placeholder={"New " + type} name="field" onChange={onChange} />
           </Form.Group>
-        </Form>
-      </Modal.Body>
-      {Object.keys(errors).length > 0 && (
-        <Form.Text className="text-muted">
-          <Alert variant={'danger'}>
-            <ul className='list'>
-              {Object.values(errors).map(v => (
-                <li key={v}>{v}</li>
-              ))}
-            </ul>
-          </Alert>
-        </Form.Text>
-      )}
-      <Modal.Footer>
-        <Button variant="primary" onClick={handleSubmit}>
-          Save
-        </Button>
-      </Modal.Footer>
+        </Modal.Body>
+        {Object.keys(errors).length > 0 && (
+          <Form.Text className="text-muted">
+            <Alert variant={'danger'}>
+              <ul className='list'>
+                {Object.values(errors).map(v => (
+                  <li key={v}>{v}</li>
+                ))}
+              </ul>
+            </Alert>
+          </Form.Text>
+        )}
+        <Modal.Footer>
+          <Button variant="primary" type="submit">
+            Save
+          </Button>
+        </Modal.Footer>
+      </Form>
     </Modal>
   );
 

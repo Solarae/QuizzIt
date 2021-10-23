@@ -21,7 +21,7 @@ function DeleteProfile({ show, handleClose }) {
 
     const closeModal = (err) => {
         if (err) {
-            setErrors({...err})
+            setErrors({ ...err })
             return;
         }
         setValues({ ...values, password: "" });
@@ -32,7 +32,7 @@ function DeleteProfile({ show, handleClose }) {
     const handleSubmit = ((e) => {
         e.preventDefault();
 
-        dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, callback: closeModal}));
+        dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, callback: closeModal }));
     })
 
     return (
@@ -40,31 +40,31 @@ function DeleteProfile({ show, handleClose }) {
             <Modal.Header closeButton>
                 <Modal.Title>Delete Profile</Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-                <Form>
+            <Form onSubmit={handleSubmit}>
+                <Modal.Body>
                     <Form.Group className="mb-3" controlId="formBasicPassword">
                         <Form.Label>Enter Password to Confirm</Form.Label>
                         <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
                     </Form.Group>
-                </Form>
 
-            </Modal.Body>
-            {Object.keys(errors).length > 0 && (
-                <Form.Text className="text-muted">
-                    <Alert variant={'danger'}>
-                        <ul className='list'>
-                            {Object.values(errors).map(v => (
-                                <li key={v}>{v}</li>
-                            ))}
-                        </ul>
-                    </Alert>
-                </Form.Text>
-            )}
-            <Modal.Footer >
-                <Button variant="outline-danger" onClick={handleSubmit}>
-                    Delete
-                </Button>
-            </Modal.Footer>
+                </Modal.Body>
+                {Object.keys(errors).length > 0 && (
+                    <Form.Text className="text-muted">
+                        <Alert variant={'danger'}>
+                            <ul className='list'>
+                                {Object.values(errors).map(v => (
+                                    <li key={v}>{v}</li>
+                                ))}
+                            </ul>
+                        </Alert>
+                    </Form.Text>
+                )}
+                <Modal.Footer >
+                    <Button variant="outline-danger" type="submit">
+                        Delete
+                    </Button>
+                </Modal.Footer>
+            </Form>
         </Modal>
     );
 
