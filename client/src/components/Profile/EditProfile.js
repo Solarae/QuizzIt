@@ -12,6 +12,7 @@ function EditProfile({ type, show, handleClose }) {
 
   const [values, setValues] = useState({
     field: "",
+    currentPassword: "" // used if password confirmation needed
   });
 
   const onChange = (e) => {
@@ -23,7 +24,7 @@ function EditProfile({ type, show, handleClose }) {
       setErrors({ ...err });
       return;
     }
-    setValues({ ...values, field: "" });
+    setValues({ ...values, field: "", currentPassword: "" });
     setErrors({});
     handleClose();
   }
@@ -49,18 +50,19 @@ function EditProfile({ type, show, handleClose }) {
       }))
 
     }
-    else if (type === "Password"){
+    else if (type === "Password") {
       dispatch(editProfile({
         id: auth.user.id,
         password: values.field,
+        currentPassword: values.currentPassword,
         history: history,
+        callback: closeModal
       }))
     }
-    else{
+    else {
       console.log("Error")
     }
 
-    closeModal()
   })
 
   return (
@@ -70,8 +72,15 @@ function EditProfile({ type, show, handleClose }) {
       </Modal.Header>
       <Modal.Body>
         <Form>
+          {type === "Password" && (
+            <Form.Group className="mb-3" controlId="formBasicField">
+              <Form.Label>Current {type} </Form.Label>
+              <Form.Control type="currentPassword" defaultValue="" placeholder="Current Password" name="currentPassword" onChange={onChange} />
+            </Form.Group>
+
+          )}
           <Form.Group className="mb-3" controlId="formBasicField">
-            <Form.Label>Enter New {type} </Form.Label>
+            <Form.Label>New {type} </Form.Label>
             <Form.Control type="field" defaultValue="" placeholder={type} name="field" onChange={onChange} />
           </Form.Group>
         </Form>

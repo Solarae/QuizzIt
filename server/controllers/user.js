@@ -88,7 +88,8 @@ export const signup = async (req, res) => {
 }
 
 export const editAccount = async (req, res) => {
-    const { id, username, email, password } = req.body
+    const { id, username, email, password, currentPassword } = req.body
+    const errors = {}
 
     try {
         const user = await User.findById(id)
@@ -99,12 +100,20 @@ export const editAccount = async (req, res) => {
             console.log(username)
             newUser = await User.findByIdAndUpdate(id, { username: username }, { new: true })
         } else if (password && password.trim() !== "") {
+            // password confirmation before changing password
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                errors.invalidPassword = "Incorrect Current Password";
+                return res.status(200).json({ errors: errors });
+            }
+
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
             newUser = await User.findByIdAndUpdate(id, { password: hash }, { new: true })
         } else if (email && email.trim() !== "" && email.includes("@")) {
             newUser = await User.findByIdAndUpdate(id, { email: email }, { new: true })
         }
+
         if (!newUser) return res.status(200).json({ success: false })
         return res.status(200).json({
             success: true,

@@ -58,6 +58,7 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: true
             }
         case EDIT_PROFILE_FAIL:
+            return state;
         case DELETE_PROFILE_SUCCESS:
             localStorage.removeItem('token')
             return {

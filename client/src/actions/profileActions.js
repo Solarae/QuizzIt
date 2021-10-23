@@ -9,13 +9,13 @@ import axios from 'axios'
 
 import { URL } from '../config.js'
 
-export const editProfile = ({ id, username, email, password, history }) => async (dispatch) => {
+export const editProfile = ({ id, username, email, password, currentPassword, history, callback}) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    const body = JSON.stringify({ id, username, email, password })
+    const body = JSON.stringify({ id, username, email, password, currentPassword })
     try {
         const res = await axios.post(`${URL}/api/users/edit`, body, config)
         if (res.data.errors) {
@@ -30,7 +30,7 @@ export const editProfile = ({ id, username, email, password, history }) => async
             })
 
         }
-        console.log(res.data)
+        callback(res.data.errors);
         history.push('/profile')
     } catch (error) {
         console.log(error.message)
