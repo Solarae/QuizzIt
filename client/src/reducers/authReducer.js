@@ -5,7 +5,9 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     EDIT_PROFILE_SUCCESS,
-    EDIT_PROFILE_FAIL
+    EDIT_PROFILE_FAIL,
+    DELETE_PROFILE_SUCCESS,
+    DELETE_PROFILE_FAIL
 } from '../actions/types'
 
 const initialState = {
@@ -56,6 +58,15 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: true
             }
         case EDIT_PROFILE_FAIL:
+        case DELETE_PROFILE_SUCCESS:
+            localStorage.removeItem('token')
+            return {
+                ...state,
+                token: null,
+                isAuthenticated: null,
+                ...action.payload
+            }
+        case DELETE_PROFILE_FAIL:
         default:
             return state
     }

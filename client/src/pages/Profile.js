@@ -4,7 +4,8 @@ import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import EditProfile from '../components/EditProfile';
+import EditProfile from '../components/Profile/EditProfile';
+import DeleteProfile from '../components/Profile/DeleteProfile';
 
 function Profile() {
     const dispatch = useDispatch()
@@ -15,6 +16,7 @@ function Profile() {
         showUsernameModal: false,
         showEmailModal: false,
         showPasswordModal: false,
+        showDeleteModal: false
     })
 
     const handleCloseUsernameModal = () => { setValues({ ...values, showUsernameModal: false }) };
@@ -25,6 +27,9 @@ function Profile() {
 
     const handleClosePasswordModal = () => { setValues({ ...values, showPasswordModal: false }) };
     const handleShowPasswordModal = () => { setValues({ ...values, showPasswordModal: true }) };
+    
+    const handleCloseDeleteModal = () => { setValues({ ...values, showDeleteModal: false }) };
+    const handleShowDeleteModal = () => { setValues({ ...values, showDeleteModal: true }) };
 
     return (
         <Container>
@@ -59,15 +64,27 @@ function Profile() {
                 </Col>
             </Row>
 
+            <br/>
+
             <Row className="justify-content-md-center">
                 <Col md={4}>
                     <Button onClick={handleShowPasswordModal} variant="outline-primary">Edit Password</Button>
                 </Col>
             </Row>
 
+            <br/>
+            
+            <Row className="justify-content-md-center">
+                <Col md={4}>
+                    <Button onClick={handleShowDeleteModal} variant="outline-danger">Delete Profile</Button>
+                </Col>
+            </Row>
+
             <EditProfile type="Username" show={values.showUsernameModal} handleClose={handleCloseUsernameModal}></EditProfile>
             <EditProfile type="Email" show={values.showEmailModal} handleClose={handleCloseEmailModal}></EditProfile>
             <EditProfile type="Password" show={values.showPasswordModal} handleClose={handleClosePasswordModal}></EditProfile>
+            <DeleteProfile show={values.showDeleteModal} handleClose={handleCloseDeleteModal}></DeleteProfile>
+
         </Container>
     )
 }
