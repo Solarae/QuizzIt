@@ -38,6 +38,7 @@ function SignIn({ show, handleShowSignUp, handleClose }) {
 
     const onClickSignUp = () => {
         setValues({ ...values, username: "", password: "" });
+        setErrors({});
         handleShowSignUp();
     }
 
