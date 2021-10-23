@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
-import { editProfile } from '../actions/profileActions'
+import { editProfile } from '../../actions/profileActions'
 import { useHistory } from 'react-router-dom';
 
 function EditProfile({ type, show, handleClose }) {
