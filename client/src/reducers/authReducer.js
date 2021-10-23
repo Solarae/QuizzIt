@@ -34,6 +34,7 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: true
             }
         case LOGIN_FAIL:
+            return state;
         case LOGOUT_SUCCESS:
             localStorage.removeItem('token')
             return {
@@ -51,7 +52,6 @@ const authReducer = (state = initialState, action) => {
                 user: null
             }
         case EDIT_PROFILE_SUCCESS:
-            localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
                 ...action.payload,
@@ -68,8 +68,9 @@ const authReducer = (state = initialState, action) => {
                 user: {} 
             }
         case DELETE_PROFILE_FAIL:
+            return state;
         default:
-            return state
+            return state;
     }
 }
 
