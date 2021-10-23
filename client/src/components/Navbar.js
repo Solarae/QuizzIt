@@ -7,8 +7,7 @@ import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
 import SignIn from './SignIn.js';
-
-
+import CreatePlatform from './CreatePlatform.js';
 
 function AppNavbar() {
   const dispatch = useDispatch()
@@ -17,16 +16,21 @@ function AppNavbar() {
 
   const [values, setValues] = useState({
     showSignIn: false,
-    showSignUp: false
+    showSignUp: false,
+    showCreatePlatform: false
   });
 
   const handleCloseSignIn = () => { setValues({ ...values, showSignIn: false }) };
   const handleShowSignIn = () => { setValues({ ...values, showSignIn: true }) };
+
   const handleCloseSignUp = () => { setValues({ ...values, showSignUp: false }) };
   const handleShowSignUp = () => { setValues({ ...values, showSignUp: true, showSignIn: false }) };
 
+  const handleCloseCreatePlatform = () => { setValues({ ...values, showCreatePlatform: false }) };
+  const handleShowCreatePlatform = () => { setValues({ ...values, showCreatePlatform: true }) };
+
   return (
-    <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{minWidth: "1300px !important;"}}>
+    <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
       <Container>
         <LinkContainer to='/'>
           <Navbar.Brand >
@@ -60,9 +64,10 @@ function AppNavbar() {
                   }
                   menuVariant="dark"
                 >
-                  <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link>View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link className="text-white">View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item onClick={() => dispatch(logout(history))} href="#">Logout</NavDropdown.Item>
+                  <NavDropdown.Item className="text-light" onClick={() => dispatch(logout(history))} href="#">Logout</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
@@ -70,6 +75,7 @@ function AppNavbar() {
 
         <SignIn show={values.showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
         <SignUp show={values.showSignUp} handleClose={handleCloseSignUp} />
+        <CreatePlatform show={values.showCreatePlatform} handleClose={handleCloseCreatePlatform} />
 
       </Container>
     </Navbar>
