@@ -64,7 +64,7 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 token: null,
                 isAuthenticated: null,
-                ...action.payload
+                user: {} 
             }
         case DELETE_PROFILE_FAIL:
         default:
