@@ -49,10 +49,11 @@ export const deletePlatform = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
         await platform.remove();
 
-        await User.updateMany(
+        const count = await User.updateMany(
             { _id: { $in: platform.subscribers } },
-            { $pull: { platformInfos : { platform: platform._id }}}
+            { $pull: { platformInfos : { platformId: platform._id }}}
         )
+        console.log(count)
         res.status(200).json({ platform: platform })
     } catch (error) {
         res.status(404).json({ msg: error.message })
