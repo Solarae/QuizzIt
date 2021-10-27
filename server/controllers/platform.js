@@ -53,3 +53,42 @@ export const deletePlatform = async (req, res) => {
     }
 }
 
+export const joinPlatform = async (req, res) => {
+    const { userId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+
+        const platform = await Todo.findById(req.params.id);
+        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+
+        const isMember = platform.users.filter((id) => userId !== id);
+
+        if (!isMember) platform.users.push(userId);
+
+        res.status(200).json(platform);
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+export const leavePlatform = async (req, res) => {
+    const { userId } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+
+        const platform = await Todo.findById(req.params.id);
+        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+
+        const isMember = platform.users.filter((id) => userId !== id);
+
+        if (isMember) post.users = post.users.filter((id) => userId !== id);
+
+        res.status(200).json(platform);
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
