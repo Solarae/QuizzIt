@@ -3,13 +3,12 @@ import Platform from '../models/Platform.js'
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
-
+    
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: `No user with id: ${userId}` });
 
         const platform = await Platform.findOne({ name: name });
-        console.log(platform)
         if (platform) return res.status(404).json({ msg: `Platform with name: ${name} already exists` });
 
         const newPlatform = new Platform({ 
@@ -33,6 +32,8 @@ export const createPlatform = async (req, res) => {
             },
             role: 'Creator'
         })
+
+        user.save();
 
         res.status(200).json({ platform: createdPlatform })
     } catch (error) {
