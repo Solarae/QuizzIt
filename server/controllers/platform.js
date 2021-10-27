@@ -11,12 +11,12 @@ export const createPlatform = async (req, res) => {
 
         const platform = await Platform.findOne({ name: name });
         if (platform) return res.status(404).json({ msg: `Platform with name: ${name} already exists` });
-        const subscribersAr = [user._id]
-        console.log(subscribersAr)
+       
         const newPlatform = new Platform({ 
             name: name, 
             owner: userId, 
-            description: description
+            description: description,
+            subscribers: [userId]
         });
         const createdPlatform = await newPlatform.save();
 
@@ -35,7 +35,7 @@ export const createPlatform = async (req, res) => {
             role: 'Creator'
         })
 
-        user.save();
+        await user.save();
 
         res.status(200).json({ platform: createdPlatform })
     } catch (error) {
@@ -46,9 +46,9 @@ export const createPlatform = async (req, res) => {
 export const deletePlatform = async (req, res) => {
     try {
         const platform = await Platform.findById(req.params.id);
-        platform.remove();
+        await platform.remove();
 
-        User.updateMany(
+        await User.updateMany(
             { _id: { $in: platform.subscribers } },
             { $pull: { platformInfos : { platform: platform._id }}}
         )
@@ -68,9 +68,10 @@ export const joinPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const isMember = platform.subscribers.findIndex((id) => userId === id);
+        const index = platform.subscribers.findIndex((id) => userId === id);
 
-        if (!isMember) platform.subscribers.push(userId);
+        if (index === -1) platform.subscribers.push(userId);
+        await platform.save()
 
         user.platformInfos.push( {
             platformId: platform._id,
@@ -82,10 +83,10 @@ export const joinPlatform = async (req, res) => {
                 yearly: 0,
                 allTime: 0
             },
-            role: 'Member'
+            role: 'Consumer'
         })
 
-        user.save();
+        await user.save();
 
         res.status(200).json(platform);
     } catch (error) {
@@ -103,12 +104,15 @@ export const leavePlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        platform.subscribers.pull(platform._id)
+        platform.subscribers.pull(user._id)
+        await platform.save();
 
-        user.update( 
-            { $pull: { platformInfos : { platform: platform._id }}}
+
+        await user.update( 
+            { $pull: { platformInfos: { platformId: platform._id }}},
+            { new: true }
         )
-
+        
         res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
@@ -129,6 +133,8 @@ export const reportPlatform = async (req, res) => {
             userId: user._id,
             text: text 
         })
+
+        await platform.save();
 
         res.status(200).json(platform);
     } catch (error) {
