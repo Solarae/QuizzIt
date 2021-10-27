@@ -46,6 +46,7 @@ export const createPlatform = async (req, res) => {
 export const deletePlatform = async (req, res) => {
     try {
         const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
         await platform.remove();
 
         await User.updateMany(
