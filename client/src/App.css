@@ -5,3 +5,40 @@
 .navbar-custom {
   height: 70px;
 }
+
+.tabNav > .nav-item > * > a >  i{
+  color: black;
+}
+
+.tabNav > .nav-item > * > .active >  i{
+  color: #1DA1F2;
+}
+
+.tabNav > .nav-item > * >  a{
+  outline: None;
+  border: None;
+}
+
+.tabNav > .nav-item > * > .active{
+  outline: None;
+  border: None;
+  background-color: white;
+  border-bottom: 5px solid #1DA1F2;
+  bottom: -10px;
+}
+
+.tabNav > .nav-item > * > a{
+  outline: None;
+  border: None;
+  background-color: white;
+  border-bottom: 5px solid white;
+  bottom: -10px;
+}
+
+.tabNav > .nav-item > * > a:hover, .tabNav > .nav-item > a:focus{
+  outline: None;
+  border: None;
+  background-color: white;
+  border-bottom: 5px solid #1DA1F2;
+  bottom: -10px;
+}
