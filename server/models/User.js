@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema ({
         type: mongoose.Schema.Types.ObjectId, ref: 'Award' 
     }],
     platformInfos: [{
-        platform: {
+        platformId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Platform'
         },

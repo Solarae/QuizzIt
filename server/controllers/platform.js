@@ -17,7 +17,7 @@ export const createPlatform = async (req, res) => {
         if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with registering the user" });
 
         user.platformInfos.push( {
-            platform: createdPlatform._id,
+            platformId: createdPlatform._id,
             points: {
                 daily: 0,
                 weekly: 0,
@@ -68,7 +68,7 @@ export const joinPlatform = async (req, res) => {
         if (!isMember) platform.users.push(userId);
 
         user.platformInfos.push( {
-            platform: platform._id,
+            platformId: platform._id,
             points: {
                 daily: 0,
                 weekly: 0,
@@ -101,7 +101,7 @@ export const leavePlatform = async (req, res) => {
         user.update( 
             { $pull: { platformInfos : { platform: platform._id }}}
         )
-        
+
         res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
