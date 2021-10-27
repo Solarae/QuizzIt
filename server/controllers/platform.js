@@ -107,3 +107,24 @@ export const leavePlatform = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+export const reportPlatform = async (req, res) => {
+    const { userId, text } = req.body;
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+
+        const platform = await Todo.findById(req.params.id);
+        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+
+        platform.reports.push({
+            userId: user._id,
+            text: text 
+        })
+
+        res.status(200).json(platform);
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
