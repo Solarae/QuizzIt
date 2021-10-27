@@ -4,6 +4,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 
 import userRoutes from './routes/user.js'
+import platformRoutes from './routes/platform.js'
 
 dotenv.config()
 
@@ -26,3 +27,4 @@ mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
     .catch(error => console.log(error.message));
 
 app.use('/api/users', userRoutes);
+app.use('/api/platforms', platformRoutes);

@@ -35,7 +35,7 @@ export const createPlatform = async (req, res) => {
     }
 }
 
-export const platform = async (req, res) => {
+export const deletePlatform = async (req, res) => {
     try {
         const platform = await Todo.findById(req.params.id);
         platform.remove();
