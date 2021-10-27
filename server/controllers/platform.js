@@ -43,7 +43,7 @@ export const deletePlatform = async (req, res) => {
         const user = await User.findById(deleteTodo.user)
         if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
-        User.updateMany (
+        User.updateMany(
             { _id: { $in: deletePlatform.users } },
             { $pull: { platformInfos : { platform: deletePlatform._id }}}
         )
@@ -67,6 +67,19 @@ export const joinPlatform = async (req, res) => {
 
         if (!isMember) platform.users.push(userId);
 
+        user.platformInfos.push( {
+            platform: platform._id,
+            points: {
+                daily: 0,
+                weekly: 0,
+                monthly: 0,
+                biannual: 0,
+                yearly: 0,
+                allTime: 0
+            },
+            role: 'Member'
+        })
+
         res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
@@ -83,10 +96,12 @@ export const leavePlatform = async (req, res) => {
         const platform = await Todo.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const isMember = platform.users.filter((id) => userId !== id);
+        platform.users.pull(platform._id)
 
-        if (isMember) post.users = post.users.filter((id) => userId !== id);
-
+        user.update( 
+            { $pull: { platformInfos : { platform: platform._id }}}
+        )
+        
         res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
