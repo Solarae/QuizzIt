@@ -1,5 +1,6 @@
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
+import mongoose from 'mongoose'
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -10,12 +11,12 @@ export const createPlatform = async (req, res) => {
 
         const platform = await Platform.findOne({ name: name });
         if (platform) return res.status(404).json({ msg: `Platform with name: ${name} already exists` });
-
+        const subscribersAr = [user._id]
+        console.log(subscribersAr)
         const newPlatform = new Platform({ 
             name: name, 
             owner: userId, 
-            description: description,
-            subscribers: [userId]
+            description: description
         });
         const createdPlatform = await newPlatform.save();
 
@@ -44,11 +45,8 @@ export const createPlatform = async (req, res) => {
 
 export const deletePlatform = async (req, res) => {
     try {
-        const platform = await Todo.findById(req.params.id);
+        const platform = await Platform.findById(req.params.id);
         platform.remove();
-
-        const user = await User.findById(deleteTodo.user)
-        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
         User.updateMany(
             { _id: { $in: platform.subscribers } },
@@ -67,7 +65,7 @@ export const joinPlatform = async (req, res) => {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
-        const platform = await Todo.findById(req.params.id);
+        const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         const isMember = platform.subscribers.filter((id) => userId !== id);
@@ -100,7 +98,7 @@ export const leavePlatform = async (req, res) => {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
-        const platform = await Todo.findById(req.params.id);
+        const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         platform.subscribers.pull(platform._id)
@@ -122,7 +120,7 @@ export const reportPlatform = async (req, res) => {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
-        const platform = await Todo.findById(req.params.id);
+        const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         platform.reports.push({

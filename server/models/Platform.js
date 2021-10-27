@@ -21,7 +21,7 @@ const platformSchema = new mongoose.Schema ({
         type: String
     },
     subscibers: [{ 
-        type: mongoose.Schema.Types.ObjectId, ref: 'User' 
+        type: mongoose.Schema.Types.ObjectId, ref: 'User', 
     }],
     quizzes: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
