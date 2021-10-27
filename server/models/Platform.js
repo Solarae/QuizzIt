@@ -60,7 +60,16 @@ const platformSchema = new mongoose.Schema ({
         totalDislikes: {
             type: Number
         }
-    }
+    },
+    reports: [{ 
+        userId: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User'
+        },
+        text: {
+            type: String 
+        }
+    }],
 })
 
 const Platform = mongoose.model('Platform', platformSchema)
