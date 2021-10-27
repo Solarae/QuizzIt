@@ -20,7 +20,7 @@ const platformSchema = new mongoose.Schema ({
     icon: {
         type: String
     },
-    subscibers: [{ 
+    subscribers: [{ 
         type: mongoose.Schema.Types.ObjectId, ref: 'User', 
     }],
     quizzes: [{

@@ -68,7 +68,7 @@ export const joinPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const isMember = platform.subscribers.filter((id) => userId !== id);
+        const isMember = platform.subscribers.findIndex((id) => userId === id);
 
         if (!isMember) platform.subscribers.push(userId);
 
@@ -84,6 +84,8 @@ export const joinPlatform = async (req, res) => {
             },
             role: 'Member'
         })
+
+        user.save();
 
         res.status(200).json(platform);
     } catch (error) {
