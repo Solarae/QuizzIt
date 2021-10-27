@@ -2,17 +2,21 @@ import User from '../models/User.js'
 import Platform from '../models/Platform.js'
 
 export const createPlatform = async (req, res) => {
-    const { userId, platformName } = req.body;
+    const { userId, name, description } = req.body;
 
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: `No user with id: ${userId}` });
 
-        const platform = await Platform.findOne({ name: platformName });
+        const platform = await Platform.findOne({ name: name });
         console.log(platform)
-        if (platform) return res.status(404).json({ msg: `Platform with name: ${platformName} already exists` });
+        if (platform) return res.status(404).json({ msg: `Platform with name: ${name} already exists` });
 
-        const newPlatform = new Platform({ name: platformName, owner: userId });
+        const newPlatform = new Platform({ 
+            name: name, 
+            owner: userId, 
+            description: description 
+        });
         const createdPlatform = await newPlatform.save();
 
         if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with registering the user" });
