@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Nav, Navbar, Container, Form, Button, Image, Row, Col, NavDropdown } from 'react-bootstrap'
+import { Nav, Navbar, Container, Image, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
@@ -14,20 +14,18 @@ function AppNavbar() {
   const auth = useSelector((state) => state.auth)
   const history = useHistory()
 
-  const [values, setValues] = useState({
-    showSignIn: false,
-    showSignUp: false,
-    showCreatePlatform: false
-  });
 
-  const handleCloseSignIn = () => { setValues({ ...values, showSignIn: false }) };
-  const handleShowSignIn = () => { setValues({ ...values, showSignIn: true }) };
+  const [showSignIn, setShowSignIn] = useState(false);
+  const handleCloseSignIn = () => { setShowSignIn(false) };
+  const handleShowSignIn = () => { setShowSignIn(true) };
 
-  const handleCloseSignUp = () => { setValues({ ...values, showSignUp: false }) };
-  const handleShowSignUp = () => { setValues({ ...values, showSignUp: true, showSignIn: false }) };
+  const [showSignUp, setShowSignUp] = useState(false);
+  const handleCloseSignUp = () => { setShowSignUp(false) };
+  const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
 
-  const handleCloseCreatePlatform = () => { setValues({ ...values, showCreatePlatform: false }) };
-  const handleShowCreatePlatform = () => { setValues({ ...values, showCreatePlatform: true }) };
+  const [showCreatePlatform, setShowCreatePlatform] = useState(false);
+  const handleCloseCreatePlatform = () => { setShowCreatePlatform(false) };
+  const handleShowCreatePlatform = () => { setShowCreatePlatform(true) };
 
   return (
     <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
@@ -73,9 +71,9 @@ function AppNavbar() {
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
         </Navbar.Collapse>
 
-        <SignIn show={values.showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
-        <SignUp show={values.showSignUp} handleClose={handleCloseSignUp} />
-        <CreatePlatform show={values.showCreatePlatform} handleClose={handleCloseCreatePlatform} />
+        <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+        <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+        <CreatePlatform show={showCreatePlatform} handleClose={handleCloseCreatePlatform} />
 
       </Container>
     </Navbar>

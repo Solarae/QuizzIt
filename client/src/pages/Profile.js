@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import { Nav, Navbar, Container, Form, Button, Image, Row, Col, NavDropdown, InputGroup, FormControl } from 'react-bootstrap'
-import { LinkContainer } from 'react-router-bootstrap'
+import { Container, Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
@@ -12,24 +11,21 @@ function Profile() {
     const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
-    const [values, setValues] = useState({
-        showUsernameModal: false,
-        showEmailModal: false,
-        showPasswordModal: false,
-        showDeleteModal: false
-    })
+    const [showUsernameModal, setShowUsernameModal] = useState(false);
+    const handleCloseUsernameModal = () => { setShowUsernameModal(false) };
+    const handleShowUsernameModal = () => { setShowUsernameModal(true) };
 
-    const handleCloseUsernameModal = () => { setValues({ ...values, showUsernameModal: false }) };
-    const handleShowUsernameModal = () => { setValues({ ...values, showUsernameModal: true }) };
-    
-    const handleCloseEmailModal = () => { setValues({ ...values, showEmailModal: false }) };
-    const handleShowEmailModal = () => { setValues({ ...values, showEmailModal: true }) };
+    const [showEmailModal, setShowEmailModal] = useState(false);
+    const handleCloseEmailModal = () => { setShowEmailModal(false) };
+    const handleShowEmailModal = () => { setShowEmailModal(true) };
 
-    const handleClosePasswordModal = () => { setValues({ ...values, showPasswordModal: false }) };
-    const handleShowPasswordModal = () => { setValues({ ...values, showPasswordModal: true }) };
-    
-    const handleCloseDeleteModal = () => { setValues({ ...values, showDeleteModal: false }) };
-    const handleShowDeleteModal = () => { setValues({ ...values, showDeleteModal: true }) };
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const handleClosePasswordModal = () => { setShowPasswordModal(false) };
+    const handleShowPasswordModal = () => { setShowPasswordModal(true) };
+
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
+    const handleShowDeleteModal = () => { setShowDeleteModal(true) };
 
     return (
         <Container>
@@ -64,7 +60,7 @@ function Profile() {
                 </Col>
             </Row>
 
-            <br/>
+            <br />
 
             <Row className="justify-content-md-center">
                 <Col md={4}>
@@ -72,18 +68,18 @@ function Profile() {
                 </Col>
             </Row>
 
-            <br/>
-            
+            <br />
+
             <Row className="justify-content-md-center">
                 <Col md={4}>
                     <Button onClick={handleShowDeleteModal} variant="outline-danger">Delete Profile</Button>
                 </Col>
             </Row>
 
-            <EditProfile type="Username" show={values.showUsernameModal} handleClose={handleCloseUsernameModal}></EditProfile>
-            <EditProfile type="Email" show={values.showEmailModal} handleClose={handleCloseEmailModal}></EditProfile>
-            <EditProfile type="Password" show={values.showPasswordModal} handleClose={handleClosePasswordModal}></EditProfile>
-            <DeleteProfile show={values.showDeleteModal} handleClose={handleCloseDeleteModal}></DeleteProfile>
+            <EditProfile type="Username" show={showUsernameModal} handleClose={handleCloseUsernameModal}></EditProfile>
+            <EditProfile type="Email" show={showEmailModal} handleClose={handleCloseEmailModal}></EditProfile>
+            <EditProfile type="Password" show={showPasswordModal} handleClose={handleClosePasswordModal}></EditProfile>
+            <DeleteProfile show={showDeleteModal} handleClose={handleCloseDeleteModal}></DeleteProfile>
 
         </Container>
     )
