@@ -9,8 +9,8 @@ const router = express.Router();
 
 router.post('/', createPlatform);
 router.delete('/:id', deletePlatform);
-router.post('/join', joinPlatform);
-router.post('/leave', leavePlatform);
-router.post('/report', reportPlatform);
+router.post('/:id/join', joinPlatform);
+router.post('/:id/leave', leavePlatform);
+router.post('/:id/report', reportPlatform);
 
 export default router;
