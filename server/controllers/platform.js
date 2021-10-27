@@ -5,10 +5,11 @@ export const createPlatform = async (req, res) => {
     const { userId, platformName } = req.body;
 
     try {
-        const user = User.findById(userId);
+        const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: `No user with id: ${userId}` });
 
-        const platform = Platform.findOne({ name: platformName });
+        const platform = await Platform.findOne({ name: platformName });
+        console.log(platform)
         if (platform) return res.status(404).json({ msg: `Platform with name: ${platformName} already exists` });
 
         const newPlatform = new Platform({ name: platformName, owner: userId });
