@@ -35,19 +35,19 @@ export const createPlatform = async (req, res) => {
     }
 }
 
-export const deletePlatform = async (req, res) => {
+export const platform = async (req, res) => {
     try {
-        const deletePlatform = await Todo.findById(req.params.id);
-        deletePlatform.remove();
+        const platform = await Todo.findById(req.params.id);
+        platform.remove();
 
         const user = await User.findById(deleteTodo.user)
         if (!user) return res.status(404).json({ msg: "User doesn't exist" })
 
         User.updateMany(
-            { _id: { $in: deletePlatform.users } },
-            { $pull: { platformInfos : { platform: deletePlatform._id }}}
+            { _id: { $in: platform.subscribers } },
+            { $pull: { platformInfos : { platform: platform._id }}}
         )
-        res.status(200).json({ platform: deletePlatform })
+        res.status(200).json({ platform: platform })
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
@@ -63,9 +63,9 @@ export const joinPlatform = async (req, res) => {
         const platform = await Todo.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const isMember = platform.users.filter((id) => userId !== id);
+        const isMember = platform.subscribers.filter((id) => userId !== id);
 
-        if (!isMember) platform.users.push(userId);
+        if (!isMember) platform.subscribers.push(userId);
 
         user.platformInfos.push( {
             platformId: platform._id,
@@ -96,7 +96,7 @@ export const leavePlatform = async (req, res) => {
         const platform = await Todo.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        platform.users.pull(platform._id)
+        platform.subscribers.pull(platform._id)
 
         user.update( 
             { $pull: { platformInfos : { platform: platform._id }}}
