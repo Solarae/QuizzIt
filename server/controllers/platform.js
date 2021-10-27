@@ -14,7 +14,8 @@ export const createPlatform = async (req, res) => {
         const newPlatform = new Platform({ 
             name: name, 
             owner: userId, 
-            description: description 
+            description: description,
+            subscribers: [userId]
         });
         const createdPlatform = await newPlatform.save();
 
