@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 
 import userRoutes from './routes/user.js'
 import platformRoutes from './routes/platform.js'
+import quizRoutes from './routes/quiz.js'
 
 dotenv.config()
 
@@ -28,3 +29,4 @@ mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
 
 app.use('/api/users', userRoutes);
 app.use('/api/platforms', platformRoutes);
+app.use('/api/quiz',quizRoutes)

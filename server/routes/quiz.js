@@ -1,8 +1,8 @@
 import express from 'express';
 import { 
-    createQuiz, deleteQuiz, editQuiz,
-    addQuizQuestion, editQuizQuestion, deleteQuizQuestion,
-    editQuizName,editQuizTime,setCorrectAnswerForQuestion
+    createQuiz,
+    deleteQuiz, editQuiz,
+    addQuizQuestion, editQuizQuestion, deleteQuizQuestion
 } from '../controllers/quiz.js';
 
 const router = express.Router();
