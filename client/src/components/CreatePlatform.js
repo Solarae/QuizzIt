@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
-import { editProfile } from '../actions/profileActions'
+import { createPlatform } from '../actions/platformActions'
 import { useHistory } from 'react-router-dom';
 
 function CreatePlatform({ show, handleClose }) {
@@ -12,6 +12,7 @@ function CreatePlatform({ show, handleClose }) {
 
     const [values, setValues] = useState({
         platformName: "",
+        platformDescription: ""
     });
 
     const onChange = (e) => {
@@ -31,15 +32,13 @@ function CreatePlatform({ show, handleClose }) {
     const handleSubmit = ((e) => {
         e.preventDefault();
 
-        console.log(values.platformName)
-        //   dispatch(editProfile({
-        // id: auth.user.id,
-        // username: values.field,
-        // history: history,
-        //   }))
-
-
-        closeModal()
+        dispatch(createPlatform({
+            userId: auth.user.id,
+            name: values.platformName,
+            description: values.platformDescription,
+            history: history,
+            callback: closeModal
+        }))
     })
 
     return (
@@ -49,9 +48,13 @@ function CreatePlatform({ show, handleClose }) {
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
-                    <Form.Group className="mb-3" controlId="formBasicField">
+                    <Form.Group className="mb-3" controlId="formName">
                         <Form.Label>Platform Name</Form.Label>
                         <Form.Control type="platformName" defaultValue="" placeholder="Platform Name" name="platformName" onChange={onChange} />
+                    </Form.Group>
+                    <Form.Group className="mb-3" controlId="formDesc">
+                        <Form.Label>Platform Description</Form.Label>
+                        <Form.Control as="textarea" rows={3} type="platformDesc" defaultValue="" placeholder="Platform Description" name="platformDescription" onChange={onChange} />
                     </Form.Group>
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (

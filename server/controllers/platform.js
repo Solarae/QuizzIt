@@ -4,25 +4,29 @@ import mongoose from 'mongoose'
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
-    
+    const errors = {};
+
     try {
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: `No user with id: ${userId}` });
 
         const platform = await Platform.findOne({ name: name });
-        if (platform) return res.status(404).json({ msg: `Platform with name: ${name} already exists` });
-       
-        const newPlatform = new Platform({ 
-            name: name, 
-            owner: userId, 
+        if (platform) {
+            errors.platformExists = `Platform with name: ${name} already exists`;
+            return res.status(200).json({ errors: errors });
+        }
+
+        const newPlatform = new Platform({
+            name: name,
+            owner: userId,
             description: description,
             subscribers: [userId]
         });
         const createdPlatform = await newPlatform.save();
 
-        if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with registering the user" });
+        if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
 
-        user.platformInfos.push( {
+        user.platformInfos.push({
             platformId: createdPlatform._id,
             points: {
                 daily: 0,
@@ -51,7 +55,7 @@ export const deletePlatform = async (req, res) => {
 
         const count = await User.updateMany(
             { _id: { $in: platform.subscribers } },
-            { $pull: { platformInfos : { platformId: platform._id }}}
+            { $pull: { platformInfos: { platformId: platform._id } } }
         )
         console.log(count)
         res.status(200).json({ platform: platform })
@@ -75,7 +79,7 @@ export const joinPlatform = async (req, res) => {
         if (index === -1) platform.subscribers.push(userId);
         await platform.save()
 
-        user.platformInfos.push( {
+        user.platformInfos.push({
             platformId: platform._id,
             points: {
                 daily: 0,
@@ -110,11 +114,11 @@ export const leavePlatform = async (req, res) => {
         await platform.save();
 
 
-        await user.update( 
-            { $pull: { platformInfos: { platformId: platform._id }}},
+        await user.update(
+            { $pull: { platformInfos: { platformId: platform._id } } },
             { new: true }
         )
-        
+
         res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
@@ -133,7 +137,7 @@ export const reportPlatform = async (req, res) => {
 
         platform.reports.push({
             userId: user._id,
-            text: text 
+            text: text
         })
 
         await platform.save();

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
 import authReducer from './authReducer'
+import platformReducer from './platformReducer'
 
 export default combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    platform: platformReducer
 })
