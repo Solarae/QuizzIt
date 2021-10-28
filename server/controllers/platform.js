@@ -1,6 +1,5 @@
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-import mongoose from 'mongoose'
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -55,6 +54,16 @@ export const deletePlatform = async (req, res) => {
         )
         console.log(count)
         res.status(200).json({ platform: platform })
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+export const getPlatform = async (req, res) => {
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" });
+        res.status(200).json(platform);
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
