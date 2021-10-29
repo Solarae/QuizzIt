@@ -1,7 +1,8 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import { Container, Image, Button } from 'react-bootstrap';
 
-function Banner({ platformId }) {
+function Banner({ platform }) {
+
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
@@ -20,7 +21,7 @@ function Banner({ platformId }) {
                                 <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> 80
                             </p>
                             <p className="lead fw-normal">
-                                Platform Description
+                               {platform.description} 
                             </p>
                         </div>
                     </div>
@@ -39,7 +40,7 @@ function Banner({ platformId }) {
                 </div>
             </div>
             <div>
-                <h4 className="ms-5 mt-1">Platform Name</h4>
+                <h4 className="ms-5 mt-1">{platform.name}</h4>
             </div>
         </div>
     )

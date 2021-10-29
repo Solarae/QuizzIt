@@ -2,7 +2,7 @@ import React from 'react'
 import { Container, Image, Button, Row, Col } from 'react-bootstrap';
 import QuizCard from './QuizCard.js';
 
-function Home({ platformId }) {
+function Home({ platform }) {
     return (
         <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
 

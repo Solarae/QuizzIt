@@ -5,6 +5,8 @@ import {
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
+    GET_PLATFORM_SUCCESS,
+    GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
     CREATE_PLATFORM_FAIL,
     DELETE_PLATFORM_SUCCESS,
@@ -52,20 +54,37 @@ const platformReducer = (state = initialState, action) => {
     }
 
     switch (action.type) {
-        case CREATE_PLATFORM_SUCCESS:
+        case GET_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                "GET_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
+        case GET_PLATFORM_FAIL:
             return {
                 ...state,
                 ...action.payload,
+                "GET_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
+        case CREATE_PLATFORM_SUCCESS:
+            return {
+                ...state,
                 "CREATE_PLATFORM": {
-                    loading: false
+                    loading: false,
+                    ...action.payload
                 }
             }
         case CREATE_PLATFORM_FAIL:
             return {
                 ...state,
-                ...action.payload,
                 "CREATE_PLATFORM": {
-                    loading: false
+                    loading: false,
+                    ...action.payload
                 }
             }
         default:

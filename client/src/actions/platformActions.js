@@ -57,37 +57,30 @@ export const createPlatform = ({ userId, name, description, history }) => async 
     }
 }
 
-export const getPlatform = ({ id, history, callback }) => async (dispatch) => {
+export const getPlatform = ({ id }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
-        params: {
-            id: id
-        }
     }
     try {
-        const res = await axios.get(`${URL}/api/platforms/:id`, config);
+        dispatch({
+            type: GET_PLATFORM_REQ
+        });
+        const res = await axios.get(`${URL}/api/platforms/${id}`, config);
         if (res.data.errors) {
             dispatch({
-                type: GET_PLATFORM_FAIL
+                type: GET_PLATFORM_FAIL,
+                payload: res.data
             })
         }
         else {
-            const update = (dispatch) => new Promise((resolve, reject) => {
-                dispatch({
-                    type: GET_PLATFORM_SUCCESS,
-                    payload: res.data
-                });
-                resolve();
-            })
-            // await update(dispatch);
-            update(dispatch).then(() => { callback(res.data.errors) })
+
+            dispatch({
+                type: GET_PLATFORM_SUCCESS,
+                payload: res.data
+            });
         }
-
-        // send any request errors to callback function
-        // if (callback) callback(res.data.errors);
-
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({

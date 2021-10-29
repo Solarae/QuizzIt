@@ -1,27 +1,58 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Nav, FloatingLabel, Form } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
 import MemberList from '../components/Platform/MemberList.js'
+import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
-function Platform({ platformId }) {
+function Platform() {
+    const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
+    const platforms = useSelector((state) => state.platforms)
     const history = useHistory()
+
+
+    let { id } = useParams();  // get the platform ID from the url
+   
+    const [platform, setPlatform] = useState({});
+
+    // dispatch the GET_PLATFORM request on initial render
+    useEffect(() => {
+        dispatch(getPlatform({
+            id: id
+        }))
+    }, [ id, dispatch ]);
+
+    // waits for GET_PLATFORM request to update redux store with the platform data 
+    useEffect(() => {
+        console.log("GET_PLATFORM.loading: " + platforms.GET_PLATFORM.loading)
+        if (!platforms.GET_PLATFORM.loading && platforms.GET_PLATFORM.platform) {
+            const platform = platforms.GET_PLATFORM.platform;
+            setPlatform(platform);
+            console.log(platform);
+            // check if there were errors
+            if (platform.errors) {
+                setErrors({ ...platform.errors });
+                return;
+            }
+
+        }
+    }, [platforms.GET_PLATFORM]);
+
 
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [showHome, setShowHome] = useState(true);
     const handleHideHome = () => { setShowHome(false) };
     const handleShowHome = () => { setShowHome(true) };
 
-
     return (
         <div className="justify-content-between">
-            <Banner></Banner>
+            <Banner platform={platform}></Banner>
 
             <div style={{ height: "50px" }}></div>
 
@@ -43,8 +74,8 @@ function Platform({ platformId }) {
                             </Row>
                         </Container>
 
-                        { showHome ? <Home platformId={platformId}></Home> : <MemberList platformId={platformId}></MemberList> }
-                        
+                        { showHome ? <Home platform={platform}></Home> : <MemberList platform={platform}></MemberList>}
+
                     </div>
                     <div className="col" style={{}}>
                         leaderboard goes here

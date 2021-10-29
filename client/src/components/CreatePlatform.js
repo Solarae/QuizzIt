@@ -30,20 +30,21 @@ function CreatePlatform({ show, handleClose }) {
     // waits for CREATE_PLATFORM request to update redux store with the new platform id so that we can use it here
     useEffect(() => {
         console.log("CREATE_PLATFORM.loading: " + platforms.CREATE_PLATFORM.loading)
-        if (!platforms.CREATE_PLATFORM.loading && platforms.platform) {
+        if (!platforms.CREATE_PLATFORM.loading && platforms.CREATE_PLATFORM.platform) {
+            const platform = platforms.CREATE_PLATFORM.platform;
             // check if there were errors
-            if (platforms.platform.errors) {
-                setErrors({...platforms.platform.errors});
+            if (platform.errors) {
+                setErrors({...platform.errors});
                 return;
             }
 
-            console.log(platforms.platform._id);
+            console.log(platform._id);
 
             // close the modal and redirect user to the platform page
             handleClose();
-            history.push(`/platform/${platforms.platform._id}`);
+            history.push(`/platform/${platform._id}`);
         }
-    }, [platforms.CREATE_PLATFORM.loading, platforms.platform, history, handleClose]);
+    }, [platforms.CREATE_PLATFORM, history, handleClose]);
 
     const handleSubmit = ((e) => {
         e.preventDefault();
