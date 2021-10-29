@@ -131,7 +131,19 @@ export const editQuizQuestion = async (req,res) =>{
     }
 }
 
-export const deleteQuizQuestion = () =>{
-    
+export const deleteQuizQuestion = async (req,res) =>{
+    let quizId = req.params.id;
+    let {questionIndex} = req.body
+
+    try {
+        let quiz = await Quiz.findById(quizId)
+        quiz.questions.splice(questionIndex,1)
+        await quiz.save()
+        res.status(200).json({quiz:quiz})
+
+
+    } catch (error) {
+        res.status(500).json({message:error})
+    }
 }
 
