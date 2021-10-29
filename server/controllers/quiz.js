@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-
+import mongoose from "mongoose"
 
 
 
@@ -115,15 +115,16 @@ export const addQuizQuestion = async (req,res) =>{
 
 export const editQuizQuestion = async (req,res) =>{
     let quizId = req.params.id;
-    let {question,questionIndex} = req.body
-
+    let {question,questionId} = req.body
     try {
         let formattedQuestion = JSON.parse(question)
-        console.log(JSON.parse(question))
         let quiz = await Quiz.findById(quizId)
+
+        let questionIndex = quiz.questions.findIndex((question)=> question._id.toString() === questionId)
+        console.log(questionIndex)
         quiz.questions[questionIndex] = formattedQuestion;
-        await quiz.save()
-        res.status(200).json({quiz:quiz})
+        let newQuiz = await quiz.save()
+        res.status(200).json({quiz:newQuiz})
 
 
     } catch (error) {
