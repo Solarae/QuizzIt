@@ -133,11 +133,10 @@ export const editQuizQuestion = async (req,res) =>{
 
 export const deleteQuizQuestion = async (req,res) =>{
     let quizId = req.params.id;
-    let {questionIndex} = req.body
-
+    let {questionId} = req.body;
     try {
         let quiz = await Quiz.findById(quizId)
-        quiz.questions.splice(questionIndex,1)
+        quiz.questions.pull(questionId)
         await quiz.save()
         res.status(200).json({quiz:quiz})
 
