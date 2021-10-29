@@ -17,7 +17,7 @@ function App() {
       <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/profile' exact component={Profile} />
-        <Route path='/platform' exact component={Platform} />
+        <Route path='/platform/:id' exact component={Platform} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>

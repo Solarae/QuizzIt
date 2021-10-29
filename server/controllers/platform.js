@@ -12,7 +12,7 @@ export const createPlatform = async (req, res) => {
         const platform = await Platform.findOne({ name: name });
         if (platform) {
             errors.platformExists = `Platform with name: ${name} already exists`;
-            return res.status(200).json({ errors: errors });
+            return res.status(200).json({ platform: {errors: errors} });
         }
 
         const newPlatform = new Platform({
@@ -66,8 +66,8 @@ export const deletePlatform = async (req, res) => {
 export const getPlatform = async (req, res) => {
     try {
         const platform = await Platform.findById(req.params.id);
-        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" });
-        res.status(200).json(platform);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+        res.status(200).json({ platform: platform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }

@@ -4,5 +4,5 @@ import platformReducer from './platformReducer'
 
 export default combineReducers({
     auth: authReducer,
-    platform: platformReducer
+    platforms: platformReducer
 })
