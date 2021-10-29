@@ -47,7 +47,7 @@ export const getQuiz = async (req,res) => {
 
         if(!quiz) return res.status(500).json({message:"Quiz not found with the provided id"})
     
-        return res.status(200).json({quiz:quiz})        
+        return res.status(200).json(quiz)        
     } catch (error) {
         res.status(500).json({message:error})
     }
