@@ -1,10 +1,36 @@
-import React from 'react'
+import { React, useEffect } from 'react'
 import { Container, Col } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
 import QuestionCard from '../components/Quiz/QuestionCard'
 
+import { getQuiz } from '../actions/quizActions'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
+
+
 function EditQuiz({ quizId }) {
+    const dispatch = useDispatch()
+    const isLoading = useSelector((state) => state.quiz.isLoading)
+    const quiz = useSelector((state) => state.quiz.quiz)
+    // const platform = useSelector((state) => state.platform.platform)
+
+    const history = useHistory()
+
+    let { qid } = useParams()
+    // let { id } = useParams()
+
+    useEffect(() => {
+        if (!quiz) dispatch(getQuiz(qid))
+    }, [dispatch, quiz])
+
+    // useEffect(() => {
+    //     if (!platform) dispatch(getQuiz(id))
+    // }, [dispatch, platform])
+
+    if (isLoading) {
+        return ( <div> Loading... </div> )
+    }
     return (
         <>
             <Banner></Banner>

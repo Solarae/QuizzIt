@@ -28,11 +28,11 @@ function Quiz() {
     // }, [dispatch, platform])
 
     if (isLoading) {
-        return ( <div> Loading... </div>)
+        return ( <div> Loading... </div> )
     }
     console.log(isLoading)
     return (
-        <div>
+        <>
             <Banner></Banner>      
 
             <div style={{ height: "10vh" }}></div>
@@ -58,7 +58,7 @@ function Quiz() {
                     <div> Leaderboard Goes Here</div>
                 </Col>
                 </Container>
-        </div>
+        </>
     )
 }
 
