@@ -8,7 +8,8 @@ import {
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAIL,
-    GET_QUIZ
+    GET_QUIZ,
+    QUIZ_LOADING
 } from '../actions/types'
 
 const initialState = {
@@ -22,6 +23,12 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                isLoading: false
+            }
+        case QUIZ_LOADING:
+            return {
+                ...state,
+                isLoading: true
             }
         default:
             return state;

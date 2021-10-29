@@ -1,5 +1,6 @@
 import {
-    GET_QUIZ,GET_QUIZ_FAIL
+    GET_QUIZ,GET_QUIZ_FAIL,
+    QUIZ_LOADING
 } from '../actions/types'
 
 import axios from 'axios'
@@ -7,6 +8,7 @@ import axios from 'axios'
 import { URL } from '../config.js'
 
 export const getQuiz = ( id ) => async (dispatch) => {
+    dispatch(setQuizLoading());
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -28,3 +30,9 @@ export const getQuiz = ( id ) => async (dispatch) => {
         })
     }
 }
+
+export const setQuizLoading = () => {
+    return {
+      type: QUIZ_LOADING
+    };
+};
