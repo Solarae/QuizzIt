@@ -1,5 +1,5 @@
 import {
-    GET_QUIZ,
+    GET_QUIZ
 } from '../actions/types'
 
 import axios from 'axios'
@@ -23,8 +23,5 @@ export const getQuiz = ( id ) => async (dispatch) => {
 
     } catch (error) {
         console.log(error.msg)
-        dispatch({
-            type: REGISTER_FAIL
-        })
     }
 }

@@ -1,13 +1,5 @@
 import {
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT_SUCCESS,
-    REGISTER_SUCCESS,
-    REGISTER_FAIL,
-    EDIT_PROFILE_SUCCESS,
-    EDIT_PROFILE_FAIL,
-    DELETE_PROFILE_SUCCESS,
-    DELETE_PROFILE_FAIL
+    GET_QUIZ
 } from '../actions/types'
 
 const initialState = {
