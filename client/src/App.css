@@ -6,6 +6,8 @@
   height: 70px;
 }
 
+/* START of CSS for platfoorm navbar */ 
+
 .tabNav > .nav-item > * > a >  i{
   color: black;
 }
@@ -42,3 +44,5 @@
   border-bottom: 5px solid #1DA1F2;
   bottom: -10px;
 }
+
+/* END of CSS for platfoorm navbar */ 

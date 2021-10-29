@@ -1,12 +1,13 @@
 import express from 'express';
 import { 
-    createPlatform, deletePlatform, 
-    joinPlatform, leavePlatform, 
-    reportPlatform 
+    getPlatform, createPlatform, 
+    deletePlatform, joinPlatform, 
+    leavePlatform, reportPlatform 
 } from '../controllers/platform.js';
 
 const router = express.Router();
 
+router.get('/:id', getPlatform);
 router.post('/', createPlatform);
 router.delete('/:id', deletePlatform);
 router.post('/:id/join', joinPlatform);

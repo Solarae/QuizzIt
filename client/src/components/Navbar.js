@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { Nav, Navbar, Container, Image, NavDropdown } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,7 +24,7 @@ function AppNavbar() {
   const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
 
   const [showCreatePlatform, setShowCreatePlatform] = useState(false);
-  const handleCloseCreatePlatform = () => { setShowCreatePlatform(false) };
+  const handleCloseCreatePlatform = useCallback(() => { setShowCreatePlatform(false) }, []);
   const handleShowCreatePlatform = () => { setShowCreatePlatform(true) };
 
   return (
