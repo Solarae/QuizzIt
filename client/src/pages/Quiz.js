@@ -3,7 +3,22 @@ import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
 
-function Quiz({ quizId }) {
+import { getQuiz } from '../actions/quizActions'
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
+
+
+function Quiz() {
+    const dispatch = useDispatch()
+    const quiz = useSelector((state) => state.quiz.quiz)
+    const history = useHistory()
+
+    let { qid } = useParams()
+
+    useEffect(() => {
+        if (quiz) dispatch(getQuiz(qid))
+    }, [dispatch, quiz])
+
     return (
         <div>
             <Banner></Banner>      

@@ -18,8 +18,8 @@ function App() {
         <Route path='/' exact component={Home} />
         <Route path='/profile' exact component={Profile} />
         <Route path='/platform/:id' exact component={Platform} />
-        <Route path='/platform/:id/quiz/:id' exact component={Quiz} />
-        <Route path='/platform/:id/quiz/:id/edit' exact component={EditQuiz} />
+        <Route path='/platform/:id/quiz/:qid' exact component={Quiz} />
+        <Route path='/platform/:id/quiz/:qid/edit' exact component={EditQuiz} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>
