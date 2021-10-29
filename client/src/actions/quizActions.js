@@ -1,5 +1,6 @@
 import {
-    GET_QUIZ,GET_QUIZ_FAIL,
+    GET_QUIZ,
+    GET_QUIZ_FAIL,
     QUIZ_LOADING
 } from '../actions/types'
 

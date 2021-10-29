@@ -10,20 +10,25 @@ import { useHistory, useParams } from 'react-router-dom'
 
 function Quiz() {
     const dispatch = useDispatch()
+    const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
     const history = useHistory()
 
     let { qid } = useParams()
 
     useEffect(() => {
-        if (quiz) dispatch(getQuiz('617b7f8d5ff650a255484597'))
+        dispatch(getQuiz('617b7f8d5ff650a255484597'))
     }, [dispatch, quiz])
 
+    if (isLoading) {
+        return ( <div> Loading... </div>)
+    }
+    console.log(isLoading)
     return (
         <div>
             <Banner></Banner>      
 
-            <div style={{ height: "50px" }}></div>
+            <div style={{ height: "10vh" }}></div>
                 <Container>
                 <Col>
                 <Table striped bordered hover>

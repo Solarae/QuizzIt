@@ -9,7 +9,7 @@ function EditQuiz({ quizId }) {
         <>
             <Banner></Banner>
 
-            <div style={{ height: "100px" }}></div>
+            <div style={{ height: "10vh" }}></div>
 
             <Container className="row justify-content-center">
                 <Col xs={1} md={4} className="g-4">
