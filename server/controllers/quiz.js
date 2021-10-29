@@ -36,9 +36,21 @@ export const createQuiz = async (req,res) =>{
         res.status(404).json({ msg: error.message })
     }
 
+}
 
 
+export const getQuiz = async (req,res) => {
+    let quizId = req.params.id
 
+    try {
+        let quiz = await Quiz.findById(quizId);
+
+        if(!quiz) return res.status(500).json({message:"Quiz not found with the provided id"})
+    
+        return res.status(200).json({quiz:quiz})        
+    } catch (error) {
+        res.status(500).json({message:error})
+    }
 
 
 }
@@ -92,6 +104,20 @@ export const editQuiz = async (req,res) =>{
     
 }
 
+export const getQuestion = async (req,res) =>{
+    let quizId = req.params.id
+
+    try {
+        let quiz = await Quiz.findById(quizId);
+
+        if(!quiz) return res.status(500).json({message:"Quiz not found with the provided id"})
+        
+        return res.status(200).json({questions:quiz.questions})        
+    } catch (error) {
+        res.status(500).json({message:error})
+    }
+
+}
 
 
 export const addQuizQuestion = async (req,res) =>{
