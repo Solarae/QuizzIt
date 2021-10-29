@@ -87,6 +87,38 @@ const platformReducer = (state = initialState, action) => {
                     ...action.payload
                 }
             }
+        case JOIN_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                "JOIN_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
+        case JOIN_PLATFORM_FAIL:
+            return {
+                ...state,
+                "JOIN_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
+        case LEAVE_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                "LEAVE_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
+        case LEAVE_PLATFORM_FAIL:
+            return {
+                ...state,
+                "LEAVE_PLATFORM": {
+                    loading: false,
+                    ...action.payload
+                }
+            }
         default:
             return state;
     }

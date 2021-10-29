@@ -88,3 +88,69 @@ export const getPlatform = ({ id }) => async (dispatch) => {
         })
     }
 }
+
+export const joinPlatform = ({ userId, platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        dispatch({
+            type: JOIN_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/join`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: JOIN_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: JOIN_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: JOIN_PLATFORM_FAIL
+        })
+    }
+}
+
+export const leavePlatform = ({ userId, platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        dispatch({
+            type: LEAVE_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/leave`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: LEAVE_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: LEAVE_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: LEAVE_PLATFORM_FAIL
+        })
+    }
+}

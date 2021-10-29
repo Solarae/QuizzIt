@@ -52,7 +52,7 @@ function Platform() {
 
     return (
         <div className="justify-content-between">
-            <Banner platform={platform}></Banner>
+            {Object.keys(platform).length !== 0 ? <Banner platform={platform} setPlatform={setPlatform}></Banner> : <div></div>}
 
             <div style={{ height: "50px" }}></div>
 
@@ -74,7 +74,7 @@ function Platform() {
                             </Row>
                         </Container>
 
-                        { showHome ? <Home platform={platform}></Home> : <MemberList platform={platform}></MemberList>}
+                        {showHome && Object.keys(platform).length !== 0 ? <Home platform={platform}></Home> : <MemberList platform={platform}></MemberList>}
 
                     </div>
                     <div className="col" style={{}}>

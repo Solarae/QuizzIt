@@ -103,7 +103,7 @@ export const joinPlatform = async (req, res) => {
 
         await user.save();
 
-        res.status(200).json(platform);
+        res.status(200).json({ platform: platform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
@@ -128,7 +128,7 @@ export const leavePlatform = async (req, res) => {
             { new: true }
         )
 
-        res.status(200).json(platform);
+        res.status(200).json({ platform: platform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
