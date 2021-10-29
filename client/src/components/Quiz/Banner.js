@@ -15,7 +15,7 @@ function Banner({ quizId }) {
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{overflowWrap: "break-word"}} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" >
-                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src="/quizzit_logo.png" thumbnail />
+                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src="/quizzit_logo.png" roundedCircle />
                         <div style={{ marginLeft: "2%"}}>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
@@ -42,7 +42,7 @@ function Banner({ quizId }) {
                 </div>
             </div>
             <div>
-                <h4 className="ms-5 mt-1">Platform Name</h4>
+                <h5 className="ms-5">Platform Name</h5>
             </div>
         </div>
     )
