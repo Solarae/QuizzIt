@@ -1,1 +1,1 @@
-export const URL = "https://quizzit-server.herokuapp.com/"
+export const URL = "https://quizzit-server.herokuapp.com"
