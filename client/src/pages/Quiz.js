@@ -1,4 +1,4 @@
-import React from 'react'
+import {React,useEffect} from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
