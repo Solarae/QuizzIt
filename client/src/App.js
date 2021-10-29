@@ -10,6 +10,9 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
 
+import Quiz from './pages/Quiz'
+import EditQuiz from './pages/EditQuiz'
+
 function App() {
   return (
     <BrowserRouter>
