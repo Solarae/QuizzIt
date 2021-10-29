@@ -16,7 +16,7 @@ function Quiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        if (quiz) dispatch(getQuiz(qid))
+        if (quiz) dispatch(getQuiz('617b7f8d5ff650a255484597'))
     }, [dispatch, quiz])
 
     return (

@@ -1,7 +1,10 @@
 import React from 'react'
 import { Container, Image, Button } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux'
+
 
 function Banner({ quizId }) {
+    const quiz = useSelector((state) => state.quiz.quiz)
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
@@ -14,14 +17,14 @@ function Banner({ quizId }) {
                     <div className="col-6 d-flex justify-content-start" >
                         <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src="/quizzit_logo.png" thumbnail />
                         <div style={{ marginLeft: "2%"}}>
-                            <p className="lead fw-normal" style={{marginBottom:"10px"}}> Quiz title </p>
+                            <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
                                 5.8k submissions
                                 <i className="bi bi-hand-thumbs-up" style={{ marginLeft: "30px" }}></i> 1.7k
                                 <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> 80
                             </p>
                             <p className="lead fw-normal">
-                                Quiz Description
+                                {quiz.description}
                             </p>
                         </div>
                     </div>
