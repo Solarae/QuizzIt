@@ -12,12 +12,13 @@ function Quiz() {
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
+
     const history = useHistory()
 
     let { qid } = useParams()
 
     useEffect(() => {
-        dispatch(getQuiz('617b7f8d5ff650a255484597'))
+        if (!quiz) dispatch(getQuiz(qid))
     }, [dispatch, quiz])
 
     if (isLoading) {
