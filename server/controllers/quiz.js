@@ -49,7 +49,17 @@ export const deleteQuiz = () =>{
 }
 
 
-export const editQuiz = () =>{
+export const editQuiz = async (req,res) =>{
+    let quizId = req.params.id;
+    let updateFields = req.body;
+    console.log(quizId);
+    try {
+        let newQuiz = await Quiz.findByIdAndUpdate(quizId,{$set: updateFields},{new:true})
+        res.status(200).json({quiz:newQuiz})
+    } catch (error) {
+        res.status(500).json({error:'There was a Server Side Error!'})
+    }
+    
     
 }
 
