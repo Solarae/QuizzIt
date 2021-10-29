@@ -12,14 +12,20 @@ function Quiz() {
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
+    // const platform = useSelector((state) => state.platform.platform)
 
     const history = useHistory()
 
     let { qid } = useParams()
+    // let { id } = useParams()
 
     useEffect(() => {
         if (!quiz) dispatch(getQuiz(qid))
     }, [dispatch, quiz])
+
+    // useEffect(() => {
+    //     if (!platform) dispatch(getQuiz(id))
+    // }, [dispatch, platform])
 
     if (isLoading) {
         return ( <div> Loading... </div>)
@@ -36,11 +42,11 @@ function Quiz() {
                     <tr><th>Quiz Rules</th></tr>
                     <tr>
                         <th>Time</th>
-                        <th>5 minutes</th>
+                        <th>{quiz.time}</th>
                     </tr>
                     <tr>
                         <th>Number of Questions</th>
-                        <th>20</th>
+                        <th>{quiz.questions.length}</th>
                     </tr>
                 </Table>
                 <div className="d-grid gap-1">
