@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Image, Button } from 'react-bootstrap';
 import { joinPlatform, leavePlatform } from '../../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
+import Report from './Report.js'
 
 function Banner({ platform }) {
     const [errors, setErrors] = useState({});
@@ -25,6 +26,10 @@ function Banner({ platform }) {
             platformId: platform._id
         }))
     }
+
+    const [showReport, setShowReport] = useState(false);
+    const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
+    const handleShowReport = () => { setShowReport(true) };
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
@@ -57,7 +62,7 @@ function Banner({ platform }) {
                                         <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
                                         : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
                                     <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
-                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>
+                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>
                         </div>
@@ -67,6 +72,8 @@ function Banner({ platform }) {
             <div>
                 <h4 className="ms-5 mt-1">{platform.name}</h4>
             </div>
+
+            <Report platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
         </div>
     )
 }

@@ -84,6 +84,19 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isLeaveLoading: false
             }
+        case REPORT_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isReportLoading: false,
+                errors: null 
+            }
+        case REPORT_PLATFORM_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isReportLoading: false
+            }
         case GET_PLATFORM_REQ:
             return {
                 ...state,

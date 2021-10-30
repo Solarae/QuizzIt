@@ -154,3 +154,36 @@ export const leavePlatform = ({ userId, platformId }) => async (dispatch) => {
         })
     }
 }
+
+export const reportPlatform = ({ platformId, userId, text }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId, text })
+    try {
+        dispatch({
+            type: REPORT_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/report`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: REPORT_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: REPORT_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
