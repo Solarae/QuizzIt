@@ -8,7 +8,9 @@ function CreatePlatform({ show, handleClose }) {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const platforms = useSelector((state) => state.platforms)
+    const platform = useSelector((state) => state.platforms.platform)
+    const platformErrors = useSelector((state) => state.platforms.errors);
+    const isCreateLoading = useSelector((state) => state.platforms.isCreateLoading)
     const history = useHistory()
 
     const [values, setValues] = useState({
@@ -17,8 +19,8 @@ function CreatePlatform({ show, handleClose }) {
     });
 
     // reset state values when the modal is opened/closed
-    useEffect(()=>{
-        setValues({platformName: "", platformDescription: ""});
+    useEffect(() => {
+        setValues({ platformName: "", platformDescription: "" });
         setErrors({});
     }, [show])
 
@@ -27,14 +29,13 @@ function CreatePlatform({ show, handleClose }) {
         setValues({ ...values, [e.target.name]: e.target.value });
     }
 
-    // waits for CREATE_PLATFORM request to update redux store with the new platform id so that we can use it here
+    // waits for CREATE_PLATFORM request to update redux store with the new platform id so that we can use it here to redirect user 
     useEffect(() => {
-        console.log("CREATE_PLATFORM.loading: " + platforms.CREATE_PLATFORM.loading)
-        if (!platforms.CREATE_PLATFORM.loading && platforms.CREATE_PLATFORM.platform) {
-            const platform = platforms.CREATE_PLATFORM.platform;
+        console.log("CREATE_PLATFORM.loading: " + isCreateLoading)
+        if (!isCreateLoading && (platform || platformErrors)) {
             // check if there were errors
-            if (platform.errors) {
-                setErrors({...platform.errors});
+            if (platformErrors) {
+                setErrors({ ...platformErrors });
                 return;
             }
 
@@ -44,7 +45,7 @@ function CreatePlatform({ show, handleClose }) {
             handleClose();
             history.push(`/platform/${platform._id}`);
         }
-    }, [platforms.CREATE_PLATFORM, history, handleClose]);
+    }, [isCreateLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
         e.preventDefault();

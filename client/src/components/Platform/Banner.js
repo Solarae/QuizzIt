@@ -6,28 +6,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
 
-function Banner({ platform, setPlatform }) {
+function Banner({ platform }) {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const platforms = useSelector((state) => state.platforms)
     const history = useHistory();
-
-    // waits for JOIN_PLATFORM request to update redux store with any response data 
-    useEffect(() => {
-        console.log("JOIN_PLATFORM.loading: " + platforms.JOIN_PLATFORM.loading)
-        if (!platforms.JOIN_PLATFORM.loading && platforms.JOIN_PLATFORM.platform) {
-            setPlatform(platforms.JOIN_PLATFORM.platform);
-        }
-    }, [platforms.JOIN_PLATFORM, setPlatform]);
-
-    // waits for LEAVE_PLATFORM request to update redux store with any response data 
-    useEffect(() => {
-        console.log("LEAVE_PLATFORM.loading: " + platforms.LEAVE_PLATFORM.loading)
-        if (!platforms.LEAVE_PLATFORM.loading && platforms.LEAVE_PLATFORM.platform) {
-            setPlatform(platforms.LEAVE_PLATFORM.platform);
-        }
-    }, [platforms.LEAVE_PLATFORM, setPlatform]);
 
     const handleJoin = () => {
         dispatch(joinPlatform({
