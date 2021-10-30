@@ -1,16 +1,28 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
 import { createPlatform } from '../actions/platformActions'
 import { useHistory } from 'react-router-dom';
 
+// custom hook for getting reference to previous values/props
+function usePrevious(value) {
+    const ref = useRef();
+    useEffect(() => {
+        ref.current = value;
+    });
+    return ref.current;
+}
+
 function CreatePlatform({ show, handleClose }) {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
+
     const platform = useSelector((state) => state.platforms.platform)
     const platformErrors = useSelector((state) => state.platforms.errors);
     const isCreateLoading = useSelector((state) => state.platforms.isCreateLoading)
+    const prev_isCreateLoading = usePrevious(isCreateLoading)
+
     const history = useHistory()
 
     const [values, setValues] = useState({
@@ -31,20 +43,22 @@ function CreatePlatform({ show, handleClose }) {
 
     // waits for CREATE_PLATFORM request to update redux store with the new platform id so that we can use it here to redirect user 
     useEffect(() => {
-        console.log("CREATE_PLATFORM.loading: " + isCreateLoading)
-        if (!isCreateLoading && (platform || platformErrors)) {
-            // check if there were errors
-            if (platformErrors) {
-                setErrors({ ...platformErrors });
-                return;
-            }
-
-            console.log(platform._id);
-
-            // close the modal and redirect user to the platform page
-            handleClose();
-            history.push(`/platform/${platform._id}`);
+        if (!prev_isCreateLoading) {
+            return;
         }
+
+        console.log("CREATE_PLATFORM.loading: " + isCreateLoading)
+        // check if there were errors
+        if (platformErrors) {
+            setErrors({ ...platformErrors });
+            return;
+        }
+
+        console.log(platform._id);
+
+        // close the modal and redirect user to the platform page
+        handleClose();
+        history.push(`/platform/${platform._id}`);
     }, [isCreateLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
