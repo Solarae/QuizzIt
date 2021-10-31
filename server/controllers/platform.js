@@ -1,3 +1,5 @@
+import bcrypt from "bcryptjs";
+
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
 
@@ -47,9 +49,22 @@ export const createPlatform = async (req, res) => {
 }
 
 export const deletePlatform = async (req, res) => {
+    const { confirmPassword } = req.body
+    const errors = {}
+
     try {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+
+        const owner = await User.findById(platform.owner);
+
+        // check if confirmPassword matches with owner's password
+        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
+        if (!isMatch) {
+            errors.invalidPassword = "Incorrect Password";
+            return res.status(200).json({ errors: errors });
+        }
+
         await platform.remove();
 
         const count = await User.updateMany(
