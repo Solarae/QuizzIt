@@ -89,6 +89,39 @@ export const getPlatform = ({ id }) => async (dispatch) => {
     }
 }
 
+export const deletePlatform = ({ platformId, confirmPassword }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ confirmPassword })
+    try {
+        dispatch({
+            type: DELETE_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/delete`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: DELETE_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: DELETE_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: DELETE_PLATFORM_FAIL
+        })
+    }
+}
+
 export const joinPlatform = ({ userId, platformId }) => async (dispatch) => {
     const config = {
         headers: {

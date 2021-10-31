@@ -58,6 +58,19 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isCreateLoading: false
             }
+        case DELETE_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isDeleteLoading: false,
+                errors: null 
+            }
+        case DELETE_PLATFORM_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isDeleteLoading: false
+            }
         case JOIN_PLATFORM_SUCCESS:
             return {
                 ...state,

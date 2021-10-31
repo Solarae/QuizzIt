@@ -9,6 +9,7 @@ import './App.css'; // overridden css after all other css
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
+import EditPlatform from './pages/EditPlatform';
 
 import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
@@ -21,6 +22,7 @@ function App() {
         <Route path='/' exact component={Home} />
         <Route path='/profile' exact component={Profile} />
         <Route path='/platform/:id' exact component={Platform} />
+        <Route path='/platform/:id/edit' exact component={EditPlatform} />
         <Route path='/platform/:id/quiz/:qid' exact component={Quiz} />
         <Route path='/platform/:id/quiz/:qid/edit' exact component={EditQuiz} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
