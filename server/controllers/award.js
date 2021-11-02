@@ -3,23 +3,24 @@ import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
 
 export const createAward = async (req, res) => {
-    const { ownerId } = req.body;
+    const { ownerId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
     const errors = {}
 
     try {
-        const platform = await Platform.findById(ownerId);
+        const platform = await Platform.findById(platformId);
         if (!platform) {
             errors.invalidPlatform = `No platform with id: ${platform._id}`;
             return res.status(404).json({ errors: errors});
         }
-
-        // check if user has update permissions
-        if (ownerId === platform.owner) {
-            errors.invalidOwner = "You don't have update permissions";
-            return res.status(200).json({ errors: errors });
-        }
     
-        const award = new Award(req.body);
+        const award = new Award({
+            title: title,
+            description: description,
+            icon: icon,
+            platformId: platformId,
+            requirementType: requirementType,
+            requirementCount: requirementCount
+        });
         const createdAward = await award.save();
 
         if (!createdAward) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
@@ -40,10 +41,14 @@ export const getAward = async (req, res) => {
     }
 }
 
-export const getAwardsByPlatformId = async (req, res) => {
-    const { platformId } = req.query;
+export const getAwardsByFilter = async (req, res) => {
+    var query = {}
+    for(var key in req.query){ 
+        query[key] = req.query[key];
+    }
+
     try {
-        const awards = await Award.find({ platformId: platformId });
+        const awards = await Award.find(query);
         res.status(200).json({ awards: awards });
     } catch (error) {
         res.status(404).json({ msg: error.message })
