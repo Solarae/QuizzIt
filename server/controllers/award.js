@@ -44,7 +44,7 @@ export const getAwardsByPlatformId = async (req, res) => {
 }
 
 export const updateAward = async (req, res) => {
-    const { newValue, confirmPassword } = req.body
+    const { newValue, ownerId } = req.body
     const errors = {}
     try {
         const award = await Award.findById(req.params.id);
@@ -53,12 +53,9 @@ export const updateAward = async (req, res) => {
         const platform = await Platform.findById(award.platformId);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const owner = await User.findById(platform.owner);
-
-        // check if confirmPassword matches with owner's password
-        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
-        if (!isMatch) {
-            errors.invalidPassword = "Incorrect Password";
+        // check if user has update permissions
+        if (ownerId === platform.owner) {
+            errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
 
@@ -75,7 +72,7 @@ export const updateAward = async (req, res) => {
 }
 
 export const deleteAward = async (req, res) => {
-    const { confirmPassword } = req.body
+    const { ownerId } = req.body
     const errors = {}
 
     try {
@@ -85,12 +82,9 @@ export const deleteAward = async (req, res) => {
         const platform = await Award.findById(award.platformId);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const owner = await User.findById(platform.owner);
-
-        // check if confirmPassword matches with owner's password
-        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
-        if (!isMatch) {
-            errors.invalidPassword = "Incorrect Password";
+        // check if user has update permissions
+        if (ownerId === platform.owner) {
+            errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
 
