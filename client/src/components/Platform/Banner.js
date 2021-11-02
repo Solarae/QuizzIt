@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Image, Button } from 'react-bootstrap';
 import { joinPlatform, leavePlatform } from '../../actions/platformActions'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
@@ -61,7 +62,9 @@ function Banner({ platform }) {
                                     {platform.subscribers.includes(auth.user.id) ?
                                         <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
                                         : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
-                                    <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
+                                    <CopyToClipboard text={window.location.href}>
+                                        <i className="bi bi-share" style={{ marginLeft: "25px", cursor: "pointer" }}></i>
+                                    </CopyToClipboard>
                                     <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>
