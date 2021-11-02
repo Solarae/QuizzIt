@@ -29,4 +29,5 @@ mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
 
 app.use('/api/users', userRoutes);
 app.use('/api/platforms', platformRoutes);
-app.use('/api/quizzes',quizRoutes)
+app.use('/api/quizzes', quizRoutes);
+app.use('/api/awards', awardRoutes);
