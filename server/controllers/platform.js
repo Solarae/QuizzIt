@@ -88,6 +88,21 @@ export const getPlatform = async (req, res) => {
     }
 }
 
+export const updatePlatform = async (req, res) => {
+    const { newValue } = req.body
+    try {
+        const platform = await Platform.findByIdAndUpdate(
+            req.params.id, 
+            { $set: newValue }, 
+            { new:true }
+        );
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+        res.status(200).json({ platform: platform });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
 export const joinPlatform = async (req, res) => {
     const { userId } = req.body;
 
