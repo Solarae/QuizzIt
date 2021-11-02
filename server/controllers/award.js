@@ -100,7 +100,7 @@ export const deleteAward = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        const deletedAward = Award.findByIdAndDelete(req.params.id);
+        const deletedAward = await Award.findByIdAndDelete(req.params.id);
         if (!deletedAward) return res.status(404).json({ msg: "Something went wrong with deleting the award" });
         res.status(200).json({ award: award })
     } catch (error) {
