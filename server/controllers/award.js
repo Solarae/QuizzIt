@@ -3,13 +3,20 @@ import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
 
 export const createAward = async (req, res) => {
+    const { ownerId } = req.body;
     const errors = {}
 
     try {
-        const platform = await Platform.findById(req.body.platformId);
+        const platform = await Platform.findById(ownerId);
         if (!platform) {
-            errors.invalidPlatform = `No user with id: ${userId}`;
+            errors.invalidPlatform = `No platform with id: ${platform._id}`;
             return res.status(404).json({ errors: errors});
+        }
+
+        // check if user has update permissions
+        if (ownerId === platform.owner) {
+            errors.invalidOwner = "You don't have update permissions";
+            return res.status(200).json({ errors: errors });
         }
     
         const award = new Award(req.body);
