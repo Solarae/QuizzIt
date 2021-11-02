@@ -8,6 +8,14 @@ export const createPlatform = async (req, res) => {
     const errors = {};
 
     try {
+        if (name.trim() === "") {
+            errors.emptyName = "Platform name cannot be empty";
+        }
+        if (description.trim() === "") {
+            errors.emptyDesc = "Platform description cannot be empty";
+        }
+        if (errors.emptyName || errors.emptyDesc) return res.status(200).json({ errors: errors });
+
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ msg: `No user with id: ${userId}` });
 
