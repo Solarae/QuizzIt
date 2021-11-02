@@ -91,7 +91,7 @@ export const deleteAward = async (req, res) => {
         const award = await Award.findById(req.params.id);
         if (!award) return res.status(404).json({ msg: "Award doesn't exist" });
 
-        const platform = await Award.findById(award.platformId);
+        const platform = await Platform.findById(award.platformId);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         // check if user has update permissions
