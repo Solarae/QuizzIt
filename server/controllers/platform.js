@@ -88,6 +88,10 @@ export const getPlatform = async (req, res) => {
     }
 }
 
+// To change a field, say name, newValue should be
+// newValue = {
+//  name: "NewName"
+// }
 export const updatePlatform = async (req, res) => {
     const { newValue } = req.body
     try {
