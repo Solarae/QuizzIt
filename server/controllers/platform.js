@@ -94,7 +94,7 @@ export const updatePlatform = async (req, res) => {
         const platform = await Platform.findByIdAndUpdate(
             req.params.id, 
             { $set: newValue }, 
-            { new:true }
+            { new: true }
         );
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
         res.status(200).json({ platform: platform });
