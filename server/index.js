@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import userRoutes from './routes/user.js'
 import platformRoutes from './routes/platform.js'
 import quizRoutes from './routes/quiz.js'
+import awardRoutes from './routes/award.js'
 
 dotenv.config()
 

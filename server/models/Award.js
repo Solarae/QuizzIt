@@ -10,8 +10,7 @@ const awardSchema = new mongoose.Schema ({
         required: true
     },
     icon: {
-        data: Buffer,
-        contentType: String,
+        type: String,
         required: true
     },
     platformId: {
