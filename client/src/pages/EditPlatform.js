@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import EditInfo from '../components/EditPlatform/EditInfo.js'
 import AwardSection from '../components/EditPlatform/AwardSection.js'
+import QuizSection from '../components/EditPlatform/QuizSection.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -38,6 +39,8 @@ function EditPlatform() {
 
             <div >
                 <h2 className='text-center m-3'>Platform Edit page</h2>
+                <QuizSection platform={platform}></QuizSection>
+                <hr/>
                 <AwardSection platform={platform}></AwardSection>
                 <hr/>
                 <EditInfo platform={platform}></EditInfo>
