@@ -49,7 +49,7 @@ export const getQuiz = async (req,res) => {
     
         return res.status(200).json({ quiz : quiz })        
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error,message})
     }
 
 
@@ -82,7 +82,7 @@ export const deleteQuiz = async (req,res) =>{
 
 
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 
 
@@ -98,7 +98,7 @@ export const editQuiz = async (req,res) =>{
         let newQuiz = await Quiz.findByIdAndUpdate(quizId,{$set: updateFields},{new:true})
         res.status(200).json({quiz:newQuiz})
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
     
     
@@ -114,7 +114,7 @@ export const getQuestion = async (req,res) =>{
         
         return res.status(200).json({questions:quiz.questions})        
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 
 }
@@ -125,17 +125,13 @@ export const addQuizQuestion = async (req,res) =>{
     let {question}= req.body
 
     try {
-        let formattedQuestion = JSON.parse(question)
-        console.log(JSON.parse(question))
         let quiz = await Quiz.findById(quizId)
-        quiz.questions.push(formattedQuestion)
+        quiz.questions.push(question)
         await quiz.save()
         res.status(200).json({quiz:quiz})
-
-
     } catch (error) {
-        res.status(500).json({message:error})
-    }
+        res.status(500).json({message:error.message})
+     }
 
 }
 
@@ -154,7 +150,7 @@ export const editQuizQuestion = async (req,res) =>{
 
 
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 }
 
@@ -169,7 +165,7 @@ export const deleteQuizQuestion = async (req,res) =>{
 
 
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 }
 
