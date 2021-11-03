@@ -117,14 +117,14 @@ export const updatePlatform = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        const platform = await Platform.findByIdAndUpdate(
+        const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id, 
             { $set: newValue }, 
             { new: true }
         );
-        if (!platform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+        if (!updatedPlatform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
 
-        res.status(200).json({ platform: platform });
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }

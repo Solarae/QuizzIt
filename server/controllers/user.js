@@ -193,7 +193,7 @@ export const getUsersByFilter = async (req, res) => {
     var query = {}
     for(var key in req.query){ 
         query[key] = {
-            "$regex": req.query.input, 
+            "$regex": req.query[key], 
             "$options": "i"
         }
     }
