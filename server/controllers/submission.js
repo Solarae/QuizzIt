@@ -11,8 +11,6 @@ export const createSubmission = async (req,res) =>{
         let quiz = await Quiz.findById(quizId)
         if(!quiz) return res.status(400).json({message:"Quiz id not found"})
 
-        let user = await User.findById(userId)
-        if(!user) return res.status(400).json({message:"User id not found"})
 
         let newSubmission = new Submission({
             quizId:quizId,
@@ -30,10 +28,6 @@ export const createSubmission = async (req,res) =>{
         //save submission to quiz 
         quiz.submissions.push(created_submission)
         await quiz.save()
-
-        //save submission to user
-        user.submissions.push(created_submission)
-        await user.save()
         res.status(200).json({submission:created_submission})
 
     } catch (error) {
@@ -49,21 +43,18 @@ export const createSubmission = async (req,res) =>{
 export const getAllSubmissions = async (req,res)=>{
 
     let userId = req.params.id
-
-
     try {
 
-        let user = await User.findById(userId)
+        let submissions = await Submission.find({userId:userId})
 
-        if(!user) return res.status(400).json({message:"User id is not found"})
-    
-        let submissions = user.submissions
+        if(!submissions) return res.status(400).json({message:"User id is not found"})
     
         return res.status(200).json({submissions:submissions})     
 
 
     } catch (error) {
-        
+        console.log(error)
+        return res.status(500).json({message:error.message})
     }
    
 
@@ -75,19 +66,45 @@ export const getQuizSubmissions = async (req,res)=>{
     let userId = req.params.uid
     let quizId = req.params.qid
 
-    //find all the submissions based on provided userId
-    
-    let user = await User.findById(userId)
-    let submissions = user.submissions
 
-    //filter out the submission that is the same quiz
-    submissions.filter((element)=>{
-        return element.userId
-    })
+
+    try {
+
+        //find all the submissions based on provided userId
+        let submissions = await Submission.find({userId:userId,quizId:quizId})
+            
+        res.status(200).json({submissions:submissions})     
+        
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:error.message})  
+    }
 
 
 
 }
 
+
+export const getSubmission = async (req,res) =>{
+
+    let id = req.params.id
+
+    try {
+
+        //find all the submissions based on provided userId
+        let submissions = await Submission.findById(id)
+            
+        res.status(200).json({submissions:submissions})     
+        
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:error.message})  
+    }
+
+
+
+}
 
 
