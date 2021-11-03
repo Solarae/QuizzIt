@@ -28,7 +28,7 @@ function EditPlatform() {
     }, [id, dispatch]);
 
 
-    if (isGetLoading) {
+    if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
     return (

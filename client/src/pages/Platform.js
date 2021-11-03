@@ -31,7 +31,7 @@ function Platform() {
     const handleHideHome = () => { setShowHome(false) };
     const handleShowHome = () => { setShowHome(true) };
 
-    if (isGetLoading){
+    if (isGetLoading || !platform){
         return (<div>Loading...</div>)
     }
     return (
