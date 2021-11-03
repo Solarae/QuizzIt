@@ -11,3 +11,5 @@ router.get("/:id",getAllSubmissions);
 router.post("/",createSubmission);
 
 
+export default router
+

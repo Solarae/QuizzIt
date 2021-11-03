@@ -58,11 +58,7 @@ const userSchema = new mongoose.Schema ({
             type: String,
             enum: ['Consumer', 'Moderator', 'Creator']
         }
-    }],
-    submissions:[{
-        type:mongoose.Schema.Types.ObjectId,
-        ref: 'Submission'
-    }],
+    }]
 })
 
 const User = mongoose.model('User', userSchema)
