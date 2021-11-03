@@ -58,7 +58,7 @@ export const deletePlatform = async (req, res) => {
 
         const owner = await User.findById(platform.owner);
 
-        if (ownerId !== platform.owner) {
+        if (userId !== platform.owner) {
             errors.invalidOwner = "You don't have delete permissions";
             return res.status(200).json({ errors: errors });
         }
@@ -98,14 +98,14 @@ export const getPlatform = async (req, res) => {
 //  name: "NewName"
 // }
 export const updatePlatform = async (req, res) => {
-    const { newValue, confirmPassword } = req.body
+    const { newValue, userId, confirmPassword } = req.body
     try {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
 
         const owner = await User.findById(platform.owner);
 
-        if (ownerId !== platform.owner) {
+        if (userId !== platform.owner) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }

@@ -3,7 +3,7 @@ import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
 
 export const createAward = async (req, res) => {
-    const { ownerId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
+    const { userId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
     const errors = {}
 
     try {
@@ -13,7 +13,7 @@ export const createAward = async (req, res) => {
             return res.status(404).json({ errors: errors});
         }
 
-        if (ownerId !== platform.owner) {
+        if (userId !== platform.owner) {
             errors.invalidOwner = "You don't have create permissions";
             return res.status(200).json({ errors: errors });
         }
@@ -61,7 +61,7 @@ export const getAwardsByFilter = async (req, res) => {
 }
 
 export const updateAward = async (req, res) => {
-    const { newValue, ownerId } = req.body
+    const { newValue, userId } = req.body
     const errors = {}
     try {
         const award = await Award.findById(req.params.id);
@@ -71,7 +71,7 @@ export const updateAward = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         // check if user has update permissions
-        if (ownerId !== platform.owner) {
+        if (userId !== platform.owner) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
@@ -89,7 +89,7 @@ export const updateAward = async (req, res) => {
 }
 
 export const deleteAward = async (req, res) => {
-    const { ownerId } = req.body
+    const { userId } = req.body
     const errors = {}
 
     try {
@@ -100,7 +100,7 @@ export const deleteAward = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         // check if user has update permissions
-        if (ownerId !== platform.owner) {
+        if (userId !== platform.owner) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
