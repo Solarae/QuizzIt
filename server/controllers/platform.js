@@ -213,3 +213,20 @@ export const reportPlatform = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+export const getPlatformsByFilter = async (req, res) => {
+    var query = {}
+    for(var key in req.query){ 
+        query[key] = {
+            "$regex": req.query[key], 
+            "$options": "i"
+        }
+    }
+
+    try {
+        const platforms = await Platform.find(query);
+        res.status(200).json({ platforms: platforms });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
