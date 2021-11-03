@@ -1,8 +1,9 @@
-import { React, useEffect } from 'react'
-import { Container, Col } from 'react-bootstrap';
+import { React, useEffect, useState } from 'react'
+import { Container, Col, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
-import QuestionCard from '../components/Quiz/QuestionCard'
+import QuestionCard from '../components/Question/QuestionCard'
+import AddQuestion from '../components/Question/AddQuestion'
 
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,6 +29,14 @@ function EditQuiz({ quizId }) {
     //     if (!platform) dispatch(getQuiz(id))
     // }, [dispatch, platform])
 
+    const [showAddQuestion, setShowAddQuestion] = useState(false);
+    const handleShowAddQuestion = () => { 
+        console.log("show add")
+        setShowAddQuestion(true) };
+    const handleCloseAddQuestion = () => { setShowAddQuestion(false) };
+
+
+
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
@@ -39,16 +48,19 @@ function EditQuiz({ quizId }) {
 
             <Container className="row justify-content-center">
                 <Col xs={1} md={4} className="g-4">
-                        {Array.from({ length: 9 }).map((_, idx) => (
-                            <>
-                            <Col>
-                                <QuestionCard quizId={quizId}></QuestionCard>
-                            </Col>
-                            <div style={{ height: '20px'}}></div>
-                            </>
+                    <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Add Question</Button>
+                    {Array.from({ length: 9 }).map((_, idx) => (
+                        <>
+                        <Col>
+                            <QuestionCard quizId={quizId}></QuestionCard>
+                        </Col>
+                        <div style={{ height: '20px'}}></div>
+                        </>
                         ))}
                 </Col>
             </Container>
+
+            <AddQuestion quizId={quizId} show={showAddQuestion} handleClose={handleCloseAddQuestion}></AddQuestion>
         </>
     )
 }
