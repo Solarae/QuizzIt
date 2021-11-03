@@ -63,6 +63,7 @@ function DeletePlatform({ show, handleClose }) {
 
         dispatch(deletePlatform(
             {
+                userId: auth.user.id,
                 platformId: id,
                 confirmPassword: values.password,
             }
