@@ -58,6 +58,11 @@ export const deletePlatform = async (req, res) => {
 
         const owner = await User.findById(platform.owner);
 
+        if (ownerId !== platform.owner) {
+            errors.invalidOwner = "You don't have delete permissions";
+            return res.status(200).json({ errors: errors });
+        }
+
         // check if confirmPassword matches with owner's password
         const isMatch = await bcrypt.compare(confirmPassword, owner.password);
         if (!isMatch) {
@@ -99,6 +104,11 @@ export const updatePlatform = async (req, res) => {
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
 
         const owner = await User.findById(platform.owner);
+
+        if (ownerId !== platform.owner) {
+            errors.invalidOwner = "You don't have update permissions";
+            return res.status(200).json({ errors: errors });
+        }
 
         // check if confirmPassword matches with owner's password
         const isMatch = await bcrypt.compare(confirmPassword, owner.password);
