@@ -20,6 +20,7 @@ function EditInfo({ platform }) {
         <div className="row">
             <div className="col" style={{}}>
                 <Container>
+            <h4 style={{ marginBottom: "20px" }}>Platform Details</h4>
                     <Row className="justify-content-md-center">
                         <Col md={4}>
                             <Form.Label>Platform Name</Form.Label>
