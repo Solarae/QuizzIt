@@ -54,7 +54,7 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         optionList.push( 
             <Form.Group className="mb-3">
                 <Form.Label>Option {index+1} </Form.Label>
-                <Form.Control type="text" placeholder="option" name={"Option"+(index+1)} onChange={onChange} />
+                <Form.Control type="text" placeholder="option" name={"option"+(index+1)} onChange={onChange} />
             </Form.Group>
         )
     })
@@ -65,6 +65,10 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
             <Modal.Header closeButton> <Modal.Title>Add Question</Modal.Title> </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
+                <Form.Group className="mb-3">
+                    <Form.Label>Question</Form.Label>
+                    <Form.Control type="text" placeholder="quesiton" name="question" onChange={onChange} />
+                </Form.Group>
                     {optionList}
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (
