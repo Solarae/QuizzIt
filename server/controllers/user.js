@@ -192,7 +192,10 @@ export const deleteAccount = async (req, res) => {
 export const getUsersByFilter = async (req, res) => {
     var query = {}
     for(var key in req.query){ 
-        query[key] = req.query[key];
+        query[key] = {
+            "$regex": req.query.input, 
+            "$options": "i"
+        }
     }
 
     try {
