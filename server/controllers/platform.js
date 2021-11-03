@@ -57,7 +57,7 @@ export const createPlatform = async (req, res) => {
 }
 
 export const deletePlatform = async (req, res) => {
-    const { confirmPassword } = req.body
+    const { userId, confirmPassword } = req.body
     const errors = {}
 
     try {
@@ -66,7 +66,7 @@ export const deletePlatform = async (req, res) => {
 
         const owner = await User.findById(platform.owner);
 
-        if (userId !== platform.owner) {
+        if (userId !== String(platform.owner)) {
             errors.invalidOwner = "You don't have delete permissions";
             return res.status(200).json({ errors: errors });
         }
