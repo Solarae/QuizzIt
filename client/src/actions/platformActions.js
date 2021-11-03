@@ -89,13 +89,13 @@ export const getPlatform = ({ id }) => async (dispatch) => {
     }
 }
 
-export const deletePlatform = ({ platformId, confirmPassword }) => async (dispatch) => {
+export const deletePlatform = ({ userId, platformId, confirmPassword }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ confirmPassword })
+    const body = JSON.stringify({ userId, confirmPassword })
     try {
         dispatch({
             type: DELETE_PLATFORM_REQ
