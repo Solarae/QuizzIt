@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Row, Col, Nav, FloatingLabel, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
-import DeletePlatform from '../components/EditPlatform/DeletePlatform.js'
+import EditInfo from '../components/EditPlatform/EditInfo.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -25,9 +25,6 @@ function EditPlatform() {
         }))
     }, [id, dispatch]);
 
-    const [showDelete, setShowDelete] = useState(false);
-    const handleCloseDelete = useCallback(() => { setShowDelete(false) }, []);
-    const handleShowDelete = () => { setShowDelete(true) };
 
     if (isGetLoading) {
         return (<div>Loading...</div>)
@@ -39,23 +36,10 @@ function EditPlatform() {
             <div style={{ height: "50px" }}></div>
 
             <div >
-                <div className="row">
-                    <div className="col" style={{}}>
-                        <Container>
-
-                            <h2 className='text-center m-3'>Platform Edit page</h2>
-                            <Row className="justify-content-md-center">
-                                <Col md={4}>
-                                    <Button onClick={handleShowDelete} variant="outline-danger">Delete Platform</Button>
-                                </Col>
-                            </Row>
-                        </Container>
-
-                    </div>
-                </div>
+                <h2 className='text-center m-3'>Platform Edit page</h2>
+                <EditInfo platform={platform}></EditInfo>
             </div>
 
-            <DeletePlatform show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
         </div >
     )
 }
