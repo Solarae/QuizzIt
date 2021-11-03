@@ -1,3 +1,5 @@
+import jwtDecode from 'jwt-decode'
+
 import {
     LOGIN_SUCCESS,
     LOGIN_FAIL,
@@ -15,6 +17,17 @@ const initialState = {
     isAuthenticated: null,
     isLoading: false,
     user: null
+}
+
+// set the user if there is a valid jwt token
+if (localStorage.getItem('token')) {
+    const token = jwtDecode(localStorage.getItem('token'))
+    if (token.exp * 1000 < Date.now()) {
+        localStorage.removeItem('jwtToken');
+    } else {
+        initialState.isAuthenticated = true
+        initialState.user = token.user;
+    }
 }
 
 const authReducer = (state = initialState, action) => {
