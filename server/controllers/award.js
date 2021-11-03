@@ -12,6 +12,11 @@ export const createAward = async (req, res) => {
             errors.invalidPlatform = `No platform with id: ${platform._id}`;
             return res.status(404).json({ errors: errors});
         }
+
+        if (ownerId === platform.owner) {
+            errors.invalidOwner = "You don't have create permissions";
+            return res.status(200).json({ errors: errors });
+        }
     
         const award = new Award({
             title: title,

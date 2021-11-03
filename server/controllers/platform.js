@@ -93,14 +93,27 @@ export const getPlatform = async (req, res) => {
 //  name: "NewName"
 // }
 export const updatePlatform = async (req, res) => {
-    const { newValue } = req.body
+    const { newValue, confirmPassword } = req.body
     try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+
+        const owner = await User.findById(platform.owner);
+
+        // check if confirmPassword matches with owner's password
+        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
+        if (!isMatch) {
+            errors.invalidPassword = "Incorrect Password";
+            return res.status(200).json({ errors: errors });
+        }
+
         const platform = await Platform.findByIdAndUpdate(
             req.params.id, 
             { $set: newValue }, 
             { new: true }
         );
-        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+        if (!platform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+
         res.status(200).json({ platform: platform });
     } catch (error) {
         res.status(404).json({ msg: error.message })

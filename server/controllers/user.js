@@ -188,3 +188,17 @@ export const deleteAccount = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+export const getUsersByFilter = async (req, res) => {
+    var query = {}
+    for(var key in req.query){ 
+        query[key] = req.query[key];
+    }
+
+    try {
+        const users = await User.find(query);
+        res.status(200).json({ users: users });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
