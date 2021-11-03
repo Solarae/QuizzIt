@@ -66,6 +66,11 @@ export const deletePlatform = async (req, res) => {
 
         const owner = await User.findById(platform.owner);
 
+        if (userId !== platform.owner) {
+            errors.invalidOwner = "You don't have delete permissions";
+            return res.status(200).json({ errors: errors });
+        }
+
         // check if confirmPassword matches with owner's password
         const isMatch = await bcrypt.compare(confirmPassword, owner.password);
         if (!isMatch) {
@@ -91,6 +96,43 @@ export const getPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
         res.status(200).json({ platform: platform });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+// To change a field, say name, newValue should be
+// newValue = {
+//  name: "NewName"
+// }
+export const updatePlatform = async (req, res) => {
+    const { newValue, userId, confirmPassword } = req.body
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+
+        const owner = await User.findById(platform.owner);
+
+        if (userId !== platform.owner) {
+            errors.invalidOwner = "You don't have update permissions";
+            return res.status(200).json({ errors: errors });
+        }
+
+        // check if confirmPassword matches with owner's password
+        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
+        if (!isMatch) {
+            errors.invalidPassword = "Incorrect Password";
+            return res.status(200).json({ errors: errors });
+        }
+
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id, 
+            { $set: newValue }, 
+            { new: true }
+        );
+        if (!updatedPlatform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
@@ -175,6 +217,23 @@ export const reportPlatform = async (req, res) => {
         await platform.save();
 
         res.status(200).json({ platform: platform });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+export const getPlatformsByFilter = async (req, res) => {
+    var query = {}
+    for(var key in req.query){ 
+        query[key] = {
+            "$regex": req.query[key], 
+            "$options": "i"
+        }
+    }
+
+    try {
+        const platforms = await Platform.find(query);
+        res.status(200).json({ platforms: platforms });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
