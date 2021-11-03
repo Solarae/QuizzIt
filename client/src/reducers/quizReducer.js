@@ -1,9 +1,12 @@
 import {
     GET_QUIZ,
+    GET_QUIZ_FAIL,
     QUIZ_LOADING,
     CREATE_QUIZ_REQ,
     CREATE_QUIZ_SUCCESS,
-    CREATE_QUIZ_FAIL
+    CREATE_QUIZ_FAIL,
+    ADD_QUIZ_QUESTION,
+    ADD_QUIZ_QUESTION_FAIL,
 } from '../actions/types'
 
 const initialState = {
@@ -20,6 +23,23 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isLoading: false
+            }
+        case GET_QUIZ_FAIL:
+            return {
+                ...state,
+                quiz: null,
+                isLoading: false,
+                errors: action.payload.errors
+            }
+        case ADD_QUIZ_QUESTION: 
+            return {
+                ...state,
+                ...action.payload,
+            }
+        case ADD_QUIZ_QUESTION_FAIL: 
+            return {
+                ...state,
+                ...action.payload
             }
         case QUIZ_LOADING:
             return {

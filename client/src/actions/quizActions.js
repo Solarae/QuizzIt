@@ -4,7 +4,9 @@ import {
     QUIZ_LOADING,
     CREATE_QUIZ_REQ,
     CREATE_QUIZ_SUCCESS,
-    CREATE_QUIZ_FAIL
+    CREATE_QUIZ_FAIL,
+    ADD_QUIZ_QUESTION,
+    ADD_QUIZ_QUESTION_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -68,6 +70,38 @@ export const createQuiz = ({ userId, name, description, platformId, time }) => a
         })
     }
 }
+
+export const addQuizQuestion = ({ id, question, options, answer }) => async (dispatch) => {
+    
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ question, options, answer })
+        const res = await axios.post(`${URL}/api/quizzes/${id}/addQuizQuestion`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: ADD_QUIZ_QUESTION_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: ADD_QUIZ_QUESTION,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }
+}
+
+// export const editQuizQuestion = NaN
+// export const deleteQuizQuestion = NaN
+// export const editQuiz = NaN
 
 export const setQuizLoading = () => {
     return {
