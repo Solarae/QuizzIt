@@ -1,7 +1,10 @@
 import {
     GET_QUIZ,
     GET_QUIZ_FAIL,
-    QUIZ_LOADING
+    QUIZ_LOADING,
+    CREATE_QUIZ_REQ,
+    CREATE_QUIZ_SUCCESS,
+    CREATE_QUIZ_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -28,6 +31,40 @@ export const getQuiz = ( id ) => async (dispatch) => {
         console.log(error.msg)
         dispatch({
             type: GET_QUIZ_FAIL
+        })
+    }
+}
+
+export const createQuiz = ({ userId, name, description, platformId, time }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ userId, name, description, platformId, time })
+    try {
+        dispatch({
+            type: CREATE_QUIZ_REQ
+        });
+        const res = await axios.post(`${URL}/api/quizzes`, body, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: CREATE_QUIZ_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: CREATE_QUIZ_SUCCESS,
+                payload: res.data
+            })
+        }
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: CREATE_QUIZ_FAIL
         })
     }
 }
