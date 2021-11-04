@@ -3,8 +3,6 @@ import User from '../models/User.js'
 import Platform from "../models/Platform.js"
 import mongoose from "mongoose"
 
-
-
 export const createQuiz = async (req,res) =>{
 
     const {userId,name,description,platformId,time} = req.body;
@@ -38,7 +36,6 @@ export const createQuiz = async (req,res) =>{
 
 }
 
-
 export const getQuiz = async (req,res) => {
     let quizId = req.params.id
 
@@ -49,17 +46,29 @@ export const getQuiz = async (req,res) => {
     
         return res.status(200).json({ quiz : quiz })        
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error,message})
     }
 
 
 }
 
+export const getPlatformQuiz = async (req,res) =>{
+    let platformId = req.params.id
+
+    try {
+        let quiz = await Quiz.find({platformId:platformId});
+
+        // if(!platform) return res.status(500).json({message:"Platform not found with the provided id"})
+
+        return res.status(200).json({ quiz:quiz})        
+    } catch (error) {
+        res.status(500).json({message:error,message})
+    }
+    
+}
 
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
-
-
     try {
         let quiz = await Quiz.findById(quizId)
 
@@ -78,15 +87,9 @@ export const deleteQuiz = async (req,res) =>{
 
         res.status(200).json({message:"Success"})
 
-
-
-
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
-
-
-
 
 }
 
@@ -98,9 +101,8 @@ export const editQuiz = async (req,res) =>{
         let newQuiz = await Quiz.findByIdAndUpdate(quizId,{$set: updateFields},{new:true})
         res.status(200).json({quiz:newQuiz})
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
-    
     
 }
 
@@ -114,11 +116,10 @@ export const getQuestion = async (req,res) =>{
         
         return res.status(200).json({questions:quiz.questions})        
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 
 }
-
 
 export const addQuizQuestion = async (req,res) =>{
     let quizId = req.params.id;
@@ -129,11 +130,9 @@ export const addQuizQuestion = async (req,res) =>{
         quiz.questions.push(question)
         await quiz.save()
         res.status(200).json({quiz:quiz})
-
-
     } catch (error) {
-        res.status(500).json({message:error})
-    }
+        res.status(500).json({message:error.message})
+     }
 
 }
 
@@ -151,7 +150,7 @@ export const editQuizQuestion = async (req,res) =>{
 
         res.status(200).json({quiz:newQuiz})
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 }
 
@@ -166,7 +165,7 @@ export const deleteQuizQuestion = async (req,res) =>{
 
 
     } catch (error) {
-        res.status(500).json({message:error})
+        res.status(500).json({message:error.message})
     }
 }
 
