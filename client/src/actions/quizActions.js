@@ -7,6 +7,8 @@ import {
     CREATE_QUIZ_FAIL,
     ADD_QUIZ_QUESTION,
     ADD_QUIZ_QUESTION_FAIL,
+    EDIT_QUIZ,
+    EDIT_QUIZ_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -80,7 +82,7 @@ export const addQuizQuestion = ({ id, question, options, answer }) => async (dis
     }
 
     try {
-        const body = JSON.stringify({ question: { question, choices, answer } })
+        const body = JSON.stringify({ question: { question, answer } })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/${id}/addQuestion`, body, config)
 
@@ -92,6 +94,37 @@ export const addQuizQuestion = ({ id, question, options, answer }) => async (dis
         else {
             dispatch({
                 type: ADD_QUIZ_QUESTION,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }
+}
+
+
+
+export const editQuiz = ({ id, name,description }) => async (dispatch) => {
+    
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ question: { name,description } })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/${id}/editQuizQuestion`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_QUIZ_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_QUIZ,
                 payload: res.data
             })
         }

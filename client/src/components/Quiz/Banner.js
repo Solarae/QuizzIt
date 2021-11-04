@@ -1,9 +1,14 @@
-import React from 'react'
-import { Container, Image, Button } from 'react-bootstrap';
+import React,{useState} from 'react'
+import { Container, Image, Button, ToggleButton } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
+import Modal from "./Modal/editQuestionModal"
 
 
 function Banner({ quizId }) {
+
+    const [modal, setModal] = useState(false);
+    const ToggleModal = () => setModal(!modal)
+
     const quiz = useSelector((state) => state.quiz.quiz)
     console.log(quizId)
     return (
@@ -33,8 +38,9 @@ function Banner({ quizId }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Edit</Button>
+                                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleModal()}    >Edit</Button>
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
+                                    <Modal show={modal} setShow = {setModal} quiz = {quiz} />
                                     <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
                                     <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>
                                 </p>
