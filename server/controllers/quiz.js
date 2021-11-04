@@ -128,7 +128,7 @@ export const addQuizQuestion = async (req,res) =>{
         // let formattedQuestion = JSON.parse(question)
         // console.log(JSON.parse(question))
         let quiz = await Quiz.findById(quizId)
-        quiz.questions.push(formattedQuestion)
+        quiz.questions.push(question)
         await quiz.save()
         res.status(200).json({quiz:quiz})
 
