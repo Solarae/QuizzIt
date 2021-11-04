@@ -1,6 +1,7 @@
 import {
     GET_PLATFORM_REQ,
     CREATE_PLATFORM_REQ,
+    EDIT_PLATFORM_REQ,
     DELETE_PLATFORM_REQ,
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
@@ -9,6 +10,8 @@ import {
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
     CREATE_PLATFORM_FAIL,
+    EDIT_PLATFORM_SUCCESS,
+    EDIT_PLATFORM_FAIL,
     DELETE_PLATFORM_SUCCESS,
     DELETE_PLATFORM_FAIL,
     JOIN_PLATFORM_SUCCESS,
@@ -22,11 +25,14 @@ import {
 const initialState = {
     isGetLoading: false,
     isCreateLoading: false,
+    isEditLoading: false,
     isDeleteLoading: false,
     isJoinLoading: false,
     isLeaveLoading: false,
     isReportLoading: false,
     platform: null,
+    quizzesData: null,
+    awardsData: null,
     errors: null
 }
 
@@ -57,6 +63,19 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isCreateLoading: false
+            }
+        case EDIT_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isEditLoading: false,
+                errors: null 
+            }
+        case EDIT_PLATFORM_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isEditLoading: false
             }
         case DELETE_PLATFORM_SUCCESS:
             return {
@@ -119,6 +138,11 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isCreateLoading: true 
+            }
+        case EDIT_PLATFORM_REQ:
+            return {
+                ...state,
+                isEditLoading: true 
             }
         case DELETE_PLATFORM_REQ:
             return {

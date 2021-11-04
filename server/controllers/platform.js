@@ -113,17 +113,19 @@ export const updatePlatform = async (req, res) => {
 
         const owner = await User.findById(platform.owner);
 
-        if (userId !== platform.owner) {
+        if (userId !== String(platform.owner)) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
 
-        // check if confirmPassword matches with owner's password
+        // check if confirmPassword matches with owner's password\
+        /*
         const isMatch = await bcrypt.compare(confirmPassword, owner.password);
         if (!isMatch) {
             errors.invalidPassword = "Incorrect Password";
             return res.status(200).json({ errors: errors });
         }
+        */
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id, 
