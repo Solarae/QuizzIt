@@ -40,7 +40,7 @@ export const createSubmission = async (req,res) =>{
 
 
 
-export const getAllSubmissions = async (req,res)=>{
+export const getUserSubmissions = async (req,res)=>{
 
     let userId = req.params.id
     try {
