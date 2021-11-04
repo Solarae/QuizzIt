@@ -26,6 +26,9 @@ const platformSchema = new mongoose.Schema ({
     quizzes: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
     }],
+    awards: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'Award'
+    }],
     leaderboards: {
         daily: [{
             type: mongoose.Schema.Types.ObjectId, 
