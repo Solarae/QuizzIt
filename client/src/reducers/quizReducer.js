@@ -11,6 +11,7 @@ import {
     EDIT_QUIZ_QUESTION_FAIL,
     DELETE_QUIZ_QUESTION,
     DELETE_QUIZ_QUESTION_FAIL,
+    EDIT_QUIZ,
 } from '../actions/types'
 
 const initialState = {
@@ -42,6 +43,12 @@ const quizReducer = (state = initialState, action) => {
                 errors: null,
             }
         case ADD_QUIZ_QUESTION_FAIL: 
+            return {
+                ...state,
+                ...action.payload
+            }
+        
+        case EDIT_QUIZ:
             return {
                 ...state,
                 ...action.payload
