@@ -5,6 +5,9 @@ import {
     EDIT_AWARD_REQ,
     EDIT_AWARD_SUCCESS,
     EDIT_AWARD_FAIL,
+    DELETE_AWARD_REQ,
+    DELETE_AWARD_SUCCESS,
+    DELETE_AWARD_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -127,6 +130,43 @@ export const editAward = ({ awardId, userId, title, description, iconImage, requ
         console.log("error message: " + error.message);
         dispatch({
             type: EDIT_AWARD_FAIL
+        })
+    }
+}
+
+export const deleteAward = ({ userId, awardId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        data: {
+            'userId': userId
+        }
+    }
+
+    try {
+        dispatch({
+            type: DELETE_AWARD_REQ
+        });
+        const res = await axios.delete(`${URL}/api/awards/${awardId}`, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: DELETE_AWARD_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: DELETE_AWARD_SUCCESS,
+                payload: res.data
+            })
+        }
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: DELETE_AWARD_FAIL
         })
     }
 }

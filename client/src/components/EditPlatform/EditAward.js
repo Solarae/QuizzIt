@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { editAward } from '../../actions/awardActions.js'
+import { editAward, deleteAward } from '../../actions/awardActions.js'
 import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
 
 // custom hook for getting reference to previous values/props
@@ -25,6 +25,9 @@ function EditAward({ award, show, handleClose }) {
     const isEditLoading = useSelector((state) => state.awards.isEditLoading)
     const prev_isEditLoading = usePrevious(isEditLoading)
 
+    const isDeleteLoading = useSelector((state) => state.awards.isDeleteLoading)
+    const prev_isDeleteLoading = usePrevious(isDeleteLoading)
+
     let { id } = useParams();  // get the platform id from the url
 
     const [values, setValues] = useState({
@@ -42,7 +45,7 @@ function EditAward({ award, show, handleClose }) {
             description: award.description,
             iconImage: null,
             requirementType: award.requirementType,
-            requirementCount: award.requirementCount 
+            requirementCount: award.requirementCount
         });
         setErrors({});
     }, [show])
@@ -51,7 +54,7 @@ function EditAward({ award, show, handleClose }) {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
 
-    // waits for CREATE AWARD request to update redux store 
+    // waits for EDIT AWARD request to update redux store 
     useEffect(() => {
         if (!prev_isEditLoading) {
             return;
@@ -64,10 +67,26 @@ function EditAward({ award, show, handleClose }) {
             return;
         }
 
-        // close the modal and redirect user to the edit quiz page 
+        // close the modal 
         handleClose();
-        // history.push(`/`);
     }, [isEditLoading, history, handleClose]);
+
+    // waits for DELETE AWARD request to update redux store 
+    useEffect(() => {
+        if (!prev_isDeleteLoading) {
+            return;
+        }
+
+        console.log("Delete award loading: " + isDeleteLoading)
+        // check if there were errors
+        if (awardErrors) {
+            setErrors({ ...awardErrors });
+            return;
+        }
+
+        // close the modal
+        handleClose();
+    }, [isDeleteLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
         e.preventDefault();
@@ -80,6 +99,16 @@ function EditAward({ award, show, handleClose }) {
                 iconImage: values.iconImage,
                 requirementType: values.requirementType,
                 requirementCount: Number(values.requirementCount)
+            }
+        ));
+    })
+
+    const handleDelete = ((e) => {
+        e.preventDefault();
+        dispatch(deleteAward(
+            {
+                userId: auth.user.id,
+                awardId: award._id
             }
         ));
     })
@@ -108,7 +137,7 @@ function EditAward({ award, show, handleClose }) {
                         <Form.Control type="number" defaultValue={award.requirementCount} name="requirementCount" onChange={onChange} />
                     </Form.Group>
                     <br />
-                    <Button variant="outline-danger" type="submit">
+                    <Button variant="outline-danger" type="" onClick={handleDelete}>
                         Delete Award
                     </Button>
 
