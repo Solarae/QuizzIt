@@ -1,6 +1,7 @@
 import {
     GET_PLATFORM_REQ,
     CREATE_PLATFORM_REQ,
+    EDIT_PLATFORM_REQ,
     DELETE_PLATFORM_REQ,
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
@@ -9,6 +10,8 @@ import {
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
     CREATE_PLATFORM_FAIL,
+    EDIT_PLATFORM_SUCCESS,
+    EDIT_PLATFORM_FAIL,
     DELETE_PLATFORM_SUCCESS,
     DELETE_PLATFORM_FAIL,
     JOIN_PLATFORM_SUCCESS,
@@ -57,6 +60,40 @@ export const createPlatform = ({ userId, name, description, history }) => async 
     }
 }
 
+export const editPlatform = ({ newValue, userId, platformId, confirmPassword }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ newValue, userId, confirmPassword })
+    try {
+        dispatch({
+            type: EDIT_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/update`, body, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_PLATFORM_SUCCESS,
+                payload: res.data
+            })
+        }
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_PLATFORM_FAIL
+        })
+    }
+}
+
 export const getPlatform = ({ id }) => async (dispatch) => {
     const config = {
         headers: {
@@ -79,7 +116,7 @@ export const getPlatform = ({ id }) => async (dispatch) => {
             // get the platform quizzes
             const quizzes = [];
             for (const qid of res.data.platform.quizzes) {
-                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config); 
+                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config);
                 if (quiz_res.data.errors) {
                     dispatch({
                         type: GET_PLATFORM_FAIL,
@@ -89,7 +126,25 @@ export const getPlatform = ({ id }) => async (dispatch) => {
                 quizzes.push(quiz_res.data.quiz);
             }
 
-            res.data.platform.quizzesData = quizzes; // pack the quizzes data with the platform
+            // get the platform awards 
+            const awardsConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'platformId': id 
+                }
+            }
+            let award_res = await axios.get(`${URL}/api/awards/`, awardsConfig);
+            if (award_res.data.errors) {
+                dispatch({
+                    type: GET_PLATFORM_FAIL,
+                    payload: award_res.data
+                })
+            }
+
+            res.data.quizzesData = quizzes; // pack the quizzes data with the platform
+            res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data

@@ -30,6 +30,7 @@ export const createAward = async (req, res) => {
 
         if (!createdAward) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
 
+
         res.status(200).json({ award: createdAward })
     } catch (error) {
         res.status(404).json({ msg: error.message })

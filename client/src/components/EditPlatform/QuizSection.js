@@ -7,7 +7,7 @@ import CreateQuiz from './CreateQuiz.js'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
-function QuizSection({ platform }) {
+function QuizSection({ quizzesData }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const [errors, setErrors] = useState({});
@@ -19,7 +19,7 @@ function QuizSection({ platform }) {
         <Container>
             <h4 style={{ marginBottom: "20px" }}>Platform Quizzes</h4>
             <Row xs={1} md={4} className="g-4" >
-                {platform.quizzesData.length > 0 && platform.quizzesData.map((quiz, idx) => (
+                {quizzesData.length > 0 && quizzesData.map((quiz, idx) => (
                     <Col align="center">
                         <QuizCard quiz={quiz}></QuizCard>
                     </Col>

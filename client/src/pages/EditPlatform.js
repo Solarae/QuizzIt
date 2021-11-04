@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Row, Col, Nav, FloatingLabel, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
-import EditInfo from '../components/EditPlatform/EditInfo.js'
+import Settings from '../components/EditPlatform/Settings.js'
 import AwardSection from '../components/EditPlatform/AwardSection.js'
 import QuizSection from '../components/EditPlatform/QuizSection.js'
 import { getPlatform } from '../actions/platformActions'
@@ -16,6 +16,8 @@ function EditPlatform() {
     const [errors, setErrors] = useState({});
     const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
+    const quizzesData = useSelector((state) => state.platforms.quizzesData)
+    const awardsData = useSelector((state) => state.platforms.awardsData)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
     let { id } = useParams();  // get the platform ID from the url
@@ -39,11 +41,11 @@ function EditPlatform() {
 
             <div >
                 <h2 className='text-center m-3'>Platform Edit page</h2>
-                <QuizSection platform={platform}></QuizSection>
+                <QuizSection quizzesData={quizzesData}></QuizSection>
                 <hr/>
-                <AwardSection platform={platform}></AwardSection>
+                <AwardSection awardsData={awardsData}></AwardSection>
                 <hr/>
-                <EditInfo platform={platform}></EditInfo>
+                <Settings platform={platform}></Settings>
             </div>
 
         </div >
