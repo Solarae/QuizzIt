@@ -16,108 +16,129 @@ import {
     LEAVE_PLATFORM_SUCCESS,
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
-    REPORT_PLATFORM_FAIL,
-    PLATFORM_REQ_LOADING
+    REPORT_PLATFORM_FAIL
 } from '../actions/types'
 
 const initialState = {
-    "GET_PLATFORM": { loading: false },
-    "CREATE_PLATFORM": { loading: false },
-    "DELETE_PLATFORM": { loading: false },
-    "JOIN_PLATFORM": { loading: false },
-    "LEAVE_PLATFORM": { loading: false },
-    "REPORT_PLATFORM": { loading: false }
-}
-
-function getActionName(actionType) {
-    if (typeof actionType !== 'string') {
-        return null;
-    }
-
-    return actionType
-        .split("_")
-        .slice(0, -1)
-        .join("_");
+    isGetLoading: false,
+    isCreateLoading: false,
+    isDeleteLoading: false,
+    isJoinLoading: false,
+    isLeaveLoading: false,
+    isReportLoading: false,
+    platform: null,
+    errors: null
 }
 
 const platformReducer = (state = initialState, action) => {
-    const type = action.type;
-    const actionName = getActionName(action.type);
-
-    if (type.endsWith("_REQ")) {
-        return {
-            ...state,
-            [actionName]: {
-                loading: true
-            }
-        };
-    }
-
     switch (action.type) {
         case GET_PLATFORM_SUCCESS:
             return {
                 ...state,
-                "GET_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isGetLoading: false,
+                errors: null 
             }
         case GET_PLATFORM_FAIL:
             return {
                 ...state,
                 ...action.payload,
-                "GET_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                isGetLoading: false
             }
         case CREATE_PLATFORM_SUCCESS:
             return {
                 ...state,
-                "CREATE_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isCreateLoading: false,
+                errors: null 
             }
         case CREATE_PLATFORM_FAIL:
             return {
                 ...state,
-                "CREATE_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isCreateLoading: false
+            }
+        case DELETE_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isDeleteLoading: false,
+                errors: null 
+            }
+        case DELETE_PLATFORM_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isDeleteLoading: false
             }
         case JOIN_PLATFORM_SUCCESS:
             return {
                 ...state,
-                "JOIN_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isJoinLoading: false,
+                errors: null 
             }
         case JOIN_PLATFORM_FAIL:
             return {
                 ...state,
-                "JOIN_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isJoinLoading: false
             }
         case LEAVE_PLATFORM_SUCCESS:
             return {
                 ...state,
-                "LEAVE_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isLeaveLoading: false,
+                errors: null 
             }
         case LEAVE_PLATFORM_FAIL:
             return {
                 ...state,
-                "LEAVE_PLATFORM": {
-                    loading: false,
-                    ...action.payload
-                }
+                ...action.payload,
+                isLeaveLoading: false
+            }
+        case REPORT_PLATFORM_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isReportLoading: false,
+                errors: null 
+            }
+        case REPORT_PLATFORM_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isReportLoading: false
+            }
+        case GET_PLATFORM_REQ:
+            return {
+                ...state,
+                isGetLoading: true 
+            }
+        case CREATE_PLATFORM_REQ:
+            return {
+                ...state,
+                isCreateLoading: true 
+            }
+        case DELETE_PLATFORM_REQ:
+            return {
+                ...state,
+                isDeleteLoading: true 
+            }
+        case JOIN_PLATFORM_REQ:
+            return {
+                ...state,
+                isJoinLoading: true 
+            }
+        case LEAVE_PLATFORM_REQ:
+            return {
+                ...state,
+                isLeaveLoading: true 
+            }
+        case REPORT_PLATFORM_REQ:
+            return {
+                ...state,
+                isReportLoading: true 
             }
         default:
             return state;

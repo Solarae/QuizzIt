@@ -31,11 +31,9 @@ export const login = ({ username, password, history, callback }) => async (dispa
                 type: LOGIN_SUCCESS,
                 payload: res.data
             })
-
         }
         console.log(res.data)
         callback(res.data.errors);
-        history.push('/')
     } catch (error) {
         console.log(error.message)
         dispatch({

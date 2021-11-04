@@ -1,4 +1,4 @@
-import {React,useEffect} from 'react'
+import { React, useEffect } from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
@@ -30,7 +30,6 @@ function Quiz() {
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
-    console.log(isLoading)
     return (
         <>
             <Banner></Banner>      

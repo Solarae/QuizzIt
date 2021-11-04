@@ -10,16 +10,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
 function Platform() {
-    const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
-    const auth = useSelector((state) => state.auth)
-    const platforms = useSelector((state) => state.platforms)
     const history = useHistory()
-
+    const [errors, setErrors] = useState({});
+    const auth = useSelector((state) => state.auth)
+    const platform = useSelector((state) => state.platforms.platform)
+    const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
     let { id } = useParams();  // get the platform ID from the url
-   
-    const [platform, setPlatform] = useState({});
 
     // dispatch the GET_PLATFORM request on initial render
     useEffect(() => {
@@ -28,31 +26,17 @@ function Platform() {
         }))
     }, [ id, dispatch ]);
 
-    // waits for GET_PLATFORM request to update redux store with the platform data 
-    useEffect(() => {
-        console.log("GET_PLATFORM.loading: " + platforms.GET_PLATFORM.loading)
-        if (!platforms.GET_PLATFORM.loading && platforms.GET_PLATFORM.platform) {
-            const platform = platforms.GET_PLATFORM.platform;
-            setPlatform(platform);
-            console.log(platform);
-            // check if there were errors
-            if (platform.errors) {
-                setErrors({ ...platform.errors });
-                return;
-            }
-
-        }
-    }, [platforms.GET_PLATFORM]);
-
-
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [showHome, setShowHome] = useState(true);
     const handleHideHome = () => { setShowHome(false) };
     const handleShowHome = () => { setShowHome(true) };
 
+    if (isGetLoading || !platform){
+        return (<div>Loading...</div>)
+    }
     return (
         <div className="justify-content-between">
-            {Object.keys(platform).length !== 0 ? <Banner platform={platform} setPlatform={setPlatform}></Banner> : <div></div>}
+            {Object.keys(platform).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
 
             <div style={{ height: "50px" }}></div>
 

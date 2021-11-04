@@ -1,33 +1,18 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Image, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
 import { joinPlatform, leavePlatform } from '../../actions/platformActions'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useHistory, Link } from 'react-router-dom'
 
+import Report from './Report.js'
 
-function Banner({ platform, setPlatform }) {
+function Banner({ platform }) {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const platforms = useSelector((state) => state.platforms)
     const history = useHistory();
-
-    // waits for JOIN_PLATFORM request to update redux store with any response data 
-    useEffect(() => {
-        console.log("JOIN_PLATFORM.loading: " + platforms.JOIN_PLATFORM.loading)
-        if (!platforms.JOIN_PLATFORM.loading && platforms.JOIN_PLATFORM.platform) {
-            setPlatform(platforms.JOIN_PLATFORM.platform);
-        }
-    }, [platforms.JOIN_PLATFORM, setPlatform]);
-
-    // waits for LEAVE_PLATFORM request to update redux store with any response data 
-    useEffect(() => {
-        console.log("LEAVE_PLATFORM.loading: " + platforms.LEAVE_PLATFORM.loading)
-        if (!platforms.LEAVE_PLATFORM.loading && platforms.LEAVE_PLATFORM.platform) {
-            setPlatform(platforms.LEAVE_PLATFORM.platform);
-        }
-    }, [platforms.LEAVE_PLATFORM, setPlatform]);
 
     const handleJoin = () => {
         dispatch(joinPlatform({
@@ -42,6 +27,14 @@ function Banner({ platform, setPlatform }) {
             platformId: platform._id
         }))
     }
+
+    const [showReport, setShowReport] = useState(false);
+    const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
+    const handleShowReport = () => { setShowReport(true) };
+
+    // used to show tooltip after clicking "share" button
+    const [showTooltip, setShowTooltip] = useState(false);
+    const targetTooltip = useRef(null);
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
@@ -69,12 +62,27 @@ function Banner({ platform, setPlatform }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    <Button variant="primary btn-lg" >Edit</Button>
+                                    <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
                                     {platform.subscribers.includes(auth.user.id) ?
                                         <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
-                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
-                                    <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
-                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>
+                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
+                                    }
+
+                                    <CopyToClipboard text={window.location.href}>
+                                        <i className="bi bi-share"
+                                            ref={targetTooltip}
+                                            onMouseLeave={() => setShowTooltip(false)}
+                                            onClick={() => setShowTooltip(true)}
+                                            style={{ marginLeft: "25px", cursor: "pointer" }}></i>
+                                    </CopyToClipboard>
+                                    <Overlay target={targetTooltip.current} show={showTooltip} placement="top">
+                                        {(props) => (
+                                            <Tooltip id="overlay-example" {...props}>
+                                                Link copied
+                                            </Tooltip>
+                                        )}
+                                    </Overlay>
+                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>
                         </div>
@@ -84,6 +92,8 @@ function Banner({ platform, setPlatform }) {
             <div>
                 <h4 className="ms-5 mt-1">{platform.name}</h4>
             </div>
+
+            <Report platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
         </div>
     )
 }

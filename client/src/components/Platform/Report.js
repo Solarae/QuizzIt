@@ -1,8 +1,10 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
+
+import React, { useContext, useState, useEffect, useRef } from 'react';
+import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { createPlatform } from '../actions/platformActions'
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
+import { reportPlatform } from '../../actions/platformActions'
+import platformReducer from '../../reducers/platformReducer';
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -13,80 +15,72 @@ function usePrevious(value) {
     return ref.current;
 }
 
-function CreatePlatform({ show, handleClose }) {
+function Report({ platformId, show, handleClose }) {
+    //   const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
 
-    const platform = useSelector((state) => state.platforms.platform)
-    const platformErrors = useSelector((state) => state.platforms.errors);
-    const isCreateLoading = useSelector((state) => state.platforms.isCreateLoading)
-    const prev_isCreateLoading = usePrevious(isCreateLoading)
+    const platformErrors = useSelector((state) => state.platforms.errors)
+    const isReportLoading = useSelector((state) => state.platforms.isReportLoading)
+    const prev_isReportLoading = usePrevious(isReportLoading);
 
     const history = useHistory()
 
     const [values, setValues] = useState({
-        platformName: "",
-        platformDescription: ""
+        reason: "",
     });
 
     // reset state values when the modal is opened/closed
     useEffect(() => {
-        setValues({ platformName: "", platformDescription: "" });
+        setValues({ reason: "" });
         setErrors({});
     }, [show])
 
-    // updates state values when user types into text fields
     const onChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
-    }
+    };
 
     // waits for CREATE_PLATFORM request to update redux store with the new platform id so that we can use it here to redirect user 
     useEffect(() => {
-        if (!prev_isCreateLoading) {
+        if (!prev_isReportLoading) {
             return;
         }
-
-        console.log("CREATE_PLATFORM.loading: " + isCreateLoading)
+        console.log("REPORT_PLATFORM.loading: " + isReportLoading)
         // check if there were errors
         if (platformErrors) {
             setErrors({ ...platformErrors });
             return;
         }
 
-        console.log(platform._id);
+        console.log("Report submitted");
 
         // close the modal and redirect user to the platform page
         handleClose();
-        history.push(`/platform/${platform._id}`);
-    }, [isCreateLoading, history, handleClose]);
+    }, [isReportLoading, handleClose]);
 
     const handleSubmit = ((e) => {
         e.preventDefault();
 
-        dispatch(createPlatform({
+        dispatch(reportPlatform({
+            platformId: platformId,
             userId: auth.user.id,
-            name: values.platformName,
-            description: values.platformDescription,
-            history: history
+            text: values.reason
         }))
     })
 
     return (
         <Modal style={{ color: "black" }} show={show} onHide={handleClose} >
             <Modal.Header closeButton>
-                <Modal.Title>Create Platform</Modal.Title>
+                <Modal.Title>Report Platform</Modal.Title>
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
-                    <Form.Group className="mb-3" controlId="formName">
-                        <Form.Label>Platform Name</Form.Label>
-                        <Form.Control type="platformName" defaultValue="" placeholder="Platform Name" name="platformName" onChange={onChange} />
+                    <Form.Group className="mb-3" controlId="formReportReason">
+                        <Form.Label>Reason</Form.Label>
+                        <Form.Control as="textarea" rows={3} type="text" placeholder="Reason" name="reason" onChange={onChange} />
                     </Form.Group>
-                    <Form.Group className="mb-3" controlId="formDesc">
-                        <Form.Label>Platform Description</Form.Label>
-                        <Form.Control as="textarea" rows={3} type="platformDesc" defaultValue="" placeholder="Platform Description" name="platformDescription" onChange={onChange} />
-                    </Form.Group>
+
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (
                     <Form.Text className="text-muted">
@@ -99,9 +93,9 @@ function CreatePlatform({ show, handleClose }) {
                         </Alert>
                     </Form.Text>
                 )}
-                <Modal.Footer>
+                <Modal.Footer className="justify-content-end">
                     <Button variant="primary" type="submit">
-                        Create
+                        Report
                     </Button>
                 </Modal.Footer>
             </Form>
@@ -110,5 +104,6 @@ function CreatePlatform({ show, handleClose }) {
 
 }
 
+export default Report;
 
-export default CreatePlatform;
+

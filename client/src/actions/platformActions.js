@@ -67,7 +67,8 @@ export const getPlatform = ({ id }) => async (dispatch) => {
         dispatch({
             type: GET_PLATFORM_REQ
         });
-        const res = await axios.get(`${URL}/api/platforms/${id}`, config);
+        const res = await axios.get(`${URL}/api/platforms/${id}`, config); // get the platform 
+
         if (res.data.errors) {
             dispatch({
                 type: GET_PLATFORM_FAIL,
@@ -75,7 +76,20 @@ export const getPlatform = ({ id }) => async (dispatch) => {
             })
         }
         else {
+            // get the platform quizzes
+            const quizzes = [];
+            for (const qid of res.data.platform.quizzes) {
+                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config); 
+                if (quiz_res.data.errors) {
+                    dispatch({
+                        type: GET_PLATFORM_FAIL,
+                        payload: quiz_res.data
+                    })
+                }
+                quizzes.push(quiz_res.data.quiz);
+            }
 
+            res.data.platform.quizzesData = quizzes; // pack the quizzes data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data
@@ -85,6 +99,39 @@ export const getPlatform = ({ id }) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_PLATFORM_FAIL
+        })
+    }
+}
+
+export const deletePlatform = ({ userId, platformId, confirmPassword }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId, confirmPassword })
+    try {
+        dispatch({
+            type: DELETE_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/delete`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: DELETE_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: DELETE_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: DELETE_PLATFORM_FAIL
         })
     }
 }
@@ -151,6 +198,39 @@ export const leavePlatform = ({ userId, platformId }) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: LEAVE_PLATFORM_FAIL
+        })
+    }
+}
+
+export const reportPlatform = ({ platformId, userId, text }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId, text })
+    try {
+        dispatch({
+            type: REPORT_PLATFORM_REQ
+        });
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/report`, body, config);
+        if (res.data.errors) {
+            dispatch({
+                type: REPORT_PLATFORM_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+
+            dispatch({
+                type: REPORT_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
         })
     }
 }
