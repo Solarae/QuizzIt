@@ -4,7 +4,7 @@ import Submission from "../models/Submission.js"
 import User from "../models/User.js"
 
 export const createSubmission = async (req,res) =>{
-    let {quizId,answers,pointsAwarded,platformId,userId,score,timeTaken} = req.body
+    let {quizId,answers,platformId,userId,timeTaken} = req.body
 
     try {
 
@@ -12,15 +12,38 @@ export const createSubmission = async (req,res) =>{
         if(!quiz) return res.status(400).json({message:"Quiz id not found"})
 
 
+
+        //calculate the score
+
+        let questions = quiz.questions
+        let total_correct = 0
+        
+        let i = 0
+        questions.forEach((question)=>{
+            if(question != null){
+                if(question.answer === answers[i]){
+                    total_correct+=1
+                }
+                i+=1
+            } 
+
+
+        })
+        console.log(total_correct)
+
+
         let newSubmission = new Submission({
             quizId:quizId,
             answers:answers,
-            pointsAwarded:pointsAwarded,
             platformId:platformId,
             userId:userId,
-            score:score,
             timeTaken,
+            score:total_correct
         })
+
+
+
+
         
         //save submission
         let created_submission = await newSubmission.save()
