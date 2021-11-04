@@ -113,9 +113,10 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     }
 
     try {
-        const body = JSON.stringify({ question: { name,description } })
+        const body = JSON.stringify({ name,description })
         console.log(body)
-        const res = await axios.post(`${URL}/api/quizzes/${id}/editQuizQuestion`, body, config)
+        console.log(id)
+        const res = await axios.post(`${URL}/api/quizzes/${id}/editQuiz`, body, config)
 
         if (res.data.errors) {
             dispatch({

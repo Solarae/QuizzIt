@@ -26,11 +26,12 @@ const EditQuestionModal = ({ quiz,show,setShow }) => {
   const handleSubmit = (e) =>{
 
     e.preventDefault()
+    setShow(!show)
 
     console.log(name)
     console.log(description)
 
-    dispatch(editQuiz({ id: quiz.id,description:description,name: name }))
+    dispatch(editQuiz({ id: quiz._id,description:description,name: name }))
 
   }
 
