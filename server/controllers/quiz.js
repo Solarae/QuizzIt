@@ -159,12 +159,11 @@ export const editQuizQuestion = async (req,res) =>{
     let quizId = req.params.id;
     let {question,questionId} = req.body
     try {
-        let formattedQuestion = JSON.parse(question)
         let quiz = await Quiz.findById(quizId)
 
         let questionIndex = quiz.questions.findIndex((question)=> question._id.toString() === questionId)
         console.log(questionIndex)
-        quiz.questions[questionIndex] = formattedQuestion;
+        quiz.questions[questionIndex] = question;
         let newQuiz = await quiz.save()
         res.status(200).json({quiz:newQuiz})
 
