@@ -19,27 +19,29 @@ function EditQuiz({ quizId }) {
     const history = useHistory()
 
     let { qid } = useParams()
+    console.log(qid)
+    console.log(useParams())
     // let { id } = useParams()
 
+    
     useEffect(() => {
         if (!quiz) dispatch(getQuiz(qid))
     }, [dispatch, quiz])
-
+    
     // useEffect(() => {
-    //     if (!platform) dispatch(getQuiz(id))
-    // }, [dispatch, platform])
-
+        //     if (!platform) dispatch(getQuiz(id))
+        // }, [dispatch, platform])
+    
     const [showAddQuestion, setShowAddQuestion] = useState(false);
-    const handleShowAddQuestion = () => { 
-        console.log("show add")
-        setShowAddQuestion(true) };
+    const handleShowAddQuestion = () => { setShowAddQuestion(true) };
     const handleCloseAddQuestion = () => { setShowAddQuestion(false) };
-
-
-
+        
+        
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
+
+    console.log(quiz.questions)
     return (
         <>
             <Banner></Banner>
@@ -49,18 +51,18 @@ function EditQuiz({ quizId }) {
             <Container className="row justify-content-center">
                 <Col xs={1} md={4} className="g-4">
                     <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Add Question</Button>
-                    {Array.from({ length: 9 }).map((_, idx) => (
+                    {quiz.questions.map((question, idx) => (
                         <>
-                        <Col>
-                            <QuestionCard quizId={quizId}></QuestionCard>
-                        </Col>
-                        <div style={{ height: '20px'}}></div>
+                            <Col>
+                                <QuestionCard question={question}></QuestionCard>
+                            </Col>
+                            <div style={{ height: '20px'}}></div>
                         </>
                         ))}
                 </Col>
             </Container>
 
-            <AddQuestion quizId={quizId} show={showAddQuestion} handleClose={handleCloseAddQuestion}></AddQuestion>
+            <AddQuestion quizId={qid} show={showAddQuestion} handleClose={handleCloseAddQuestion}></AddQuestion>
         </>
     )
 }

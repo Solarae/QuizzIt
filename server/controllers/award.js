@@ -71,7 +71,7 @@ export const updateAward = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         // check if user has update permissions
-        if (userId !== platform.owner) {
+        if (userId !== String(platform.owner)) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
@@ -100,7 +100,7 @@ export const deleteAward = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         // check if user has update permissions
-        if (userId !== platform.owner) {
+        if (userId !== String(platform.owner)) {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }

@@ -32,7 +32,7 @@ function Quiz() {
     }
     return (
         <>
-            <Banner></Banner>      
+            <Banner quizId={qid}></Banner>      
 
             <div style={{ height: "10vh" }}></div>
                 <Container>
