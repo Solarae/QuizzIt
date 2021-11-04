@@ -10,14 +10,14 @@ export const createAward = async (req, res) => {
         const platform = await Platform.findById(platformId);
         if (!platform) {
             errors.invalidPlatform = `No platform with id: ${platform._id}`;
-            return res.status(404).json({ errors: errors});
+            return res.status(404).json({ errors: errors });
         }
 
-        if (userId !== platform.owner) {
+        if (userId !== String(platform.owner)) {
             errors.invalidOwner = "You don't have create permissions";
             return res.status(200).json({ errors: errors });
         }
-    
+
         const award = new Award({
             title: title,
             description: description,
@@ -48,7 +48,7 @@ export const getAward = async (req, res) => {
 
 export const getAwardsByFilter = async (req, res) => {
     var query = {}
-    for(var key in req.query){ 
+    for (var key in req.query) {
         query[key] = req.query[key];
     }
 
@@ -77,8 +77,8 @@ export const updateAward = async (req, res) => {
         }
 
         const updatedAward = await Award.findByIdAndUpdate(
-            req.params.id, 
-            { $set: newValue }, 
+            req.params.id,
+            { $set: newValue },
             { new: true }
         );
         if (!updatedAward) return res.status(404).json({ msg: "Something went wrong with updating the award" });

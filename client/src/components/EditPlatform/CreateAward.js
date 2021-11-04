@@ -2,6 +2,8 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
+import { createAward } from '../../actions/awardActions.js'
+import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -19,20 +21,29 @@ function CreateAward({ show, handleClose }) {
     const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
-    /*
     const awardErrors = useSelector((state) => state.awards.errors);
     const isCreateLoading = useSelector((state) => state.awards.isCreateLoading)
     const prev_isCreateLoading = usePrevious(isCreateLoading)
-    */
 
     let { id } = useParams();  // get the platform id from the url
 
     const [values, setValues] = useState({
+        title: "",
+        description: "",
+        iconImage: null,
+        requirementType: "Point",
+        requirementCount: 0
     });
 
     // reset state values when the modal is opened/closed
     useEffect(() => {
-        setValues({ });
+        setValues({
+            title: "",
+            description: "",
+            iconImage: null,
+            requirementType: "Point",
+            requirementCount: 0
+        });
         setErrors({});
     }, [show])
 
@@ -41,16 +52,15 @@ function CreateAward({ show, handleClose }) {
     };
 
     // waits for CREATE AWARD request to update redux store 
-    /*
     useEffect(() => {
         if (!prev_isCreateLoading) {
             return;
         }
 
-        console.log("Create quiz loading: " + isCreateLoading)
+        console.log("Create award loading: " + isCreateLoading)
         // check if there were errors
         if (awardErrors) {
-            setErrors({ ...awardErrors});
+            setErrors({ ...awardErrors });
             return;
         }
 
@@ -58,21 +68,20 @@ function CreateAward({ show, handleClose }) {
         handleClose();
         // history.push(`/`);
     }, [isCreateLoading, history, handleClose]);
-    */
 
     const handleSubmit = ((e) => {
         e.preventDefault();
-        /*
-        dispatch(createQuiz(
+        dispatch(createAward(
             {
                 userId: auth.user.id,
-                name: values.quizName,
+                title: values.title,
                 description: values.description,
+                iconImage: values.iconImage,
                 platformId: id,
-                time: "20"
+                requirementType: values.requirementType,
+                requirementCount: Number(values.requirementCount)
             }
         ));
-        */
     })
 
     return (
@@ -82,9 +91,13 @@ function CreateAward({ show, handleClose }) {
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Award Icon</Form.Label>
+                        <Form.Control type="file" onChange={(e) => setValues({ ...values, iconImage: e.target.files[0] })} />
+                    </Form.Group>
                     <Form.Group className="mb-3" controlId="formAwardName">
                         <Form.Label>Award Name</Form.Label>
-                        <Form.Control type="text" placeholder="Award Name" name="awardName" onChange={onChange} />
+                        <Form.Control type="text" placeholder="Award Name" name="title" onChange={onChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formDescription">
                         <Form.Label>Award Description</Form.Label>
@@ -92,7 +105,7 @@ function CreateAward({ show, handleClose }) {
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formPoints">
                         <Form.Label>Points Requirement</Form.Label>
-                        <Form.Control type="text" placeholder="ex. 150" name="points" onChange={onChange} />
+                        <Form.Control type="number" placeholder="ex. 150" name="requirementCount" onChange={onChange} />
                     </Form.Group>
 
                 </Modal.Body>
