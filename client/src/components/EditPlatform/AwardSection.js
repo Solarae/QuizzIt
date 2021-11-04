@@ -7,7 +7,7 @@ import CreateAward from './CreateAward.js'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
-function AwardSection({ platform }) {
+function AwardSection({ awardsData }) {
     const dispatch = useDispatch()
     const history = useHistory()
     const [errors, setErrors] = useState({});
@@ -19,7 +19,7 @@ function AwardSection({ platform }) {
         <Container>
             <h4 style={{ marginBottom: "20px" }}>Platform Awards</h4>
             <Row xs={1} md={4} className="g-4">
-                {platform.awardsData.map((award, idx) => (
+                {awardsData.map((award, idx) => (
                     <Col align="center">
                         <AwardCard award={award}></AwardCard>
                     </Col>
