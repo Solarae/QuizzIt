@@ -7,8 +7,8 @@ import {
     CREATE_QUIZ_FAIL,
     ADD_QUIZ_QUESTION,
     ADD_QUIZ_QUESTION_FAIL,
-    EDIT_QUIZ,
-    EDIT_QUIZ_FAIL
+    EDIT_QUIZ_QUESTION,
+    EDIT_QUIZ_QUESTION_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -73,7 +73,7 @@ export const createQuiz = ({ userId, name, description, platformId, time }) => a
     }
 }
 
-export const addQuizQuestion = ({ id, question, options, answer }) => async (dispatch) => {
+export const addQuizQuestion = ({ id, question, choices, answer, callback }) => async (dispatch) => {
     
     const config = {
         headers: {
@@ -97,15 +97,20 @@ export const addQuizQuestion = ({ id, question, options, answer }) => async (dis
                 payload: res.data
             })
         }
+        callback(res.data.errors)
     } catch (errors) {
         console.log(errors)
     }
 }
 
+<<<<<<< HEAD
 
 
 export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     
+=======
+export const editQuizQuestion = ({quizId, question}) => async (dispatch) => {
+>>>>>>> 6a1704be95371f59765e2433d9a9cbe738d7e09e
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -113,6 +118,7 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     }
 
     try {
+<<<<<<< HEAD
         const body = JSON.stringify({ name,description })
         console.log(body)
         console.log(id)
@@ -121,20 +127,38 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
         if (res.data.errors) {
             dispatch({
                 type: EDIT_QUIZ_FAIL
+=======
+        const body = JSON.stringify({ quizId, question })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/${quizId}/editQuestion`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_QUIZ_QUESTION_FAIL
+>>>>>>> 6a1704be95371f59765e2433d9a9cbe738d7e09e
             })
         }
         else {
             dispatch({
+<<<<<<< HEAD
                 type: EDIT_QUIZ,
+=======
+                type: EDIT_QUIZ_QUESTION,
+>>>>>>> 6a1704be95371f59765e2433d9a9cbe738d7e09e
                 payload: res.data
             })
         }
     } catch (errors) {
         console.log(errors)
+<<<<<<< HEAD
     }
 }
 
 // export const editQuizQuestion = NaN
+=======
+    }    
+}
+>>>>>>> 6a1704be95371f59765e2433d9a9cbe738d7e09e
 // export const deleteQuizQuestion = NaN
 // export const editQuiz = NaN
 

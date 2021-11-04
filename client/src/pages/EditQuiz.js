@@ -51,10 +51,11 @@ function EditQuiz({ quizId }) {
             <Container className="row justify-content-center">
                 <Col xs={1} md={4} className="g-4">
                     <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Add Question</Button>
+                    <div style={{ height: "3vh" }}></div>
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
-                                <QuestionCard question={question}></QuestionCard>
+                                <QuestionCard quizId={qid} question={question}></QuestionCard>
                             </Col>
                             <div style={{ height: '20px'}}></div>
                         </>

@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addQuizQuestion } from '../../actions/quizActions'
 import { useHistory, useParams } from 'react-router-dom'
 
-function AddQuizQuestion({ quizId, show, handleClose }) {
+function EditQuizQuestion({ quizId, show, handleClose }) {
     const dispatch = useDispatch();
     const quiz = useSelector((state) => state.quiz.quiz)
     const [errors, setErrors] = useState({});
@@ -44,15 +44,15 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        console.log(quizId)
+        console.log(values)
+
         let optionValues = [] // Currently options exsist as individual k:v pairs in values, get a list of them instead
         options.forEach(x => optionValues.push(values[x]))
         console.log(optionValues)
 
-        if ((values.question == '') || (optionValues.includes(''))) {
-            return;
-        }
 
-        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: values.answer, callback: closeModal }))
+        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: values.answer }))
     }
     
     let options = ['option1', 'option2', 'option3', 'option4']
@@ -101,4 +101,4 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
     )
 }
 
-export default AddQuizQuestion;
+export default EditQuizQuestion;

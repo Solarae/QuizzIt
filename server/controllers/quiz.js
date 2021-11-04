@@ -3,8 +3,6 @@ import User from '../models/User.js'
 import Platform from "../models/Platform.js"
 import mongoose from "mongoose"
 
-
-
 export const createQuiz = async (req,res) =>{
 
     const {userId,name,description,platformId,time} = req.body;
@@ -38,7 +36,6 @@ export const createQuiz = async (req,res) =>{
 
 }
 
-
 export const getQuiz = async (req,res) => {
     let quizId = req.params.id
 
@@ -55,7 +52,6 @@ export const getQuiz = async (req,res) => {
 
 }
 
-
 export const getPlatformQuiz = async (req,res) =>{
     let platformId = req.params.id
 
@@ -69,17 +65,10 @@ export const getPlatformQuiz = async (req,res) =>{
         res.status(500).json({message:error,message})
     }
     
-
-
-
-
 }
-
 
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
-
-
     try {
         let quiz = await Quiz.findById(quizId)
 
@@ -98,15 +87,9 @@ export const deleteQuiz = async (req,res) =>{
 
         res.status(200).json({message:"Success"})
 
-
-
-
     } catch (error) {
         res.status(500).json({message:error.message})
     }
-
-
-
 
 }
 
@@ -120,7 +103,6 @@ export const editQuiz = async (req,res) =>{
     } catch (error) {
         res.status(500).json({message:error.message})
     }
-    
     
 }
 
@@ -138,7 +120,6 @@ export const getQuestion = async (req,res) =>{
     }
 
 }
-
 
 export const addQuizQuestion = async (req,res) =>{
     let quizId = req.params.id;
@@ -158,20 +139,18 @@ export const addQuizQuestion = async (req,res) =>{
 }
 
 export const editQuizQuestion = async (req,res) =>{
-    let quizId = req.params.id;
-    let {question,questionId} = req.body
+    let quizId = req.params.id
+    let { question } = req.body
     try {
         let quiz = await Quiz.findById(quizId)
 
-        if(!quiz) return res.status(500).json({message:"quiz does not exist with id "+quizId})
-
-        let questionIndex = quiz.questions.findIndex((question)=> question._id.toString() === questionId)
+        let questionIndex = quiz.questions.findIndex((q)=> q._id.toString() === question._id)
         console.log(questionIndex)
-        quiz.questions[questionIndex] = question;
+        quiz.questions[questionIndex] = formattedQuestion
+
         let newQuiz = await quiz.save()
+
         res.status(200).json({quiz:newQuiz})
-
-
     } catch (error) {
         res.status(500).json({message:error.message})
     }
