@@ -1,6 +1,7 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Image, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
 import { joinPlatform, leavePlatform } from '../../actions/platformActions'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, Link } from 'react-router-dom'
@@ -31,6 +32,10 @@ function Banner({ platform }) {
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
     const handleShowReport = () => { setShowReport(true) };
 
+    // used to show tooltip after clicking "share" button
+    const [showTooltip, setShowTooltip] = useState(false);
+    const targetTooltip = useRef(null);
+
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
@@ -60,8 +65,23 @@ function Banner({ platform }) {
                                     <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
                                     {platform.subscribers.includes(auth.user.id) ?
                                         <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
-                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
-                                    <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
+                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
+                                    }
+
+                                    <CopyToClipboard text={window.location.href}>
+                                        <i className="bi bi-share"
+                                            ref={targetTooltip}
+                                            onMouseLeave={() => setShowTooltip(false)}
+                                            onClick={() => setShowTooltip(true)}
+                                            style={{ marginLeft: "25px", cursor: "pointer" }}></i>
+                                    </CopyToClipboard>
+                                    <Overlay target={targetTooltip.current} show={showTooltip} placement="top">
+                                        {(props) => (
+                                            <Tooltip id="overlay-example" {...props}>
+                                                Link copied
+                                            </Tooltip>
+                                        )}
+                                    </Overlay>
                                     <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>

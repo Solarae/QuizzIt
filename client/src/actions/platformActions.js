@@ -67,7 +67,8 @@ export const getPlatform = ({ id }) => async (dispatch) => {
         dispatch({
             type: GET_PLATFORM_REQ
         });
-        const res = await axios.get(`${URL}/api/platforms/${id}`, config);
+        const res = await axios.get(`${URL}/api/platforms/${id}`, config); // get the platform 
+
         if (res.data.errors) {
             dispatch({
                 type: GET_PLATFORM_FAIL,
@@ -75,7 +76,20 @@ export const getPlatform = ({ id }) => async (dispatch) => {
             })
         }
         else {
+            // get the platform quizzes
+            const quizzes = [];
+            for (const qid of res.data.platform.quizzes) {
+                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config); 
+                if (quiz_res.data.errors) {
+                    dispatch({
+                        type: GET_PLATFORM_FAIL,
+                        payload: quiz_res.data
+                    })
+                }
+                quizzes.push(quiz_res.data.quiz);
+            }
 
+            res.data.platform.quizzesData = quizzes; // pack the quizzes data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data
@@ -89,13 +103,13 @@ export const getPlatform = ({ id }) => async (dispatch) => {
     }
 }
 
-export const deletePlatform = ({ platformId, confirmPassword }) => async (dispatch) => {
+export const deletePlatform = ({ userId, platformId, confirmPassword }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ confirmPassword })
+    const body = JSON.stringify({ userId, confirmPassword })
     try {
         dispatch({
             type: DELETE_PLATFORM_REQ

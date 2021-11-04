@@ -2,7 +2,7 @@ import React, { useContext, useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { deletePlatform } from '../../actions/platformActions';
+import { createQuiz } from '../../actions/quizActions';
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -13,26 +13,28 @@ function usePrevious(value) {
     return ref.current;
 }
 
-function DeletePlatform({ show, handleClose }) {
+function CreateQuiz({ show, handleClose }) {
     //   const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
-    const platformErrors = useSelector((state) => state.platforms.errors);
-    const isDeleteLoading = useSelector((state) => state.platforms.isDeleteLoading)
-    const prev_isDeleteLoading = usePrevious(isDeleteLoading)
+    const quizErrors = useSelector((state) => state.quiz.errors);
+    const isCreateLoading = useSelector((state) => state.quiz.isCreateLoading)
+    const prev_isCreateLoading = usePrevious(isCreateLoading)
 
-    let { id } = useParams();  // get the platform ID from the url
+    let { id } = useParams();  // get the platform id from the url
 
     const [values, setValues] = useState({
-        password: "",
+        quizName: "",
+        description: "",
+        time: ""
     });
 
     // reset state values when the modal is opened/closed
     useEffect(() => {
-        setValues({ password: "" });
+        setValues({ quizName: "" });
         setErrors({});
     }, [show])
 
@@ -42,30 +44,31 @@ function DeletePlatform({ show, handleClose }) {
 
     // waits for DELETE PLATFORM request to update redux store 
     useEffect(() => {
-        if (!prev_isDeleteLoading) {
+        if (!prev_isCreateLoading) {
             return;
         }
 
-        console.log("DELETE_PLATFORM.loading: " + isDeleteLoading)
+        console.log("Create quiz loading: " + isCreateLoading)
         // check if there were errors
-        if (platformErrors) {
-            setErrors({ ...platformErrors });
+        if (quizErrors) {
+            setErrors({ ...quizErrors});
             return;
         }
 
-        // close the modal and redirect user to the home page
+        // close the modal and redirect user to the edit quiz page 
         handleClose();
-        history.push(`/`);
-    }, [isDeleteLoading, history, handleClose]);
-    
+        // history.push(`/`);
+    }, [isCreateLoading, history, handleClose]);
+
     const handleSubmit = ((e) => {
         e.preventDefault();
-
-        dispatch(deletePlatform(
+        dispatch(createQuiz(
             {
                 userId: auth.user.id,
+                name: values.quizName,
+                description: values.description,
                 platformId: id,
-                confirmPassword: values.password,
+                time: "20"
             }
         ));
     })
@@ -73,15 +76,18 @@ function DeletePlatform({ show, handleClose }) {
     return (
         <Modal style={{ color: "black" }} show={show} onHide={handleClose}>
             <Modal.Header closeButton>
-                <Modal.Title>Delete Platform</Modal.Title>
+                <Modal.Title>Create Quiz</Modal.Title>
             </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
-                    <Form.Group className="mb-3" controlId="formBasicPassword">
-                        <Form.Label>Enter Password to Confirm</Form.Label>
-                        <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
+                    <Form.Group className="mb-3" controlId="formQuizName">
+                        <Form.Label>Quiz Name</Form.Label>
+                        <Form.Control type="text" placeholder="Quiz Name" name="quizName" onChange={onChange} />
                     </Form.Group>
-                    <p className="text-danger">Warning: This action cannot be undone</p>
+                    <Form.Group className="mb-3" controlId="formDescription">
+                        <Form.Label>Quiz Description</Form.Label>
+                        <Form.Control as="textarea" rows={3} type="text" placeholder="Quiz Description" name="description" onChange={onChange} />
+                    </Form.Group>
 
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (
@@ -96,8 +102,8 @@ function DeletePlatform({ show, handleClose }) {
                     </Form.Text>
                 )}
                 <Modal.Footer >
-                    <Button variant="outline-danger" type="submit">
-                        Delete
+                    <Button variant="primary" type="submit">
+                        Create
                     </Button>
                 </Modal.Footer>
             </Form>
@@ -106,4 +112,4 @@ function DeletePlatform({ show, handleClose }) {
 
 }
 
-export default DeletePlatform;
+export default CreateQuiz;
