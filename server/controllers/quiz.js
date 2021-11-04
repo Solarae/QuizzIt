@@ -56,6 +56,26 @@ export const getQuiz = async (req,res) => {
 }
 
 
+export const getPlatformQuiz = async (req,res) =>{
+    let platformId = req.params.id
+
+    try {
+        let quiz = await Quiz.find({platformId:platformId});
+
+        // if(!platform) return res.status(500).json({message:"Platform not found with the provided id"})
+
+        return res.status(200).json({ quiz:quiz})        
+    } catch (error) {
+        res.status(500).json({message:error,message})
+    }
+    
+
+
+
+
+}
+
+
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
 
