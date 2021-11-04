@@ -55,7 +55,7 @@ function EditQuiz({ quizId }) {
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
-                                <QuestionCard question={question}></QuestionCard>
+                                <QuestionCard quizId={qid} question={question}></QuestionCard>
                             </Col>
                             <div style={{ height: '20px'}}></div>
                         </>
