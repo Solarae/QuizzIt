@@ -161,6 +161,8 @@ export const editQuizQuestion = async (req,res) =>{
     try {
         let quiz = await Quiz.findById(quizId)
 
+        if(!quiz) return res.status(500).json({message:"quiz does not exist with id "+quizId})
+
         let questionIndex = quiz.questions.findIndex((question)=> question._id.toString() === questionId)
         console.log(questionIndex)
         quiz.questions[questionIndex] = question;
