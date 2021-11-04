@@ -19,9 +19,9 @@ function AwardSection({ platform }) {
         <Container>
             <h4 style={{ marginBottom: "20px" }}>Platform Awards</h4>
             <Row xs={1} md={4} className="g-4">
-                {Array.from({ length: 9 }).map((_, idx) => (
+                {platform.awardsData.map((award, idx) => (
                     <Col align="center">
-                        <AwardCard></AwardCard>
+                        <AwardCard award={award}></AwardCard>
                     </Col>
                 ))}
                 <Col style={{ minHeight: "220px" }} align="center">

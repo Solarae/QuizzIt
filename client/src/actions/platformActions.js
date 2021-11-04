@@ -88,8 +88,22 @@ export const getPlatform = ({ id }) => async (dispatch) => {
                 }
                 quizzes.push(quiz_res.data.quiz);
             }
+            
+            // get the platform awards 
+            const awards = [];
+            for (const awardId of res.data.platform.awards) {
+                let award_res = await axios.get(`${URL}/api/awards/${awardId}`, config); 
+                if (award_res.data.errors) {
+                    dispatch({
+                        type: GET_PLATFORM_FAIL,
+                        payload: award_res.data
+                    })
+                }
+                awards.push(award_res.data.award);
+            }
 
             res.data.platform.quizzesData = quizzes; // pack the quizzes data with the platform
+            res.data.platform.awardsData = awards; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data
