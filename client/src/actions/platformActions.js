@@ -79,7 +79,7 @@ export const getPlatform = ({ id }) => async (dispatch) => {
             // get the platform quizzes
             const quizzes = [];
             for (const qid of res.data.platform.quizzes) {
-                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config); 
+                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config);
                 if (quiz_res.data.errors) {
                     dispatch({
                         type: GET_PLATFORM_FAIL,
@@ -88,22 +88,26 @@ export const getPlatform = ({ id }) => async (dispatch) => {
                 }
                 quizzes.push(quiz_res.data.quiz);
             }
-            
+
             // get the platform awards 
-            const awards = [];
-            for (const awardId of res.data.platform.awards) {
-                let award_res = await axios.get(`${URL}/api/awards/${awardId}`, config); 
-                if (award_res.data.errors) {
-                    dispatch({
-                        type: GET_PLATFORM_FAIL,
-                        payload: award_res.data
-                    })
+            const awardsConfig = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'platformId': id 
                 }
-                awards.push(award_res.data.award);
+            }
+            let award_res = await axios.get(`${URL}/api/awards/`, awardsConfig);
+            if (award_res.data.errors) {
+                dispatch({
+                    type: GET_PLATFORM_FAIL,
+                    payload: award_res.data
+                })
             }
 
             res.data.platform.quizzesData = quizzes; // pack the quizzes data with the platform
-            res.data.platform.awardsData = awards; // pack the awards data with the platform
+            res.data.platform.awardsData = award_res.data.awards; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data
