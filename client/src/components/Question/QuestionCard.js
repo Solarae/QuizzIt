@@ -1,7 +1,8 @@
 import React from 'react'
 import { Col, Card, ListGroup } from 'react-bootstrap';
 
-function QuestionCard({ quizId }) {
+function QuestionCard({ question }) {
+    console.log(question)
     return (
         <Card bg="white" style={{ width: "220px" }} >
             <Card.Title style={{fontSize: "11pt"}}>Question Title</Card.Title>

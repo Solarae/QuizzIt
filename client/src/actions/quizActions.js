@@ -34,7 +34,7 @@ export const getQuiz = ( id ) => async (dispatch) => {
     }
 }
 
-export const addQuizQuestion = ({ id, question, options, answer }) => async (dispatch) => {
+export const addQuizQuestion = ({ id, question, choices, answer }) => async (dispatch) => {
     
     const config = {
         headers: {
@@ -43,8 +43,9 @@ export const addQuizQuestion = ({ id, question, options, answer }) => async (dis
     }
 
     try {
-        const body = JSON.stringify({ question, options, answer })
-        const res = await axios.post(`${URL}/api/quizzes/${id}/addQuizQuestion`, body, config)
+        const body = JSON.stringify({ question: { question, choices, answer } })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/${id}/addQuestion`, body, config)
 
         if (res.data.errors) {
             dispatch({

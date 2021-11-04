@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 function Banner({ quizId }) {
     const quiz = useSelector((state) => state.quiz.quiz)
+    console.log(quizId)
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
@@ -32,6 +33,7 @@ function Banner({ quizId }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
+                                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Edit</Button>
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
                                     <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
                                     <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>

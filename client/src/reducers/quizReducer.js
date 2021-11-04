@@ -18,19 +18,20 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                isLoading: false
+                isLoading: false,
+                errors: null,
             }
         case GET_QUIZ_FAIL:
             return {
                 ...state,
                 quiz: null,
                 isLoading: false,
-                errors: action.payload.errors
             }
         case ADD_QUIZ_QUESTION: 
             return {
                 ...state,
                 ...action.payload,
+                errors: null,
             }
         case ADD_QUIZ_QUESTION_FAIL: 
             return {
