@@ -125,8 +125,6 @@ export const addQuizQuestion = async (req,res) =>{
     let {question}= req.body
 
     try {
-        // let formattedQuestion = JSON.parse(question)
-        // console.log(JSON.parse(question))
         let quiz = await Quiz.findById(quizId)
         quiz.questions.push(question)
         await quiz.save()
@@ -140,19 +138,18 @@ export const addQuizQuestion = async (req,res) =>{
 }
 
 export const editQuizQuestion = async (req,res) =>{
-    let quizId = req.params.id;
-    let {question,questionId} = req.body
+    let quizId = req.params.id
+    let { question } = req.body
     try {
-        let formattedQuestion = JSON.parse(question)
         let quiz = await Quiz.findById(quizId)
 
-        let questionIndex = quiz.questions.findIndex((question)=> question._id.toString() === questionId)
+        let questionIndex = quiz.questions.findIndex((q)=> q._id.toString() === question._id)
         console.log(questionIndex)
-        quiz.questions[questionIndex] = formattedQuestion;
+        quiz.questions[questionIndex] = formattedQuestion
+
         let newQuiz = await quiz.save()
+
         res.status(200).json({quiz:newQuiz})
-
-
     } catch (error) {
         res.status(500).json({message:error})
     }

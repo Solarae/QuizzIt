@@ -7,6 +7,10 @@ import {
     CREATE_QUIZ_FAIL,
     ADD_QUIZ_QUESTION,
     ADD_QUIZ_QUESTION_FAIL,
+    EDIT_QUIZ_QUESTION,
+    EDIT_QUIZ_QUESTION_FAIL,
+    DELETE_QUIZ_QUESTION,
+    DELETE_QUIZ_QUESTION_FAIL,
 } from '../actions/types'
 
 const initialState = {
@@ -38,6 +42,28 @@ const quizReducer = (state = initialState, action) => {
                 errors: null,
             }
         case ADD_QUIZ_QUESTION_FAIL: 
+            return {
+                ...state,
+                ...action.payload
+            }
+        case EDIT_QUIZ_QUESTION: 
+            return {
+                ...state,
+                ...action.payload,
+                errors: null,
+            }
+        case EDIT_QUIZ_QUESTION_FAIL: 
+            return {
+                ...state,
+                ...action.payload
+            }
+        case DELETE_QUIZ_QUESTION: 
+            return {
+                ...state,
+                ...action.payload,
+                errors: null,
+            }
+        case DELETE_QUIZ_QUESTION_FAIL: 
             return {
                 ...state,
                 ...action.payload

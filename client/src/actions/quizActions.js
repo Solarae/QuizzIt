@@ -7,6 +7,8 @@ import {
     CREATE_QUIZ_FAIL,
     ADD_QUIZ_QUESTION,
     ADD_QUIZ_QUESTION_FAIL,
+    EDIT_QUIZ_QUESTION,
+    EDIT_QUIZ_QUESTION_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -71,7 +73,7 @@ export const createQuiz = ({ userId, name, description, platformId, time }) => a
     }
 }
 
-export const addQuizQuestion = ({ id, question, choices, answer }) => async (dispatch) => {
+export const addQuizQuestion = ({ id, question, choices, answer, callback }) => async (dispatch) => {
     
     const config = {
         headers: {
@@ -95,12 +97,39 @@ export const addQuizQuestion = ({ id, question, choices, answer }) => async (dis
                 payload: res.data
             })
         }
+        callback(res.data.errors)
     } catch (errors) {
         console.log(errors)
     }
 }
 
-// export const editQuizQuestion = NaN
+export const editQuizQuestion = ({quizId, question}) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ quizId, question })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/${quizId}/editQuestion`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_QUIZ_QUESTION_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_QUIZ_QUESTION,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }    
+}
 // export const deleteQuizQuestion = NaN
 // export const editQuiz = NaN
 
