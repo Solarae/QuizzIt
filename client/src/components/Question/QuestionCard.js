@@ -1,16 +1,16 @@
 import React from 'react'
-import { Col, Card, ListGroup } from 'react-bootstrap';
+import { Col, Card, ListGroup, Button } from 'react-bootstrap';
 
 function QuestionCard({ question }) {
-    console.log(question)
     return (
         <Card bg="white" style={{ width: "220px" }} >
-            <Card.Title style={{fontSize: "11pt"}}>Question Title</Card.Title>
+            <Card.Title style={{fontSize: "14pt"}}>{question.question}</Card.Title>
             <Col className="g-4">
-                    {Array.from({ length: 4 }).map((_, idx) => (
-                        <Col> Option Text </Col>
+                    {question.choices.map((choice, idx) => (
+                        <Col> {choice} </Col>
                     ))}
-            </Col>         
+            </Col>  
+            <Button variant="primary btn-sm"> Edit </Button>       
         </Card>
     )
 }

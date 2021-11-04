@@ -71,7 +71,7 @@ export const createQuiz = ({ userId, name, description, platformId, time }) => a
     }
 }
 
-export const addQuizQuestion = ({ id, question, options, answer }) => async (dispatch) => {
+export const addQuizQuestion = ({ id, question, choices, answer }) => async (dispatch) => {
     
     const config = {
         headers: {

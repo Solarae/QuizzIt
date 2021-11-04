@@ -51,6 +51,7 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         options.forEach(x => optionValues.push(values[x]))
         console.log(optionValues)
 
+
         dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: values.answer }))
     }
     
