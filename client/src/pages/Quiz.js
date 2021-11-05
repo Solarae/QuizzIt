@@ -27,6 +27,10 @@ function Quiz() {
     //     if (!platform) dispatch(getQuiz(id))
     // }, [dispatch, platform])
 
+    const handleTakeQuiz = () => {
+        history.push('/take')
+    }
+
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
@@ -49,7 +53,7 @@ function Quiz() {
                     </tr>
                 </Table>
                 <div className="d-grid gap-1">
-                    <Button variant="outline-primary btn-lg" style={{ marginLeft: "10px" }}>Take Quiz</Button>
+                    <Button onClick={handleTakeQuiz} variant="outline-primary btn-lg" style={{ marginLeft: "10px" }}>Take Quiz</Button>
                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>View Submissions</Button>
                 </div>
                 </Col>
