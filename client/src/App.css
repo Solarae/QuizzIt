@@ -6,30 +6,30 @@
   height: 70px;
 }
 
-/* START of CSS for platfoorm navbar */ 
+/* START of CSS for platfoorm navbar */
 
-.tabNav > .nav-item > * > a >  i{
+.tabNav > .nav-item > * > a > i {
   color: black;
 }
 
-.tabNav > .nav-item > * > .active >  i{
-  color: #1DA1F2;
+.tabNav > .nav-item > * > .active > i {
+  color: #1da1f2;
 }
 
-.tabNav > .nav-item > * >  a{
+.tabNav > .nav-item > * > a {
   outline: None;
   border: None;
 }
 
-.tabNav > .nav-item > * > .active{
+.tabNav > .nav-item > * > .active {
   outline: None;
   border: None;
   background-color: white;
-  border-bottom: 5px solid #1DA1F2;
+  border-bottom: 5px solid #1da1f2;
   bottom: -10px;
 }
 
-.tabNav > .nav-item > * > a{
+.tabNav > .nav-item > * > a {
   outline: None;
   border: None;
   background-color: white;
@@ -37,12 +37,13 @@
   bottom: -10px;
 }
 
-.tabNav > .nav-item > * > a:hover, .tabNav > .nav-item > a:focus{
+.tabNav > .nav-item > * > a:hover,
+.tabNav > .nav-item > a:focus {
   outline: None;
   border: None;
   background-color: white;
-  border-bottom: 5px solid #1DA1F2;
+  border-bottom: 5px solid #1da1f2;
   bottom: -10px;
 }
 
-/* END of CSS for platfoorm navbar */ 
+/* END of CSS for platfoorm navbar */
