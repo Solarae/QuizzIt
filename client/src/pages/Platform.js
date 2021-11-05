@@ -15,6 +15,7 @@ function Platform() {
     const [errors, setErrors] = useState({});
     const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
+    const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
     let { id } = useParams();  // get the platform ID from the url
@@ -58,7 +59,7 @@ function Platform() {
                             </Row>
                         </Container>
 
-                        {showHome && Object.keys(platform).length !== 0 ? <Home platform={platform}></Home> : <MemberList platform={platform}></MemberList>}
+                        {showHome && Object.keys(platform).length !== 0 ? <Home quizzesData={quizzesData}></Home> : <MemberList platform={platform}></MemberList>}
 
                     </div>
                     <div className="col" style={{}}>
