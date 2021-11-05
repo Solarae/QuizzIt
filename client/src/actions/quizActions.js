@@ -103,7 +103,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
     }
 }
 
-export const editQuizQuestion = ({quizId, question}) => async (dispatch) => {
+export const editQuizQuestion = ({id, question, callback}) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -111,9 +111,9 @@ export const editQuizQuestion = ({quizId, question}) => async (dispatch) => {
     }
 
     try {
-        const body = JSON.stringify({ quizId, question })
+        const body = JSON.stringify({ id, question })
         console.log(body)
-        const res = await axios.post(`${URL}/api/quizzes/${quizId}/editQuestion`, body, config)
+        const res = await axios.post(`${URL}/api/quizzes/${id}/editQuizQuestion`, body, config)
 
         if (res.data.errors) {
             dispatch({
@@ -126,6 +126,7 @@ export const editQuizQuestion = ({quizId, question}) => async (dispatch) => {
                 payload: res.data
             })
         }
+        callback(res.data.errors)
     } catch (errors) {
         console.log(errors)
     }    

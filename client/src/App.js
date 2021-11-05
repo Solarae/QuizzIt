@@ -13,6 +13,7 @@ import EditPlatform from './pages/EditPlatform';
 
 import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
+import TakeQuiz from './pages/TakeQuiz'
 import Upload from './pages/Upload'
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
         <Route path='/platform/:id/edit' exact component={EditPlatform} />
         <Route path='/platform/:id/quiz/:qid' exact component={Quiz} />
         <Route path='/platform/:id/quiz/:qid/edit' exact component={EditQuiz} />
+        <Route path='/platform/:id/quiz/:qid/take' exact component={TakeQuiz} />
         <Route path='/upload' exact component={Upload} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
