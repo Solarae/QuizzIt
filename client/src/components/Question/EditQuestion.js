@@ -1,20 +1,20 @@
 import React, { useState } from 'react'
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
-import { addQuizQuestion } from '../../actions/quizActions'
+import { editQuizQuestion } from '../../actions/quizActions'
 import { useHistory, useParams } from 'react-router-dom'
 
-function EditQuizQuestion({ quizId, show, handleClose }) {
+function EditQuizQuestion({ quizId, show, handleClose, question }) {
     const dispatch = useDispatch();
     const quiz = useSelector((state) => state.quiz.quiz)
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
-        question: "",
-        option1:"",
-        option2:"",
-        option3:"",
-        option4:"",
-        answer:""
+        question: question.question,
+        option1: question.choices[0],
+        option2: question.choices[1],
+        option3: question.choices[2],
+        option4: question.choices[3],
+        answer: question.answer
     });
     const history = useHistory()
 
@@ -52,7 +52,16 @@ function EditQuizQuestion({ quizId, show, handleClose }) {
         console.log(optionValues)
 
 
-        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: values.answer }))
+        dispatch(editQuizQuestion({ 
+            id: quizId, 
+            question: {
+                _id: question._id, 
+                question: values.question, 
+                choices: optionValues, 
+                answer: values.answer
+            }, 
+            callback: closeModal 
+        }))
     }
     
     let options = ['option1', 'option2', 'option3', 'option4']
@@ -66,10 +75,10 @@ function EditQuizQuestion({ quizId, show, handleClose }) {
         )
     })
     
-    console.log('modal add question')
+    console.log('modal edit question')
     return (
         <Modal show={show} onHide={closeModal}>
-            <Modal.Header closeButton> <Modal.Title>Add Question</Modal.Title> </Modal.Header>
+            <Modal.Header closeButton> <Modal.Title>Edit Question</Modal.Title> </Modal.Header>
             <Form onSubmit={handleSubmit}>
                 <Modal.Body>
                     <Form.Group className="mb-3">

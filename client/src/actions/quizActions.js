@@ -137,6 +137,38 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     }
 }
 
+
+
+
+export const editQuizQuestion = ({id, question, callback}) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ id, question })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/${id}/editQuizQuestion`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_QUIZ_QUESTION_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_QUIZ_QUESTION,
+                payload: res.data
+            })
+        }
+        callback(res.data.errors)
+    } catch (errors) {
+        console.log(errors)
+    }    
+}
+
 // export const editQuizQuestion = NaN
 // export const deleteQuizQuestion = NaN
 // export const editQuiz = NaN
