@@ -5,11 +5,12 @@ import TakeQuestionCard from '../components/Question/TakeQuestionCard'
 import TakeQuizBanner from '../components/Quiz/TakeQuizBanner'
 
 import { getQuiz } from '../actions/quizActions'
+import { makeSubmission } from '../actions/submissionActions';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
 
-function TakeQuiz({ quizId }) {
+function TakeQuiz() {
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
@@ -37,21 +38,38 @@ function TakeQuiz({ quizId }) {
         return ( <div> Loading... </div> )
     }
     
-    const questionInput = (e, index) => {
+    const questionInput = (e, idx, index) => {
         const newQuestionsAttempted = {...questionsAttempted}
-        newQuestionsAttempted[index] = e.target.value
+        newQuestionsAttempted[index] = idx
         setQuestionsAttempted(newQuestionsAttempted)
     }
     console.log(quiz.questions)
 
     const handleSubmit = () => {
         console.log(questionsAttempted)
+
+        let answers = []
+        for (var key in questionsAttempted) {
+            answers.push(String.fromCharCode(questionsAttempted[key] + 97))
+        }
+
+        if (answers.length !== quiz.questions.length) {
+            return;
+        }
+
+        console.log(answers)
+        dispatch(makeSubmission({ 
+            quizId: qid, 
+            answers: answers,
+            platformId: quiz.platformId,
+            userId: '61789892168228326a5fadd9',
+            timeTaken: 0,
+        }))
     }
 
     return (
         <>
             <TakeQuizBanner></TakeQuizBanner>
-
             <div style={{ height: "10vh" }}></div>
 
             <Container className="row justify-content-center">
@@ -66,9 +84,8 @@ function TakeQuiz({ quizId }) {
                         </>
                         ))}
                 </Col>
-                <Button variant="primary" onClick={handleSubmit} >Submit</Button>
+                <Button variant="primary" onClick={handleSubmit}>Submit</Button>
             </Container>
-
         </>
     )
 }

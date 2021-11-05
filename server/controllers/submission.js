@@ -5,13 +5,12 @@ import User from "../models/User.js"
 
 export const createSubmission = async (req,res) =>{
     let {quizId,answers,platformId,userId,timeTaken} = req.body
+    console.log(req.body)
 
     try {
 
         let quiz = await Quiz.findById(quizId)
         if(!quiz) return res.status(400).json({message:"Quiz id not found"})
-
-
 
         //calculate the score
 
@@ -26,12 +25,8 @@ export const createSubmission = async (req,res) =>{
                 }
                 i+=1
             } 
-
-
         })
         console.log(total_correct)
-
-
         let newSubmission = new Submission({
             quizId:quizId,
             answers:answers,
@@ -40,10 +35,6 @@ export const createSubmission = async (req,res) =>{
             timeTaken,
             score:total_correct
         })
-
-
-
-
         
         //save submission
         let created_submission = await newSubmission.save()

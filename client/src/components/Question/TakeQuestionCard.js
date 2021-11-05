@@ -12,11 +12,11 @@ function TakeQuestionCard({ quizId, question, questionNumber, questionInput }) {
                         <input
                         key={idx}
                         type="radio"
-                        name={idx}
+                        name={question._id + idx}
                         value={choice}
                         checked={choiceValue === choice}
                         onChange={(e) => {
-                            questionInput(e, questionNumber)
+                            questionInput(e, idx, questionNumber)
                             setChoiceValue(e.currentTarget.value)
                         }}
                     />{choice}
