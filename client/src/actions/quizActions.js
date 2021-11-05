@@ -84,7 +84,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
     }
 
     try {
-        const body = JSON.stringify({ question: { question, answer } })
+        const body = JSON.stringify({ question: { question, choices, answer } })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/${id}/addQuestion`, body, config)
 

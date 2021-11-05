@@ -10,6 +10,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
 import EditPlatform from './pages/EditPlatform';
+import Search from './pages/Search';
 
 import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
@@ -23,6 +24,7 @@ function App() {
       <AppNavbar />
       <Switch>
         <Route path='/' exact component={Home} />
+        <Route path='/search' exact component={Search} />
         <Route path='/profile' exact component={Profile} />
         <Route path='/platform/:id' exact component={Platform} />
         <Route path='/platform/:id/edit' exact component={EditPlatform} />
