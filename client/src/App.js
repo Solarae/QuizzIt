@@ -15,6 +15,7 @@ import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
 import TakeQuiz from './pages/TakeQuiz'
 import Upload from './pages/Upload'
+import CountDownTimer from './components/Quiz/CountDownTimer'
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Route path='/platform/:id/quiz/:qid/edit' exact component={EditQuiz} />
         <Route path='/platform/:id/quiz/:qid/take' exact component={TakeQuiz} />
         <Route path='/upload' exact component={Upload} />
+        <Route path='/countdown' exact component={CountDownTimer} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>
