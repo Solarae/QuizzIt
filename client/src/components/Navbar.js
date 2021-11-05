@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react'
-import { Nav, Navbar, Container, Image, NavDropdown } from 'react-bootstrap'
+import { Nav, Navbar, Container, Image, NavDropdown, Row, Col, Form, InputGroup, Button, FormControl } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
 import SignIn from './SignIn.js';
@@ -14,6 +14,14 @@ function AppNavbar() {
   const auth = useSelector((state) => state.auth)
   const history = useHistory()
 
+  const [query, setQuery] = useState("");
+  const onQueryChange = (e) => {
+    setQuery(e.target.value)
+  }
+  const handleSearch = (e) =>{
+    e.preventDefault();
+    history.push(`/search?query=${query}`)
+  }
 
   const [showSignIn, setShowSignIn] = useState(false);
   const handleCloseSignIn = () => { setShowSignIn(false) };
@@ -29,8 +37,8 @@ function AppNavbar() {
 
   return (
     <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
-      <Container>
-        <LinkContainer to='/'>
+      <Container fluid>
+        <LinkContainer to='/' style={{ marginLeft: "8%" }}>
           <Navbar.Brand >
             <img
               alt=""
@@ -42,7 +50,19 @@ function AppNavbar() {
             Quizzit
           </Navbar.Brand>
         </LinkContainer>
-        <Navbar.Collapse id="responsive-navbar-nav" class='ml-auto'>
+
+        <Form className="d-flex me-auto" style={{ marginLeft: "2%", width: "30%" }} onSubmit={handleSearch}>
+          <FormControl
+            type="search"
+            placeholder="Search"
+            className="me-2"
+            aria-label="Search"
+            onChange={onQueryChange}
+          />
+          <i class="bi bi-search" onClick={handleSearch} style={{ color: "white", fontSize: "1.5rem", marginLeft: "2px", marginTop: "2px", cursor: "pointer" }} ></i>
+        </Form>
+
+        <Navbar.Collapse id="responsive-navbar-nav" class='ml-auto' style={{ marginRight: "8%" }}>
           {auth.isAuthenticated ?
             (
 
