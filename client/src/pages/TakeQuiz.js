@@ -75,6 +75,8 @@ function TakeQuiz() {
             userId: '61789892168228326a5fadd9',
             timeTaken: timer,
         }))
+
+        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
     }
 
     const calculateTime = () => {
