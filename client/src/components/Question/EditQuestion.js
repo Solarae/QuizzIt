@@ -70,7 +70,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         optionList.push( 
             <Form.Group className="mb-3">
                 <Form.Label>Option {index+1} </Form.Label>
-                <Form.Control type="text" placeholder="Option" name={option} onChange={onChange} />
+                <Form.Control type="text" placeholder="Option" defaultValue={values[option]} name={option} onChange={onChange} />
             </Form.Group>
         )
     })
@@ -83,12 +83,12 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>Question</Form.Label>
-                        <Form.Control type="text" placeholder="Quesiton" name="question" onChange={onChange} />
+                        <Form.Control type="text" defaultValue={values.question} name="question" onChange={onChange} />
                     </Form.Group>
                         {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control type="text" placeholder="Answer" name="answer" onChange={onChange} />
+                        <Form.Control type="text" defaultValue={values.answer} name="answer" onChange={onChange} />
                     </Form.Group>
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (
