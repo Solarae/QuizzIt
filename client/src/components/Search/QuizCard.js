@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { Card, Image, Row, Col, Button } from 'react-bootstrap';
 
-function QuizCard() {
+function QuizCard({ quiz }) {
 
     return (
-        <Card>
+        <Card style={{marginBottom: "20px"}}>
             <Card.Body>
                 <Row>
                     <Col md={3} className="my-auto" align="center" style={{  }}>
@@ -12,7 +12,7 @@ function QuizCard() {
                     </Col>
                     <Col style={{ }}>
                         <Row style={{ height: "20%" }}>
-                            <p className="fs-4 text">Quiz Title</p>
+                            <p className="fs-4 text">{quiz.name}</p>
                         </Row>
                         <Row style={{ height: "20%" }}>
                             <p>3.8k Submissions<i class="bi bi-dot" />5d ago</p>
@@ -21,7 +21,7 @@ function QuizCard() {
                             <p>Platform icon and platform name here</p>
                         </Row>
                         <Row style={{ height: "20%" }}>
-                            <p>Quiz Description here</p>
+                            <p>{quiz.description}</p>
                         </Row>
                         <Row style={{ height: "20%" }}>
                             <p>

@@ -3,14 +3,45 @@ import { Container, Row, Col, Dropdown } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 import PlatformCard from '../components/Search/PlatformCard.js'
 import QuizCard from '../components/Search/QuizCard'
 
-function Search() {
+import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
 
-    if (false) {
+function Search() {
+    const dispatch = useDispatch()
+    const history = useHistory()
+    const [errors, setErrors] = useState({});
+    const auth = useSelector((state) => state.auth)
+
+    const platforms = useSelector((state) => state.search.platforms)
+    const quizzes = useSelector((state) => state.search.quizzes)
+    const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
+    const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
+
+    const location_search = useLocation().search;
+    const query = new URLSearchParams(location_search).get('query');
+
+    const [filter, setFilter] = useState({
+        platform: true,
+        quiz: true
+    });
+
+    // dispatch the SEARCH_PLATFORM request
+    useEffect(() => {
+        console.log("searching");
+        dispatch(searchPlatform({
+            query: { 'name': query }
+        }))
+
+        dispatch(searchQuiz({
+            query: { 'name': query }
+        }))
+    }, [query, filter, dispatch]);
+
+    if (isSearchPlatformLoading || isSearchQuizLoading) {
         return (<div>Loading...</div>)
     }
     return (
@@ -19,7 +50,7 @@ function Search() {
                 {/* <h2 className='text-center m-3'>Search page</h2> */}
                 <Container style={{ width: "80%", marginTop: "30px" }}>
                     <Dropdown>
-                        <Dropdown.Toggle variant="white" id="dropdown-basic" style={{fontSize: "1.4rem", marginBottom: "-20px"}}>
+                        <Dropdown.Toggle variant="white" id="dropdown-basic" style={{ fontSize: "1.4rem", marginBottom: "-20px" }}>
                             <i class="bi bi-filter"></i>Filter
                         </Dropdown.Toggle>
 
@@ -32,9 +63,23 @@ function Search() {
                     <hr />
 
                     {/* Search results section below */}
-                    <PlatformCard></PlatformCard>
+                    <h3>Platforms</h3>
+                    {filter.platform && platforms && platforms.length>0 ?
+                        platforms.map((p, idx) => (
+                            <PlatformCard platform={p}></PlatformCard>
+                        ))
+                        :
+                        <p>No Platform Results</p>
+                    }
                     <hr />
-                    <QuizCard></QuizCard>
+                    <h3>Quizzes</h3>
+                    {filter.quiz && quizzes && quizzes.length>0 ?
+                        quizzes.map((q, idx) => (
+                            <QuizCard quiz={q}></QuizCard>
+                        ))
+                        :
+                        <p>No Quiz Results</p>
+                    }
                 </Container>
             </div>
 
