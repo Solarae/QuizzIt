@@ -38,15 +38,12 @@ function Banner({ platform }) {
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
-                <div className="col-md-5 p-lg-5 mx-auto my-3">
-                    <p className="lead fw-normal">Banner image goes here</p>
-                </div>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{backgroundImage: `url(${platform.banner})`}}>
             </div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{ overflowWrap: "break-word" }} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" >
-                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src="/quizzit_logo.png" thumbnail />
+                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={platform.icon && platform.icon!=="" ? platform.icon :  "/quizzit_logo.png"} thumbnail />
                         <div style={{ marginLeft: "2%" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
                                 5.8k subscribers
@@ -94,7 +91,7 @@ function Banner({ platform }) {
             </div>
 
             <Report platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
-        </div>
+        </div >
     )
 }
 export default Banner;
