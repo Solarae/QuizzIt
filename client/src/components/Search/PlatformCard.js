@@ -2,18 +2,24 @@ import React, { useState } from 'react'
 import { Card, Image, Row, Col, Button } from 'react-bootstrap';
 import authReducer from '../../reducers/authReducer';
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 function PlatformCard({ platform }) {
     const auth = useSelector((state) => state.auth)
+    const history = useHistory()
+
+    const routeToPlatform = () => {
+        history.push(`/platform/${platform._id}`);
+    }
 
     return (
-        <Card style={{marginBottom: "20px"}}>
+        <Card style={{ marginBottom: "20px" }}>
             <Card.Body>
                 <Row>
-                    <Col md={3} className="my-auto" align="center" style={{}}>
+                    <Col onClick={routeToPlatform} md={3} className="my-auto" align="center" style={{cursor: "pointer"}}>
                         <Image style={{ width: "150px", height: "150px" }} className="bg-dark" src={platform.icon ? platform.icon : '/quizzit_logo.png'} thumbnail />
                     </Col>
-                    <Col md={6} style={{}}>
+                    <Col onClick={routeToPlatform} md={6} style={{cursor: "pointer"}}>
                         <Row style={{ height: "25%" }}>
                             <p className="fs-4 text">{platform.name}</p>
                         </Row>
