@@ -42,7 +42,7 @@ function Search() {
         dispatch(searchQuiz({
             query: { 'name': query }
         }))
-    }, [query, filter, dispatch]);
+    }, [query, filter, sort, dispatch]);
 
     // compares the creation time of mongo documents a and b
     const compareDates = (a, b) => {
