@@ -4,14 +4,19 @@ import {
     SEARCH_PLATFORM_FAIL,
     SEARCH_QUIZ_REQ,
     SEARCH_QUIZ_SUCCESS,
-    SEARCH_QUIZ_FAIL
+    SEARCH_QUIZ_FAIL,
+    SEARCH_USER_REQ,
+    SEARCH_USER_SUCCESS,
+    SEARCH_USER_FAIL
 } from '../actions/types'
 
 const initialState = {
     isSearchPlatformLoading: false,
-    isSearchQuizzesLoading: false,
+    isSearchQuizLoading: false,
+    isSearchUserLoading: false,
     platforms: null,
     quizzes: null,
+    users: null,
     errors: null
 }
 
@@ -52,6 +57,24 @@ const searchReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isSearchQuizLoading: false
+            }
+        case SEARCH_USER_REQ:
+            return {
+                ...state,
+                isSearchUserLoading: true 
+            }
+        case SEARCH_USER_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isSearchUserLoading: false,
+                errors: null 
+            }
+        case SEARCH_USER_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isSearchUserLoading: false
             }
         default:
             return state;

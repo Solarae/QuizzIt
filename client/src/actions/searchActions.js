@@ -4,7 +4,10 @@ import {
     SEARCH_PLATFORM_FAIL,
     SEARCH_QUIZ_REQ,
     SEARCH_QUIZ_SUCCESS,
-    SEARCH_QUIZ_FAIL
+    SEARCH_QUIZ_FAIL,
+    SEARCH_USER_REQ,
+    SEARCH_USER_SUCCESS,
+    SEARCH_USER_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -90,6 +93,41 @@ export const searchQuiz = ({ query }) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: SEARCH_QUIZ_FAIL
+        })
+    }
+}
+
+export const searchUser = ({ query }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            ...query
+        }
+    }
+    try {
+        dispatch({
+            type: SEARCH_USER_REQ
+        });
+        const res = await axios.get(`${URL}/api/users/`, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: SEARCH_USER_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: SEARCH_USER_SUCCESS,
+                payload: res.data
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: SEARCH_USER_FAIL
         })
     }
 }
