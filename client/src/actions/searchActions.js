@@ -55,6 +55,7 @@ export const searchQuiz = ({ query }) => async (dispatch) => {
             ...query
         }
     }
+
     try {
         dispatch({
             type: SEARCH_QUIZ_REQ
@@ -68,6 +69,18 @@ export const searchQuiz = ({ query }) => async (dispatch) => {
             })
         }
         else {
+            // get the platform icon/name for each quiz
+            for (let q of res.data.quizzes) {
+                let platformConfig = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                let plat_res = await axios.get(`${URL}/api/platforms/${q.platformId}`, platformConfig); // get the platform 
+                q.platformName = plat_res.data.platform.name
+                q.platformIcon = plat_res.data.platform.icon
+            }
+            
             dispatch({
                 type: SEARCH_QUIZ_SUCCESS,
                 payload: res.data

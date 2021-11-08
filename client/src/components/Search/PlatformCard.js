@@ -51,8 +51,8 @@ function PlatformCard({ platform }) {
                         </Row>
                         <Row style={{ height: "25%" }}>
                             <p>
-                                <i className="bi bi-hand-thumbs-up"></i> {platform.likes ? platform.likes.totalLikes : 0}
-                                <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> {platform.likes ? platform.likes.totalDislikes : 0}
+                                <i className="bi bi-hand-thumbs-up"></i> {platform.likes && platform.likes.totalLikes ? platform.likes.totalLikes : 0}
+                                <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> {platform.likes && platform.likes.totalDislikes ? platform.likes.totalDislikes : 0}
                             </p>
                         </Row>
 
