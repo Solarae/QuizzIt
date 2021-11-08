@@ -7,8 +7,9 @@ import { useHistory, useLocation } from 'react-router-dom'
 
 import PlatformCard from '../components/Search/PlatformCard.js'
 import QuizCard from '../components/Search/QuizCard'
+import UserCard from '../components/Search/UserCard'
 
-import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
+import { searchPlatform, searchQuiz, searchUser } from '../actions/searchActions.js'
 
 import mongoose from 'mongoose'
 
@@ -20,8 +21,10 @@ function Search() {
 
     const platforms = useSelector((state) => state.search.platforms)
     const quizzes = useSelector((state) => state.search.quizzes)
+    const users = useSelector((state) => state.search.users)
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
+    const isSearchUserLoading = useSelector((state) => state.search.isSearchUserLoading);
 
     const location_search = useLocation().search;
     const query = new URLSearchParams(location_search).get('query');
@@ -42,6 +45,10 @@ function Search() {
         dispatch(searchQuiz({
             query: { 'name': query }
         }))
+        
+        dispatch(searchUser({
+            query: { 'username': query }
+        }))
     }, [query, filter, sort, dispatch]);
 
     // compares the creation time of mongo documents a and b
@@ -58,7 +65,7 @@ function Search() {
     }
 
 
-    if (isSearchPlatformLoading || isSearchQuizLoading) {
+    if (isSearchPlatformLoading || isSearchQuizLoading || isSearchUserLoading) {
         return (<div>Loading...</div>)
     }
     return (
@@ -117,6 +124,17 @@ function Search() {
                         ))
                         :
                         ((filter === "quiz" || filter === "none") && <p>No Quiz Results</p>)
+                    }
+                    
+                    {/* Search results for users */}
+                    {filter === "none" && <hr />}
+                    {(filter === "user" || filter === "none") && <h3>Users</h3>}
+                    {(filter === "user" || filter === "none") && users && users.length > 0 ?
+                        users.sort(compareDates).map((user, idx) => (
+                            <UserCard user={user}></UserCard>
+                        ))
+                        :
+                        ((filter === "user" || filter === "none") && <p>No User Results</p>)
                     }
                 </Container>
             </div>
