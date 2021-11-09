@@ -13,21 +13,28 @@ function UserCard({ user }) {
         // history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
     }
 
-    const createdAt = mongoose.Types.ObjectId(user._id).getTimestamp();
-
     return (
         <Card style={{ marginBottom: "20px" }}>
             <Card.Body>
                 <Row>
                     <Col md={3} className="my-auto" align="center" >
-                        <Image style={{ width: "150px", height: "150px", cursor: 'pointer' }} onClick={routeToUser} className="bg-dark" src={user.icon? user.icon : "/quizzit_logo.png"} thumbnail roundedCircle />
+                        <Image style={{ width: "150px", height: "150px", cursor: 'pointer' }} onClick={routeToUser} className="bg-dark" src={user.icon ? user.icon : "/quizzit_logo.png"} thumbnail roundedCircle />
                     </Col>
                     <Col style={{}}>
                         <Row style={{ height: "20%" }}>
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToUser}>{user.username}</p>
                         </Row>
+                        <Row style={{ height: "20%", marginTop:"10px" }}>
+                            <p>
+                                {
+                                    user.platformInfos.reduce((prev, curr) => {
+                                        return prev + curr.points.allTime
+                                    }, 0)
+                                } Points<i class="bi bi-dot" /> Member of {user.platformInfos.length} platforms
+                            </p>
+                        </Row>
                         <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>
-                            <p>{user.awards.length} awards</p>
+                            <p><i class="bi bi-award-fill"></i> {user.awards.length} Awards</p>
                         </Row>
                     </Col >
                 </Row>
