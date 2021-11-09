@@ -37,14 +37,22 @@ function Home({ quizzesData }) {
 
             <div>
                 {quizzesData && quizzesData.length > 0 ?
-                    (<Row xs={1} md={4} className="g-4 me-auto">
-                        {quizzesData.sort(compareDates).map((quiz, idx) => (
-                            <Col align="center">
-                                <QuizCard quiz={quiz}></QuizCard>
-                            </Col>
-                        ))}
-                    </Row>
-                    ) : <div>This platform does not have any quizzes yet</div>
+                    (
+                        <Row xs={1} md={4} className="g-4 me-auto">
+                            {quizzesData.sort(compareDates).map((quiz, idx) => (
+                                <Col align="center">
+                                    <QuizCard quiz={quiz}></QuizCard>
+                                </Col>
+                            ))}
+                        </Row>
+                    )
+                    :
+                    (
+                        <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
+                            This platform does not have any quizzes yet
+                        </div>
+                    )
+
                 }
             </div>
 

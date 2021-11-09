@@ -1,3 +1,7 @@
+body {
+  overflow-y: scroll; /* Show vertical scrollbar */
+}
+
 .dropdown-toggle::after {
   display: none;
 }
