@@ -44,7 +44,7 @@ function PlatformCard({ platform }) {
                             <p className="fs-4 text">{platform.name}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p>{platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizzes.length} Quizzes</p>
+                            <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizzes.length} Quizzes</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
                             <p>{platform.description}</p>
