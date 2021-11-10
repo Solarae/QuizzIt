@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
 import MemberList from '../components/Platform/MemberList.js'
+import Leaderboard  from '../components/Platform/Leaderboard.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -63,7 +64,7 @@ function Platform() {
 
                     </div>
                     <div className="col" style={{}}>
-                        leaderboard goes here
+                        <Leaderboard platform={platform}></Leaderboard>
                     </div>
                 </div>
             </div>
