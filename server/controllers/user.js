@@ -35,6 +35,7 @@ export const signin = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                likes: user.likes,
                 token
             }
         })
@@ -150,6 +151,7 @@ export const editAccount = async (req, res) => {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
+                likes: newUser.likes
             }
         })
     } catch (error) {
@@ -201,6 +203,38 @@ export const getUsersByFilter = async (req, res) => {
     try {
         const users = await User.find(query);
         res.status(200).json({ users: users });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+// To change a field, say name, newValue should be
+// newValue = {
+//  name: "NewName"
+// }
+export const updateUser = async (req, res) => {
+    const { newValue, userId } = req.body
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(200).json({ msg: "User doesn't exist" });
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            { $set: newValue },
+            { new: true }
+        );
+        if (!updatedUser) return res.status(200).json({ msg: "Something went wrong with updating user" });
+
+        res.status(200).json(
+            {
+                user: {
+                    id: updatedUser._id,
+                    username: updatedUser.username,
+                    email: updatedUser.email,
+                    likes: updatedUser.likes,
+                    token
+                }
+            });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
