@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
-import { joinPlatform, leavePlatform } from '../../actions/platformActions'
+import { joinPlatform, leavePlatform, editPlatform } from '../../actions/platformActions'
+import { updateUser } from '../../actions/profileActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,6 +29,81 @@ function Banner({ platform }) {
         }))
     }
 
+    const handleLike = () => {
+        let likes = auth.user.likes
+        let platform_likes = platform.likes
+
+        // check if not yet liked  
+        if (!likes.likedPlatforms.some(e => e === platform._id)) {
+            likes.likedPlatforms.push(platform._id);
+            platform_likes.totalLikes += 1
+
+            // remove from disliked if there
+            let idx = likes.dislikedPlatforms.findIndex(e => e === platform._id);
+            if (idx !== -1) {
+                likes.dislikedPlatforms.splice(idx, 1);
+                platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes-1
+            }
+        }
+        else {
+            // unlike the platform
+            likes.likedPlatforms = likes.likedPlatforms.filter(e => e !== platform._id)
+            platform_likes.totalLikes -= 1
+        }
+
+        dispatch(updateUser({
+            newValue: { likes: likes },
+            userId: auth.user.id
+        }))
+        dispatch(editPlatform(
+            {
+                newValue: {
+                    likes: platform_likes
+                },
+                userId: auth.user.id,
+                platformId: platform._id,
+                confirmPassword: ""
+            }))
+    }
+
+    const handleDislike = () => {
+        let likes = auth.user.likes
+        let platform_likes = platform.likes
+
+        // check if not yet disliked  
+        if (!likes.dislikedPlatforms.some(e => e === platform._id)) {
+            likes.dislikedPlatforms.push(platform._id);
+            platform_likes.totalDislikes += 1
+
+            // remove from liked if there
+            let idx = likes.likedPlatforms.findIndex(e => e === platform._id);
+            if (idx !== -1) {
+                likes.likedPlatforms.splice(idx, 1);
+                platform_likes.totalLikes -= 1
+            }
+
+        }
+        else {
+            // un-dislike the platform
+            likes.dislikedPlatforms = likes.dislikedPlatforms.filter(e => e !== platform._id)
+            platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes -= 1
+        }
+
+        dispatch(updateUser({
+            newValue: { likes: likes },
+            userId: auth.user.id
+        }))
+        dispatch(editPlatform(
+            {
+                newValue: {
+                    likes: platform_likes
+                },
+                userId: auth.user.id,
+                platformId: platform._id,
+                confirmPassword: ""
+            }))
+    }
+
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
     const handleShowReport = () => { setShowReport(true) };
@@ -38,17 +114,17 @@ function Banner({ platform }) {
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{backgroundImage: `url(${platform.banner})`}}>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${platform.banner})` }}>
             </div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{ overflowWrap: "break-word" }} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" >
-                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={platform.icon && platform.icon!=="" ? platform.icon :  "/quizzit_logo.png"} thumbnail />
+                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={platform.icon && platform.icon !== "" ? platform.icon : "/quizzit_logo.png"} thumbnail />
                         <div style={{ marginLeft: "2%" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
-                                5.8k subscribers
-                                <i className="bi bi-hand-thumbs-up" style={{ marginLeft: "30px" }}></i> 1.7k
-                                <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> 80
+                                <i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers
+                                <i className={auth.user.likes.likedPlatforms.some(e => e === platform._id) ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike} style={{ marginLeft: "30px", cursor: "pointer" }}></i> {platform.likes && platform.likes.totalLikes ? platform.likes.totalLikes : 0}
+                                <i className={auth.user.likes.dislikedPlatforms.some(e => e === platform._id) ? "bi bi-hand-thumbs-down-fill" : "bi bi-hand-thumbs-down"} onClick={handleDislike} style={{ marginLeft: "10px", cursor: "pointer" }}></i> {platform.likes && platform.likes.totalDislikes ? platform.likes.totalDislikes : 0}
                             </p>
                             <p className="lead fw-normal">
                                 {platform.description}
