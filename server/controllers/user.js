@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import jwtDecode from 'jwt-decode'
 import User from '../models/User.js'
 
 import { JWT_SECRET } from '../config.js';
@@ -24,6 +25,36 @@ export const signin = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             errors.invalidCredentials = "Invalid credentials";
+            return res.status(200).json({ errors: errors });
+        }
+
+        const token = jwt.sign({ user: { id: user._id, username: user.username, email: user.email, likes: user.likes } }, JWT_SECRET, { expiresIn: 3600 });
+
+        res.status(200).json({
+            token,
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                likes: user.likes,
+                token
+            }
+        })
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+export const tokenSignin = async (req, res) => {
+    const { userToken } = req.body;
+    const decodedToken= jwtDecode(userToken)
+    const errors = {}
+    
+    try {
+        const user = await User.findById(decodedToken.user.id)
+
+        if (!user) {
+            errors.noUser = "User does not exist";
             return res.status(200).json({ errors: errors });
         }
 
@@ -97,7 +128,7 @@ export const editAccount = async (req, res) => {
         if (!user) return res.status(404).json({ msg: "User doesn't exist" });
 
         var newUser;
-        if (username!=null) {
+        if (username != null) {
             if (username.trim() == "") {
                 errors.emptyUsername = "Username cannot be empty"
                 return res.status(200).json({ errors: errors });
@@ -112,13 +143,13 @@ export const editAccount = async (req, res) => {
 
             // update user 
             newUser = await User.findByIdAndUpdate(id, { username: username }, { new: true })
-        } else if (password!=null) {
+        } else if (password != null) {
             if (currentPassword.trim() == "") {
                 errors.emptyCurrentPassword = "Fields cannot be empty"
                 return res.status(200).json({ errors: errors });
             }
             if (password.trim() == "") {
-                errors.emptyNewPassword= "Fields cannot be empty"
+                errors.emptyNewPassword = "Fields cannot be empty"
                 return res.status(200).json({ errors: errors });
             }
 
@@ -133,9 +164,9 @@ export const editAccount = async (req, res) => {
             const salt = await bcrypt.genSalt(10);
             const hash = await bcrypt.hash(password, salt)
             newUser = await User.findByIdAndUpdate(id, { password: hash }, { new: true })
-        } else if (email!=null) {
+        } else if (email != null) {
             // check if new email is valid 
-            if (!validateEmail(email)){
+            if (!validateEmail(email)) {
                 errors.invalidEmail = "Invalid Email Address";
                 return res.status(200).json({ errors: errors });
             }
@@ -193,9 +224,9 @@ export const deleteAccount = async (req, res) => {
 
 export const getUsersByFilter = async (req, res) => {
     var query = {}
-    for(var key in req.query){ 
+    for (var key in req.query) {
         query[key] = {
-            "$regex": req.query[key], 
+            "$regex": req.query[key],
             "$options": "i"
         }
     }
