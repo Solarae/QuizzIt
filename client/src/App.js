@@ -1,4 +1,5 @@
 // import TodoList from './components/TodoList';
+import React, { useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,7 +19,20 @@ import TakeQuiz from './pages/TakeQuiz'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
+import { useSelector, useDispatch } from 'react-redux'
+import { tokenLogin } from './actions/authActions'
+
 function App() {
+  const dispatch = useDispatch()
+  const auth = useSelector((state) => state.auth)
+
+  // try logging in wth token  
+  useEffect(() => {
+    dispatch(tokenLogin({
+      token: auth.token
+    }))
+  }, []);
+
   return (
     <BrowserRouter>
       <AppNavbar />

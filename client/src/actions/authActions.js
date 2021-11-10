@@ -42,6 +42,43 @@ export const login = ({ username, password, history, callback }) => async (dispa
     }
 }
 
+export const tokenLogin = ({ token }) => async (dispatch) => {
+    if (!token) {
+        dispatch({
+            type: LOGIN_FAIL
+        })
+    }
+
+    // do a new login request to get updated user and generate a new token
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ userToken: token })
+    try {
+        const res = await axios.post(`${URL}/api/users/tokenSignin`, body, config)
+
+        if (res.data.errors) {
+            // route user to home page
+            dispatch({
+                type: LOGIN_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: LOGIN_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log(error.message)
+        dispatch({
+            type: LOGIN_FAIL
+        })
+    }
+}
+
 export const signup = ({ username, email, password, history, callback }) => async (dispatch) => {
     const config = {
         headers: {

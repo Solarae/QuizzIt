@@ -13,7 +13,7 @@ import {
 } from '../actions/types'
 
 const initialState = {
-    token: localStorage.getItem('token'),
+    token: null,
     isAuthenticated: null,
     isLoading: false,
     user: null
@@ -21,12 +21,14 @@ const initialState = {
 
 // set the user if there is a valid jwt token
 if (localStorage.getItem('token')) {
-    const token = jwtDecode(localStorage.getItem('token'))
-    if (token.exp * 1000 < Date.now()) {
+    const userToken = localStorage.getItem('token')
+    const decodedToken = jwtDecode(userToken)
+    if (decodedToken.exp * 1000 < Date.now()) {
         localStorage.removeItem('jwtToken');
     } else {
         initialState.isAuthenticated = true
-        initialState.user = token.user;
+        initialState.user = decodedToken.user
+        initialState.token = userToken
     }
 }
 
