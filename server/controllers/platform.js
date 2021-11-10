@@ -240,3 +240,24 @@ export const getPlatformsByFilter = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+
+
+export const getPlatformMemberlist = async(req,res)=> {
+
+    let platformId = req.params.id
+
+
+    try {
+        let platform = await Platform.findById(platformId).populate('subscribers')
+
+        if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
+
+
+        return res.status(200).json(platform.subscribers)
+
+    } catch (error) {
+        res.status(500).json({msg:error.message})
+    }
+
+}
