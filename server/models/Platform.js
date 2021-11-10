@@ -54,16 +54,20 @@ const platformSchema = new mongoose.Schema ({
     },
     likes: {
         likesThisHour: {
-            type: Number
+            type: Number,
+            default: 0
         },
         dislikesThisHour: {
-            type: Number
+            type: Number,
+            default: 0
         },
         totalLikes: {
-            type: Number
+            type: Number,
+            default: 0
         },
         totalDislikes: {
-            type: Number
+            type: Number,
+            default: 0
         }
     },
     reports: [{ 
