@@ -231,8 +231,7 @@ export const updateUser = async (req, res) => {
                     id: updatedUser._id,
                     username: updatedUser.username,
                     email: updatedUser.email,
-                    likes: updatedUser.likes,
-                    token
+                    likes: updatedUser.likes
                 }
             });
     } catch (error) {
