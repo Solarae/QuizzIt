@@ -59,7 +59,7 @@ const userSchema = new mongoose.Schema({
             enum: ['Consumer', 'Moderator', 'Creator']
         }
     }],
-    likes: [{
+    likes: {
         likedPlatforms: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Platform'
         }],
@@ -72,7 +72,7 @@ const userSchema = new mongoose.Schema({
         dislikedQuizzes: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
         }]
-    }]
+    }
 
 })
 
