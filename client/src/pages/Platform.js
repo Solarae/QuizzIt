@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
 import MemberList from '../components/Platform/MemberList.js'
-import Leaderboard  from '../components/Platform/Leaderboard.js'
+import MiniLeaderboard from '../components/Platform/MiniLeaderboard.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -26,14 +26,14 @@ function Platform() {
         dispatch(getPlatform({
             id: id
         }))
-    }, [ id, dispatch ]);
+    }, [id, dispatch]);
 
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [showHome, setShowHome] = useState(true);
     const handleHideHome = () => { setShowHome(false) };
     const handleShowHome = () => { setShowHome(true) };
 
-    if (isGetLoading || !platform){
+    if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
     return (
@@ -64,7 +64,7 @@ function Platform() {
 
                     </div>
                     <div className="col" style={{}}>
-                        <Leaderboard platform={platform}></Leaderboard>
+                        <MiniLeaderboard platform={platform}></MiniLeaderboard>
                     </div>
                 </div>
             </div>

@@ -1,44 +1,23 @@
 import React from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
+import { Container, Image, Button, Row, Col, Table, Nav, Card } from 'react-bootstrap';
+import { useHistory, useParams } from 'react-router-dom'
 
-function Leaderboard({ platform }) {
-
-    // for pagination buttons
-    let active = 1;
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        items.push(
-            <Pagination.Item key={number} active={number === active}>
-                {number}
-            </Pagination.Item>,
-        );
-    }
-
+function MiniLeaderboard({ platform }) {
+    const history = useHistory()
 
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
-                <Col align="center">
-                    <h3 >Platform Leaderboard</h3>
-                </Col>
+                <h3>Platform Leaderboard</h3>
             </Row>
             <Row>
                 <Nav fill variant="tabs"
                 >
                     <Nav.Item>
-                        <Nav.Link>Daily</Nav.Link>
+                        <Nav.Link>Today</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>Weekly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link>Monthly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link>6mo</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link>Yearly</Nav.Link>
+                        <Nav.Link >Weekly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link disabled>
@@ -103,7 +82,7 @@ function Leaderboard({ platform }) {
                 </Card>
             </Row>
 
-            <Row style={{ marginTop: "10px" }}>
+            <Row style={{marginTop: "10px"}}>
                 <Table hover>
                     <thead>
                         <tr>
@@ -152,13 +131,13 @@ function Leaderboard({ platform }) {
                 </Table>
             </Row>
 
-            <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
-                <Col>
-                    <Pagination className="justify-content-center">{items}</Pagination>
-                </Col>
+            <Row>
+                <Button variant="primary" size="sm" onClick={()=>{history.push(`/platform/${platform._id}/leaderboard`)}}>
+                    View Leaderboard
+                </Button>
             </Row>
 
         </div>
     )
 }
-export default Leaderboard;
+export default MiniLeaderboard;
