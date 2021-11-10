@@ -78,3 +78,34 @@ export const deleteProfile = ({ id, password, history, callback }) => async (dis
         })
     }
 }
+
+export const updateUser = ({ newValue, userId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ newValue, userId })
+    try {
+        const res = await axios.post(`${URL}/api/users/update`, body, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_PROFILE_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_PROFILE_SUCCESS,
+                payload: res.data
+            })
+        }
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_PROFILE_FAIL
+        })
+    }
+}
