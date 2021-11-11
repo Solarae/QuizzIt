@@ -269,3 +269,36 @@ export const updateUser = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+
+
+export const promoteMember = async(req,res) =>{
+    let {userId} = req.body
+
+    
+    try {
+        let user = await User.findByIdAndUpdate(userId,{$set:{"role":"Moderator"}},{new:true})   
+        if(!user) return res.status(400).json({msg:"User ID does not exist"})
+        
+        return res.status(200).json({user:user})     
+    } catch (error) {
+        return res.status(500).json({msg:error.message})
+    }
+
+
+}
+
+export const demoteMember = async(req,res) =>{
+    let {userId} = req.body
+
+    try {
+        let user = await User.findByIdAndUpdate(userId,{$set:{"role":"Consumer"}},{new:true})    
+        if(!user) return res.status(400).json({msg:"User ID does not exist"})  
+
+        return res.status(200).json({user:user})     
+    } catch (error) {
+        return res.status(500).json({msg:error.message})
+    }
+
+
+}

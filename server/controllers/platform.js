@@ -254,7 +254,7 @@ export const getPlatformMemberlist = async(req,res)=> {
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
 
-        return res.status(200).json(platform.subscribers)
+        return res.status(200).json({members:platform.subscribers})
 
     } catch (error) {
         res.status(500).json({msg:error.message})
