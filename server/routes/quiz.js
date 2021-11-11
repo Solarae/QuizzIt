@@ -3,7 +3,7 @@ import {
     createQuiz,
     deleteQuiz, editQuiz,
     addQuizQuestion, editQuizQuestion,getQuestion,getPlatformQuiz,
-    deleteQuizQuestion,getQuiz,getQuizzesByFilter
+    deleteQuizQuestion,getQuiz,getQuizzesByFilter, upvoteQuiz, downvoteQuiz
 } from '../controllers/quiz.js';
 
 const router = express.Router();
@@ -15,6 +15,8 @@ router.post('/', createQuiz);
 router.delete('/:id', deleteQuiz);
 router.post('/:id/editQuiz', editQuiz);
 router.get("/getPlatformQuiz/:id",getPlatformQuiz)
+router.post('/upvote/:id',upvoteQuiz)
+router.post('/downvote/:id',downvoteQuiz)
 
 //crud on quiz questions
 router.get("/:id/getQuestion",getQuestion)
