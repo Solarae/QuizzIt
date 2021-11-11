@@ -10,6 +10,7 @@ import './App.css'; // overridden css after all other css
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
+import PlatformLeaderboard from './pages/PlatformLeaderboard';
 import EditPlatform from './pages/EditPlatform';
 import Search from './pages/Search';
 
@@ -41,6 +42,7 @@ function App() {
         <Route path='/search' exact component={Search} />
         <Route path='/profile' exact component={Profile} />
         <Route path='/platform/:id' exact component={Platform} />
+        <Route path='/platform/:id/leaderboard' exact component={PlatformLeaderboard} />
         <Route path='/platform/:id/edit' exact component={EditPlatform} />
         <Route path='/platform/:id/quiz/:qid' exact component={Quiz} />
         <Route path='/platform/:id/quiz/:qid/edit' exact component={EditQuiz} />
