@@ -20,9 +20,8 @@ function Quiz() {
     // let { id } = useParams()
 
     useEffect(() => {
-        dispatch(getQuiz(qid))
-    }, [dispatch, qid])
-
+        if (!quiz) dispatch(getQuiz(qid))
+    }, [dispatch, quiz])
     // useEffect(() => {
     //     if (!platform) dispatch(getQuiz(id))
     // }, [dispatch, platform])
