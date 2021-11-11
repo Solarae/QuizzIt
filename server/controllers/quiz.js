@@ -292,3 +292,26 @@ export const downvoteQuiz = async (req,res) =>{
     }
 
 }
+
+export const reportQuiz = async (req, res) => {
+    const { userId, text } = req.body;
+    let quizId = req.params.id
+    try {
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+
+        const quiz = await Quiz.findById(quizId);
+        if (!quiz) return res.status(404).json({ msg: "Quiz doesn't exist" })
+
+        quiz.reports.push({
+            userId: user._id,
+            text: text
+        })
+
+        await quiz.save();
+
+        res.status(200).json({ quiz: quiz });
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}

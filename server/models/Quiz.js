@@ -78,7 +78,16 @@ const quizSchema = new mongoose.Schema ({
     time: {
         type: Number,
         required: true 
-    }
+    },
+    reports: [{ 
+        userId: {
+            type: mongoose.Schema.Types.ObjectId, 
+            ref: 'User'
+        },
+        text: {
+            type: String 
+        }
+    }],
 })
 
 const Quiz = mongoose.model('Quiz', quizSchema)
