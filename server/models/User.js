@@ -1,81 +1,71 @@
-import mongoose from 'mongoose'
+import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    username: {
-        type: String,
-        required: true
+  username: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ["User", "Admin"],
+    default: "User",
+  },
+  banner: {
+    data: Buffer,
+    contentType: String,
+  },
+  icon: {
+    data: Buffer,
+    contentType: String,
+  },
+  awards: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Award",
     },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: String,
-        enum: ['User', 'Admin'],
-        default: 'User'
-    },
-    banner: {
-        data: Buffer,
-        contentType: String
-    },
-    icon: {
-        data: Buffer,
-        contentType: String
-    },
-    awards: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Award'
-    }],
-    platformInfos: [{
-        platformId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Platform'
+  ],
+  platformInfos: [
+    {
+      platformId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Platform",
+      },
+      points: {
+        daily: {
+          type: Number,
         },
-        points: {
-            daily: {
-                type: Number
-            },
-            weekly: {
-                type: Number
-            },
-            monthly: {
-                type: Number
-            },
-            biannual: {
-                type: Number
-            },
-            year: {
-                type: Number
-            },
-            allTime: {
-                type: Number
-            }
+        weekly: {
+          type: Number,
         },
-        role: {
-            type: String,
-            enum: ['Consumer', 'Moderator', 'Creator']
-        }
-    }],
-    likes: {
-        likedPlatforms: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Platform'
-        }],
-        dislikedPlatforms: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Platform'
-        }],
-        likedQuizzes: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
-        }],
-        dislikedQuizzes: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
-        }]
-    }
+        monthly: {
+          type: Number,
+        },
+        biannual: {
+          type: Number,
+        },
+        year: {
+          type: Number,
+        },
+        allTime: {
+          type: Number,
+        },
+      },
+      role: {
+        type: String,
+        enum: ["Consumer", "Moderator", "Creator"],
+      },
+    },
+  ],
+});
 
-})
+const User = mongoose.model("User", userSchema);
 
-const User = mongoose.model('User', userSchema)
-
-export default User
+export default User;

@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
-import { useSelector, useDispatch } from 'react-redux'
-import { signup } from '../actions/authActions'
-import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from "react-redux";
+import { signup } from "../actions/authActions";
+import { useHistory } from "react-router-dom";
 
 function SignUp({ show, handleClose }) {
   const [errors, setErrors] = useState({});
-  const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth)
-  const history = useHistory()
+  const dispatch = useDispatch();
+  const auth = useSelector((state) => state.auth);
+  const history = useHistory();
 
   const [values, setValues] = useState({
     username: "",
@@ -18,7 +18,7 @@ function SignUp({ show, handleClose }) {
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
-  }
+  };
 
   const closeModal = (err) => {
     if (err) {
@@ -28,22 +28,24 @@ function SignUp({ show, handleClose }) {
     setValues({ ...values, username: "", email: "", password: "" });
     setErrors({});
     handleClose();
-  }
+  };
 
-  const handleSubmit = ((e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(signup({
-      username: values.username,
-      email: values.email,
-      password: values.password,
-      history: history,
-      callback: closeModal
-    }))
-  })
+    dispatch(
+      signup({
+        username: values.username,
+        email: values.email,
+        password: values.password,
+        history: history,
+        callback: closeModal,
+      })
+    );
+  };
 
   return (
-    <Modal style={{ color: "black" }} show={show} onHide={closeModal} >
+    <Modal style={{ color: "black" }} show={show} onHide={closeModal}>
       <Modal.Header closeButton>
         <Modal.Title>Sign Up</Modal.Title>
       </Modal.Header>
@@ -51,24 +53,39 @@ function SignUp({ show, handleClose }) {
         <Modal.Body>
           <Form.Group className="mb-3" controlId="formBasicUsername">
             <Form.Label>Username</Form.Label>
-            <Form.Control type="username" placeholder="Username" name="username" onChange={onChange} />
+            <Form.Control
+              type="username"
+              placeholder="Username"
+              name="username"
+              onChange={onChange}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicEmail">
             <Form.Label>Email Address</Form.Label>
-            <Form.Control type="field" placeholder="Email" name="email" onChange={onChange} />
+            <Form.Control
+              type="field"
+              placeholder="Email"
+              name="email"
+              onChange={onChange}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="formBasicPassword">
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Password" name="password" onChange={onChange} />
+            <Form.Control
+              type="password"
+              placeholder="Password"
+              name="password"
+              onChange={onChange}
+            />
           </Form.Group>
         </Modal.Body>
         {Object.keys(errors).length > 0 && (
           <Form.Text className="text-muted">
-            <Alert variant={'danger'}>
-              <ul className='list'>
-                {Object.values(errors).map(v => (
+            <Alert variant={"danger"}>
+              <ul className="list">
+                {Object.values(errors).map((v) => (
                   <li key={v}>{v}</li>
                 ))}
               </ul>
@@ -83,8 +100,6 @@ function SignUp({ show, handleClose }) {
       </Form>
     </Modal>
   );
-
 }
-
 
 export default SignUp;

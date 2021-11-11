@@ -1,49 +1,46 @@
-import mongoose from "mongoose"
-
+import mongoose from "mongoose";
 
 const submission = new mongoose.Schema({
-    answers:{
-        type:[{
-            type:String
-        }]
-    },
+  answers: {
+    type: [
+      {
+        type: String,
+      },
+    ],
+  },
 
-    pointsAwarded:{
-        type:Number
-    },
+  pointsAwarded: {
+    type: Number,
+  },
 
+  platformId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Platform",
+  },
 
-    platformId:{
-        type:mongoose.Types.ObjectId,
-        ref:'Platform'
-    },
+  quizId: {
+    type: mongoose.Types.ObjectId,
+    ref: "Quiz",
+  },
 
-    quizId:{
-        type:mongoose.Types.ObjectId,
-        ref:'Quiz'
-    },
+  timeSubmitted: {
+    type: Date,
+  },
 
-    timeSubmitted:{
-        type:Date
-    },
+  timeTaken: {
+    type: String,
+  },
 
-    timeTaken:{
-        type:String
-    },
+  score: {
+    type: Number,
+  },
 
-    score:{
-        type:Number
-    },
+  userId: {
+    type: mongoose.Types.ObjectId,
+    ref: "User",
+  },
+});
 
-    userId:{
-        type:mongoose.Types.ObjectId,
-        ref:'User'
-    }
-})
+const Submission = mongoose.model("Submission", submission);
 
-
-
-const Submission = mongoose.model('Submission',submission)
-
-
-export default Submission
+export default Submission;
