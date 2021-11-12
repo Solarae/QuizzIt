@@ -29,7 +29,18 @@ export const createPlatform = async (req, res) => {
             name: name,
             owner: userId,
             description: description,
-            subscribers: [userId]
+            subscribers: [{
+                userId,
+                points: {
+                    daily: 0,
+                    weekly: 0,
+                    monthly: 0,
+                    biannual: 0,
+                    yearly: 0,
+                    allTime: 0
+                },
+                role: 'Creator'
+            }]
         });
         const createdPlatform = await newPlatform.save();
 
@@ -152,7 +163,18 @@ export const joinPlatform = async (req, res) => {
 
         const index = platform.subscribers.findIndex((id) => userId === id);
 
-        if (index === -1) platform.subscribers.push(userId);
+        if (index === -1) platform.subscribers.push({
+            userId,
+            points: {
+                daily: 0,
+                weekly: 0,
+                monthly: 0,
+                biannual: 0,
+                yearly: 0,
+                allTime: 0
+            },
+            role: 'Consumer'
+        });
         await platform.save()
 
         user.platformInfos.push({
@@ -186,8 +208,12 @@ export const leavePlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        platform.subscribers.pull(user._id)
-        await platform.save();
+        await platform.update(
+            { $pull: { subscribers: { userId: user._id } } },
+            { new: true }
+        )
+        // platform.subscribers.pull(user._id)
+        // await platform.save();
 
 
         await user.update(
