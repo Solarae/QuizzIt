@@ -21,37 +21,92 @@ const platformSchema = new mongoose.Schema ({
         type: String
     },
     subscribers: [{ 
-        type: mongoose.Schema.Types.ObjectId, ref: 'User', 
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            daily: {
+                type: Number
+            },
+            weekly: {
+                type: Number
+            },
+            monthly: {
+                type: Number
+            },
+            biannual: {
+                type: Number
+            },
+            year: {
+                type: Number
+            },
+            allTime: {
+                type: Number
+            }
+        },
+        role: {
+            type: String,
+            enum: ['Consumer', 'Moderator', 'Creator']
+        }
     }],
     quizzes: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
     }],
-    leaderboards: {
-        daily: [{
-            type: mongoose.Schema.Types.ObjectId, 
+    daily_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        weekly: [{
-            type: mongoose.Schema.Types.ObjectId, 
+        },
+        points: {
+            type: Number
+        },
+    }],
+    weekly_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        monthly: [{
-            type: mongoose.Schema.Types.ObjectId, 
+        },
+        points: {
+            type: Number
+        },
+    }],
+    monthly_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        biannual: [{
-            type: mongoose.Schema.Types.ObjectId, 
+        },
+        points: {
+            type: Number
+        },
+    }],
+    biannual_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        year: [{
-            type: mongoose.Schema.Types.ObjectId, 
+        },
+        points: {
+            type: Number
+        },
+    }],
+    year_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }],
-        allTime: [{
-            type: mongoose.Schema.Types.ObjectId, 
+        },
+        points: {
+            type: Number
+        },
+    }],
+    allTime_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
-        }]
-    },
+        },
+        points: {
+            type: Number
+        },
+    }],
     likes: {
         likesThisHour: {
             type: Number,
