@@ -60,6 +60,8 @@ export const getUserSubmissions = async (req,res)=>{
     try {
 
         let submissions = await Submission.find({userId:userId})
+        .populate("platformId")
+        .populate("quizId")
 
         if(!submissions) return res.status(400).json({message:"User id is not found"})
     
@@ -85,7 +87,7 @@ export const getQuizSubmissions = async (req,res)=>{
     try {
 
         //find all the submissions based on provided userId
-        let submissions = await Submission.find({userId:userId,quizId:quizId})
+        let submissions = await Submission.find({userId:userId,quizId:quizId}).populate("platformId")
             
         res.status(200).json({submission:submissions})     
         

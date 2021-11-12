@@ -30,20 +30,7 @@ function ViewSubmission() {
     return(
 
         <div>
-            <h1>Welcome, {user.id}</h1>
-
-            {/* <ol> 
-                
-                <li>
-                    {submission.map((submission)=>{
-                            return <SubmissionCard submission={submission}/>
-                    })}
-                
-                </li>
-            </ol> */}
-            
-
-            <Table striped bordered hover>
+            <Table striped bordered hover className='mt-5'>
                 <thead>
                     <tr>
                     <th>Time submitted</th>
@@ -58,11 +45,11 @@ function ViewSubmission() {
                     {submission.map((submission)=>{
                         return( 
                             <tr>
-                                    <td>{submission.timeSubmitted}</td>
-                                    <td>{submission.quiz}</td>
-                                    <td>{submission.platform}</td>
+                                    <td>{submission.createdAt}</td>
+                                    <td>{submission.quizId.name}</td>
+                                    <td>{submission.platformId.name}</td>
                                     <td>{submission.score}</td>
-                                    <td>{submission.time}</td>
+                                    <td>{submission.timeTaken} seconds</td>
                                     <td>{submission.point}</td>
                             </tr>
                         )
@@ -71,10 +58,6 @@ function ViewSubmission() {
                     }
                 </tbody>
             </Table>
-
-
-
-
         </div>
 
     )
