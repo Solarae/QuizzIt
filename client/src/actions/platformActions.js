@@ -100,7 +100,9 @@ export const getPlatform = ({ id }) => async (dispatch) => {
             'Content-Type': 'application/json'
         },
     }
+
     try {
+        console.log(id)
         dispatch({
             type: GET_PLATFORM_REQ
         });

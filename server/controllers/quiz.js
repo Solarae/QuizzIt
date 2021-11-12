@@ -198,7 +198,7 @@ export const getQuizzesByFilter = async (req, res) => {
 export const upvoteQuiz = async (req,res) =>{
 
     let quizId = req.params.id
-    let {userId} = req.body
+    let { userId } = req.body
     try {
 
         //check if the user already liked the quiz

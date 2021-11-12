@@ -11,6 +11,10 @@ import {
     EDIT_QUIZ_FAIL,
     EDIT_QUIZ_QUESTION,
     EDIT_QUIZ_QUESTION_FAIL,
+    UPVOTE_QUIZ,
+    UPVOTE_QUIZ_FAIL,
+    DOWNVOTE_QUIZ,
+    DOWNVOTE_QUIZ_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -169,9 +173,61 @@ export const editQuizQuestion = ({id, question, callback}) => async (dispatch) =
     }    
 }
 
-// export const editQuizQuestion = NaN
-// export const deleteQuizQuestion = NaN
-// export const editQuiz = NaN
+export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ userId })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/upvote/${id}`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: UPVOTE_QUIZ_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: UPVOTE_QUIZ,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }    
+}
+
+export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+
+    try {
+        const body = JSON.stringify({ userId })
+        console.log(body)
+        const res = await axios.post(`${URL}/api/quizzes/downvote/${id}`, body, config)
+
+        if (res.data.errors) {
+            dispatch({
+                type: DOWNVOTE_QUIZ_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: DOWNVOTE_QUIZ,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }    
+}
 
 export const setQuizLoading = () => {
     return {

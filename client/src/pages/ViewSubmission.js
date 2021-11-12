@@ -8,7 +8,7 @@ function ViewSubmission() {
     
     const dispatch = useDispatch()
 
-    let user = useSelector((state)=> state.auth.user  )
+    let user = useSelector((state)=> state.auth.user)
     let submission = useSelector((state)=> state.submission.submissions)
 
     console.log(submission)
