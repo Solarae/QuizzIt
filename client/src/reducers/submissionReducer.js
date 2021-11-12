@@ -6,7 +6,8 @@ import {
 } from '../actions/types'
 
 const initialState = {
-    submission:null
+    submission:null,
+    isLoading:true,
 }
 
 const submissionReducer = (state=initialState, action) => {
@@ -23,7 +24,8 @@ const submissionReducer = (state=initialState, action) => {
         case GET_SUBMISSION_SUCCESS:
             return{
                 ...state,
-                ...action.payload
+                ...action.payload,
+                isLoading:false,
             }
         
         case GET_SUBMISSION_FAIL:

@@ -1,7 +1,7 @@
-import React,{useState, useEffect} from 'react'
-import { Container, Image, Button, ToggleButton } from 'react-bootstrap';
+import React,{useState, useEffect, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { getPlatform } from '../../actions/platformActions';
 import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
@@ -28,7 +28,14 @@ function Banner() {
     const [modal, setModal] = useState(false);
     const ToggleModal = () => setModal(!modal)
 
-    
+    const [showReport, setShowReport] = useState(false);
+    const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
+    const handleShowReport = () => { setShowReport(true) };
+
+    // used to show tooltip after clicking "share" button
+    const [showTooltip, setShowTooltip] = useState(false);
+    const targetTooltip = useRef(null);
+
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
@@ -79,8 +86,21 @@ function Banner() {
                                     {(auth.isAuthenticated && auth.user.id == platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleModal()}>Edit</Button>:<div></div>}
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
                                     <Modal show={modal} setShow = {setModal} quiz = {quiz} />
-                                    <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
-                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>
+                                    <CopyToClipboard text={window.location.href}>
+                                        <i className="bi bi-share"
+                                            ref={targetTooltip}
+                                            onMouseLeave={() => setShowTooltip(false)}
+                                            onClick={() => setShowTooltip(true)}
+                                            style={{ marginLeft: "25px", cursor: "pointer" }}></i>
+                                    </CopyToClipboard>
+                                    <Overlay target={targetTooltip.current} show={showTooltip} placement="top">
+                                        {(props) => (
+                                            <Tooltip id="overlay-example" {...props}>
+                                                Link copied
+                                            </Tooltip>
+                                        )}
+                                    </Overlay>
+                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>
                         </div>
@@ -88,7 +108,7 @@ function Banner() {
                 </div>
             </div>
             <div>
-                <h5 className="ms-5">Platform Name</h5>
+                <h5 className="ms-5">{platform.name}</h5>
             </div>
         </div>
     )

@@ -236,7 +236,13 @@ export const getPlatformMemberlist = async(req,res)=> {
 
 
     try {
-        let platform = await Platform.findById(platformId).populate('subscribers')
+        let platform = await Platform.findById(platformId).populate({
+            path:'subscribers',
+            populate:{
+                path:'userId',
+                model: 'User'
+            }
+        })
 
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
