@@ -37,6 +37,6 @@ app.use('/api/submissions',submissionRoutes)
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/awards', awardRoutes);
 
-//updateLeaderboards()
-updateLeaderboard('platform', 'daily')
+updateLeaderboards()
+
 //duplicateDB()
