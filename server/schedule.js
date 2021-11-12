@@ -89,4 +89,4 @@ export const duplicateDB = async () => {
     await Platform.aggregate([ { $match: {} }, { $out: "platformDup" } ])
 }
 
-export const updateLeaderboardsJob = cron.schedule('0 0 0 * *', updateLeaderboards);
+export const updateLeaderboardsJob = cron.schedule('0 0 * * *', updateLeaderboards);
