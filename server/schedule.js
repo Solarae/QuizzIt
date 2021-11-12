@@ -54,7 +54,7 @@ export const updateLeaderboard = async (type, time) => {
                 { $sort: { points: -1 } },
                 { $group: groupQuery },
                 { $merge: {
-                    into: "platformDup",
+                    into: `${type}Dup`,
                     on: "_id",
                     whenMatched: "merge"
                 } }
@@ -65,7 +65,7 @@ export const updateLeaderboard = async (type, time) => {
                 { $sort: { points: -1 } },
                 { $group: groupQuery },
                 { $merge: {
-                    into: `${type}Dup"`,
+                    into: `${type}Dup`,
                     on: "_id",
                     whenMatched: "merge"
                 } }
