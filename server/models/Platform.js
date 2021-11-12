@@ -53,188 +53,60 @@ const platformSchema = new mongoose.Schema ({
     quizzes: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
     }],
-    leaderboards: {
-        daily: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }],
-        weekly: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }],
-        monthly: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }],
-        biannual: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }],
-        year: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }],
-        allTime: [{
-            userId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User'
-            },
-            points: {
-                daily: {
-                    type: Number
-                },
-                weekly: {
-                    type: Number
-                },
-                monthly: {
-                    type: Number
-                },
-                biannual: {
-                    type: Number
-                },
-                year: {
-                    type: Number
-                },
-                allTime: {
-                    type: Number
-                }
-            },
-            role: {
-                type: String,
-                enum: ['Consumer', 'Moderator', 'Creator']
-            }
-        }]
-    },
+    daily_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
+    weekly_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
+    monthly_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
+    biannual_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
+    year_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
+    allTime_leaderboard: [{
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        },
+        points: {
+            type: Number
+        },
+    }],
     likes: {
         likesThisHour: {
             type: Number,

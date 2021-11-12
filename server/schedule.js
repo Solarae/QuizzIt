@@ -18,22 +18,24 @@ export const updateLeaderboard = async (type) => {
         _id: "$_id",
         [`${type}_leaderboard`]: {
             $push: {
-                userId: "$subscribers",
+                userId: "$subscribers.userId",
                 points: `$subscribers.points.${type}`
             }
         }
     }
     const projectQuery = {
-        platformId: "$_id",
-        leaderboard: `$${type}_leaderboard`,
-        type: `${type}`
+        [`${type}_leaderboard`]: `$${type}_leaderboard`,
     }
     const result = await Platform.aggregate([
         { $unwind: "$subscribers" },
         { $sort: sortQuery },
         { $group: groupQuery },
         { $project: projectQuery },
-        { $out: "Hello"}
+        { $merge: {
+            into: "mycopy",
+            on: "_id",
+            whenMatched: "merge"
+        } }
         // { $merge: {
         //     into: "testingM",
         //     on: "_id",
