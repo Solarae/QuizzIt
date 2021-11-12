@@ -20,6 +20,7 @@ function CreateQuiz({ show, handleClose }) {
     const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
+    const quiz = useSelector((state) => state.quiz.quiz)
     const quizErrors = useSelector((state) => state.quiz.errors);
     const isCreateLoading = useSelector((state) => state.quiz.isCreateLoading)
     const prev_isCreateLoading = usePrevious(isCreateLoading)
@@ -51,13 +52,13 @@ function CreateQuiz({ show, handleClose }) {
         console.log("Create quiz loading: " + isCreateLoading)
         // check if there were errors
         if (quizErrors) {
-            setErrors({ ...quizErrors});
+            setErrors({ ...quizErrors });
             return;
         }
 
         // close the modal and redirect user to the edit quiz page 
         handleClose();
-        // history.push(`/`);
+        history.push(`/platform/${id}/quiz/${quiz._id}/edit`);
     }, [isCreateLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
