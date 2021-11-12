@@ -2,7 +2,7 @@ import User from './models/User.js'
 import Submission from './models/Submission.js'
 import Platform from './models/Platform.js'
 
-import { startOfYesterday, startOfToday, endOfToday} from 'date-fns'
+import { startOfYesterday, startOfToday, startOfWeek, startOfMonth, startOfYear } from 'date-fns'
 
 const TYPES = ['platform', 'quiz']
 const TIMES = ['daily', 'weekly', 'monthly', 'year', 'allTime']
