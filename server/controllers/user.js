@@ -47,10 +47,10 @@ export const signin = async (req, res) => {
 
 export const tokenSignin = async (req, res) => {
     const { userToken } = req.body;
-    const decodedToken= jwtDecode(userToken)
     const errors = {}
-    
+            
     try {
+        const decodedToken= jwtDecode(userToken)
         const user = await User.findById(decodedToken.user.id)
 
         if (!user) {
