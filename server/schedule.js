@@ -2,21 +2,25 @@ import User from './models/User.js'
 import Submission from './models/Submission.js'
 import Platform from './models/Platform.js'
 
+import cron from 'node-cron'
+
 import { startOfYesterday, startOfToday, endOfToday, startOfWeek, startOfMonth, startOfYear } from 'date-fns'
 
 const TYPES = ['platform', 'quiz']
 const TIMES = ['daily', 'weekly', 'monthly', 'year', 'allTime']
 
-export const updateLeaderboards = async () => {
+const updateLeaderboards = async () => {
+    const date = Date.now()
+    console.log("Running scheduled job");
     for (const type of TYPES) {
         for (const t of TIMES) {
-            console.log(type, t)
             updateLeaderboard(type, t)
         }
     }
+    console.log(`Updating leaderboards successful after ${Date.now() - date}ms`);
 }
 
-export const updateLeaderboard = async (type, time) => {
+const updateLeaderboard = async (type, time) => {
     try {
         var collectionName
         if (type == 'platform')
@@ -84,3 +88,5 @@ export const updateLeaderboard = async (type, time) => {
 export const duplicateDB = async () => {
     await Platform.aggregate([ { $match: {} }, { $out: "platformDup" } ])
 }
+
+export const updateLeaderboardsJob = cron.schedule('0 0 0 * *', updateLeaderboards);
