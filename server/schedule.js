@@ -1,8 +1,11 @@
 import User from './models/User.js'
 import Submission from './models/Submission.js'
+import Platform from './models/Platform.js'
+
+import { startOfYesterday, startOfToday, endOfToday} from 'date-fns'
 
 const TYPES = ['platform', 'quiz']
-const TIMES = ['daily', 'weekly', 'monthly', 'biannual', 'year', 'allTime']
+const TIMES = ['daily', 'weekly', 'monthly', 'year', 'allTime']
 
 export const updateLeaderboards = async () => {
     for (const type of TYPES) {
@@ -14,13 +17,23 @@ export const updateLeaderboards = async () => {
 
 export const updateLeaderboard = async (type, time) => {
     try {
+        const end = startOfToday()
+        if (time === 'daily') {
+            const start = startOfYesterday()
+        } else if (time === 'weekly') {
+            const start = startOfWeek()
+        } else if (time === 'monthly') {
+            const start = startOfMonth()
+        } else {
+            const start = startOfYear()
+        }
         const groupQuery1 = {
             _id: {
                 [`${type}Id`]: `$${type}Id`,
                 userId: "$userId",
             },
               points: {
-                $sum: "$pointsAwarded"
+                $sum: "$score"
             }
         }
         const groupQuery = {
@@ -32,17 +45,31 @@ export const updateLeaderboard = async (type, time) => {
                     }
                 }
         }
-        const result = await Submission.aggregate([
-            { $match: { time: { $lte : 10 } } },
-            { $group: groupQuery1 },
-            { $sort: { points: -1 } },
-            { $group: groupQuery  },
-            { $merge: {
-                into: "mycopy",
-                on: "_id",
-                whenMatched: "merge"
-            } }
-        ])
+        if (time != 'allTime') {
+            const result = await Submission.aggregate([
+                { $match: { createdAt: { $gte: start, $lt: end } } },
+                { $group: groupQuery1 },
+                { $sort: { points: -1 } },
+                { $group: groupQuery  },
+                { $merge: {
+                    into: "platformDup",
+                    on: "_id",
+                    whenMatched: "merge"
+                } }
+            ])
+        } else {
+            const result = await Submission.aggregate([
+                { $group: groupQuery1 },
+                { $sort: { points: -1 } },
+                { $group: groupQuery  },
+                { $merge: {
+                    into: "platformDup",
+                    on: "_id",
+                    whenMatched: "merge"
+                } }
+            ])
+        }
+        
         console.log(result)
     } catch (error) {
         console.log(error.message)
@@ -50,5 +77,5 @@ export const updateLeaderboard = async (type, time) => {
 }
 
 export const duplicateDB = async () => {
-    await Platform.aggregate([ { $match: {} }, { $out: "mycopy" } ])
+    await Platform.aggregate([ { $match: {} }, { $out: "platformDup" } ])
 }

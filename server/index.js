@@ -9,7 +9,7 @@ import quizRoutes from './routes/quiz.js'
 import submissionRoutes from './routes/submission.js'
 import awardRoutes from './routes/award.js'
 
-import { duplicateDB, updateLeaderboards} from './schedule.js'
+import { duplicateDB, updateLeaderboard, updateLeaderboards} from './schedule.js'
 
 dotenv.config()
 
@@ -37,5 +37,6 @@ app.use('/api/submissions',submissionRoutes)
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/awards', awardRoutes);
 
-updateLeaderboards()
+//updateLeaderboards()
+updateLeaderboard('platform', 'daily')
 //duplicateDB()
