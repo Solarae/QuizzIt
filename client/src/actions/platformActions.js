@@ -145,8 +145,18 @@ export const getPlatform = ({ id }) => async (dispatch) => {
                 })
             }
 
+            // get the memberlist 
+            let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
+            if (member_res.data.errors) {
+                dispatch({
+                    type: GET_PLATFORM_FAIL,
+                    payload: member_res.data
+                })
+            }
+
             res.data.quizzesData = quizzes; // pack the quizzes data with the platform
             res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
+            res.data.memberList = member_res.data.members; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data

@@ -25,8 +25,8 @@ function EditQuiz({ quizId }) {
 
     
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz(qid))
-    }, [dispatch, quiz])
+        dispatch(getQuiz(qid))
+    }, [dispatch, qid])
     
     // useEffect(() => {
         //     if (!platform) dispatch(getQuiz(id))

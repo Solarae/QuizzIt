@@ -1,7 +1,8 @@
 import React from 'react'
 import { Container, Image, Button, Row, Col, Table } from 'react-bootstrap';
 
-function MemberList({ platform }) {
+function MemberList({ platform, memberList }) {
+    console.log(memberList)
     return (
         <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
             <Table striped bordered hover>
@@ -12,18 +13,14 @@ function MemberList({ platform }) {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Mark</td>
-                        <td>1</td>
-                    </tr>
-                    <tr>
-                        <td>Jacob</td>
-                        <td>2</td>
-                    </tr>
-                    <tr>
-                        <td>Thornton</td>
-                        <td>3</td>
-                    </tr>
+                    {memberList.map((m) => (
+
+                        <tr>
+                            <td>{m.username}</td>
+                            <td>{m._id===platform.owner ? "Owner" : "Member"}</td>
+                        </tr>
+                    )
+                    )}
                 </tbody>
             </Table>
 

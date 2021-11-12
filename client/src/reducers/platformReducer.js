@@ -33,6 +33,7 @@ const initialState = {
     platform: null,
     quizzesData: null,
     awardsData: null,
+    memberList: null,
     errors: null
 }
 
