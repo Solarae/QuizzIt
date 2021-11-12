@@ -12,6 +12,12 @@ import {
     DELETE_QUIZ_QUESTION,
     DELETE_QUIZ_QUESTION_FAIL,
     EDIT_QUIZ,
+    UPVOTE_QUIZ,
+    UPVOTE_QUIZ_FAIL,
+    DOWNVOTE_QUIZ,
+    DOWNVOTE_QUIZ_FAIL,
+    REPORT_QUIZ,
+    REPORT_QUIZ_FAIL,
 } from '../actions/types'
 
 const initialState = {
@@ -98,6 +104,36 @@ const quizReducer = (state = initialState, action) => {
                 ...action.payload,
                 isCreateLoading: false
             }
+        case UPVOTE_QUIZ:
+            return {
+                ...state,
+                ...action.payload,
+            }
+        case UPVOTE_QUIZ_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+            }
+            case DOWNVOTE_QUIZ:
+                return {
+                    ...state,
+                    ...action.payload,
+                }
+            case DOWNVOTE_QUIZ_FAIL:
+                return {
+                    ...state,
+                    ...action.payload,
+                }
+            case REPORT_QUIZ:
+                return {
+                    ...state,
+                    ...action.payload,
+                }
+            case REPORT_QUIZ_FAIL:
+                return {
+                    ...state,
+                    ...action.payload,
+                }
         default:
             return state;
     }

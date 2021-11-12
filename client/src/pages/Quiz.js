@@ -4,29 +4,23 @@ import { Container, Col, Table, Button } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner'
 
 import { getQuiz } from '../actions/quizActions'
+import { getPlatform } from '../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
 
 function Quiz() {
     const dispatch = useDispatch()
+
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
-    // const platform = useSelector((state) => state.platform.platform)
-
     const history = useHistory()
 
     let { qid } = useParams()
-    // let { id } = useParams()
 
     useEffect(() => {
         dispatch(getQuiz(qid))
     }, [dispatch, qid])
-
-    // useEffect(() => {
-    //     if (!platform) dispatch(getQuiz(id))
-    // }, [dispatch, platform])
-
 
     if (isLoading) {
         return ( <div> Loading... </div> )
@@ -37,7 +31,7 @@ function Quiz() {
     
     return (
         <>
-            <Banner quizId={qid}></Banner>      
+            <Banner></Banner>      
 
             <div style={{ height: "10vh" }}></div>
                 <Container>
