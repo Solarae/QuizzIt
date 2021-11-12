@@ -4,7 +4,7 @@ import Platform from './models/Platform.js'
 
 import { startOfYesterday, startOfToday, endOfToday, startOfWeek, startOfMonth, startOfYear } from 'date-fns'
 
-const TYPES = ['platform']
+const TYPES = ['platform', 'quiz']
 const TIMES = ['daily', 'weekly', 'monthly', 'year', 'allTime']
 
 export const updateLeaderboards = async () => {
@@ -47,8 +47,6 @@ export const updateLeaderboard = async (type, time) => {
                     }
                 }
         }
-        console.log(type)
-        console.log(start)
         if (time != 'allTime') {
             await Submission.aggregate([
                 { $match: { createdAt: { $gte: start, $lt: end } } },
@@ -67,7 +65,7 @@ export const updateLeaderboard = async (type, time) => {
                 { $sort: { points: -1 } },
                 { $group: groupQuery },
                 { $merge: {
-                    into: "platformDup",
+                    into: `${type}Dup"`,
                     on: "_id",
                     whenMatched: "merge"
                 } }
