@@ -63,7 +63,7 @@ export const getUserSubmissions = async (req,res)=>{
 
         if(!submissions) return res.status(400).json({message:"User id is not found"})
     
-        return res.status(200).json({submissions:submissions})     
+        return res.status(200).json({submission:submissions})     
 
 
     } catch (error) {
@@ -87,7 +87,7 @@ export const getQuizSubmissions = async (req,res)=>{
         //find all the submissions based on provided userId
         let submissions = await Submission.find({userId:userId,quizId:quizId})
             
-        res.status(200).json({submissions:submissions})     
+        res.status(200).json({submission:submissions})     
         
         
     } catch (error) {
@@ -109,7 +109,7 @@ export const getSubmission = async (req,res) =>{
         //find all the submissions based on provided userId
         let submissions = await Submission.findById(id)
             
-        res.status(200).json({submissions:submissions})     
+        res.status(200).json({submission:submissions})     
         
         
     } catch (error) {
