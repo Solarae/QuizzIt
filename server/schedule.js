@@ -18,6 +18,11 @@ export const updateLeaderboards = async () => {
 
 export const updateLeaderboard = async (type, time) => {
     try {
+        var collectionName
+        if (type == 'platform')
+            collectionName = 'platforms'
+        else
+            collectionName = 'quizzes'
         const end = endOfToday()
         var start
         if (time === 'daily') {
@@ -54,7 +59,7 @@ export const updateLeaderboard = async (type, time) => {
                 { $sort: { points: -1 } },
                 { $group: groupQuery },
                 { $merge: {
-                    into: `${type}Dup`,
+                    into: collectionName,
                     on: "_id",
                     whenMatched: "merge"
                 } }
@@ -65,7 +70,7 @@ export const updateLeaderboard = async (type, time) => {
                 { $sort: { points: -1 } },
                 { $group: groupQuery },
                 { $merge: {
-                    into: `${type}Dup`,
+                    into: collectionName,
                     on: "_id",
                     whenMatched: "merge"
                 } }
