@@ -26,6 +26,7 @@ function TakeQuiz() {
     let { qid } = useParams()
     // console.log(qid)
     // console.log(useParams())
+    const user = useSelector((state)=>state.auth.user)
     
     useEffect(() => {
         if (!quiz) dispatch(getQuiz(qid))
@@ -62,7 +63,7 @@ function TakeQuiz() {
                     quizId: qid, 
                     answers: answers,
                     platformId: quiz.platformId,
-                    userId: '61789892168228326a5fadd9',
+                    userId: user.id,
                     timeTaken: timer,
                 }))
             }
@@ -72,7 +73,7 @@ function TakeQuiz() {
             quizId: qid, 
             answers: answers,
             platformId: quiz.platformId,
-            userId: '61789892168228326a5fadd9',
+            userId: user.id,
             timeTaken: timer,
         }))
 

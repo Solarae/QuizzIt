@@ -22,6 +22,7 @@ import CountDownTimer from './components/Quiz/CountDownTimer'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { tokenLogin } from './actions/authActions'
+import ViewSubmission from './pages/ViewSubmission';
 
 function App() {
   const dispatch = useDispatch()
@@ -49,6 +50,7 @@ function App() {
         <Route path='/platform/:id/quiz/:qid/take' exact component={TakeQuiz} />
         <Route path='/upload' exact component={Upload} />
         <Route path='/countdown' exact component={CountDownTimer} />
+        <Route path='/viewSubmission' exact component={ViewSubmission} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>
