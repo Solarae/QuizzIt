@@ -17,9 +17,9 @@ import Search from './pages/Search';
 import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
 import TakeQuiz from './pages/TakeQuiz'
+import QuizLeaderboard from './pages/QuizLeaderboard'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
-import QuizLeaderboard from './pages/QuizLeaderboard'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { tokenLogin } from './actions/authActions'

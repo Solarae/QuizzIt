@@ -25,7 +25,7 @@ import axios from 'axios'
 
 import { URL } from '../config.js'
 
-export const getQuiz = ( id ) => async (dispatch) => {
+export const getQuiz = ({ id }) => async (dispatch) => {
     dispatch(setQuizLoading());
     const config = {
         headers: {

@@ -24,7 +24,7 @@ function TakeQuiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz(qid))
+        if (!quiz) dispatch(getQuiz({id: qid}))
     }, [dispatch, quiz])
         
     useEffect(() => {

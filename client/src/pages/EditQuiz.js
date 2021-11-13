@@ -25,7 +25,7 @@ function EditQuiz() {
 
     
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz(qid))
+        if (!quiz) dispatch(getQuiz({id: qid}))
     }, [dispatch, quiz])
     
     // useEffect(() => {
@@ -41,7 +41,6 @@ function EditQuiz() {
         return ( <div> Loading... </div> )
     }
 
-    console.log(quiz.questions)
     return (
         <>
             <Banner></Banner>

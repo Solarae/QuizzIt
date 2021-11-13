@@ -131,7 +131,7 @@ function MiniLeaderboard({ quiz }) {
             </Row>
 
             <Row>
-                <Button variant="primary" size="sm" onClick={()=>{history.push(`/platform/${platform._id}/quiz/${quiz._id}/leaderboard`)}}>
+                <Button variant="primary" size="sm" onClick={()=>{history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/leaderboard`)}}>
                     View Leaderboard
                 </Button>
             </Row>
