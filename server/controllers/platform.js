@@ -38,7 +38,7 @@ export const createPlatform = async (req, res) => {
 
         if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
 
-        user.platformInfos.push(createdPlatform._id)
+        user.platforms.push(createdPlatform._id)
 
         await user.save();
 

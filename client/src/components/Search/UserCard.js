@@ -24,13 +24,9 @@ function UserCard({ user }) {
                         <Row style={{ height: "20%" }}>
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToUser}>{user.username}</p>
                         </Row>
-                        <Row style={{ height: "20%", marginTop:"10px" }}>
+                        <Row style={{ height: "20%", marginTop: "10px" }}>
                             <p>
-                                {
-                                    user.platformInfos.reduce((prev, curr) => {
-                                        return prev + curr.points.allTime
-                                    }, 0)
-                                } Points<i class="bi bi-dot" /> Member of {user.platformInfos.length} platforms
+                                <i class="bi bi-dot" /> Member of {user.platforms.length} platforms
                             </p>
                         </Row>
                         <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>
