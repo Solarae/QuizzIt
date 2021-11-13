@@ -103,7 +103,7 @@ function Leaderboard({ platform }) {
                                 {leaderboard.lb[2] && memberList.find((m) => m.userId._id === leaderboard.lb[2].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[2].userId).userId.username : "--"}
                             </Row>
                             <Row className="justify-content-center">
-                                {leaderboard.lb[2] && <span>{leaderboard.lb[2].points} Points</span>}
+                                {leaderboard.lb[2] ? (leaderboard.lb[2].points + ' Points') : ""}
                             </Row>
                         </Card.Text>
                     </Card.Body>
@@ -127,7 +127,7 @@ function Leaderboard({ platform }) {
                                     {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.username : "--"}
                                 </td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.points : "--"}
+                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? leaderboard.lb[rank - 1].points : "--"}
                                 </td>
                             </tr>
 
