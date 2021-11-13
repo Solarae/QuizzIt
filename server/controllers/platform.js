@@ -267,8 +267,6 @@ export const getPlatformsByFilter = async (req, res) => {
     }
 }
 
-
-
 export const getPlatformMemberlist = async(req,res)=> {
 
     let platformId = req.params.id

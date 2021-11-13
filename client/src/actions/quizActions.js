@@ -9,6 +9,8 @@ import {
     ADD_QUIZ_QUESTION_FAIL,
     EDIT_QUIZ,
     EDIT_QUIZ_FAIL,
+    DELETE_QUIZ,
+    DELETE_QUIZ_FAIL,
     EDIT_QUIZ_QUESTION,
     EDIT_QUIZ_QUESTION_FAIL,
     UPVOTE_QUIZ,
@@ -111,10 +113,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
     }
 }
 
-
-
 export const editQuiz = ({ id, name,description }) => async (dispatch) => {
-    
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -143,8 +142,32 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     }
 }
 
+export const deleteQuiz = ({ id }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
 
+    console.log(id)
+    try {
+        const res = await axios.delete(`${URL}/api/quizzes/${id}`, config)
 
+        if (res.data.errors) {
+            dispatch({
+                type: DELETE_QUIZ_FAIL
+            })
+        }
+        else {
+            dispatch({
+                type: DELETE_QUIZ,
+                payload: res.data
+            })
+        }
+    } catch (errors) {
+        console.log(errors)
+    }
+}
 
 export const editQuizQuestion = ({id, question, callback}) => async (dispatch) => {
     const config = {
