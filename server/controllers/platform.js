@@ -228,3 +228,18 @@ export const getPlatformsByFilter = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+export const getLeaderboardByType = async (req, res) => {
+    const { type } = req.query.type 
+    if (type !== 'daily' || type !== 'weekly' || type !== 'monthly' || type !== 'year' || type != 'allTime')
+    return res.status(404).json({ msg: "Invalid leaderboard type" }); 
+
+    const leaderboardType= `'${type}_leaderboard'`
+    try {
+        const platform = await Platform.findById(req.params.id, leaderboardType).populate(leaderboardType);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+        res.status(200).json({ platform: platform });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
