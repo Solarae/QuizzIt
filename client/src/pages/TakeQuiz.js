@@ -24,8 +24,8 @@ function TakeQuiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz({id: qid}))
-    }, [dispatch, quiz])
+        dispatch(getQuiz(qid))
+    }, [dispatch, qid])
         
     useEffect(() => {
         if (!isLoading && quiz.time == (timer/60)) handleSubmit()

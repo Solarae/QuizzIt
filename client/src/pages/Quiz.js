@@ -19,7 +19,7 @@ function Quiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        dispatch(getQuiz({id: qid}))
+        dispatch(getQuiz(qid))
     }, [dispatch, qid])
 
     if (isLoading) {
