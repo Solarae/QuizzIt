@@ -150,7 +150,7 @@ export const joinPlatform = async (req, res) => {
         });
         await platform.save()
 
-        user.platformInfos.push(platform._id)
+        user.platforms.push(platform._id)
 
         await user.save();
 
