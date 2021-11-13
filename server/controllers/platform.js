@@ -269,3 +269,95 @@ export const getLeaderboardByType = async (req, res) => {
         res.status(404).json({ msg: error.message }) 
     }
 }
+
+
+export const upvotePlatform = async (req,res) =>{
+
+    let platformId = req.params.id
+    let { userId } = req.body
+    try {
+
+        //check if the user already liked the platform
+        let user = await User.findById(userId)
+        let likedPlatforms = user.likes.likedPlatforms
+        let dislikedPlatforms = user.likes.dislikedPlatforms
+
+        //if already liked, then unlike it and then return
+        if(likedPlatforms.includes(platformId)){
+            //decrement the like on platform
+            let platform = await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalLikes':-1}} , {new:true} )
+
+            //remove from liked quizzes
+            likedPlatforms.pull(platformId)
+            await user.save()
+            return res.status(200).json({platform:platform})
+        }
+        //if the platform is already disliked, then undo dislike
+        else if (dislikedPlatforms.includes(platformId)){
+            dislikedPlatforms.pull(platformId)
+            await user.save()
+            await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalDislikes':-1}})
+        }
+    
+        //perform upvote/like
+        likedPlatforms.push(platformId)
+        await user.save()
+
+        let platform = await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalLikes':1}} , {new:true} )
+
+        if (!platform) {return res.status(400).json({msg:"Platform ID not found"})}
+
+        return res.status(200).json({platform:platform})
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+
+}
+
+export const downvotePlatform = async (req,res) =>{
+
+    let platformId = req.params.id
+    let {userId} = req.body
+    try {
+
+        //check if the user already disliked the platform
+        let user = await User.findById(userId)
+        let likedPlatforms    = user.likes.likedPlatforms 
+        let dislikedPlatforms = user.likes.dislikedPlatforms
+
+
+        //if already disliked, then unlike it and return
+        if(dislikedPlatforms.includes(platformId)){
+            //decrement the dislike on platform
+            let platform = await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalDislikes':-1}} , {new:true} )
+
+            //remove from disliked quizzes
+            dislikedPlatforms.pull(platformId)
+            await user.save()
+            return res.status(200).json({platform:platform})
+        }
+
+        //else if the platform is already liked, then undo like
+        else if (likedPlatforms.includes(platformId)){
+            likedPlatforms.pull(platformId)
+            await user.save()
+            await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalLikes':-1}})
+
+
+        }
+        //perform downvote/dislike
+        dislikedPlatforms.push(platformId)
+        await user.save()
+
+        let platform = await Platform.findByIdAndUpdate(platformId, {$inc:{'likes.totalDislikes':1}} , {new:true} )
+
+        if (!platform) {return res.status(400).json({msg:"Platform ID not found"})}
+
+        return res.status(200).json({platform:platform})
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+
+}

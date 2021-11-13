@@ -33,23 +33,8 @@ function Banner({ platform }) {
         let likes = auth.user.likes
         let platform_likes = platform.likes
 
-        // check if not yet liked  
-        if (!likes.likedPlatforms.some(e => e === platform._id)) {
-            likes.likedPlatforms.push(platform._id);
-            platform_likes.totalLikes += 1
+        
 
-            // remove from disliked if there
-            let idx = likes.dislikedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.dislikedPlatforms.splice(idx, 1);
-                platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes-1
-            }
-        }
-        else {
-            // unlike the platform
-            likes.likedPlatforms = likes.likedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalLikes -= 1
-        }
 
         dispatch(updateUser({
             newValue: { likes: likes },
@@ -70,24 +55,7 @@ function Banner({ platform }) {
         let likes = auth.user.likes
         let platform_likes = platform.likes
 
-        // check if not yet disliked  
-        if (!likes.dislikedPlatforms.some(e => e === platform._id)) {
-            likes.dislikedPlatforms.push(platform._id);
-            platform_likes.totalDislikes += 1
-
-            // remove from liked if there
-            let idx = likes.likedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.likedPlatforms.splice(idx, 1);
-                platform_likes.totalLikes -= 1
-            }
-
-        }
-        else {
-            // un-dislike the platform
-            likes.dislikedPlatforms = likes.dislikedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes -= 1
-        }
+  
 
         dispatch(updateUser({
             newValue: { likes: likes },
