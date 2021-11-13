@@ -19,9 +19,7 @@ function QuizLeaderboard() {
     let { qid } = useParams(); 
     let { id } = useParams();
     useEffect(() => {
-        dispatch(getQuiz({
-            id: qid
-        }))
+        dispatch(getQuiz(qid))
     }, [qid, dispatch]);
 
     if (isLoading || !quiz) {
