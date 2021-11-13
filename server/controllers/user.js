@@ -270,8 +270,6 @@ export const updateUser = async (req, res) => {
     }
 }
 
-
-
 export const promoteMember = async(req,res) =>{
     let {userId} = req.body
 

@@ -13,23 +13,18 @@ import { useHistory, useParams } from 'react-router-dom'
 
 function TakeQuiz() {
     const dispatch = useDispatch()
-    const isLoading = useSelector((state) => state.quiz.isLoading)
-    const quiz = useSelector((state) => state.quiz.quiz)
-    const [questionsAttempted, setQuestionsAttempted] = useState()
-    
-    const [timer, setTimer] = useState(0)
-
-    const timerIncrement = () => { setTimer(timer + 1) }
-
-    const history = useHistory()
-
-    let { qid } = useParams()
-    // console.log(qid)
-    // console.log(useParams())
     const user = useSelector((state)=>state.auth.user)
+    const quiz = useSelector((state) => state.quiz.quiz)
+    const isLoading = useSelector((state) => state.quiz.isLoading)
+    const [questionsAttempted, setQuestionsAttempted] = useState()
+    const history = useHistory()
+    const [timer, setTimer] = useState(0)
+    const timerIncrement = () => { setTimer(timer + 1) }
     
+    let { qid } = useParams()
+
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz(qid))
+        if (!quiz) dispatch(getQuiz({id: qid}))
     }, [dispatch, quiz])
         
     useEffect(() => {
@@ -45,7 +40,6 @@ function TakeQuiz() {
         newQuestionsAttempted[index] = idx
         setQuestionsAttempted(newQuestionsAttempted)
     }
-    // console.log(quiz.questions)
 
     const handleSubmit = () => {
         console.log(questionsAttempted)
@@ -54,8 +48,6 @@ function TakeQuiz() {
         for (var key in questionsAttempted) {
             answers[key] = String.fromCharCode(questionsAttempted[key] + 97) 
         }
-
-        console.log(answers)
 
         if (answers.includes(-1)) {
             if (timer/60 >= quiz.time) {

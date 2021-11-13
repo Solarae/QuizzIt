@@ -2,11 +2,11 @@ import { React, useEffect } from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
-
 import { getQuiz } from '../actions/quizActions'
 import { getPlatform } from '../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
+import MiniLeaderboard from '../components/Quiz/MiniLeaderboard.js'
 
 
 function Quiz() {
@@ -19,7 +19,7 @@ function Quiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz({id: qid}))
     }, [dispatch, qid])
 
     if (isLoading) {
@@ -53,7 +53,9 @@ function Quiz() {
                 </div>
                 </Col>
                 <Col>
-                    <div> Leaderboard Goes Here</div>
+                    <div className="col" style={{}}>
+                        <MiniLeaderboard quiz={quiz}></MiniLeaderboard>
+                    </div>
                 </Col>
                 </Container>
         </>

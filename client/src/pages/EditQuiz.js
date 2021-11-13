@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
 
-function EditQuiz({ quizId }) {
+function EditQuiz() {
     const dispatch = useDispatch()
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
@@ -41,7 +41,6 @@ function EditQuiz({ quizId }) {
         return ( <div> Loading... </div> )
     }
 
-    console.log(quiz.questions)
     return (
         <>
             <Banner></Banner>

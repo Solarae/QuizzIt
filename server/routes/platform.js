@@ -5,7 +5,8 @@ import {
     joinPlatform, leavePlatform, 
     reportPlatform, 
     getPlatformsByFilter,
-    getPlatformMemberlist
+    getPlatformMemberlist,
+    getLeaderboardByType,
 } from '../controllers/platform.js';
 
 const router = express.Router();
@@ -13,6 +14,7 @@ const router = express.Router();
 router.get('/:id', getPlatform);
 router.get('/', getPlatformsByFilter);
 router.get('/:id/getMemberList',getPlatformMemberlist)
+router.get('/:id/leaderboard', getLeaderboardByType);
 router.post('/', createPlatform);
 router.post('/:id/delete', deletePlatform);
 router.post('/:id/update', updatePlatform);

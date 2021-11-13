@@ -70,6 +70,7 @@ export const getPlatformQuiz = async (req,res) =>{
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
     try {
+        console.log(quizId)
         let quiz = await Quiz.findById(quizId)
 
         if(!quiz) return res.status(500).json({message:"Quiz not found"})
@@ -92,7 +93,6 @@ export const deleteQuiz = async (req,res) =>{
     }
 
 }
-
 
 export const editQuiz = async (req,res) =>{
     let quizId = req.params.id;
@@ -193,8 +193,6 @@ export const getQuizzesByFilter = async (req, res) => {
     }
 }
 
-
-
 export const upvoteQuiz = async (req,res) =>{
 
     let quizId = req.params.id
@@ -215,15 +213,12 @@ export const upvoteQuiz = async (req,res) =>{
             likedQuizzes.pull(quizId)
             await user.save()
             return res.status(200).json({quiz:quiz})
-
         }
         //if the quiz is already disliked, then undo dislike
         else if (dislikedQuizzes.includes(quizId)){
             dislikedQuizzes.pull(quizId)
             await user.save()
             await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalDislikes':-1}})
-
-
         }
     
         //perform upvote/like
@@ -241,7 +236,6 @@ export const upvoteQuiz = async (req,res) =>{
     }
 
 }
-
 
 export const downvoteQuiz = async (req,res) =>{
 
@@ -274,9 +268,6 @@ export const downvoteQuiz = async (req,res) =>{
 
 
         }
-        
-    
-
         //perform downvote/dislike
         dislikedQuizzes.push(quizId)
         await user.save()

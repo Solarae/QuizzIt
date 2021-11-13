@@ -5,7 +5,8 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { getPlatform } from '../../actions/platformActions';
 import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
-import Modal from "./Modal/editQuestionModal"
+import EditQuizModal from "./Modal/editQuestionModal"
+import DeleteQuizModal from './Modal/deleteQuizModal';
 
 
 function Banner() {
@@ -15,18 +16,11 @@ function Banner() {
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
-    console.log(auth)
-    console.log(quiz)
+    const [deleteModal, setDeleteModal] = useState(false);
+    const ToggleDeleteModal = () => setDeleteModal(!deleteModal)
 
-    useEffect(() => {
-        console.log(quiz.platformId)
-        if (!platform) dispatch(getPlatform({ id: quiz.platformId}))
-    }, [dispatch, platform])
-
-    console.log(platform)
-    
-    const [modal, setModal] = useState(false);
-    const ToggleModal = () => setModal(!modal)
+    const [editModal, setEditModal] = useState(false);
+    const ToggleEditModal = () => setEditModal(!editModal)
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
@@ -36,13 +30,16 @@ function Banner() {
     const [showTooltip, setShowTooltip] = useState(false);
     const targetTooltip = useRef(null);
 
+    useEffect(() => {
+        console.log(quiz.platformId)
+        if (!platform) dispatch(getPlatform({ id: quiz.platformId}))
+    }, [dispatch, platform])    
+
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
     
     const handleLike = () => {
-        console.log(auth.user.id)
-        console.log(quiz._id)
         dispatch(upvoteQuiz({
             userId: auth.user.id,
             id: quiz._id
@@ -83,9 +80,11 @@ function Banner() {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.isAuthenticated && auth.user.id == platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleModal()}>Edit</Button>:<div></div>}
+                                    {(auth.isAuthenticated && auth.user.id == platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<div></div>}
+                                    {(auth.isAuthenticated && auth.user.id == platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
-                                    <Modal show={modal} setShow = {setModal} quiz = {quiz} />
+                                    <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
+                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

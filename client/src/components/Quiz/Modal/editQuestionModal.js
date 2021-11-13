@@ -4,13 +4,7 @@ import { Form, Button, Modal, Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { editQuiz } from '../../../actions/quizActions';
 
-
-
-
-const EditQuestionModal = ({ quiz,show,setShow }) => {
-
-
-
+const EditQuestionModal = ({ quiz, show, setShow }) => {
   let curr_name = quiz.name
   let curr_description = quiz.description
   const [name,setName] = useState(curr_name)
@@ -20,19 +14,13 @@ const EditQuestionModal = ({ quiz,show,setShow }) => {
   const closeModal = (err) =>{
     console.log(show)
     setShow(!show)
-
   }
 
   const handleSubmit = (e) =>{
-
     e.preventDefault()
     setShow(!show)
 
-    console.log(name)
-    console.log(description)
-
     dispatch(editQuiz({ id: quiz._id,description:description,name: name }))
-
   }
 
 
