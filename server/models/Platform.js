@@ -25,26 +25,6 @@ const platformSchema = new mongoose.Schema ({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'
         },
-        points: {
-            daily: {
-                type: Number
-            },
-            weekly: {
-                type: Number
-            },
-            monthly: {
-                type: Number
-            },
-            biannual: {
-                type: Number
-            },
-            year: {
-                type: Number
-            },
-            allTime: {
-                type: Number
-            }
-        },
         role: {
             type: String,
             enum: ['Consumer', 'Moderator', 'Creator']
@@ -72,15 +52,6 @@ const platformSchema = new mongoose.Schema ({
         },
     }],
     monthly_leaderboard: [{
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'User'
-        },
-        points: {
-            type: Number
-        },
-    }],
-    biannual_leaderboard: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User'

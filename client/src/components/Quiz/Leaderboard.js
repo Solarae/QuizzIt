@@ -1,7 +1,7 @@
 import React from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
+import { Image, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
 
-function Leaderboard({ quiz }) {
+function Leaderboard() {
 
     // for pagination buttons
     let active = 1;

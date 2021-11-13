@@ -31,14 +31,6 @@ export const createPlatform = async (req, res) => {
             description: description,
             subscribers: [{
                 userId,
-                points: {
-                    daily: 0,
-                    weekly: 0,
-                    monthly: 0,
-                    biannual: 0,
-                    yearly: 0,
-                    allTime: 0
-                },
                 role: 'Creator'
             }]
         });
@@ -46,18 +38,7 @@ export const createPlatform = async (req, res) => {
 
         if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
 
-        user.platformInfos.push({
-            platformId: createdPlatform._id,
-            points: {
-                daily: 0,
-                weekly: 0,
-                monthly: 0,
-                biannual: 0,
-                yearly: 0,
-                allTime: 0
-            },
-            role: 'Creator'
-        })
+        user.platforms.push(createdPlatform._id)
 
         await user.save();
 
@@ -92,8 +73,8 @@ export const deletePlatform = async (req, res) => {
         await platform.remove();
 
         const count = await User.updateMany(
-            { _id: { $in: platform.subscribers } },
-            { $pull: { platformInfos: { platformId: platform._id } } }
+            { _id: { $in: platform.subscribers.map(s => s.userId ) } },
+            { $pull: { platforms: platform._id } }
         )
         console.log(count)
         res.status(200).json({ platform: platform })
@@ -161,34 +142,15 @@ export const joinPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const index = platform.subscribers.findIndex((id) => userId === id);
+        const index = platform.subscribers.findIndex((subscriber) => userId === subscriber.userId);
 
         if (index === -1) platform.subscribers.push({
             userId,
-            points: {
-                daily: 0,
-                weekly: 0,
-                monthly: 0,
-                biannual: 0,
-                yearly: 0,
-                allTime: 0
-            },
             role: 'Consumer'
         });
         await platform.save()
 
-        user.platformInfos.push({
-            platformId: platform._id,
-            points: {
-                daily: 0,
-                weekly: 0,
-                monthly: 0,
-                biannual: 0,
-                yearly: 0,
-                allTime: 0
-            },
-            role: 'Consumer'
-        })
+        user.platforms.push(platform._id)
 
         await user.save();
 
@@ -208,20 +170,20 @@ export const leavePlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        await platform.update(
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id,
             { $pull: { subscribers: { userId: user._id } } },
             { new: true }
         )
         // platform.subscribers.pull(user._id)
         // await platform.save();
 
-
         await user.update(
-            { $pull: { platformInfos: { platformId: platform._id } } },
+            { $pull: { platforms: platform._id } },
             { new: true }
         )
 
-        res.status(200).json({ platform: platform });
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
@@ -283,5 +245,21 @@ export const getPlatformMemberlist = async(req,res)=> {
     } catch (error) {
         res.status(500).json({msg:error.message})
     }
+}
+export const getLeaderboardByType = async (req, res) => {
+    const { type } = req.query
+    console.log(type)
+    
+    if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
+        return res.status(404).json({ msg: "Invalid leaderboard type" }); 
 
+    const select = { [`${type}_leaderboard`]: 1 }
+
+    try {
+        const platform = await Platform.findById(req.params.id, select).populate()
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+        res.status(200).json({ platform: platform });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
 }
