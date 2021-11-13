@@ -1,7 +1,14 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Container, Image, Button, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux'
 
 function Leaderboard({ platform }) {
+    const memberList = useSelector((state) => state.platforms.memberList)
+
+    const [leaderboard, setLb] = useState({
+        type: "All",
+        lb: platform.allTime_leaderboard
+    })
 
     // for pagination buttons
     let active = 1;
@@ -26,22 +33,22 @@ function Leaderboard({ platform }) {
                 <Nav fill variant="tabs"
                 >
                     <Nav.Item>
-                        <Nav.Link>Daily</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Daily", lb: platform.daily_leaderboard })} disabled={leaderboard.type === "Daily"}>Daily</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>Weekly</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Weekly", lb: platform.weekly_leaderboard })} disabled={leaderboard.type === "Weekly"} >Weekly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>Monthly</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Monthly", lb: platform.monthly_leaderboard })} disabled={leaderboard.type === "Monthly"}>Monthly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>6mo</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Biannual", lb: platform.biannual_leaderboard })} disabled={leaderboard.type === "Biannual"}>6mo</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link>Yearly</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Yearly", lb: platform.year_leaderboard })} disabled={leaderboard.type === "Yearly"}>Yearly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link disabled>
+                        <Nav.Link onClick={() => setLb({ type: "All", lb: platform.allTime_leaderboard })} disabled={leaderboard.type === "All"}>
                             All
                         </Nav.Link>
                     </Nav.Item>
@@ -58,10 +65,10 @@ function Leaderboard({ platform }) {
                                 <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
                             </Row>
                             <Row className="justify-content-center">
-                                Username
+                                {leaderboard.lb[0] && memberList.find((m) => m.userId._id === leaderboard.lb[0].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[0].userId).userId.username : "--"}
                             </Row>
                             <Row className="justify-content-center">
-                                100 Points
+                                {leaderboard.lb[0] ? (leaderboard.lb[0].points + ' Points') : ""}
                             </Row>
                         </Card.Text>
                     </Card.Body>
@@ -77,10 +84,10 @@ function Leaderboard({ platform }) {
                                 <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
                             </Row>
                             <Row className="justify-content-center">
-                                Username
+                                {leaderboard.lb[1] && memberList.find((m) => m.userId._id === leaderboard.lb[1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[1].userId).userId.username : "--"}
                             </Row>
                             <Row className="justify-content-center">
-                                100 Points
+                                {leaderboard.lb[1] ? (leaderboard.lb[1].points + ' Points') : ""}
                             </Row>
                         </Card.Text>
                     </Card.Body>
@@ -93,10 +100,10 @@ function Leaderboard({ platform }) {
                                 <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
                             </Row>
                             <Row className="justify-content-center">
-                                Username
+                                {leaderboard.lb[2] && memberList.find((m) => m.userId._id === leaderboard.lb[2].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[2].userId).userId.username : "--"}
                             </Row>
                             <Row className="justify-content-center">
-                                100 Points
+                                {leaderboard.lb[2] && <span>{leaderboard.lb[2].points} Points</span>}
                             </Row>
                         </Card.Text>
                     </Card.Body>
@@ -113,41 +120,18 @@ function Leaderboard({ platform }) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>4</td>
-                            <td>Mark</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Jacob</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td>Thornton</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td>Thornton</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Thornton</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td>Thornton</td>
-                            <td>1</td>
-                        </tr>
-                        <tr>
-                            <td>10</td>
-                            <td>Thornton</td>
-                            <td>1</td>
-                        </tr>
+                        {Array.from({ length: 7 }, (_, i) => i + 4).map((rank, _) =>
+                            <tr>
+                                <td>{rank}</td>
+                                <td>
+                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.username : "--"}
+                                </td>
+                                <td>
+                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.points : "--"}
+                                </td>
+                            </tr>
+
+                        )}
                     </tbody>
                 </Table>
             </Row>
