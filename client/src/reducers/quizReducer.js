@@ -5,13 +5,16 @@ import {
     CREATE_QUIZ_REQ,
     CREATE_QUIZ_SUCCESS,
     CREATE_QUIZ_FAIL,
+    EDIT_QUIZ,
+    EDIT_QUIZ_FAIL,
+    DELETE_QUIZ,
+    DELETE_QUIZ_FAIL,
     ADD_QUIZ_QUESTION,
     ADD_QUIZ_QUESTION_FAIL,
     EDIT_QUIZ_QUESTION,
     EDIT_QUIZ_QUESTION_FAIL,
     DELETE_QUIZ_QUESTION,
     DELETE_QUIZ_QUESTION_FAIL,
-    EDIT_QUIZ,
     UPVOTE_QUIZ,
     UPVOTE_QUIZ_FAIL,
     DOWNVOTE_QUIZ,
@@ -53,8 +56,22 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload
             }
-        
         case EDIT_QUIZ:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case EDIT_QUIZ_FAIL:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case DELETE_QUIZ:
+            return {
+                ...state,
+                ...action.payload
+            }
+        case DELETE_QUIZ_FAIL:
             return {
                 ...state,
                 ...action.payload
@@ -114,26 +131,26 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
             }
-            case DOWNVOTE_QUIZ:
-                return {
-                    ...state,
-                    ...action.payload,
-                }
-            case DOWNVOTE_QUIZ_FAIL:
-                return {
-                    ...state,
-                    ...action.payload,
-                }
-            case REPORT_QUIZ:
-                return {
-                    ...state,
-                    ...action.payload,
-                }
-            case REPORT_QUIZ_FAIL:
-                return {
-                    ...state,
-                    ...action.payload,
-                }
+        case DOWNVOTE_QUIZ:
+            return {
+                ...state,
+                ...action.payload,
+            }
+        case DOWNVOTE_QUIZ_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+            }
+        case REPORT_QUIZ:
+            return {
+                ...state,
+                ...action.payload,
+            }
+        case REPORT_QUIZ_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+            }
         default:
             return state;
     }

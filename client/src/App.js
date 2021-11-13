@@ -17,6 +17,7 @@ import Search from './pages/Search';
 import Quiz from './pages/Quiz'
 import EditQuiz from './pages/EditQuiz'
 import TakeQuiz from './pages/TakeQuiz'
+import QuizLeaderboard from './pages/QuizLeaderboard'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
@@ -51,6 +52,7 @@ function App() {
         <Route path='/upload' exact component={Upload} />
         <Route path='/countdown' exact component={CountDownTimer} />
         <Route path='/viewSubmission' exact component={ViewSubmission} />
+        <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>

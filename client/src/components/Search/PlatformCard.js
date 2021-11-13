@@ -30,7 +30,8 @@ function PlatformCard({ platform }) {
     }
 
     // keep track of subscrbed status on frontend
-    const [subscribed, setSubscribed] = useState(platform.subscribers.includes(auth.user.id));
+    console.log(platform)
+    const [subscribed, setSubscribed] = useState(platform.subscribers.some((s) => s.userId===auth.user.id));
 
     return (
         <Card style={{ marginBottom: "20px" }}>
