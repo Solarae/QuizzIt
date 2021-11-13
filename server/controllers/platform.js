@@ -170,7 +170,7 @@ export const leavePlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        await platform.update(
+        const updatedPlatform = await platform.update(
             { $pull: { subscribers: { userId: user._id } } },
             { new: true }
         )
@@ -182,7 +182,7 @@ export const leavePlatform = async (req, res) => {
             { new: true }
         )
 
-        res.status(200).json({ platform: platform });
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
