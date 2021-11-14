@@ -48,7 +48,7 @@ export const login = ({ username, password, history, callback }) => async (dispa
 
 export const getSignedIn = () => async (dispatch) => {
     try {
-        await axios.get(`${URL}/api/auth/getSignin`)
+        await axios.get(`${URL}/api/auth/signedIn`)
         dispatch({
             type: GET_SIGNED_IN
         })

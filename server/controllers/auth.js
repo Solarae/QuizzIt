@@ -54,7 +54,7 @@ export const signin = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        const token = auth.signInToken(user._id)
+        const token = signInToken(user._id)
 
         res.cookie("token", token, {
             httpOnly: true,
@@ -110,7 +110,7 @@ export const signup = async (req, res) => {
         const resUser = await newUser.save();
         if (!resUser) return res.status(404).json({ msg: "Something went wrong with registering the user" });
 
-        const token = auth.signInToken(resUser._id)
+        const token = signInToken(resUser._id)
 
         res.cookie("token", token, {
             httpOnly: true,

@@ -26,7 +26,7 @@ export const verifyUser = (req) => {
             return null;
         }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_SECRET);
+        const decodedToken = jwt.verify(token, JWT_SECRET);
         return decodedToken.userId;
     } catch (err) {
         return null;
@@ -36,7 +36,7 @@ export const verifyUser = (req) => {
 export const signInToken = (userId) => {
     return jwt.sign({
         userId: userId
-    }, process.env.JWT_SECRET);
+    }, JWT_SECRET);
 }
 
 const auth = (req, res, next) => {
