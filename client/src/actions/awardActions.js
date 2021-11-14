@@ -11,11 +11,12 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
-axios.defaults.withCredentials = true;
 
 import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../config.js'
 
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const createAward = ({ userId, title, description, iconImage, platformId, requirementType, requirementCount }) => async (dispatch) => {
     // upload the icon image  

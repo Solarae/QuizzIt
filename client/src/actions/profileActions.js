@@ -6,9 +6,11 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
-axios.defaults.withCredentials = true;
+
 
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const editProfile = ({ id, username, email, password, currentPassword, history, callback }) => async (dispatch) => {
     const config = {

@@ -1,4 +1,5 @@
 import {
+    GET_SIGNED_IN,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
@@ -7,9 +8,11 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
-axios.defaults.withCredentials = true
+
 
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const login = ({ username, password, history, callback }) => async (dispatch) => {
     const config = {
