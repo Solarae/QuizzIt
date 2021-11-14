@@ -6,7 +6,7 @@ import { JWT_SECRET } from '../config.js';
 import { verify, verifyUser, signInToken } from '../middleware/auth.js'
 import { validateSignUpInput, validateSignInInput, validateEmail } from '../util/validators.js';
 
-export const getLoggedIn = async (req, res) => {
+export const getSignedIn = async (req, res) => {
     try {
         const userId = verifyUser(req)
         if (!userId) {

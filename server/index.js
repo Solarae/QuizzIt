@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 
+import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
 import platformRoutes from './routes/platform.js'
 import quizRoutes from './routes/quiz.js'
@@ -31,6 +32,7 @@ mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
     .catch(error => console.log(error.message));
 
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/platforms', platformRoutes);
 app.use('/api/submissions',submissionRoutes)
