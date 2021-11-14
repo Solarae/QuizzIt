@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 
-require("dotenv").config();
+import dotenv from 'dotenv';
+dotenv.config()
 
 import { JWT_SECRET } from '../config.js';
 
-const verify = (req, res, next) => {
+export const verify = (req, res, next) => {
     try {
         const token = req.cookies.token
         if (!token)
@@ -52,5 +53,3 @@ const auth = (req, res, next) => {
         res.status(400).json({ msg: 'Token is not valid' });
     }
 }
-
-export default auth 
