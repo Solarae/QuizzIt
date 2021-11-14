@@ -27,13 +27,10 @@ import ViewSubmission from './pages/ViewSubmission';
 
 function App() {
   const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth)
-
+  
   // try logging in wth token  
   useEffect(() => {
-    dispatch(tokenLogin({
-      token: auth.token
-    }))
+    dispatch(tokenLogin())
   }, []);
 
   return (
