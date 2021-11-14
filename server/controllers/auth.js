@@ -22,9 +22,10 @@ export const getSignedIn = async (req, res) => {
         return res.status(200).json({
             isAuthenticated: true,
             user: {
-                firstName: loggedInUser.firstName,
-                lastName: loggedInUser.lastName,
-                email: loggedInUser.email
+                id: loggedInUser._id,
+                username: loggedInUser.username,
+                email: loggedInUser.email,
+                likes: loggedInUser.likes,  
             }
         })
     } catch (error) {
@@ -54,7 +55,7 @@ export const signin = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        const token = jwt.sign({ user: { id: user._id, username: user.username, email: user.email, likes: user.likes } }, JWT_SECRET, { expiresIn: 3600 });
+        const token = auth.signInToken(user._id)
 
         res.cookie("token", token, {
             httpOnly: true,
@@ -110,9 +111,7 @@ export const signup = async (req, res) => {
         const resUser = await newUser.save();
         if (!resUser) return res.status(404).json({ msg: "Something went wrong with registering the user" });
 
-        const token = jwt.sign({ user: { id: newUser._id, username: newUser.username, email: newUser.email, likes: newUser.likes } }, JWT_SECRET, {
-            expiresIn: 3600
-        })
+        const token = auth.signInToken(resUser._id)
 
         res.cookie("token", token, {
             httpOnly: true,
