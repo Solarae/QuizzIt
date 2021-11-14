@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
@@ -24,6 +25,7 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors({ 
     origin: ["http://localhost:3000"],
     credentials: true }));
+app.use(cookieParser())
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
