@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react'
 import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, editPlatform } from '../../actions/platformActions'
+import { joinPlatform, leavePlatform, editPlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { updateUser } from '../../actions/profileActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -33,43 +33,33 @@ function Banner({ platform }) {
         let likes = auth.user.likes
         let platform_likes = platform.likes
 
-        
+        dispatch(upvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))        
 
 
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
-        }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
+
     }
 
     const handleDislike = () => {
         let likes = auth.user.likes
         let platform_likes = platform.likes
 
-  
+        dispatch(downvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))      
 
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
-        }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
+
     }
 
     const [showReport, setShowReport] = useState(false);

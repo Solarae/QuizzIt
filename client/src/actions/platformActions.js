@@ -19,7 +19,9 @@ import {
     LEAVE_PLATFORM_SUCCESS,
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
-    REPORT_PLATFORM_FAIL
+    REPORT_PLATFORM_FAIL,
+    UPVOTE_PLATFORM,
+    DOWNVOTE_PLATFORM,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -294,6 +296,63 @@ export const reportPlatform = ({ platformId, userId, text }) => async (dispatch)
                 payload: res.data
             });
         }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
+
+
+
+
+export const upvotePlatform = ({ userId,platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/upvote`, body, config);
+        // console.log(res.data.platform)
+
+        //update the # of likes in a platform
+        dispatch({
+            type:UPVOTE_PLATFORM,
+            payload:res.data
+        })
+
+        //update the likes that a user has
+
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
+
+
+
+export const downvotePlatform = ({ userId,platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/downvote`, body, config);
+        console.log(res.data.platform)
+        dispatch({
+            type:DOWNVOTE_PLATFORM,
+            payload:res.data
+        })
+
+
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
