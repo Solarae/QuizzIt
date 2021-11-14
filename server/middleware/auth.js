@@ -21,10 +21,13 @@ export const verify = (req, res, next) => {
 
 export const verifyUser = (req) => {
     try {
+        console.log("Calling verify user")
         const token = req.cookies.token;
+        console.log(token)
         if (!token) {
             return null;
         }
+        console.log("After token")
 
         const decodedToken = jwt.verify(token, JWT_SECRET);
         return decodedToken.userId;
@@ -36,7 +39,7 @@ export const verifyUser = (req) => {
 export const signInToken = (userId) => {
     return jwt.sign({
         userId: userId
-    }, JWT_SECRET);
+    }, JWT_SECRET, { expiresIn: 3600 });
 }
 
 const auth = (req, res, next) => {

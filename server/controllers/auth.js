@@ -7,7 +7,9 @@ import { validateSignUpInput, validateSignInInput, validateEmail } from '../util
 
 export const getSignedIn = async (req, res) => {
     try {
+        console.log("Calling getSignedIn")
         const userId = verifyUser(req)
+        console.log(userId)
         if (!userId) {
             return res.status(200).json({
                 isAuthenticated: false,

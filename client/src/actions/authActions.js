@@ -36,6 +36,7 @@ export const login = ({ username, password, history, callback }) => async (dispa
                 payload: res.data
             })
         }
+        console.log(document.cookie);
         console.log(res.data)
         callback(res.data.errors);
     } catch (error) {
@@ -48,6 +49,7 @@ export const login = ({ username, password, history, callback }) => async (dispa
 
 export const getSignedIn = () => async (dispatch) => {
     try {
+        console.log("Calling Token Sign In")
         await axios.get(`${URL}/api/auth/signedIn`)
         dispatch({
             type: GET_SIGNED_IN
@@ -128,7 +130,7 @@ export const signup = ({ username, email, password, history, callback }) => asyn
 
 export const logout = (history) => async (dispatch) => {
     try {
-        await axios.get(`${URL}/api/auth/signin`)
+        await axios.get(`${URL}/api/auth/signout`)
         dispatch({
             type: LOGOUT_SUCCESS
         })
