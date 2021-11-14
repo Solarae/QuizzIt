@@ -11,6 +11,8 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
+axios.defaults.withCredentials = true;
+
 import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../config.js'
 
 import { URL } from '../config.js'

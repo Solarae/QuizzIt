@@ -23,6 +23,7 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
+axios.defaults.withCredentials = true;
 
 import { URL } from '../config.js'
 
