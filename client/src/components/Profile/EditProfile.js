@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
+import { Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
 import { editProfile } from '../../actions/profileActions'
 import { useHistory } from 'react-router-dom';

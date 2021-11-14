@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, editPlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
-import { updateUser } from '../../actions/profileActions'
+import React, { useState, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
+import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Report from './Report.js'
 
 function Banner({ platform }) {
-    const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const history = useHistory();
 
     const handleJoin = () => {
         dispatch(joinPlatform({
@@ -30,9 +27,6 @@ function Banner({ platform }) {
     }
 
     const handleLike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
-
         dispatch(upvotePlatform({
             userId:auth.user.id,
             platformId: platform._id
@@ -47,9 +41,6 @@ function Banner({ platform }) {
     }
 
     const handleDislike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
-
         dispatch(downvotePlatform({
             userId:auth.user.id,
             platformId: platform._id

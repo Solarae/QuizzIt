@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { Image, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
+import { useSelector } from 'react-redux'
 
 function Leaderboard({ platform }) {
     const memberList = useSelector((state) => state.platforms.memberList)

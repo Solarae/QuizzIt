@@ -1,12 +1,10 @@
-import React, { useState } from 'react'
-import { Card, Image, Row, Col, Button } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import mongoose from 'mongoose'
 
 function QuizCard({ quiz }) {
-    const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
     const routeToQuiz = () => {

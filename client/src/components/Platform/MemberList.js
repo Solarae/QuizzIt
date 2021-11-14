@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Image, Button, Row, Col, Table } from 'react-bootstrap';
+import { Table } from 'react-bootstrap';
 
 function MemberList({ platform, memberList }) {
     return (

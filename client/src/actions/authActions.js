@@ -128,7 +128,7 @@ export const signup = ({ username, email, password, history, callback }) => asyn
 
 export const logout = (history) => async (dispatch) => {
     try {
-        const res = await axios.get(`${URL}/api/auth/signin`)
+        await axios.get(`${URL}/api/auth/signin`)
         dispatch({
             type: LOGOUT_SUCCESS
         })

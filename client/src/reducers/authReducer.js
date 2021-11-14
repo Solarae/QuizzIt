@@ -1,5 +1,3 @@
-import jwtDecode from 'jwt-decode'
-
 import {
     GET_SIGNED_IN,
     LOGIN_SUCCESS,

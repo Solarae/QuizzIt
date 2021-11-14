@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Card, Image, Row, Col, Button } from 'react-bootstrap';
 import { joinPlatform, leavePlatform } from '../../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'

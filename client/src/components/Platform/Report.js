@@ -1,10 +1,7 @@
-
-import React, { useContext, useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom';
 import { reportPlatform } from '../../actions/platformActions'
-import platformReducer from '../../reducers/platformReducer';
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -24,8 +21,6 @@ function Report({ platformId, show, handleClose }) {
     const platformErrors = useSelector((state) => state.platforms.errors)
     const isReportLoading = useSelector((state) => state.platforms.isReportLoading)
     const prev_isReportLoading = usePrevious(isReportLoading);
-
-    const history = useHistory()
 
     const [values, setValues] = useState({
         reason: "",

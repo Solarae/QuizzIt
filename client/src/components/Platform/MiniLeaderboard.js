@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function MiniLeaderboard({ platform }) {
     const history = useHistory()

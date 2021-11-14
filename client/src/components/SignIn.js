@@ -1,14 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login } from '../actions/authActions'
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 function SignIn({ show, handleShowSignUp, handleClose }) {
     //   const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
-    const auth = useSelector((state) => state.auth)
     const history = useHistory()
 
     const [values, setValues] = useState({

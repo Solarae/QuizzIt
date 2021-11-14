@@ -21,7 +21,7 @@ import QuizLeaderboard from './pages/QuizLeaderboard'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { getSignedIn } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 

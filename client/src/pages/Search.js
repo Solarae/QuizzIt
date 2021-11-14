@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, Dropdown } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import PlatformCard from '../components/Search/PlatformCard.js'
 import QuizCard from '../components/Search/QuizCard'
@@ -15,9 +14,7 @@ import mongoose from 'mongoose'
 
 function Search() {
     const dispatch = useDispatch()
-    const history = useHistory()
     const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
 
     const platforms = useSelector((state) => state.search.platforms)
     const quizzes = useSelector((state) => state.search.quizzes)

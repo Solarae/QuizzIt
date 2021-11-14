@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
-import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
-import { useSelector, useDispatch } from 'react-redux'
+import { Form, Button, Modal, Alert } from "react-bootstrap";
+import { useDispatch } from 'react-redux'
 import { signup } from '../actions/authActions'
 import { useHistory } from 'react-router-dom';
 
 function SignUp({ show, handleClose }) {
   const [errors, setErrors] = useState({});
   const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [values, setValues] = useState({

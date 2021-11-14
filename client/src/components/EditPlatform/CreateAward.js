@@ -1,10 +1,9 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { createAward } from '../../actions/awardActions.js'
 import { getPlatform } from '../../actions/platformActions.js'
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
