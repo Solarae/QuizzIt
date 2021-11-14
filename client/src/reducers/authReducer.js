@@ -14,12 +14,16 @@ import {
 
 const initialState = {
     isAuthenticated: null,
-    isLoading: false,
     user: null
 }
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
+        case GET_LOGGED_IN:
+            return {
+                ...state,
+                ...action.paylaod,
+            }
         case LOGIN_SUCCESS:
             return {
                 ...state,
