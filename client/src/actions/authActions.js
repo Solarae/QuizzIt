@@ -43,6 +43,17 @@ export const login = ({ username, password, history, callback }) => async (dispa
     }
 }
 
+export const getSignedIn = () => async (dispatch) => {
+    try {
+        await axios.get(`${URL}/api/auth/getSignin`)
+        dispatch({
+            type: GET_SIGNED_IN
+        })
+    } catch (error) {
+        
+    }
+}
+
 export const tokenLogin = ({ token }) => async (dispatch) => {
     if (!token) {
         dispatch({

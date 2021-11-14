@@ -22,7 +22,7 @@ import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { tokenLogin } from './actions/authActions'
+import { getSignedIn } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 
 function App() {
@@ -30,7 +30,7 @@ function App() {
   
   // try logging in wth token  
   useEffect(() => {
-    dispatch(tokenLogin())
+    dispatch(getSignedIn())
   }, []);
 
   return (

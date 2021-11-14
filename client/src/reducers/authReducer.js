@@ -19,7 +19,7 @@ const initialState = {
 
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_LOGGED_IN:
+        case GET_SIGNED_IN:
             return {
                 ...state,
                 ...action.paylaod,
