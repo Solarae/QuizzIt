@@ -13,36 +13,20 @@ import {
 } from '../actions/types'
 
 const initialState = {
-    token: null,
     isAuthenticated: null,
     isLoading: false,
     user: null
 }
 
-// set the user if there is a valid jwt token
-if (localStorage.getItem('token')) {
-    const userToken = localStorage.getItem('token')
-    const decodedToken = jwtDecode(userToken)
-    if (decodedToken.exp * 1000 < Date.now()) {
-        localStorage.removeItem('jwtToken');
-    } else {
-        initialState.isAuthenticated = true
-        initialState.user = decodedToken.user
-        initialState.token = userToken
-    }
-}
-
 const authReducer = (state = initialState, action) => {
     switch (action.type) {
         case LOGIN_SUCCESS:
-            localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
                 ...action.payload,
                 isAuthenticated: true
             }
         case REGISTER_SUCCESS:
-            localStorage.setItem('token', action.payload.token);
             return {
                 ...state,
                 ...action.payload,
@@ -51,18 +35,14 @@ const authReducer = (state = initialState, action) => {
         case LOGIN_FAIL:
             return state;
         case LOGOUT_SUCCESS:
-            localStorage.removeItem('token')
             return {
                 ...state,
-                token: null,
                 isAuthenticated: null,
                 user: null
             }
         case REGISTER_FAIL:
-            localStorage.removeItem('token')
             return {
                 ...state,
-                token: null,
                 isAuthenticated: null,
                 user: null
             }
@@ -75,10 +55,8 @@ const authReducer = (state = initialState, action) => {
         case EDIT_PROFILE_FAIL:
             return state;
         case DELETE_PROFILE_SUCCESS:
-            localStorage.removeItem('token')
             return {
                 ...state,
-                token: null,
                 isAuthenticated: null,
                 user: {} 
             }

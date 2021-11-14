@@ -19,7 +19,7 @@ export const login = ({ username, password, history, callback }) => async (dispa
 
     const body = JSON.stringify({ username, password })
     try {
-        const res = await axios.post(`${URL}/api/users/signin`, body, config)
+        const res = await axios.post(`${URL}/api/auth/signin`, body, config)
 
         if (res.data.errors) {
             dispatch({
@@ -57,7 +57,7 @@ export const tokenLogin = ({ token }) => async (dispatch) => {
     }
     const body = JSON.stringify({ userToken: token })
     try {
-        const res = await axios.post(`${URL}/api/users/tokenSignin`, body, config)
+        const res = await axios.post(`${URL}/api/auth/tokenSignin`, body, config)
 
         if (res.data.errors) {
             // route user to home page
@@ -87,7 +87,7 @@ export const signup = ({ username, email, password, history, callback }) => asyn
     }
     const body = JSON.stringify({ username, email, password })
     try {
-        const res = await axios.post(`${URL}/api/users/signup`, body, config);
+        const res = await axios.post(`${URL}/api/auth/signup`, body, config);
         
         if (res.data.errors) {
             dispatch({
@@ -112,10 +112,15 @@ export const signup = ({ username, email, password, history, callback }) => asyn
 }
 
 export const logout = (history) => async (dispatch) => {
-    dispatch({
-        type: LOGOUT_SUCCESS
-    })
-    history.push('/')
+    try {
+        const res = await axios.get(`${URL}/api/auth/signin`)
+        dispatch({
+            type: LOGOUT_SUCCESS
+        })
+        history.push('/')
+    } catch (error) {
+        
+    }
 }
 
 export const tokenConfig = (getState) => {
