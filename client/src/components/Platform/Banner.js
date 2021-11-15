@@ -78,7 +78,13 @@ function Banner({ platform }) {
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
-    const handleShowReport = () => { setShowReport(true) };
+    const handleShowReport = () => { 
+        if (auth.user === null) {
+            handleShowSignIn()
+            return 
+        }
+        setShowReport(true) 
+    };
 
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
