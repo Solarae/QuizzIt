@@ -8,6 +8,9 @@ import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
 import EditQuizModal from "./Modal/editQuestionModal"
 import DeleteQuizModal from './Modal/deleteQuizModal';
 
+import SignUp from '../SignUp.js';
+import SignIn from '../SignIn.js';
+import LikeDislike from '../Button/LikeDislike';
 
 function Banner() {
     const dispatch = useDispatch()
@@ -15,6 +18,14 @@ function Banner() {
     const quiz = useSelector((state) => state.quiz.quiz)
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+
+    const [showSignIn, setShowSignIn] = useState(false);
+    const handleCloseSignIn = () => { setShowSignIn(false) };
+    const handleShowSignIn = () => { setShowSignIn(true) };
+
+    const [showSignUp, setShowSignUp] = useState(false);
+    const handleCloseSignUp = () => { setShowSignUp(false) };
+    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
 
     const [deleteModal, setDeleteModal] = useState(false);
     const ToggleDeleteModal = () => setDeleteModal(!deleteModal)
@@ -40,6 +51,10 @@ function Banner() {
     }
     
     const handleLike = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return 
+        }
         dispatch(upvoteQuiz({
             userId: auth.user.id,
             id: quiz._id
@@ -47,6 +62,10 @@ function Banner() {
     }
 
     const handleDislike = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return 
+        }
         dispatch(downvoteQuiz({
             userId: auth.user.id,
             id: quiz._id
@@ -67,9 +86,7 @@ function Banner() {
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
                                 {quiz.submissions.length} submissions
-                                <i className={auth.isAuthenticated && auth.user.likes.likedQuizzes.some(e => e === quiz._id) ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike} style={{ marginLeft: "30px", cursor: "pointer" }}></i> {quiz.likes && quiz.likes.totalLikes ? quiz.likes.totalLikes : 0}
-                                <i className={auth.isAuthenticated && auth.user.likes.dislikedQuizzes.some(e => e === quiz._id) ? "bi bi-hand-thumbs-down-fill" : "bi bi-hand-thumbs-down"} onClick={handleDislike} style={{ marginLeft: "10px", cursor: "pointer" }}></i> {quiz.likes && quiz.likes.totalDislikes ? quiz.likes.totalDislikes : 0}
-
+                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedQuizzes' dislikedKey="dislikedQuizzes" object={quiz}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {quiz.description}
@@ -109,6 +126,8 @@ function Banner() {
             <div>
                 <h5 className="ms-5">{platform.name}</h5>
             </div>
+            <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+            <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
         </div>
     )
 }
