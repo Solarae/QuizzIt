@@ -23,7 +23,7 @@ export const login = ({ username, password, history, callback }) => async (dispa
 
     const body = JSON.stringify({ username, password })
     try {
-        const res = await axios.post(`${URL}/api/auth/signin`, body, config)
+        const res = await axios.post(`${URL}/api/auth/signin`, {username, password})
 
         if (res.data.errors) {
             dispatch({
@@ -50,9 +50,10 @@ export const login = ({ username, password, history, callback }) => async (dispa
 export const getSignedIn = () => async (dispatch) => {
     try {
         console.log("Calling Token Sign In")
-        await axios.get(`${URL}/api/auth/signedIn`)
+        const res = await axios.get(`${URL}/api/auth/signedIn`)
         dispatch({
-            type: GET_SIGNED_IN
+            type: GET_SIGNED_IN,
+            payload: res.data
         })
     } catch (error) {
         

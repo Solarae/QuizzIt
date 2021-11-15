@@ -57,11 +57,11 @@ export const signin = async (req, res) => {
         }
 
         const token = signInToken(user._id)
-
+        console.log(token)
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: true
+            // secure: true,
+            // sameSite: true
         }).status(200).json({
             user: {
                 id: user._id,
