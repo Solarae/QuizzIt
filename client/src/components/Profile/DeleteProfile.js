@@ -1,7 +1,7 @@
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { deleteProfile } from '../../actions/profileActions';
 
 function DeleteProfile({ show, handleClose }) {

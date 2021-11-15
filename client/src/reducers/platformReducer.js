@@ -19,7 +19,9 @@ import {
     LEAVE_PLATFORM_SUCCESS,
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
-    REPORT_PLATFORM_FAIL
+    REPORT_PLATFORM_FAIL,
+    UPVOTE_PLATFORM,
+    DOWNVOTE_PLATFORM
 } from '../actions/types'
 
 const initialState = {
@@ -164,6 +166,17 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isReportLoading: true 
+            }
+        case UPVOTE_PLATFORM:
+            return {
+                ...state,
+                ...action.payload
+            }
+
+        case DOWNVOTE_PLATFORM:
+            return{
+                ...state,
+                ...action.payload
             }
         default:
             return state;

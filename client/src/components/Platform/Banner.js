@@ -1,19 +1,16 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, editPlatform } from '../../actions/platformActions'
-import { updateUser } from '../../actions/profileActions'
+import React, { useState, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
+import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import Report from './Report.js'
 
 function Banner({ platform }) {
-    const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const history = useHistory();
 
     const handleJoin = () => {
         dispatch(joinPlatform({
@@ -30,78 +27,30 @@ function Banner({ platform }) {
     }
 
     const handleLike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
+        dispatch(upvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))        
 
-        // check if not yet liked  
-        if (!likes.likedPlatforms.some(e => e === platform._id)) {
-            likes.likedPlatforms.push(platform._id);
-            platform_likes.totalLikes += 1
 
-            // remove from disliked if there
-            let idx = likes.dislikedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.dislikedPlatforms.splice(idx, 1);
-                platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes-1
-            }
-        }
-        else {
-            // unlike the platform
-            likes.likedPlatforms = likes.likedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalLikes -= 1
-        }
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
 
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
-        }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
     }
 
     const handleDislike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
+        dispatch(downvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))      
 
-        // check if not yet disliked  
-        if (!likes.dislikedPlatforms.some(e => e === platform._id)) {
-            likes.dislikedPlatforms.push(platform._id);
-            platform_likes.totalDislikes += 1
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
 
-            // remove from liked if there
-            let idx = likes.likedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.likedPlatforms.splice(idx, 1);
-                platform_likes.totalLikes -= 1
-            }
-
-        }
-        else {
-            // un-dislike the platform
-            likes.dislikedPlatforms = likes.dislikedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes -= 1
-        }
-
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
-        }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
     }
 
     const [showReport, setShowReport] = useState(false);

@@ -11,8 +11,9 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
-
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const searchPlatform = ({ query }) => async (dispatch) => {
     const config = {

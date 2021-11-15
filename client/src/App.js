@@ -21,19 +21,16 @@ import QuizLeaderboard from './pages/QuizLeaderboard'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { tokenLogin } from './actions/authActions'
+import { useDispatch } from 'react-redux'
+import { getSignedIn } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 
 function App() {
   const dispatch = useDispatch()
-  const auth = useSelector((state) => state.auth)
-
+  
   // try logging in wth token  
   useEffect(() => {
-    dispatch(tokenLogin({
-      token: auth.token
-    }))
+    dispatch(getSignedIn())
   }, []);
 
   return (

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Nav, FloatingLabel, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Platform/Banner.js'
 import Leaderboard from '../components/Platform/Leaderboard.js'
 import { getPlatform } from '../actions/platformActions'
@@ -12,7 +11,6 @@ function Platform() {
     const dispatch = useDispatch()
     const history = useHistory()
     const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 

@@ -19,11 +19,13 @@ import {
     DOWNVOTE_QUIZ_FAIL,
     REPORT_QUIZ,
     REPORT_QUIZ_FAIL,
+    EDIT_PROFILE_SUCCESS,
 } from '../actions/types'
 
 import axios from 'axios'
-
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const getQuiz = (id) => async (dispatch) => {
     dispatch(setQuizLoading());
@@ -209,7 +211,8 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
         const body = JSON.stringify({ userId })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/upvote/${id}`, body, config)
-
+        let quizPayload = {quiz:res.data.quiz}
+        let userPayload = {user:res.data.user}
         if (res.data.errors) {
             dispatch({
                 type: UPVOTE_QUIZ_FAIL
@@ -218,7 +221,11 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
         else {
             dispatch({
                 type: UPVOTE_QUIZ,
-                payload: res.data
+                payload: quizPayload
+            })
+            dispatch({
+                type:EDIT_PROFILE_SUCCESS,
+                payload:userPayload
             })
         }
     } catch (errors) {
@@ -237,6 +244,8 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
         const body = JSON.stringify({ userId })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/downvote/${id}`, body, config)
+        let quizPayload = {quiz:res.data.quiz}
+        let userPayload = {user:res.data.user}
 
         if (res.data.errors) {
             dispatch({
@@ -246,7 +255,12 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
         else {
             dispatch({
                 type: DOWNVOTE_QUIZ,
-                payload: res.data
+                payload: quizPayload
+            })
+
+            dispatch({
+                type:EDIT_PROFILE_SUCCESS,
+                payload:userPayload
             })
         }
     } catch (errors) {
