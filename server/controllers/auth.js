@@ -79,8 +79,8 @@ export const signout = async (req, res) => {
     res.cookie("token", "", {
         httpOnly: true,
         expires: new Date(0),
-        secure: true,
-        sameSite: "none"
+        // secure: true,
+        // sameSite: "none"
     }).send();
 }
 
@@ -115,10 +115,9 @@ export const signup = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: true,
-            sameSite: true
+            // secure: true,
+            // sameSite: true
         }).status(200).json({
-            success: true,
             user: {
                 id: newUser._id,
                 username: newUser.username,
