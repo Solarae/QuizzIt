@@ -58,26 +58,30 @@ function Settings({ platform }) {
 
     const handleEditIcon = async (e) => {
         e.preventDefault();
-        const image = e.target.files[0];
-        const imageURL = await uploadImage(image);
-        if (!imageURL) {
-            dispatch({
-                type: EDIT_PLATFORM_FAIL
-            })
-            return;
-        }
-
-        // edit the platform 
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    icon: imageURL
-                },
-                userId: auth.user.id,
-                platformId: id,
-                confirmPassword: ""
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        reader.onloadend = async () => {
+            const imageURL = await uploadImage(reader.result);
+            if (!imageURL) {
+                dispatch({
+                    type: EDIT_PLATFORM_FAIL
+                })
+                return;
             }
-        ));
+    
+            // edit the platform 
+            dispatch(editPlatform(
+                {
+                    newValue: {
+                        icon: imageURL
+                    },
+                    userId: auth.user.id,
+                    platformId: id,
+                    confirmPassword: ""
+                }
+            ));
+        }
+        
     }
 
     const handleEditBanner = async (e) => {
@@ -109,35 +113,6 @@ function Settings({ platform }) {
 
 
 
-
-
-
-
-
-
-
-
-
-        // const image = e.target.files[0];
-        // const imageURL = await uploadImage(image);
-        // if (!imageURL) {
-        //     dispatch({
-        //         type: EDIT_PLATFORM_FAIL
-        //     })
-        //     return;
-        // }
-
-        // // edit the platform 
-        // dispatch(editPlatform(
-        //     {
-        //         newValue: {
-        //             banner: imageURL
-        //         },
-        //         userId: auth.user.id,
-        //         platformId: id,
-        //         confirmPassword: ""
-        //     }
-        // ));
     }
 
     return (
