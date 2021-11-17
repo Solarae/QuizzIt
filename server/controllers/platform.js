@@ -106,6 +106,7 @@ export const updatePlatform = async (req, res) => {
         const owner = await User.findById(platform.owner);
 
         if (userId !== String(platform.owner)) {
+            let errors = {};
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
@@ -128,6 +129,7 @@ export const updatePlatform = async (req, res) => {
 
         res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
+        console.log(error)
         res.status(404).json({ msg: error.message })
     }
 }
