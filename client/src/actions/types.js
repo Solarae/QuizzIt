@@ -1,4 +1,5 @@
 // AUTH ACTIONS // 
+export const GET_SIGNED_IN = 'GET_SIGNED_IN'
 export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
 export const LOGIN_FAIL = "LOGIN_FAIL"
 export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS"

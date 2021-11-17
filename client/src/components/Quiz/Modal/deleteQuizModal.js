@@ -1,5 +1,4 @@
 // import Close from "./times-solid.svg";
-import { useEffect, useState } from 'react';
 import { Form, Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { deleteQuiz } from '../../../actions/quizActions';

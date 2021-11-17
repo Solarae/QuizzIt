@@ -27,8 +27,10 @@ import {
 
 import axios from 'axios'
 
+
 import { URL } from '../config.js'
-import { useSelector } from 'react-redux'
+
+axios.defaults.withCredentials = true;
 
 export const createPlatform = ({ userId, name, description, history }) => async (dispatch) => {
     const config = {

@@ -28,7 +28,7 @@ function TakeQuiz() {
     }, [dispatch, qid])
         
     useEffect(() => {
-        if (!isLoading && quiz.time == (timer/60)) handleSubmit()
+        if (!isLoading && quiz.time === (timer/60)) handleSubmit()
     }, [timer])
     
     if (isLoading) {

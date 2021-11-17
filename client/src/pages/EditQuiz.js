@@ -7,7 +7,7 @@ import AddQuestion from '../components/Question/AddQuestion'
 
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 
 function EditQuiz() {
@@ -15,8 +15,6 @@ function EditQuiz() {
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
     // const platform = useSelector((state) => state.platform.platform)
-
-    const history = useHistory()
 
     let { qid } = useParams()
     console.log(qid)

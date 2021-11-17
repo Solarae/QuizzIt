@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Nav, FloatingLabel, Form } from 'react-bootstrap';
+import { Container, Row, Col, Nav } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
@@ -8,13 +8,11 @@ import MiniLeaderboard from '../components/Platform/MiniLeaderboard.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 function Platform() {
     const dispatch = useDispatch()
-    const history = useHistory()
     const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
     const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const memberList = useSelector((state) => state.platforms.memberList)

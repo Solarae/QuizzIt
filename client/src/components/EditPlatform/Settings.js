@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Row, Col, Nav, FloatingLabel, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import React, { useState, useCallback } from 'react'
+import { Container, Row, Col, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import axios from 'axios'
 import { CLOUDINARY_URL, CLOUDINARY_IMG_URL, URL } from '../../config.js'
 import DeletePlatform from './DeletePlatform.js'
@@ -9,18 +8,13 @@ import { EDIT_PLATFORM_FAIL } from '../../actions/types'
 import { editPlatform } from '../../actions/platformActions.js'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 function Settings({ platform }) {
     const dispatch = useDispatch()
-    const history = useHistory()
-    const [errors, setErrors] = useState({});
     const auth = useSelector((state) => state.auth)
 
     let { id } = useParams();  // get the platform ID from the url
-
-    const [values, setValues] = useState({
-    });
 
     const [showDelete, setShowDelete] = useState(false);
     const handleCloseDelete = useCallback(() => { setShowDelete(false) }, []);

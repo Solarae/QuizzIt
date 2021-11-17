@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import { Card, Image, Row, Col, Button } from 'react-bootstrap';
+import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import moment from 'moment'
-import mongoose from 'mongoose'
+
 
 function UserCard({ user }) {
-    const auth = useSelector((state) => state.auth)
-    const history = useHistory()
 
     const routeToUser = () => {
         // history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);

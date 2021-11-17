@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
-import { useSelector, useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { Image, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
+import { useSelector } from 'react-redux'
 
 function Leaderboard({ platform }) {
     const memberList = useSelector((state) => state.platforms.memberList)
@@ -103,7 +103,7 @@ function Leaderboard({ platform }) {
                                 {leaderboard.lb[2] && memberList.find((m) => m.userId._id === leaderboard.lb[2].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[2].userId).userId.username : "--"}
                             </Row>
                             <Row className="justify-content-center">
-                                {leaderboard.lb[2] && <span>{leaderboard.lb[2].points} Points</span>}
+                                {leaderboard.lb[2] ? (leaderboard.lb[2].points + ' Points') : ""}
                             </Row>
                         </Card.Text>
                     </Card.Body>
@@ -127,7 +127,7 @@ function Leaderboard({ platform }) {
                                     {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.username : "--"}
                                 </td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.points : "--"}
+                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? leaderboard.lb[rank - 1].points : "--"}
                                 </td>
                             </tr>
 

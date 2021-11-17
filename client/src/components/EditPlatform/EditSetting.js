@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Container, Form, Button, Modal, Alert } from "react-bootstrap";
+import { Form, Button, Modal, Alert } from "react-bootstrap";
 import { useSelector, useDispatch } from 'react-redux'
 import { editPlatform } from '../../actions/platformActions'
 import { useHistory, useParams } from 'react-router-dom';
