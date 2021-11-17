@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Container, Row, Col, Nav, FloatingLabel, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
+import { CLOUDINARY_URL, CLOUDINARY_IMG_URL, URL } from '../../config.js'
 import DeletePlatform from './DeletePlatform.js'
 import EditSetting from './EditSetting.js'
 import { EDIT_PLATFORM_FAIL } from '../../actions/types'
@@ -30,18 +30,25 @@ function Settings({ platform }) {
     const [showEditDesc, setShowEditDesc] = useState(false);
 
     // uploads an image to cloudinary and gets the url
-    const uploadImage = async (image) => {
+    const uploadImage = async (base64EncodedImg) => {
         // upload the image
         let imageURL = null;
-        if (image) {
-            const formData = new FormData();
-            formData.append('file', image)
-            formData.append('upload_preset', "jxf92wae")
+        if (base64EncodedImg) {
+
             try {
-                const res = await axios.post(CLOUDINARY_URL, formData);
-                const version = res.data.version
-                const public_id = res.data.public_id
-                imageURL = `${CLOUDINARY_IMG_URL}/v${version}/${public_id}.png`
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+                const body = JSON.stringify({data:base64EncodedImg});
+                console.log(body)
+
+                let res = await axios.post(`${URL}/api/utils/uploadImage`,body,config)
+                console.log(res)
+                imageURL = res.data.url
+
+                
             } catch (error) {
                 console.log(error)
             }
@@ -75,26 +82,62 @@ function Settings({ platform }) {
 
     const handleEditBanner = async (e) => {
         e.preventDefault();
-        const image = e.target.files[0];
-        const imageURL = await uploadImage(image);
-        if (!imageURL) {
-            dispatch({
-                type: EDIT_PLATFORM_FAIL
-            })
-            return;
-        }
 
-        // edit the platform 
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    banner: imageURL
-                },
-                userId: auth.user.id,
-                platformId: id,
-                confirmPassword: ""
+        const reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        reader.onloadend = async () => {
+            const imageURL = await uploadImage(reader.result);
+            if (!imageURL) {
+                dispatch({
+                    type: EDIT_PLATFORM_FAIL
+                })
+                return;
             }
-        ));
+
+            // edit the platform 
+            dispatch(editPlatform(
+                {
+                    newValue: {
+                        banner: imageURL
+                    },
+                    userId: auth.user.id,
+                    platformId: id,
+                    confirmPassword: ""
+                }
+            ));
+        };
+
+
+
+
+
+
+
+
+
+
+
+
+        // const image = e.target.files[0];
+        // const imageURL = await uploadImage(image);
+        // if (!imageURL) {
+        //     dispatch({
+        //         type: EDIT_PLATFORM_FAIL
+        //     })
+        //     return;
+        // }
+
+        // // edit the platform 
+        // dispatch(editPlatform(
+        //     {
+        //         newValue: {
+        //             banner: imageURL
+        //         },
+        //         userId: auth.user.id,
+        //         platformId: id,
+        //         confirmPassword: ""
+        //     }
+        // ));
     }
 
     return (

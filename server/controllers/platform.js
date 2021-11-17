@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-
+import cloudinary  from "../util/cloudinary.js";
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
     const errors = {};
@@ -388,3 +388,27 @@ export const downvotePlatform = async (req,res) =>{
     }
 
 }
+
+
+
+// export const uploadBanner = async (req,res) => {
+
+//     // console.log(req.body)
+
+
+//     try {
+//         console.log(process.env.CLOUDINARY_API_KEY)
+//         const fileStr = req.body.data;
+//         const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+//             upload_preset: 'dev_setups',
+//         });
+//         console.log(uploadResponse);
+//         res.json({ url:uploadResponse.url });
+//     } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ err: 'Something went wrong' });
+//     }
+    
+
+
+// }

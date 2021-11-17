@@ -26,4 +26,5 @@ router.post('/:id/report', reportPlatform);
 router.post('/:id/upvote',upvotePlatform)
 router.post('/:id/downvote',downvotePlatform)
 
+
 export default router;
