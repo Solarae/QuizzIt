@@ -13,12 +13,15 @@ import { useHistory, useParams } from 'react-router-dom'
 
 function TakeQuiz() {
     const dispatch = useDispatch()
+    
     const user = useSelector((state)=>state.auth.user)
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const [questionsAttempted, setQuestionsAttempted] = useState()
+    const [timer, setTimer] = useState()
+
     const history = useHistory()
-    const [timer, setTimer] = useState(0)
+
     const timerIncrement = () => { setTimer(timer + 1) }
     
     let { qid } = useParams()
@@ -28,7 +31,9 @@ function TakeQuiz() {
     }, [dispatch, qid])
         
     useEffect(() => {
-        if (!isLoading && quiz.time == (timer/60)) handleSubmit()
+        if (!isLoading && quiz.time == (timer/60)) {
+            handleSubmit()
+        }
     }, [timer])
     
     if (isLoading) {
@@ -42,9 +47,9 @@ function TakeQuiz() {
     }
 
     const handleSubmit = () => {
-        console.log(questionsAttempted)
 
         let answers = Array(quiz.questions.length).fill(-1)
+        
         for (var key in questionsAttempted) {
             answers[key] = String.fromCharCode(questionsAttempted[key] + 97) 
         }
@@ -61,6 +66,7 @@ function TakeQuiz() {
             }
             return;
         }
+
         dispatch(makeSubmission({ 
             quizId: qid, 
             answers: answers,
@@ -85,21 +91,27 @@ function TakeQuiz() {
         <>
             <TakeQuizBanner></TakeQuizBanner>
             <div style={{ height: "10vh" }}></div>
+           
             <CountDownTimer duration={calculateTime} counter={timerIncrement}></CountDownTimer>
 
             <Container className="row justify-content-center">
-                <Col xs={1} md={4} className="g-4">
+                <Col xs={1} className="g-4"></Col>
+                <Col xs={7} className="g-4">
                     <div style={{ height: "3vh" }}></div>
+
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
-                                <TakeQuestionCard quizId={qid} question={question} questionNumber={idx} questionInput={questionInput} ></TakeQuestionCard>
+                                <TakeQuestionCard quizId={qid} question={question} questionNumber={idx} questionInput={questionInput}></TakeQuestionCard>
                             </Col>
                             <div style={{ height: '20px'}}></div>
                         </>
                         ))}
+                        <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                    
                 </Col>
-                <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                <Col xs={6} className="g-4"></Col>
+                {/* <Button variant="primary" onClick={handleSubmit}>Submit</Button> */}
             </Container>
         </>
     )
