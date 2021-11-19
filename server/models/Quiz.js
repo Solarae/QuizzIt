@@ -9,8 +9,7 @@ const quizSchema = new mongoose.Schema ({
         type: String
     },
     thumbnail: {
-        data: Buffer,
-        contentType: String 
+        type: String
     },
     platformId: {
         type: mongoose.Schema.Types.ObjectId,
