@@ -406,13 +406,14 @@ export const uploadImage = async (req, res) => {
         }
 
         const cloud = await uploadImgToCloud(req.file.path)
-        const newValue = {
-            [type]: cloud.secure_url
+        const newValues = {
+            [type]: cloud.secure_url,
+            [`${type}_cloud_id`]: cloud.public_id
         }
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id, 
-            { $set: newValue }, 
+            { $set: newValues }, 
             { new: true }
         );
         if (!updatedPlatform) return res.status(200).json({ msg: "Something went wrong with updating platform" });

@@ -24,6 +24,7 @@ export const createAward = async (req, res) => {
             title: title,
             description: description,
             icon: cloud.secure_url,
+            icon_cloud_id: cloud.public_id,
             platformId: platformId,
             requirementType: requirementType,
             requirementCount: requirementCount

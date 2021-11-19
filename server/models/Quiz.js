@@ -16,6 +16,9 @@ const quizSchema = new mongoose.Schema ({
     thumbnail: {
         type: String
     },
+    thumbnail_cloud_id: {
+        type: String
+    },
     platformId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Platform',

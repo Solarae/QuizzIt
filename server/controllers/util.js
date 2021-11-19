@@ -5,7 +5,6 @@ export const uploadImgToCloud = async (img) =>{
         const res = await cloudinary.uploader.upload(img, {
             upload_preset: 'dev_setups',
         });
-        console.log(res);
         return res
     } catch (err) {
         console.error(err);
