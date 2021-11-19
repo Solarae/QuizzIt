@@ -41,7 +41,7 @@ function EditPlatform() {
         return (<div>Loading...</div>)
     }
 
-    if (auth.user == null || auth.user !== platform.owner) {
+    if (auth.user == null || auth.user.id !== platform.owner) {
         return (
             <div className='justify-content-between'>
                 <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />

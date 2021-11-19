@@ -45,7 +45,7 @@ function EditQuiz() {
         return ( <div> Loading... </div> )
     }
 
-    if (user == null || user !== quiz.owner) {
+    if (user == null || user.id !== quiz.owner) {
         return (
             <div className='justify-content-between'>
                 <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
