@@ -14,6 +14,7 @@ export const createQuiz = async (req,res) =>{
 
         let newQuiz = new Quiz ({
             name:name,
+            owner: userId,
             description:description,
             platformId:platformId,
             time:time
