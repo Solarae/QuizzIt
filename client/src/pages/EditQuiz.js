@@ -23,7 +23,6 @@ function EditQuiz() {
     
     const [showSignIn, setShowSignIn] = useState(true);
     const handleCloseSignIn = () => { setShowSignIn(false) };
-    const handleShowSignIn = () => { setShowSignIn(true) };
 
     const [showSignUp, setShowSignUp] = useState(false);
     const handleCloseSignUp = () => { setShowSignUp(false) };
@@ -46,17 +45,15 @@ function EditQuiz() {
         return ( <div> Loading... </div> )
     }
 
-    if (user == null) {
+    if (user == null || user !== quiz.owner) {
         return (
             <div className='justify-content-between'>
-                <SignIn show={showSignIn} handleClose={handleCloseSignIn} />
+                <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
                 <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+                <NotFound />
             </div>
         )
     }
-
-    if (user !== quiz.owner)
-        return <NotFound />
 
     return (
         <>

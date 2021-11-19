@@ -24,7 +24,6 @@ function EditPlatform() {
 
     const [showSignIn, setShowSignIn] = useState(true);
     const handleCloseSignIn = () => { setShowSignIn(false) };
-    const handleShowSignIn = () => { setShowSignIn(true) };
 
     const [showSignUp, setShowSignUp] = useState(false);
     const handleCloseSignUp = () => { setShowSignUp(false) };
@@ -42,18 +41,16 @@ function EditPlatform() {
         return (<div>Loading...</div>)
     }
 
-    if (auth.user == null) {
+    if (auth.user == null || auth.user !== platform.owner) {
         return (
             <div className='justify-content-between'>
-                <SignIn show={showSignIn} handleClose={handleCloseSignIn} />
+                <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
                 <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+                <NotFound />
             </div>
         )
     }
 
-    if (auth.user !== platform.owner)
-        return <NotFound />
-    
     return (
         <div className="justify-content-between">
             {Object.keys(platform).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
