@@ -4,7 +4,7 @@ import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '.
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
@@ -15,6 +15,7 @@ import Subscribe from '../Button/Subscribe';
 function Banner({ platform }) {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
+    let location = useLocation();
 
     const [showSignIn, setShowSignIn] = useState(false);
     const handleCloseSignIn = () => { setShowSignIn(false) };
@@ -113,7 +114,7 @@ function Banner({ platform }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
+                                    {(auth.user && auth.user.id===platform.owner && !location.pathname.endsWith("edit") ) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
                                     <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
