@@ -11,7 +11,8 @@ import {
     getLeaderboardByType,
     upvotePlatform,
     downvotePlatform,
-    uploadImage
+    uploadImage,
+    editMemberRole
 } from '../controllers/platform.js';
 
 const router = express.Router();
@@ -29,6 +30,7 @@ router.post('/:id/leave', leavePlatform);
 router.post('/:id/report', reportPlatform);
 router.post('/:id/upvote',upvotePlatform)
 router.post('/:id/downvote',downvotePlatform)
+router.post('/:id/editRole', editMemberRole)
 
 
 export default router;

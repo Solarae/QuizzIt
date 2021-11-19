@@ -425,3 +425,39 @@ export const uploadImage = async (req, res) => {
         res.status(404).json({ msg: error.message })
     }
 }
+
+export const editMemberRole = async (req,res) => {
+    const { memberId, senderId, role } = req.body
+    let errors = {}
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
+
+        
+        const sender = platform.subscribers.find((s) => s.userId.toString() === senderId) 
+        const member = platform.subscribers.find((s) => s.userId.toString() === memberId)
+        
+        if (sender.role !== 'Creator' && sender.role !== 'Moderator') {
+            errors.invalidPromotion = "You aren't a creator / moderator"
+            return res.status(200).json( {errors: errors})
+        }
+        if (sender.role === member.role) {
+            errors.invalidPromotion = 'You have the same role'
+            return res.status(200).json( {errors: errors})
+        }
+        if (member.role === 'Creator') {
+            errors.invalidPromotion = "Can't change role of Creator"
+            return res.status(200).json( {errors: errors})
+        }
+
+        const updatedPlatform = await Platform.findOneAndUpdate(
+            {_id: req.params.id, "subscribers.userId": memberId },
+            { $set: { "subscribers.$.role": role } },
+            { new: true }
+        )
+        return res.status(200).json( { platform: updatedPlatform } )   
+           
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
