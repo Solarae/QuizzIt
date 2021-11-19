@@ -1,11 +1,8 @@
 import React, { useState, useCallback } from 'react'
 import { Container, Row, Col, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
-import axios from 'axios'
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL, URL } from '../../config.js'
 import DeletePlatform from './DeletePlatform.js'
 import EditSetting from './EditSetting.js'
-import { EDIT_PLATFORM_FAIL } from '../../actions/types'
-import { editPlatform } from '../../actions/platformActions.js'
+import { editPlatform, uploadImage } from '../../actions/platformActions.js'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -23,90 +20,14 @@ function Settings({ platform }) {
     const [showEditName, setShowEditName] = useState(false);
     const [showEditDesc, setShowEditDesc] = useState(false);
 
-    // uploads an image to cloudinary and gets the url
-    const uploadImage = async (base64EncodedImg) => {
-        // upload the image
-        let imageURL = null;
-        if (base64EncodedImg) {
-
-            try {
-                const config = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-                const body = JSON.stringify({data:base64EncodedImg});
-                console.log(body)
-
-                let res = await axios.post(`${URL}/api/utils/uploadImage`,body,config)
-                console.log(res)
-                imageURL = res.data.url
-
-                
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        return imageURL;
+    const handleEditIcon = (e) => {
+        e.preventDefault();
+        dispatch(uploadImage(e.target.files[0], 'icon', auth.user.id))
     }
 
-    const handleEditIcon = async (e) => {
+    const handleEditBanner = (e) => {
         e.preventDefault();
-        const reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onloadend = async () => {
-            const imageURL = await uploadImage(reader.result);
-            if (!imageURL) {
-                dispatch({
-                    type: EDIT_PLATFORM_FAIL
-                })
-                return;
-            }
-    
-            // edit the platform 
-            dispatch(editPlatform(
-                {
-                    newValue: {
-                        icon: imageURL
-                    },
-                    userId: auth.user.id,
-                    platformId: id,
-                    confirmPassword: ""
-                }
-            ));
-        }
-        
-    }
-
-    const handleEditBanner = async (e) => {
-        e.preventDefault();
-
-        const reader = new FileReader();
-        reader.readAsDataURL(e.target.files[0]);
-        reader.onloadend = async () => {
-            const imageURL = await uploadImage(reader.result);
-            if (!imageURL) {
-                dispatch({
-                    type: EDIT_PLATFORM_FAIL
-                })
-                return;
-            }
-
-            // edit the platform 
-            dispatch(editPlatform(
-                {
-                    newValue: {
-                        banner: imageURL
-                    },
-                    userId: auth.user.id,
-                    platformId: id,
-                    confirmPassword: ""
-                }
-            ));
-        };
-
-
-
+        dispatch(uploadImage(e.target.files[0], 'banner', auth.user.id))
     }
 
     return (

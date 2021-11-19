@@ -80,6 +80,17 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isEditLoading: false
             }
+        case EDIT_PLATFORM_IMG_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                errors: null 
+            }
+        case EDIT_PLATFORM_IMG_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+            }
         case DELETE_PLATFORM_SUCCESS:
             return {
                 ...state,

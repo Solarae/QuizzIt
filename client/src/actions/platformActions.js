@@ -23,6 +23,7 @@ import {
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
+    EDIT_PLATFORM_IMG_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -96,6 +97,30 @@ export const editPlatform = ({ newValue, userId, platformId, confirmPassword }) 
         console.log("error message: " + error.message);
         dispatch({
             type: EDIT_PLATFORM_FAIL
+        })
+    }
+}
+
+export const uploadImage = (image, type, userId) => async (dispatch) => {
+    try {
+        const formData = new FormData()
+        formData.append('image', image)
+        formData.append('type', type)
+        formData.append('userId', userId)
+
+        const res = await axios.get(`${URL}/api/platforms/${id}/upload`, formData); 
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_PLATFORM_IMG_FAIL,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_PLATFORM_IMG_FAIL,
+            payload: res.data
         })
     }
 }
