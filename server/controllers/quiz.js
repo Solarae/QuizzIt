@@ -114,7 +114,7 @@ export const uploadImage = async (req, res) => {
 
         const updatedQuiz = await Quiz.findByIdAndUpdate(
             req.params.id, 
-            { $set: {icon: cloud.secure_url} }, 
+            { $set: { thumbnail: cloud.secure_url } }, 
             { new: true }
         );
         if (!updatedQuiz) return res.status(200).json({ msg: "Something went wrong with updating platform" });
