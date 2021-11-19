@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Dropdown } from 'react-bootstrap';
+import { Container, Row, Col, Dropdown, Pagination } from 'react-bootstrap';
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
@@ -14,11 +14,12 @@ import mongoose from 'mongoose'
 
 function Search() {
     const dispatch = useDispatch()
-    const [errors, setErrors] = useState({});
 
+    // Get the search results from redux store
     const platforms = useSelector((state) => state.search.platforms)
     const quizzes = useSelector((state) => state.search.quizzes)
     const users = useSelector((state) => state.search.users)
+
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
     const isSearchUserLoading = useSelector((state) => state.search.isSearchUserLoading);
@@ -32,23 +33,30 @@ function Search() {
     // available sorts (oldest, newest)
     const [sort, setSort] = useState("oldest");
 
-    // dispatch the SEARCH_PLATFORM request
+    // dispatch the SEARCH request
     useEffect(() => {
         console.log("searching");
-        dispatch(searchPlatform({
-            query: { 'name': query }
-        }))
 
-        dispatch(searchQuiz({
-            query: { 'name': query }
-        }))
-        
-        dispatch(searchUser({
-            query: { 'username': query }
-        }))
+        if (filter === "none" || filter === "platform") {
+            dispatch(searchPlatform({
+                query: { 'name': query }
+            }))
+        }
+
+        if (filter === "none" || filter === "quiz") {
+            dispatch(searchQuiz({
+                query: { 'name': query }
+            }))
+        }
+
+        if (filter === "none" || filter === "user") {
+            dispatch(searchUser({
+                query: { 'username': query }
+            }))
+        }
     }, [query, filter, sort, dispatch]);
 
-    // compares the creation time of mongo documents a and b
+    // compares the creation time of mongodb documents a and b
     const compareDates = (a, b) => {
         if (sort === "oldest") {
             return mongoose.Types.ObjectId(a._id).getTimestamp() - mongoose.Types.ObjectId(b._id).getTimestamp()
