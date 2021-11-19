@@ -1,11 +1,11 @@
-import express from 'express';
-import { 
-    uploadImage
-} from '../controllers/util.js';
+// import express from 'express';
+// import { 
+//     uploadImage
+// } from '../controllers/util.js';
 
-const router = express.Router();
+// const router = express.Router();
 
 
-router.post('/uploadImage',uploadImage)
+// router.post('/uploadImage',uploadImage)
 
-export default router;
+// export default router;

@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-import cloudinary  from "../util/cloudinary.js";
+import { uploadImgToCloud } from "./util.js";
+
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
     const errors = {};
@@ -391,26 +392,34 @@ export const downvotePlatform = async (req,res) =>{
 
 }
 
+export const uploadImage = async (req, res) => {
+    const { userId, type } = req.body
+    console.log(type)
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
 
+        if (userId !== String(platform.owner)) {
+            let errors = {};
+            errors.invalidOwner = "You don't have update permissions";
+            return res.status(200).json({ errors: errors });
+        }
 
-// export const uploadBanner = async (req,res) => {
+        const cloud = await uploadImgToCloud(req.file.path)
+        const newValue = {
+            [type]: cloud.secure_url
+        }
 
-//     // console.log(req.body)
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id, 
+            { $set: newValue }, 
+            { new: true }
+        );
+        if (!updatedPlatform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
 
-
-//     try {
-//         console.log(process.env.CLOUDINARY_API_KEY)
-//         const fileStr = req.body.data;
-//         const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-//             upload_preset: 'dev_setups',
-//         });
-//         console.log(uploadResponse);
-//         res.json({ url:uploadResponse.url });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ err: 'Something went wrong' });
-//     }
-    
-
-
-// }
+        res.status(200).json({ platform: updatedPlatform });
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ msg: error.message })
+    }
+}
