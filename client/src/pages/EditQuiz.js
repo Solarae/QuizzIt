@@ -4,8 +4,6 @@ import { Container, Col, Button } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner'
 import EditQuestionCard from '../components/Question/EditQuestionCard'
 import AddQuestion from '../components/Question/AddQuestion'
-import SignIn from '../components/SignIn';
-import SignUp from '../components/SignUp';
 import NotFound from '../components/NotFound';
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
@@ -20,14 +18,6 @@ function EditQuiz() {
     // const platform = useSelector((state) => state.platform.platform)
 
     let { qid } = useParams()
-    
-    const [showSignIn, setShowSignIn] = useState(true);
-    const handleCloseSignIn = () => { setShowSignIn(false) };
-
-    const [showSignUp, setShowSignUp] = useState(false);
-    const handleCloseSignUp = () => { setShowSignUp(false) };
-    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
-
     
     useEffect(() => {
         dispatch(getQuiz(qid))
@@ -45,15 +35,8 @@ function EditQuiz() {
         return ( <div> Loading... </div> )
     }
 
-    if (user == null || user.id !== quiz.owner) {
-        return (
-            <div className='justify-content-between'>
-                <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
-                <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
-                <NotFound />
-            </div>
-        )
-    }
+    if (user == null || user.id !== quiz.owner) 
+        return <NotFound/>
 
     return (
         <>
