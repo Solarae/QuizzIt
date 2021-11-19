@@ -23,7 +23,7 @@ const platformSchema = new mongoose.Schema ({
     icon: {
         type: String
     },
-    banner_cloud_id: {
+    icon_cloud_id: {
         type: String
     },
     subscribers: [{ 

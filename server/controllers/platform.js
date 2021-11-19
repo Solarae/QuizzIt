@@ -411,6 +411,7 @@ export const uploadImage = async (req, res) => {
             [`${type}_cloud_id`]: cloud.public_id
         }
 
+        console.log(newValues)
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id, 
             { $set: newValues }, 
