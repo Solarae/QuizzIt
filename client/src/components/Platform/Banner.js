@@ -114,7 +114,7 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
-                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin}/>
+                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

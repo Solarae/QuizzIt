@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import SignIn from '../components/SignIn';
 import SignUp from '../components/SignUp';
@@ -15,7 +15,7 @@ function NotFound() {
 
     return (
         <div className='justify-content-between'>
-            { user.auth ? null :
+            { user ? null :
                 <React.Fragment>
                 <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
                 <SignUp show={showSignUp} handleClose={handleCloseSignUp} />

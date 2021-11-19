@@ -93,7 +93,7 @@ function PlatformCard({ platform }) {
 
                     </Col >
                     <Col md={3} align="center" className="my-auto" style={{}}>
-                        <Subscribe handleLeave={handleLeave} handleJoin={handleJoin}/>
+                        <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
                     </Col>
                 </Row>
             </Card.Body>

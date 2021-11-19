@@ -2,10 +2,9 @@ import React from 'react'
 import { Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux'
 
-function Subscribe({ handleLeave, handleJoin }) {
+function Subscribe({ handleLeave, handleJoin, platform }) {
     const user = useSelector((state) => state.auth.user)
-    const platform = useSelector((state) => state.platforms.platform)
-
+  
     return (
         <React.Fragment>
             {user && platform.subscribers.some((s) => s.userId === user.id) ?
