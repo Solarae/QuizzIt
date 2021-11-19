@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-import mongoose from "mongoose"
+import { uploadImgToCloud } from "./util.js";
 
 export const createQuiz = async (req,res) =>{
 
@@ -14,6 +14,7 @@ export const createQuiz = async (req,res) =>{
 
         let newQuiz = new Quiz ({
             name:name,
+            owner: userId,
             description:description,
             platformId:platformId,
             time:time
@@ -104,6 +105,25 @@ export const editQuiz = async (req,res) =>{
         res.status(500).json({message:error.message})
     }
     
+}
+
+export const uploadImage = async (req, res) => {
+    try {
+        const quiz = await Quiz.findById(req.params.id)
+        const cloud = await uploadImgToCloud(req.file.path)
+
+        const updatedQuiz = await Quiz.findByIdAndUpdate(
+            req.params.id, 
+            { $set: { thumbnail: cloud.secure_url, thumbnail_cloud_id: cloud.public_id } }, 
+            { new: true }
+        );
+        if (!updatedQuiz) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+
+        res.status(200).json({ quiz: updatedQuiz });
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ msg: error.message })
+    }
 }
 
 export const getQuestion = async (req,res) =>{
@@ -211,8 +231,14 @@ export const upvoteQuiz = async (req,res) =>{
 
             //remove from liked quizzes
             likedQuizzes.pull(quizId)
-            await user.save()
-            return res.status(200).json({quiz:quiz})
+            let updatedUser = await user.save()
+            let userPayload = {
+                id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                likes: updatedUser.likes
+            }
+            return res.status(200).json({quiz:quiz,user:userPayload})
         }
         //if the quiz is already disliked, then undo dislike
         else if (dislikedQuizzes.includes(quizId)){
@@ -223,13 +249,19 @@ export const upvoteQuiz = async (req,res) =>{
     
         //perform upvote/like
         likedQuizzes.push(quizId)
-        await user.save()
+        let updatedUser = await user.save()
+        let userPayload = {
+            id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+            likes: updatedUser.likes
+        }
 
         let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalLikes':1}} , {new:true} )
 
         if (!quiz) {return res.status(400).json({msg:"Quiz ID not found"})}
 
-        return res.status(200).json({quiz:quiz})
+        return res.status(200).json({quiz:quiz,user:userPayload})
 
     } catch (error) {
         return res.status(500).json({message:error.message})
@@ -256,8 +288,14 @@ export const downvoteQuiz = async (req,res) =>{
 
             //remove from disliked quizzes
             dislikedQuizzes.pull(quizId)
-            await user.save()
-            return res.status(200).json({quiz:quiz})
+            let updatedUser = await user.save()
+            let userPayload = {
+                id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                likes: updatedUser.likes
+            }
+            return res.status(200).json({quiz:quiz,user:userPayload})
         }
 
         //else if the quiz is already liked, then undo like
@@ -270,13 +308,19 @@ export const downvoteQuiz = async (req,res) =>{
         }
         //perform downvote/dislike
         dislikedQuizzes.push(quizId)
-        await user.save()
+        let updatedUser = await user.save()
+        let userPayload = {
+            id: updatedUser._id,
+            username: updatedUser.username,
+            email: updatedUser.email,
+            likes: updatedUser.likes
+        }
 
         let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalDislikes':1}} , {new:true} )
 
         if (!quiz) {return res.status(400).json({msg:"Quiz ID not found"})}
 
-        return res.status(200).json({quiz:quiz})
+        return res.status(200).json({quiz:quiz,user:userPayload})
 
     } catch (error) {
         return res.status(500).json({message:error.message})

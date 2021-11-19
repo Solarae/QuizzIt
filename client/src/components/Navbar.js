@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react'
-import { Nav, Navbar, Container, Image, NavDropdown, Row, Col, Form, InputGroup, Button, FormControl } from 'react-bootstrap'
+import { Nav, Navbar, Container, Image, NavDropdown, Form, FormControl } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
 import SignIn from './SignIn.js';

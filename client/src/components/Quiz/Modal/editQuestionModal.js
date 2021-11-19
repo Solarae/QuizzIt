@@ -1,6 +1,6 @@
 // import Close from "./times-solid.svg";
-import { useEffect, useState } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap'
+import { useState } from 'react';
+import { Form, Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { editQuiz } from '../../../actions/quizActions';
 

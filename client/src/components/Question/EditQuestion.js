@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { editQuizQuestion } from '../../actions/quizActions'
-import { useHistory, useParams } from 'react-router-dom'
 
 function EditQuizQuestion({ quizId, show, handleClose, question }) {
     const dispatch = useDispatch();
-    const quiz = useSelector((state) => state.quiz.quiz)
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
         question: question.question,
@@ -16,8 +14,6 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         option4: question.choices[3],
         answer: question.answer
     });
-    const history = useHistory()
-
     
     const closeModal = (err) => {
         if (err) {

@@ -1,18 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col, } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
 import AwardCard from './AwardCard.js'
 import CreateAward from './CreateAward.js'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
-
 function AwardSection({ awardsData }) {
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
-
     const [showCreateAward, setShowCreateAward] = useState(false);
 
     return (

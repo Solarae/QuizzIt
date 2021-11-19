@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, Nav, FloatingLabel, Form } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner.js'
 import Leaderboard from '../components/Quiz/Leaderboard.js'
 import { getQuiz } from '../actions/quizActions'
@@ -12,7 +11,6 @@ function QuizLeaderboard() {
     const dispatch = useDispatch()
     const history = useHistory()
     const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading);
 

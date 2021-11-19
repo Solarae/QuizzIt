@@ -6,8 +6,9 @@ import {
 } from '../actions/types'
 
 import axios from 'axios'
-
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const makeSubmission = ({ quizId, answers, platformId, userId, timeTaken }) => async (dispatch) => {
     const config = {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Container, Image, Button, Row, Col, Dropdown } from 'react-bootstrap';
+import { Row, Col, Dropdown } from 'react-bootstrap';
 import QuizCard from './QuizCard.js';
 import mongoose from 'mongoose'
 

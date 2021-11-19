@@ -1,6 +1,6 @@
 import React from 'react'
-import { Container, Image, Button, Row, Col, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom'
+import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom'
 
 function MiniLeaderboard({ quiz }) {
     const history = useHistory()

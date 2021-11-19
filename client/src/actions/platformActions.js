@@ -12,6 +12,8 @@ import {
     CREATE_PLATFORM_FAIL,
     EDIT_PLATFORM_SUCCESS,
     EDIT_PLATFORM_FAIL,
+    EDIT_PLATFORM_IMG_SUCCESS,
+    EDIT_PLATFORM_IMG_FAIL,
     DELETE_PLATFORM_SUCCESS,
     DELETE_PLATFORM_FAIL,
     JOIN_PLATFORM_SUCCESS,
@@ -19,12 +21,18 @@ import {
     LEAVE_PLATFORM_SUCCESS,
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
-    REPORT_PLATFORM_FAIL
+    REPORT_PLATFORM_FAIL,
+    UPVOTE_PLATFORM,
+    DOWNVOTE_PLATFORM,
+    EDIT_PROFILE_SUCCESS,
 } from '../actions/types'
 
 import axios from 'axios'
 
+
 import { URL } from '../config.js'
+
+axios.defaults.withCredentials = true;
 
 export const createPlatform = ({ userId, name, description, history }) => async (dispatch) => {
     const config = {
@@ -90,6 +98,34 @@ export const editPlatform = ({ newValue, userId, platformId, confirmPassword }) 
         console.log("error message: " + error.message);
         dispatch({
             type: EDIT_PLATFORM_FAIL
+        })
+    }
+}
+
+export const uploadImage = (id, image, type, userId) => async (dispatch) => {
+    try {
+        const formData = new FormData()
+        formData.append('image', image)
+        formData.append('type', type)
+        formData.append('userId', userId)
+
+        const res = await axios.post(`${URL}/api/platforms/${id}/upload`, formData); 
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_PLATFORM_IMG_FAIL,
+                payload: res.data
+            })
+        } else {
+            dispatch({
+                type: EDIT_PLATFORM_IMG_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_PLATFORM_IMG_FAIL
         })
     }
 }
@@ -294,6 +330,81 @@ export const reportPlatform = ({ platformId, userId, text }) => async (dispatch)
                 payload: res.data
             });
         }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
+
+
+
+
+export const upvotePlatform = ({ userId,platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/upvote`, body, config);
+        // console.log(res.data.platform)
+
+        let platformPayload = {platform:res.data.platform}
+        let userPayload = {user:res.data.user}
+
+        console.log(userPayload)
+
+
+        //update the # of likes in a platform
+        dispatch({
+            type:UPVOTE_PLATFORM,
+            payload:platformPayload
+        })
+
+        //update the likes that a user has
+        dispatch({
+            type:EDIT_PROFILE_SUCCESS,
+            payload:userPayload
+        })
+
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
+
+
+
+export const downvotePlatform = ({ userId,platformId }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    try {
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/downvote`, body, config);
+
+        let platformPayload = {platform:res.data.platform}
+        let userPayload = {user:res.data.user}
+
+        dispatch({
+            type:DOWNVOTE_PLATFORM,
+            payload:platformPayload
+        })
+        
+        //update the likes that a user has
+        dispatch({
+            type:EDIT_PROFILE_SUCCESS,
+            payload:userPayload
+        })
+
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
