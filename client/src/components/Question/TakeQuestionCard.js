@@ -4,8 +4,8 @@ import { Col, Card } from 'react-bootstrap';
 function TakeQuestionCard({ question, questionNumber, questionInput }) {
     const [choiceValue, setChoiceValue] = useState();
     return (
-        <Card bg="white" style={{ width: "220px" }} >
-            <Card.Title style={{fontSize: "14pt"}}>{question.question}</Card.Title>
+        <Card bg="white" style={{ width: "50vw" }} >
+            <Card.Title style={{fontSize: "16pt"}}>{question.question}</Card.Title>
             <Col className="g-4">
                 {question.choices.map((choice, idx) => (
                     <>
