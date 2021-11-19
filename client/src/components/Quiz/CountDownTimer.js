@@ -2,13 +2,9 @@ import React, { useState, useEffect } from 'react'
 
 function CountDownTimer({ duration, counter }) {
     const [time, setTime] = useState(duration)
-    // console.log(time)
-    // console.log(time.hrs)
+
     const tick = () => {
-        if (time.hrs === 0 && time.mins === 0 && time.secs === 0) {
-            console.log("HELLO")
-        }
-        else if (time.mins === 0 && time.secs === 0)
+        if (time.mins === 0 && time.secs === 0)
             setTime({
                 hrs: time.hrs - 1,
                 mins: 59,

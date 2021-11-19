@@ -19,12 +19,13 @@ const userSchema = new mongoose.Schema({
         default: 'User'
     },
     banner: {
-        data: Buffer,
-        contentType: String
+        type: String 
     },
-    icon: {
-        data: Buffer,
-        contentType: String
+    banner_cloud_id: {
+        type: String 
+    },
+    icon_cloud_id: {
+        type: String
     },
     awards: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Award'

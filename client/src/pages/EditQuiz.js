@@ -4,7 +4,7 @@ import { Container, Col, Button } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner'
 import EditQuestionCard from '../components/Question/EditQuestionCard'
 import AddQuestion from '../components/Question/AddQuestion'
-
+import NotFound from '../components/NotFound';
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -12,15 +12,12 @@ import { useParams } from 'react-router-dom'
 
 function EditQuiz() {
     const dispatch = useDispatch()
+    const user = useSelector((state) => state.auth.user)
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
     // const platform = useSelector((state) => state.platform.platform)
 
     let { qid } = useParams()
-    console.log(qid)
-    console.log(useParams())
-    // let { id } = useParams()
-
     
     useEffect(() => {
         dispatch(getQuiz(qid))
@@ -34,10 +31,12 @@ function EditQuiz() {
     const handleShowAddQuestion = () => { setShowAddQuestion(true) };
     const handleCloseAddQuestion = () => { setShowAddQuestion(false) };
         
-        
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
+
+    if (user == null || user.id !== quiz.owner) 
+        return <NotFound/>
 
     return (
         <>

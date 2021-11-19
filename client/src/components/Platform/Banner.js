@@ -10,6 +10,7 @@ import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import Report from './Report.js'
 import LikeDislike from '../Button/LikeDislike';
+import Subscribe from '../Button/Subscribe';
 
 function Banner({ platform }) {
     const dispatch = useDispatch()
@@ -113,11 +114,7 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
-                                    {auth.user && platform.subscribers.some((s) => s.userId===auth.user.id) ?
-                                        <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
-                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
-                                    }
-
+                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

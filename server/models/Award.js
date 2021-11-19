@@ -13,6 +13,10 @@ const awardSchema = new mongoose.Schema ({
         type: String,
         required: true
     },
+    icon_cloud_id: {
+        type: String,
+        required: true 
+    }, 
     platformId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Platform',
