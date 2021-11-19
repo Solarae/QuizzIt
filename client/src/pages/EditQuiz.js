@@ -4,7 +4,9 @@ import { Container, Col, Button } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner'
 import EditQuestionCard from '../components/Question/EditQuestionCard'
 import AddQuestion from '../components/Question/AddQuestion'
-
+import SignIn from '../components/SignIn';
+import SignUp from '../components/SignUp';
+import NotFound from '../components/NotFound';
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -12,14 +14,20 @@ import { useParams } from 'react-router-dom'
 
 function EditQuiz() {
     const dispatch = useDispatch()
+    const user = useSelector((state) => state.auth.user)
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
     // const platform = useSelector((state) => state.platform.platform)
 
     let { qid } = useParams()
-    console.log(qid)
-    console.log(useParams())
-    // let { id } = useParams()
+    
+    const [showSignIn, setShowSignIn] = useState(true);
+    const handleCloseSignIn = () => { setShowSignIn(false) };
+    const handleShowSignIn = () => { setShowSignIn(true) };
+
+    const [showSignUp, setShowSignUp] = useState(false);
+    const handleCloseSignUp = () => { setShowSignUp(false) };
+    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
 
     
     useEffect(() => {
@@ -34,10 +42,21 @@ function EditQuiz() {
     const handleShowAddQuestion = () => { setShowAddQuestion(true) };
     const handleCloseAddQuestion = () => { setShowAddQuestion(false) };
         
-        
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
+
+    if (user == null) {
+        return (
+            <div className='justify-content-between'>
+                <SignIn show={showSignIn} handleClose={handleCloseSignIn} />
+                <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+            </div>
+        )
+    }
+
+    if (user !== quiz.owner)
+        return <NotFound />
 
     return (
         <>

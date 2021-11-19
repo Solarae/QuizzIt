@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
-import { Card, Image, Row, Col, Button } from 'react-bootstrap';
-import { joinPlatform, leavePlatform } from '../../actions/platformActions'
+import { Card, Image, Row, Col } from 'react-bootstrap';
+import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+
+import LikeDislike from '../Button/LikeDislike';
+import Subscribe from '../Button/Subscribe'
 
 function PlatformCard({ platform }) {
     const auth = useSelector((state) => state.auth)
@@ -18,7 +21,7 @@ function PlatformCard({ platform }) {
             userId: auth.user.id,
             platformId: platform._id
         }))
-        setSubscribed(true);
+        // setSubscribed(true);
     }
 
     const handleLeave = () => {
@@ -26,12 +29,34 @@ function PlatformCard({ platform }) {
             userId: auth.user.id,
             platformId: platform._id
         }))
-        setSubscribed(false);
+        // setSubscribed(false);
+    }
+
+    const handleLike = () => {
+        // if (auth.user === null) {
+        //     handleShowSignIn()
+        //     return 
+        // }
+        dispatch(upvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))        
+    }
+
+    const handleDislike = () => {
+        // if (auth.user === null) {
+        //     handleShowSignIn()
+        //     return 
+        // }
+        dispatch(downvotePlatform({
+            userId:auth.user.id,
+            platformId: platform._id
+        }))      
     }
 
     // keep track of subscrbed status on frontend
     console.log(platform)
-    const [subscribed, setSubscribed] = useState(platform.subscribers.some((s) => s.userId===auth.user.id));
+    // const [subscribed, setSubscribed] = useState(platform.subscribers.some((s) => s.userId===auth.user.id));
 
     return (
         <Card style={{ marginBottom: "20px" }}>
@@ -51,18 +76,12 @@ function PlatformCard({ platform }) {
                             <p>{platform.description}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p>
-                                <i className="bi bi-hand-thumbs-up"></i> {platform.likes && platform.likes.totalLikes ? platform.likes.totalLikes : 0}
-                                <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> {platform.likes && platform.likes.totalDislikes ? platform.likes.totalDislikes : 0}
-                            </p>
+                        <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
                         </Row>
 
                     </Col >
                     <Col md={3} align="center" className="my-auto" style={{}}>
-                        {subscribed ?
-                            <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
-                            : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
-                        }
+                        <Subscribe handleLeave={handleLeave} handleJoin={handleJoin}/>
                     </Col>
                 </Row>
             </Card.Body>
