@@ -109,7 +109,7 @@ export const getSubmission = async (req,res) =>{
     try {
 
         //find all the submissions based on provided userId
-        let submissions = await Submission.findById(id).populate('platformId')
+        let submissions = await Submission.findById(id).populate('platformId').populate('quizId')
             
         res.status(200).json({singleSubmission:submissions})     
         

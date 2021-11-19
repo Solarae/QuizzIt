@@ -44,28 +44,24 @@ function ReviewSubmission() {
     return(
 
         <div>
-            <Table striped bordered hover className='mt-5'>
-                <thead>
-                    <tr>
-                    <th>Time submitted</th>
-                    <th>Quiz</th>
-                    <th>Platform</th>
-                    <th>Score</th>
-                    <th>Time</th>
-                    <th>Point</th>
-                    </tr>
-                </thead>
-                <tbody>
-                        <tr>
-                                <td>{submission.createdAt}</td>
-                                <td>{submission.quizId}</td>
-                                {/* <td>{submission.platformId.name}</td> */}
-                                <td>{submission.score}</td>
-                                <td>{submission.timeTaken} seconds</td>
-                                <td>{submission.point}</td>
-                        </tr>
-                </tbody>
-            </Table>
+            <h1> Below shows your attempt of the quiz </h1>
+
+            <h2>Questions</h2>
+            <ol>
+                {submission.quizId.questions.map((question)=>{
+                    return <li> {question.question} </li>
+                })}
+            </ol>
+
+            <h2>Attempted Answers</h2>
+            <ol>
+                {submission.answers.map((answer)=>{
+
+                   return <li>  {answer}  </li>
+                })}
+
+            </ol>
+        
         </div>
 
     )
