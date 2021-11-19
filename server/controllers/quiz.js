@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-import mongoose from "mongoose"
+import { uploadImgToCloud } from "./util.js";
 
 export const createQuiz = async (req,res) =>{
 
@@ -105,6 +105,25 @@ export const editQuiz = async (req,res) =>{
         res.status(500).json({message:error.message})
     }
     
+}
+
+export const uploadImage = async (req, res) => {
+    try {
+        const quiz = await Quiz.findById(req.params.id)
+        const cloud = await uploadImgToCloud(req.file.path)
+
+        const updatedQuiz = await Quiz.findByIdAndUpdate(
+            req.params.id, 
+            { $set: {icon: cloud.secure_url} }, 
+            { new: true }
+        );
+        if (!updatedQuiz) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+
+        res.status(200).json({ quiz: updatedQuiz });
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ msg: error.message })
+    }
 }
 
 export const getQuestion = async (req,res) =>{
