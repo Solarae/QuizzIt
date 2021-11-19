@@ -18,10 +18,12 @@ export const createAward = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
+        const cloud = await uploadImgToCloud(req.file.path)
+
         const award = new Award({
             title: title,
             description: description,
-            icon: icon,
+            icon: cloud.secure_url,
             platformId: platformId,
             requirementType: requirementType,
             requirementCount: requirementCount
