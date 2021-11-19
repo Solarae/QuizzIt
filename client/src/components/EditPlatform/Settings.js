@@ -22,12 +22,12 @@ function Settings({ platform }) {
 
     const handleEditIcon = (e) => {
         e.preventDefault();
-        dispatch(uploadImage(e.target.files[0], 'icon', auth.user.id))
+        dispatch(uploadImage(id, e.target.files[0], 'icon', auth.user.id))
     }
 
     const handleEditBanner = (e) => {
         e.preventDefault();
-        dispatch(uploadImage(e.target.files[0], 'banner', auth.user.id))
+        dispatch(uploadImage(id, e.target.files[0], 'banner', auth.user.id))
     }
 
     return (
