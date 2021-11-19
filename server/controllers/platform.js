@@ -145,19 +145,15 @@ export const joinPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const index = platform.subscribers.findIndex((subscriber) => userId === subscriber.userId);
-
-        if (index === -1) platform.subscribers.push({
-            userId,
-            role: 'Consumer'
-        });
-        await platform.save()
-
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id,
+            { $addToSet: { subscribers: {userId, role: 'Consumer'} }}
+        )
+        
         user.platforms.push(platform._id)
-
         await user.save();
 
-        res.status(200).json({ platform: platform });
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
