@@ -105,7 +105,7 @@ function Banner({ platform }) {
                         <div style={{ marginLeft: "2%" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
                                 <i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers
-                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
+                                <LikeDislike style={{marginLeft:"30px"}} handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {platform.description}
