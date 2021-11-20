@@ -400,7 +400,7 @@ export const uploadImage = async (req, res) => {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
-
+        console.log(req.body, req.file, req.files)
         const cloud = await uploadImgToCloud(req.file.path)
         const newValues = {
             [type]: cloud.secure_url,

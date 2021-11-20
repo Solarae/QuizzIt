@@ -115,7 +115,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
     }
 }
 
-export const editQuiz = ({ id, name,description }) => async (dispatch) => {
+export const editQuiz = ({ id, name, description, time }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -123,7 +123,7 @@ export const editQuiz = ({ id, name,description }) => async (dispatch) => {
     }
 
     try {
-        const body = JSON.stringify({ name,description })
+        const body = JSON.stringify({ name, description, time })
         console.log(body)
         console.log(id)
         const res = await axios.post(`${URL}/api/quizzes/${id}/editQuiz`, body, config)
