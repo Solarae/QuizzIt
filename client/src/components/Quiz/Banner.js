@@ -73,11 +73,8 @@ function Banner() {
     }
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
-                <div className="col-md-5 p-lg-5 mx-auto my-3">
-                    <p className="lead fw-normal">Banner image goes here</p>
-                </div>
-            </div>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${quiz.thumbnail})` }}></div>
+
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{overflowWrap: "break-word"}} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" >
