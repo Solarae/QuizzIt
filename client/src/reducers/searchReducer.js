@@ -7,7 +7,8 @@ import {
     SEARCH_QUIZ_FAIL,
     SEARCH_USER_REQ,
     SEARCH_USER_SUCCESS,
-    SEARCH_USER_FAIL
+    SEARCH_USER_FAIL,
+    SEARCH_UPDATE_PLATFORM
 } from '../actions/types'
 
 const initialState = {
@@ -75,6 +76,19 @@ const searchReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isSearchUserLoading: false
+            }
+        case SEARCH_UPDATE_PLATFORM:
+            let updatedPlatforms = state.platforms 
+            if (state.platforms && action.payload.platform){
+                let updatedPl = action.payload.platform
+                updatedPlatforms = [...state.platforms]
+
+                // replace old platform with the updated platform
+                updatedPlatforms = updatedPlatforms.map((obj) => obj._id===updatedPl._id ? updatedPl : obj)
+            }
+            return{
+                ...state,
+                platforms: updatedPlatforms
             }
         default:
             return state;
