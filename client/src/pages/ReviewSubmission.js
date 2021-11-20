@@ -22,10 +22,6 @@ function ReviewSubmission() {
     let isLoading = useSelector((state)=> state.submission.isLoadingSingle)
 
 
-    
-
-
-
 
     //fetch the submission id
     useEffect(()=>{
@@ -49,10 +45,9 @@ function ReviewSubmission() {
 
     return(
         <>
+            <h2>Your score:{submission.score}/{submission.quizId.questions.length}</h2>
+            <h2>Total time taken: {submission.timeTaken} seconds </h2>
             <Container className="row justify-content-center">
-                <h1> Below shows your attempt of the quiz </h1>
-
-                <h2>Questions</h2>
 
                 {/* <ListGroup variant="flush">
                     {submission.quizId.questions.map((question,idx)=>{
@@ -72,12 +67,6 @@ function ReviewSubmission() {
                     })}
                 </Col>
 
-
-
-
-                <h2>Your score:{submission.score}/{submission.quizId.questions.length}</h2>
-                <h2>Total time taken: {submission.timeTaken} seconds </h2>
-            
             </Container>
         </>
 
