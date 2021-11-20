@@ -21,6 +21,8 @@ import {
     DOWNVOTE_QUIZ_FAIL,
     REPORT_QUIZ,
     REPORT_QUIZ_FAIL,
+    EDIT_QUIZ_THUMBNAIL,
+    EDIT_QUIZ_THUMBNAIL_FAIL,
 } from '../actions/types'
 
 const initialState = {
@@ -150,6 +152,16 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+            }
+        case EDIT_QUIZ_THUMBNAIL: 
+            return {
+                ...state,
+                ...action.payload
+            }
+        case EDIT_QUIZ_THUMBNAIL_FAIL: 
+            return {
+                ...state,
+                ...action.payload
             }
         default:
             return state;

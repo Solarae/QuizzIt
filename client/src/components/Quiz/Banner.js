@@ -11,13 +11,15 @@ import DeleteQuizModal from './Modal/deleteQuizModal';
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import LikeDislike from '../Button/LikeDislike';
+import { useHistory } from 'react-router-dom';
 
-function Banner() {
+function Banner({ isEdit }) {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const quiz = useSelector((state) => state.quiz.quiz)
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+    const history = useHistory()
 
     const [showSignIn, setShowSignIn] = useState(false);
     const handleCloseSignIn = () => { setShowSignIn(false) };
@@ -71,17 +73,18 @@ function Banner() {
             id: quiz._id
         }))
     }
+
+    const redirectEdit = () => {
+        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/edit`)
+    }
+    console.log(platform)
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
-                <div className="col-md-5 p-lg-5 mx-auto my-3">
-                    <p className="lead fw-normal">Banner image goes here</p>
-                </div>
-            </div>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${quiz.thumbnail})` }}></div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{overflowWrap: "break-word"}} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" >
-                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src="/quizzit_logo.png" roundedCircle />
+                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={platform.icon && platform.icon !== "" ? platform.icon : "/quizzit_logo.png"} thumbnail />
                         <div style={{ marginLeft: "2%"}}>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
@@ -97,7 +100,7 @@ function Banner() {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<div></div>}
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?(isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>):<div></div>}
                                     {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
