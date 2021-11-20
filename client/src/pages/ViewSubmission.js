@@ -2,6 +2,8 @@ import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getSubmissions } from "../actions/submissionActions"
 import { Table } from "react-bootstrap"
+import { Link } from "react-router-dom"
+import { useHistory } from 'react-router-dom';
 
 
 function ViewSubmission() {
@@ -12,16 +14,29 @@ function ViewSubmission() {
     let submission = useSelector((state)=> state.submission.submission)
     const isLoading = useSelector((state) => state.submission.isLoading)
     console.log(submission)
-    let id = user.id
+    // let id = user.id
 
 
 
     //fetch the submissions made by this user
     useEffect(()=>{
-        dispatch(getSubmissions({
-            id
-        }))
-    },[dispatch,id])
+        if(user){
+            dispatch(getSubmissions({
+                id:user.id
+            }))
+        }
+    },[dispatch,user])
+
+    const history = useHistory()
+
+    const handleOnclick = (e) =>{
+        let submissionId = e.target.getAttribute('submissionId')
+        
+        history.push(`/submission/reviewSubmission/${submissionId}`)
+
+    }
+
+
 
     if (isLoading) {
         return ( <div> Loading... </div> )
@@ -44,14 +59,14 @@ function ViewSubmission() {
                 <tbody>
                     {submission.map((submission)=>{
                         return( 
-                            <tr>
-                                    <td>{submission.createdAt}</td>
-                                    <td>{submission.quizId.name}</td>
-                                    <td>{submission.platformId.name}</td>
-                                    <td>{submission.score}</td>
-                                    <td>{submission.timeTaken} seconds</td>
-                                    <td>{submission.point}</td>
-                            </tr>
+                                <tr submissionId={submission._id} onClick={handleOnclick}>
+                                        <td className="display:block" submissionId={submission._id} >{submission.createdAt}</td>
+                                        <td submissionId={submission._id}>{submission.quizId.name}</td>
+                                        <td submissionId={submission._id}>{submission.platformId.name}</td>
+                                        <td submissionId={submission._id}>{submission.score}</td>
+                                        <td submissionId={submission._id}>{submission.timeTaken} seconds</td>
+                                        <td submissionId={submission._id}>{submission.point}</td>
+                                </tr>
                         )
                     })
 

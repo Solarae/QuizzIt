@@ -147,7 +147,8 @@ export const joinPlatform = async (req, res) => {
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id,
-            { $addToSet: { subscribers: {userId, role: 'Consumer'} }}
+            { $addToSet: { subscribers: {userId, role: 'Consumer'} }},
+            { new: true }
         )
         
         user.platforms.push(platform._id)
@@ -400,7 +401,7 @@ export const uploadImage = async (req, res) => {
             errors.invalidOwner = "You don't have update permissions";
             return res.status(200).json({ errors: errors });
         }
-
+        console.log(req.body, req.file, req.files)
         const cloud = await uploadImgToCloud(req.file.path)
         const newValues = {
             [type]: cloud.secure_url,
