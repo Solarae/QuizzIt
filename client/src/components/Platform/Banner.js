@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react'
-import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
+import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
 import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -28,7 +28,7 @@ function Banner({ platform }) {
     const handleJoin = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
         dispatch(joinPlatform({
             userId: auth.user.id,
@@ -46,12 +46,12 @@ function Banner({ platform }) {
     const handleLike = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
         dispatch(upvotePlatform({
-            userId:auth.user.id,
+            userId: auth.user.id,
             platformId: platform._id
-        }))        
+        }))
 
 
         // dispatch(updateUser({
@@ -64,12 +64,12 @@ function Banner({ platform }) {
     const handleDislike = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
         dispatch(downvotePlatform({
-            userId:auth.user.id,
+            userId: auth.user.id,
             platformId: platform._id
-        }))      
+        }))
 
         // dispatch(updateUser({
         //     newValue: { likes: likes },
@@ -80,17 +80,19 @@ function Banner({ platform }) {
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
-    const handleShowReport = () => { 
+    const handleShowReport = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
-        setShowReport(true) 
+        setShowReport(true)
     };
 
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
     const targetTooltip = useRef(null);
+
+    const [showReportToast, setShowReportToast] = useState(false);
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
@@ -114,8 +116,8 @@ function Banner({ platform }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.user && auth.user.id===platform.owner && !location.pathname.endsWith("edit") ) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
-                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
+                                    {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
+                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform} />
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}
@@ -141,9 +143,20 @@ function Banner({ platform }) {
                 <h4 className="ms-5 mt-1">{platform.name}</h4>
             </div>
 
-            <Report platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
+            <Report setShowReportToast={setShowReportToast} platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+            <Toast
+                show={showReportToast}
+                animation
+                autohide={true}
+                delay={2500}
+                onClose={()=>{setShowReportToast(false)}}
+                className="position-absolute top-0 end-0"
+                style={{ marginRight: "5px", marginTop: "5px", width:"auto", fontSize:"12pt" }}
+            >
+                <Toast.Body>Report Submitted</Toast.Body>
+            </Toast>
         </div >
     )
 }

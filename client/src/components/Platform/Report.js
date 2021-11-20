@@ -12,7 +12,7 @@ function usePrevious(value) {
     return ref.current;
 }
 
-function Report({ platformId, show, handleClose }) {
+function Report({ setShowReportToast, platformId, show, handleClose }) {
     //   const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
@@ -52,6 +52,7 @@ function Report({ platformId, show, handleClose }) {
 
         // close the modal and redirect user to the platform page
         handleClose();
+        setShowReportToast(true)
     }, [isReportLoading, handleClose]);
 
     const handleSubmit = ((e) => {
