@@ -96,7 +96,6 @@ function Banner() {
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<div></div>}
                                     {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
-                                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
                                     <CopyToClipboard text={window.location.href}>
