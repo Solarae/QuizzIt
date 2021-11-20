@@ -18,7 +18,7 @@ function TakeQuiz() {
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const [questionsAttempted, setQuestionsAttempted] = useState()
-    const [timer, setTimer] = useState()
+    const [timer, setTimer] = useState(0)
 
     const history = useHistory()
 
@@ -54,6 +54,8 @@ function TakeQuiz() {
             answers[key] = String.fromCharCode(questionsAttempted[key] + 97) 
         }
 
+        console.log(timer)
+
         if (answers.includes(-1)) {
             if (timer/60 >= quiz.time) {
                 dispatch(makeSubmission({ 
@@ -79,6 +81,7 @@ function TakeQuiz() {
     }
 
     const calculateTime = () => {
+        console.log(quiz.time)
         const time = quiz.time
         const hrs = Math.floor(time/60)
         // console.log(hrs)
