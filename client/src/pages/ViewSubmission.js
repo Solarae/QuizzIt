@@ -14,16 +14,18 @@ function ViewSubmission() {
     let submission = useSelector((state)=> state.submission.submission)
     const isLoading = useSelector((state) => state.submission.isLoading)
     console.log(submission)
-    let id = user.id
+    // let id = user.id
 
 
 
     //fetch the submissions made by this user
     useEffect(()=>{
-        dispatch(getSubmissions({
-            id
-        }))
-    },[dispatch])
+        if(user){
+            dispatch(getSubmissions({
+                id:user.id
+            }))
+        }
+    },[dispatch,user])
 
     const history = useHistory()
 
