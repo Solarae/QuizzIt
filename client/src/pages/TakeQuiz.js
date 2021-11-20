@@ -55,6 +55,7 @@ function TakeQuiz() {
         }
 
         console.log(timer)
+        
 
         if (answers.includes(-1)) {
             if (timer/60 >= quiz.time) {
