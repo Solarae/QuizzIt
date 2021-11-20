@@ -75,8 +75,8 @@ function ReviewSubmission() {
 
 
 
-                <h2>YOUR SCORE:{submission.score}/{submission.quizId.questions.length}</h2>
-
+                <h2>Your score:{submission.score}/{submission.quizId.questions.length}</h2>
+                <h2>Total time taken: {submission.timeTaken} seconds </h2>
             
             </Container>
         </>
