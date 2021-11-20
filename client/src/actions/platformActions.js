@@ -28,6 +28,7 @@ import {
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
+    SEARCH_UPDATE_PLATFORM
 } from '../actions/types'
 
 import axios from 'axios'
@@ -261,9 +262,12 @@ export const joinPlatform = ({ userId, platformId }) => async (dispatch) => {
             })
         }
         else {
-
             dispatch({
                 type: JOIN_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+            dispatch({
+                type: SEARCH_UPDATE_PLATFORM,
                 payload: res.data
             });
         }
@@ -297,6 +301,10 @@ export const leavePlatform = ({ userId, platformId }) => async (dispatch) => {
 
             dispatch({
                 type: LEAVE_PLATFORM_SUCCESS,
+                payload: res.data
+            });
+            dispatch({
+                type: SEARCH_UPDATE_PLATFORM,
                 payload: res.data
             });
         }
@@ -373,6 +381,11 @@ export const upvotePlatform = ({ userId,platformId }) => async (dispatch) => {
             payload:userPayload
         })
 
+        dispatch({
+            type: SEARCH_UPDATE_PLATFORM,
+            payload: platformPayload 
+        });
+
 
     } catch (error) {
         console.log("error message: " + error.message);
@@ -407,6 +420,12 @@ export const downvotePlatform = ({ userId,platformId }) => async (dispatch) => {
             type:EDIT_PROFILE_SUCCESS,
             payload:userPayload
         })
+
+        
+        dispatch({
+            type: SEARCH_UPDATE_PLATFORM,
+            payload: platformPayload 
+        });
 
     } catch (error) {
         console.log("error message: " + error.message);

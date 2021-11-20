@@ -12,6 +12,10 @@ function MiniLeaderboard({ platform }) {
         lb: platform.allTime_leaderboard
     })
 
+    if (!memberList){
+        return (<div>Loading...</div>)
+    }
+
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
