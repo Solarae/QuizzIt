@@ -2,7 +2,8 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-import cloudinary  from "../util/cloudinary.js";
+import { uploadImgToCloud } from "./util.js";
+
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
     const errors = {};
@@ -144,19 +145,15 @@ export const joinPlatform = async (req, res) => {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const index = platform.subscribers.findIndex((subscriber) => userId === subscriber.userId);
-
-        if (index === -1) platform.subscribers.push({
-            userId,
-            role: 'Consumer'
-        });
-        await platform.save()
-
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id,
+            { $addToSet: { subscribers: {userId, role: 'Consumer'} }}
+        )
+        
         user.platforms.push(platform._id)
-
         await user.save();
 
-        res.status(200).json({ platform: platform });
+        res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
@@ -391,26 +388,72 @@ export const downvotePlatform = async (req,res) =>{
 
 }
 
+export const uploadImage = async (req, res) => {
+    const { userId, type } = req.body
+    console.log(type)
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
 
+        if (userId !== String(platform.owner)) {
+            let errors = {};
+            errors.invalidOwner = "You don't have update permissions";
+            return res.status(200).json({ errors: errors });
+        }
 
-// export const uploadBanner = async (req,res) => {
+        const cloud = await uploadImgToCloud(req.file.path)
+        const newValues = {
+            [type]: cloud.secure_url,
+            [`${type}_cloud_id`]: cloud.public_id
+        }
 
-//     // console.log(req.body)
+        console.log(newValues)
+        const updatedPlatform = await Platform.findByIdAndUpdate(
+            req.params.id, 
+            { $set: newValues }, 
+            { new: true }
+        );
+        if (!updatedPlatform) return res.status(200).json({ msg: "Something went wrong with updating platform" });
 
+        res.status(200).json({ platform: updatedPlatform });
+    } catch (error) {
+        console.log(error)
+        res.status(404).json({ msg: error.message })
+    }
+}
 
-//     try {
-//         console.log(process.env.CLOUDINARY_API_KEY)
-//         const fileStr = req.body.data;
-//         const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-//             upload_preset: 'dev_setups',
-//         });
-//         console.log(uploadResponse);
-//         res.json({ url:uploadResponse.url });
-//     } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ err: 'Something went wrong' });
-//     }
-    
+export const editMemberRole = async (req,res) => {
+    const { memberId, senderId, role } = req.body
+    let errors = {}
+    try {
+        const platform = await Platform.findById(req.params.id);
+        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
 
+        
+        const sender = platform.subscribers.find((s) => s.userId.toString() === senderId) 
+        const member = platform.subscribers.find((s) => s.userId.toString() === memberId)
+        
+        if (sender.role !== 'Creator' && sender.role !== 'Moderator') {
+            errors.invalidPromotion = "You aren't a creator / moderator"
+            return res.status(200).json( {errors: errors})
+        }
+        if (sender.role === member.role) {
+            errors.invalidPromotion = 'You have the same role'
+            return res.status(200).json( {errors: errors})
+        }
+        if (member.role === 'Creator') {
+            errors.invalidPromotion = "Can't change role of Creator"
+            return res.status(200).json( {errors: errors})
+        }
 
-// }
+        const updatedPlatform = await Platform.findOneAndUpdate(
+            {_id: req.params.id, "subscribers.userId": memberId },
+            { $set: { "subscribers.$.role": role } },
+            { new: true }
+        )
+        return res.status(200).json( { platform: updatedPlatform } )   
+           
+    } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}

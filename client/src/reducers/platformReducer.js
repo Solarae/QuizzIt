@@ -12,6 +12,8 @@ import {
     CREATE_PLATFORM_FAIL,
     EDIT_PLATFORM_SUCCESS,
     EDIT_PLATFORM_FAIL,
+    EDIT_PLATFORM_IMG_SUCCESS,
+    EDIT_PLATFORM_IMG_FAIL,
     DELETE_PLATFORM_SUCCESS,
     DELETE_PLATFORM_FAIL,
     JOIN_PLATFORM_SUCCESS,
@@ -79,6 +81,17 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isEditLoading: false
+            }
+        case EDIT_PLATFORM_IMG_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                errors: null 
+            }
+        case EDIT_PLATFORM_IMG_FAIL:
+            return {
+                ...state,
+                ...action.payload,
             }
         case DELETE_PLATFORM_SUCCESS:
             return {

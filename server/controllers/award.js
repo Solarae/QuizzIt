@@ -1,4 +1,4 @@
-import User from '../models/User.js'
+import { uploadImgToCloud } from "./util.js";
 import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
 
@@ -18,10 +18,13 @@ export const createAward = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
+        const cloud = await uploadImgToCloud(req.file.path)
+
         const award = new Award({
             title: title,
             description: description,
-            icon: icon,
+            icon: cloud.secure_url,
+            icon_cloud_id: cloud.public_id,
             platformId: platformId,
             requirementType: requirementType,
             requirementCount: requirementCount

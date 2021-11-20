@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import User from '../models/User.js'
 
 import { verify, verifyUser, signInToken } from '../middleware/auth.js'
-import { validateSignUpInput, validateSignInInput, validateEmail } from '../util/validators.js';
+import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
 
 export const getSignedIn = async (req, res) => {
     try {

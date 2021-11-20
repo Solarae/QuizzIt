@@ -5,12 +5,19 @@ const quizSchema = new mongoose.Schema ({
         type: String,
         required: true
     },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'User',
+        required: true  
+    },
     description: {
         type: String
     },
     thumbnail: {
-        data: Buffer,
-        contentType: String 
+        type: String
+    },
+    thumbnail_cloud_id: {
+        type: String
     },
     platformId: {
         type: mongoose.Schema.Types.ObjectId,
