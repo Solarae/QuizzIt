@@ -117,7 +117,7 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
-                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform} />
+                                    {(auth.user && auth.user.id === platform.owner) ? <span></span> : <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform} />}
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}
