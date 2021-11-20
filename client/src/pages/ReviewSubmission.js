@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getOneSubmission, getSubmissions } from "../actions/submissionActions"
-import { ListGroup, Table } from "react-bootstrap"
+import { Col, Container, ListGroup, Table } from "react-bootstrap"
 import { useParams } from "react-router"
 import axios from "axios"
 import { URL } from "../config"
+import SubmissionCard from "../components/Submission/SubmissionCard"
 
 
 function ReviewSubmission() {
@@ -21,7 +22,6 @@ function ReviewSubmission() {
     let isLoading = useSelector((state)=> state.submission.isLoadingSingle)
 
 
-    console.log(user.id)
     
 
 
@@ -29,10 +29,12 @@ function ReviewSubmission() {
 
     //fetch the submission id
     useEffect(()=>{
-        dispatch(getOneSubmission({
-            id
-        }))
-    },[])
+
+        if(user)
+            dispatch(getOneSubmission({
+                id
+            }))
+    },[dispatch,user])
 
     console.log(submission)
 
@@ -46,25 +48,38 @@ function ReviewSubmission() {
 
 
     return(
+        <>
+            <Container className="row justify-content-center">
+                <h1> Below shows your attempt of the quiz </h1>
 
-        <div>
-            <h1> Below shows your attempt of the quiz </h1>
+                <h2>Questions</h2>
 
-            <h2>Questions</h2>
+                {/* <ListGroup variant="flush">
+                    {submission.quizId.questions.map((question,idx)=>{
+                        return <ListGroup.Item variant={question.answer === submission.answers[idx] ? 'primary':'danger'  }> {question.question}    <h5>YOUR RESPONSE:{submission.answers[idx]}</h5> </ListGroup.Item>
+                    })}
+                </ListGroup> */}
 
-            <ListGroup variant="flush">
-                 {submission.quizId.questions.map((question,idx)=>{
-                    return <ListGroup.Item variant={question.answer === submission.answers[idx] ? 'primary':'danger'  }> {question.question}    <h5>YOUR RESPONSE:{submission.answers[idx]}</h5> </ListGroup.Item>
-                })}
-            </ListGroup>
+                <Col xs={7} className="g-4">
+                    {submission.quizId.questions.map( (question,idx) => {
+                            return( 
+                                <>
+                                    <Col>
+                                        <SubmissionCard question={question} idx={idx} submission={submission} ></SubmissionCard>
+                                    </Col>
+                                </>
+                            )
+                    })}
+                </Col>
 
 
 
 
-            <h2>YOUR SCORE:{submission.score}/{submission.quizId.questions.length}</h2>
-
-        
-        </div>
+                <h2>Your score:{submission.score}/{submission.quizId.questions.length}</h2>
+                <h2>Total time taken: {submission.timeTaken} seconds </h2>
+            
+            </Container>
+        </>
 
     )
 
