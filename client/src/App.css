@@ -50,3 +50,13 @@ body {
 }
 
 /* END of CSS for platfoorm navbar */ 
+
+/* START of CSS for view submissions page */ 
+
+tr{
+  cursor:pointer
+}
+
+
+
+/* END of CSS for view submissions page*/ 

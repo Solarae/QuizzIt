@@ -24,6 +24,14 @@ function Profile() {
     const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
     const handleShowDeleteModal = () => { setShowDeleteModal(true) };
 
+    if(!auth.user){
+        return (
+            <div>Loading...</div>
+        )
+    }
+
+
+
     return (
         <Container>
             <h2 className='text-center m-3'>{auth.user.username}'s Profile page</h2>
