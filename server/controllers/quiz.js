@@ -117,7 +117,7 @@ export const uploadImage = async (req, res) => {
             { $set: { thumbnail: cloud.secure_url, thumbnail_cloud_id: cloud.public_id } }, 
             { new: true }
         );
-        if (!updatedQuiz) return res.status(200).json({ msg: "Something went wrong with updating platform" });
+        if (!updatedQuiz) return res.status(200).json({ msg: "Something went wrong with updating quiz" });
 
         res.status(200).json({ quiz: updatedQuiz });
     } catch (error) {
