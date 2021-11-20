@@ -23,7 +23,7 @@ function UserCard({ user }) {
                         </Row>
                         <Row style={{ height: "20%", marginTop: "10px" }}>
                             <p>
-                                <i class="bi bi-dot" /> Member of {user.platforms.length} platforms
+                                Member of {user.platforms.length} platforms
                             </p>
                         </Row>
                         <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>

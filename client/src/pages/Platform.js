@@ -17,6 +17,7 @@ function Platform() {
     const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const memberList = useSelector((state) => state.platforms.memberList)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+    const isEditRoleLoading = useSelector((state) => state.platforms.isEditRoleLoading);
 
     let { id } = useParams();  // get the platform ID from the url
 
@@ -25,7 +26,7 @@ function Platform() {
         dispatch(getPlatform({
             id: id
         }))
-    }, [id, dispatch]);
+    }, [id, isEditRoleLoading, dispatch]);
 
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [showHome, setShowHome] = useState(true);
@@ -47,12 +48,12 @@ function Platform() {
                         <Container>
                             <Row className="justify-content-md-center">
                                 <Col xs lg="6">
-                                    <Nav className="tabNav" justify variant="tabs" defaultActiveKey="/platform" >
+                                    <Nav className="tabNav" justify variant="tabs" activeKey={showHome ? "home" : "memberlist"}>
                                         <Nav.Item>
-                                            <Link to={`/platform/${id}`} onClick={handleShowHome}><Nav.Link href="/platform" ><i class="bi bi-house-door" style={{ fontSize: "1.5rem" }}></i></Nav.Link></Link>
+                                            <Link to={`/platform/${id}`} onClick={handleShowHome}><Nav.Link href="/platform" eventKey="home" ><i class="bi bi-house-door" style={{ fontSize: "1.5rem" }}></i></Nav.Link></Link>
                                         </Nav.Item>
                                         <Nav.Item>
-                                            <Link to={`/platform/${id}`} onClick={handleHideHome}><Nav.Link href="/platform" eventKey="link-1"><i class="bi bi-people" style={{ fontSize: "1.5rem" }}></i></Nav.Link></Link>
+                                            <Link to={`/platform/${id}`} onClick={handleHideHome}><Nav.Link href="/platform/memberlist" eventKey="memberlist"><i class="bi bi-people" style={{ fontSize: "1.5rem" }}></i></Nav.Link></Link>
                                         </Nav.Item>
                                     </Nav>
                                 </Col>
