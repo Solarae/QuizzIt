@@ -17,6 +17,7 @@ function Platform() {
     const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const memberList = useSelector((state) => state.platforms.memberList)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+    const isEditRoleLoading = useSelector((state) => state.platforms.isEditRoleLoading);
 
     let { id } = useParams();  // get the platform ID from the url
 
@@ -25,7 +26,7 @@ function Platform() {
         dispatch(getPlatform({
             id: id
         }))
-    }, [id, dispatch]);
+    }, [id, isEditRoleLoading, dispatch]);
 
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [showHome, setShowHome] = useState(true);
