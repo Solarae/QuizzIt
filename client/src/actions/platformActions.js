@@ -6,6 +6,7 @@ import {
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
+    EDIT_MEMBER_ROLE_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -22,6 +23,8 @@ import {
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
     REPORT_PLATFORM_FAIL,
+    EDIT_MEMBER_ROLE_SUCCESS,
+    EDIT_MEMBER_ROLE_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
@@ -409,6 +412,40 @@ export const downvotePlatform = ({ userId,platformId }) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: REPORT_PLATFORM_FAIL
+        })
+    }
+}
+
+export const editRole = ({ platformId, memberId, senderId, role }) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ memberId, senderId, role })
+    try {
+        dispatch({
+            type: EDIT_MEMBER_ROLE_REQ,
+        })
+        const res = await axios.post(`${URL}/api/platforms/${platformId}/editRole`, body, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_MEMBER_ROLE_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            dispatch({
+                type: EDIT_MEMBER_ROLE_SUCCESS,
+                payload: res.data
+            });
+        }
+
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_MEMBER_ROLE_FAIL,
         })
     }
 }
