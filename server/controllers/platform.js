@@ -147,7 +147,8 @@ export const joinPlatform = async (req, res) => {
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id,
-            { $addToSet: { subscribers: {userId, role: 'Consumer'} }}
+            { $addToSet: { subscribers: {userId, role: 'Consumer'} }},
+            { new: true }
         )
         
         user.platforms.push(platform._id)
