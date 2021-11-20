@@ -19,45 +19,20 @@ const userSchema = new mongoose.Schema({
         default: 'User'
     },
     banner: {
-        data: Buffer,
-        contentType: String
+        type: String 
     },
-    icon: {
-        data: Buffer,
-        contentType: String
+    banner_cloud_id: {
+        type: String 
+    },
+    icon_cloud_id: {
+        type: String
     },
     awards: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Award'
     }],
-    platformInfos: [{
-        platformId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Platform'
-        },
-        points: {
-            daily: {
-                type: Number
-            },
-            weekly: {
-                type: Number
-            },
-            monthly: {
-                type: Number
-            },
-            biannual: {
-                type: Number
-            },
-            year: {
-                type: Number
-            },
-            allTime: {
-                type: Number
-            }
-        },
-        role: {
-            type: String,
-            enum: ['Consumer', 'Moderator', 'Creator']
-        }
+    platforms: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Platform'
     }],
     likes: {
         likedPlatforms: [{

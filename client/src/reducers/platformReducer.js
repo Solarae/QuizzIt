@@ -6,12 +6,15 @@ import {
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
+    EDIT_MEMBER_ROLE_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
     CREATE_PLATFORM_FAIL,
     EDIT_PLATFORM_SUCCESS,
     EDIT_PLATFORM_FAIL,
+    EDIT_PLATFORM_IMG_SUCCESS,
+    EDIT_PLATFORM_IMG_FAIL,
     DELETE_PLATFORM_SUCCESS,
     DELETE_PLATFORM_FAIL,
     JOIN_PLATFORM_SUCCESS,
@@ -19,7 +22,11 @@ import {
     LEAVE_PLATFORM_SUCCESS,
     LEAVE_PLATFORM_FAIL,
     REPORT_PLATFORM_SUCCESS,
-    REPORT_PLATFORM_FAIL
+    REPORT_PLATFORM_FAIL,
+    EDIT_MEMBER_ROLE_SUCCESS,
+    EDIT_MEMBER_ROLE_FAIL,
+    UPVOTE_PLATFORM,
+    DOWNVOTE_PLATFORM
 } from '../actions/types'
 
 const initialState = {
@@ -30,9 +37,11 @@ const initialState = {
     isJoinLoading: false,
     isLeaveLoading: false,
     isReportLoading: false,
+    isEditRoleLoading: false,
     platform: null,
     quizzesData: null,
     awardsData: null,
+    memberList: null,
     errors: null
 }
 
@@ -76,6 +85,17 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isEditLoading: false
+            }
+        case EDIT_PLATFORM_IMG_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                errors: null 
+            }
+        case EDIT_PLATFORM_IMG_FAIL:
+            return {
+                ...state,
+                ...action.payload,
             }
         case DELETE_PLATFORM_SUCCESS:
             return {
@@ -129,6 +149,19 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isReportLoading: false
             }
+        case EDIT_MEMBER_ROLE_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isEditRoleLoading: false,
+                errors: null 
+            }
+        case EDIT_MEMBER_ROLE_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isEditRoleLoading: false,
+            }
         case GET_PLATFORM_REQ:
             return {
                 ...state,
@@ -163,6 +196,22 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isReportLoading: true 
+            }
+        case EDIT_MEMBER_ROLE_REQ:
+            return {
+                ...state,
+                isEditRoleLoading: true 
+            }
+        case UPVOTE_PLATFORM:
+            return {
+                ...state,
+                ...action.payload
+            }
+
+        case DOWNVOTE_PLATFORM:
+            return{
+                ...state,
+                ...action.payload
             }
         default:
             return state;

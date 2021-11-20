@@ -1,16 +1,76 @@
-import React,{useState} from 'react'
-import { Container, Image, Button, ToggleButton } from 'react-bootstrap';
+import React,{useState, useEffect, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import Modal from "./Modal/editQuestionModal"
+import { CopyToClipboard } from 'react-copy-to-clipboard'
 
+import { getPlatform } from '../../actions/platformActions';
+import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
+import EditQuizModal from "./Modal/editQuestionModal"
+import DeleteQuizModal from './Modal/deleteQuizModal';
 
-function Banner({ quizId }) {
+import SignUp from '../SignUp.js';
+import SignIn from '../SignIn.js';
+import LikeDislike from '../Button/LikeDislike';
 
-    const [modal, setModal] = useState(false);
-    const ToggleModal = () => setModal(!modal)
-
+function Banner() {
+    const dispatch = useDispatch()
+    const auth = useSelector((state) => state.auth)
     const quiz = useSelector((state) => state.quiz.quiz)
-    console.log(quizId)
+    const platform = useSelector((state) => state.platforms.platform)
+    const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+
+    const [showSignIn, setShowSignIn] = useState(false);
+    const handleCloseSignIn = () => { setShowSignIn(false) };
+    const handleShowSignIn = () => { setShowSignIn(true) };
+
+    const [showSignUp, setShowSignUp] = useState(false);
+    const handleCloseSignUp = () => { setShowSignUp(false) };
+    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
+
+    const [deleteModal, setDeleteModal] = useState(false);
+    const ToggleDeleteModal = () => setDeleteModal(!deleteModal)
+
+    const [editModal, setEditModal] = useState(false);
+    const ToggleEditModal = () => setEditModal(!editModal)
+
+    const [showReport, setShowReport] = useState(false);
+    const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
+    const handleShowReport = () => { setShowReport(true) };
+
+    // used to show tooltip after clicking "share" button
+    const [showTooltip, setShowTooltip] = useState(false);
+    const targetTooltip = useRef(null);
+
+    useEffect(() => {
+        console.log(quiz.platformId)
+        if (!platform) dispatch(getPlatform({ id: quiz.platformId}))
+    }, [dispatch, platform])    
+
+    if (isGetLoading || !platform) {
+        return (<div>Loading...</div>)
+    }
+    
+    const handleLike = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return 
+        }
+        dispatch(upvoteQuiz({
+            userId: auth.user.id,
+            id: quiz._id
+        }))
+    }
+
+    const handleDislike = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return 
+        }
+        dispatch(downvoteQuiz({
+            userId: auth.user.id,
+            id: quiz._id
+        }))
+    }
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger">
@@ -25,9 +85,8 @@ function Banner({ quizId }) {
                         <div style={{ marginLeft: "2%"}}>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
-                                5.8k submissions
-                                <i className="bi bi-hand-thumbs-up" style={{ marginLeft: "30px" }}></i> 1.7k
-                                <i className="bi bi-hand-thumbs-down" style={{ marginLeft: "10px" }}></i> 80
+                                {quiz.submissions.length} submissions
+                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedQuizzes' dislikedKey="dislikedQuizzes" object={quiz}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {quiz.description}
@@ -38,11 +97,26 @@ function Banner({ quizId }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleModal()}    >Edit</Button>
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<div></div>}
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
                                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
-                                    <Modal show={modal} setShow = {setModal} quiz = {quiz} />
-                                    <i className="bi bi-share" style={{ marginLeft: "25px" }}></i>
-                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px" }}></i>
+                                    <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
+                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
+                                    <CopyToClipboard text={window.location.href}>
+                                        <i className="bi bi-share"
+                                            ref={targetTooltip}
+                                            onMouseLeave={() => setShowTooltip(false)}
+                                            onClick={() => setShowTooltip(true)}
+                                            style={{ marginLeft: "25px", cursor: "pointer" }}></i>
+                                    </CopyToClipboard>
+                                    <Overlay target={targetTooltip.current} show={showTooltip} placement="top">
+                                        {(props) => (
+                                            <Tooltip id="overlay-example" {...props}>
+                                                Link copied
+                                            </Tooltip>
+                                        )}
+                                    </Overlay>
+                                    <i className="bi bi-flag-fill" style={{ marginLeft: "20px", cursor: "pointer" }} onClick={handleShowReport}></i>
                                 </p>
                             </div>
                         </div>
@@ -50,8 +124,10 @@ function Banner({ quizId }) {
                 </div>
             </div>
             <div>
-                <h5 className="ms-5">Platform Name</h5>
+                <h5 className="ms-5">{platform.name}</h5>
             </div>
+            <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+            <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
         </div>
     )
 }

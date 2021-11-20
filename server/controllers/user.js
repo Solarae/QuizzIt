@@ -4,7 +4,7 @@ import jwtDecode from 'jwt-decode'
 import User from '../models/User.js'
 
 import { JWT_SECRET } from '../config.js';
-import { validateSignUpInput, validateSignInInput, validateEmail } from '../util/validators.js';
+import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -47,10 +47,10 @@ export const signin = async (req, res) => {
 
 export const tokenSignin = async (req, res) => {
     const { userToken } = req.body;
-    const decodedToken= jwtDecode(userToken)
     const errors = {}
-    
+            
     try {
+        const decodedToken= jwtDecode(userToken)
         const user = await User.findById(decodedToken.user.id)
 
         if (!user) {

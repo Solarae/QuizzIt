@@ -2,30 +2,25 @@ import { React, useEffect } from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
-
 import { getQuiz } from '../actions/quizActions'
+import { getPlatform } from '../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
+import MiniLeaderboard from '../components/Quiz/MiniLeaderboard.js'
 
 
 function Quiz() {
     const dispatch = useDispatch()
+
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
-    // const platform = useSelector((state) => state.platform.platform)
-
     const history = useHistory()
 
     let { qid } = useParams()
-    // let { id } = useParams()
 
     useEffect(() => {
-        if (!quiz) dispatch(getQuiz(qid))
-    }, [dispatch, quiz])
-    // useEffect(() => {
-    //     if (!platform) dispatch(getQuiz(id))
-    // }, [dispatch, platform])
-
+        dispatch(getQuiz(qid))
+    }, [dispatch, qid])
 
     if (isLoading) {
         return ( <div> Loading... </div> )
@@ -36,7 +31,7 @@ function Quiz() {
     
     return (
         <>
-            <Banner quizId={qid}></Banner>      
+            <Banner></Banner>      
 
             <div style={{ height: "10vh" }}></div>
                 <Container>
@@ -58,7 +53,9 @@ function Quiz() {
                 </div>
                 </Col>
                 <Col>
-                    <div> Leaderboard Goes Here</div>
+                    <div className="col" style={{}}>
+                        <MiniLeaderboard quiz={quiz}></MiniLeaderboard>
+                    </div>
                 </Col>
                 </Container>
         </>

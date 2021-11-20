@@ -1,21 +1,35 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
-import { Container, Image, Button, OverlayTrigger, Overlay, Tooltip } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, editPlatform } from '../../actions/platformActions'
-import { updateUser } from '../../actions/profileActions'
+import React, { useState, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
+import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
+import SignUp from '../SignUp.js';
+import SignIn from '../SignIn.js';
 import Report from './Report.js'
+import LikeDislike from '../Button/LikeDislike';
+import Subscribe from '../Button/Subscribe';
 
 function Banner({ platform }) {
-    const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const history = useHistory();
+    let location = useLocation();
+
+    const [showSignIn, setShowSignIn] = useState(false);
+    const handleCloseSignIn = () => { setShowSignIn(false) };
+    const handleShowSignIn = () => { setShowSignIn(true) };
+
+    const [showSignUp, setShowSignUp] = useState(false);
+    const handleCloseSignUp = () => { setShowSignUp(false) };
+    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
 
     const handleJoin = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return
+        }
         dispatch(joinPlatform({
             userId: auth.user.id,
             platformId: platform._id
@@ -30,87 +44,55 @@ function Banner({ platform }) {
     }
 
     const handleLike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
-
-        // check if not yet liked  
-        if (!likes.likedPlatforms.some(e => e === platform._id)) {
-            likes.likedPlatforms.push(platform._id);
-            platform_likes.totalLikes += 1
-
-            // remove from disliked if there
-            let idx = likes.dislikedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.dislikedPlatforms.splice(idx, 1);
-                platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes-1
-            }
+        if (auth.user === null) {
+            handleShowSignIn()
+            return
         }
-        else {
-            // unlike the platform
-            likes.likedPlatforms = likes.likedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalLikes -= 1
-        }
-
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
+        dispatch(upvotePlatform({
+            userId: auth.user.id,
+            platformId: platform._id
         }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
+
+
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
+
     }
 
     const handleDislike = () => {
-        let likes = auth.user.likes
-        let platform_likes = platform.likes
-
-        // check if not yet disliked  
-        if (!likes.dislikedPlatforms.some(e => e === platform._id)) {
-            likes.dislikedPlatforms.push(platform._id);
-            platform_likes.totalDislikes += 1
-
-            // remove from liked if there
-            let idx = likes.likedPlatforms.findIndex(e => e === platform._id);
-            if (idx !== -1) {
-                likes.likedPlatforms.splice(idx, 1);
-                platform_likes.totalLikes -= 1
-            }
-
+        if (auth.user === null) {
+            handleShowSignIn()
+            return
         }
-        else {
-            // un-dislike the platform
-            likes.dislikedPlatforms = likes.dislikedPlatforms.filter(e => e !== platform._id)
-            platform_likes.totalDislikes = platform_likes.totalDislikes===0 ? 0 : platform_likes.totalDislikes -= 1
-        }
-
-        dispatch(updateUser({
-            newValue: { likes: likes },
-            userId: auth.user.id
+        dispatch(downvotePlatform({
+            userId: auth.user.id,
+            platformId: platform._id
         }))
-        dispatch(editPlatform(
-            {
-                newValue: {
-                    likes: platform_likes
-                },
-                userId: auth.user.id,
-                platformId: platform._id,
-                confirmPassword: ""
-            }))
+
+        // dispatch(updateUser({
+        //     newValue: { likes: likes },
+        //     userId: auth.user.id
+        // }))
+
     }
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
-    const handleShowReport = () => { setShowReport(true) };
+    const handleShowReport = () => {
+        if (auth.user === null) {
+            handleShowSignIn()
+            return
+        }
+        setShowReport(true)
+    };
 
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
     const targetTooltip = useRef(null);
+
+    const [showReportToast, setShowReportToast] = useState(false);
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
@@ -123,8 +105,7 @@ function Banner({ platform }) {
                         <div style={{ marginLeft: "2%" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
                                 <i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers
-                                <i className={auth.user.likes.likedPlatforms.some(e => e === platform._id) ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike} style={{ marginLeft: "30px", cursor: "pointer" }}></i> {platform.likes && platform.likes.totalLikes ? platform.likes.totalLikes : 0}
-                                <i className={auth.user.likes.dislikedPlatforms.some(e => e === platform._id) ? "bi bi-hand-thumbs-down-fill" : "bi bi-hand-thumbs-down"} onClick={handleDislike} style={{ marginLeft: "10px", cursor: "pointer" }}></i> {platform.likes && platform.likes.totalDislikes ? platform.likes.totalDislikes : 0}
+                                <LikeDislike style={{marginLeft:"30px"}} handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {platform.description}
@@ -135,12 +116,8 @@ function Banner({ platform }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link>
-                                    {platform.subscribers.includes(auth.user.id) ?
-                                        <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
-                                        : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>
-                                    }
-
+                                    {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
+                                    {(auth.user && auth.user.id === platform.owner) ? <span></span> : <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform} />}
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}
@@ -166,7 +143,20 @@ function Banner({ platform }) {
                 <h4 className="ms-5 mt-1">{platform.name}</h4>
             </div>
 
-            <Report platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
+            <Report setShowReportToast={setShowReportToast} platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
+            <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+            <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+            <Toast
+                show={showReportToast}
+                animation
+                autohide={true}
+                delay={2500}
+                onClose={()=>{setShowReportToast(false)}}
+                className="position-absolute top-0 end-0"
+                style={{ marginRight: "5px", marginTop: "5px", width:"auto", fontSize:"12pt" }}
+            >
+                <Toast.Body>Report Submitted</Toast.Body>
+            </Toast>
         </div >
     )
 }

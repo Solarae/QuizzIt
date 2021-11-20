@@ -1,9 +1,9 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { editAward, deleteAward } from '../../actions/awardActions.js'
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
+import { getPlatform } from '../../actions/platformActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -69,6 +69,11 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal 
         handleClose();
+
+        // do a new getplatform request so that the editPlatform page displays the newly edited award
+        dispatch(getPlatform({
+            id: id
+        }))
     }, [isEditLoading, history, handleClose]);
 
     // waits for DELETE AWARD request to update redux store 
@@ -86,6 +91,11 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal
         handleClose();
+        
+        // do a new getplatform request so that the editPlatform page doesn't display the award anymore 
+        dispatch(getPlatform({
+            id: id
+        }))
     }, [isDeleteLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {

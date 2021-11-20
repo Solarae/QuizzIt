@@ -1,13 +1,10 @@
 import React, { useState } from 'react'
-import { Card, Image, Row, Col, Button } from 'react-bootstrap';
+import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import moment from 'moment'
-import mongoose from 'mongoose'
+
 
 function UserCard({ user }) {
-    const auth = useSelector((state) => state.auth)
-    const history = useHistory()
 
     const routeToUser = () => {
         // history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
@@ -24,13 +21,9 @@ function UserCard({ user }) {
                         <Row style={{ height: "20%" }}>
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToUser}>{user.username}</p>
                         </Row>
-                        <Row style={{ height: "20%", marginTop:"10px" }}>
+                        <Row style={{ height: "20%", marginTop: "10px" }}>
                             <p>
-                                {
-                                    user.platformInfos.reduce((prev, curr) => {
-                                        return prev + curr.points.allTime
-                                    }, 0)
-                                } Points<i class="bi bi-dot" /> Member of {user.platformInfos.length} platforms
+                                Member of {user.platforms.length} platforms
                             </p>
                         </Row>
                         <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>

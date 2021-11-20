@@ -1,20 +1,18 @@
-import React, { useState, useEffect, useCallback } from 'react'
-import { Container, Row, Col, Nav, FloatingLabel, Form, InputGroup, FormControl, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import Banner from '../components/Platform/Banner.js'
 import Settings from '../components/EditPlatform/Settings.js'
 import AwardSection from '../components/EditPlatform/AwardSection.js'
 import QuizSection from '../components/EditPlatform/QuizSection.js'
+import NotFound from '../components/NotFound.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 
 function EditPlatform() {
     const dispatch = useDispatch()
-    const history = useHistory()
     const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
+    const user = useSelector((state) => state.auth.user)
     const platform = useSelector((state) => state.platforms.platform)
     const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const awardsData = useSelector((state) => state.platforms.awardsData)
@@ -33,6 +31,10 @@ function EditPlatform() {
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
+
+    if (user == null || user.id !== platform.owner) 
+        return <NotFound/>
+
     return (
         <div className="justify-content-between">
             {Object.keys(platform).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
@@ -47,7 +49,6 @@ function EditPlatform() {
                 <hr/>
                 <Settings platform={platform}></Settings>
             </div>
-
         </div >
     )
 }

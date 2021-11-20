@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
 import { Container, Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import EditProfile from '../components/Profile/EditProfile';
 import DeleteProfile from '../components/Profile/DeleteProfile';
 
 function Profile() {
-    const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const history = useHistory()
 
     const [showUsernameModal, setShowUsernameModal] = useState(false);
     const handleCloseUsernameModal = () => { setShowUsernameModal(false) };
@@ -26,6 +23,14 @@ function Profile() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
     const handleShowDeleteModal = () => { setShowDeleteModal(true) };
+
+    if(!auth.user){
+        return (
+            <div>Loading...</div>
+        )
+    }
+
+
 
     return (
         <Container>

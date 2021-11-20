@@ -1,9 +1,9 @@
-import React, { useContext, useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { createAward } from '../../actions/awardActions.js'
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../../config.js'
+import { getPlatform } from '../../actions/platformActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -64,9 +64,13 @@ function CreateAward({ show, handleClose }) {
             return;
         }
 
-        // close the modal and redirect user to the edit quiz page 
+        // close the modal
         handleClose();
-        // history.push(`/`);
+
+        // do a new getplatform request so that the editPlatform page displays the newly created award
+        dispatch(getPlatform({
+            id: id
+        }))
     }, [isCreateLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {

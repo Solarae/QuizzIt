@@ -1,38 +1,38 @@
 // import Close from "./times-solid.svg";
-import { useEffect, useState } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap'
+import { useState } from 'react';
+import { Form, Button, Modal } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { editQuiz } from '../../../actions/quizActions';
 
-
-
-
-const EditQuestionModal = ({ quiz,show,setShow }) => {
-
-
-
-  let curr_name = quiz.name
-  let curr_description = quiz.description
-  const [name,setName] = useState(curr_name)
-  const [description,setDescription] = useState(curr_description)
+const EditQuestionModal = ({ quiz, show, setShow }) => {
+  const [values, setValues] = useState({
+    name: quiz.name,
+    description: quiz.description,
+    time: quiz.time,
+  })
   const dispatch = useDispatch();
+
+  const onChange = (e) => {
+    setValues({...values, [e.target.name]: e.target.value})
+  }
 
   const closeModal = (err) =>{
     console.log(show)
     setShow(!show)
-
   }
 
   const handleSubmit = (e) =>{
-
     e.preventDefault()
     setShow(!show)
 
-    console.log(name)
-    console.log(description)
+    console.log(values)
 
-    dispatch(editQuiz({ id: quiz._id,description:description,name: name }))
-
+    dispatch(editQuiz({ 
+      id: quiz._id, 
+      name: values.name, 
+      description: values.description, 
+      time: values.time, 
+    }))
   }
 
 
@@ -44,12 +44,16 @@ const EditQuestionModal = ({ quiz,show,setShow }) => {
           <Modal.Body>
               <Form.Group className="mb-3">
                   <Form.Label>Quiz Name</Form.Label>
-                  <Form.Control type="text" defaultValue={curr_name} name="question" onChange={(e)=> setName(e.target.value)} />
+                  <Form.Control type="text" defaultValue={values.name} name="name" onChange={onChange} />
               </Form.Group>
                   {/* {optionList} */}
               <Form.Group className="mb-3">
                   <Form.Label>Description</Form.Label>
-                  <Form.Control type="text" defaultValue={curr_description} name="answer" onChange={(e)=> setDescription(e.target.value)}  />
+                  <Form.Control type="text" defaultValue={values.description} name="description" onChange={onChange}  />
+              </Form.Group>
+              <Form.Group className="mb-3">
+                  <Form.Label>Time</Form.Label>
+                  <Form.Control type="text" defaultValue={values.time} name="time" onChange={onChange}  />
               </Form.Group>
           </Modal.Body>
           <Modal.Footer className="justify-content-between"> 

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react'
-import { Nav, Navbar, Container, Image, NavDropdown, Row, Col, Form, InputGroup, Button, FormControl } from 'react-bootstrap'
+import { Nav, Navbar, Container, Image, NavDropdown, Form, FormControl } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
 import SignIn from './SignIn.js';
@@ -84,6 +84,7 @@ function AppNavbar() {
                 >
                   <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link className="text-white">View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><LinkContainer to='/viewSubmission'><Nav.Link className="text-white">View Submissions</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item className="text-light" onClick={() => dispatch(logout(history))} href="#">Logout</NavDropdown.Item>
                 </NavDropdown>

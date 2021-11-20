@@ -1,18 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState } from 'react'
 import { Container, Row, Col, } from 'react-bootstrap';
-import { Link } from 'react-router-dom'
 import QuizCard from '../Platform/QuizCard.js'
 import CreateQuiz from './CreateQuiz.js'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
-
 function QuizSection({ quizzesData }) {
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const [errors, setErrors] = useState({});
-    const auth = useSelector((state) => state.auth)
-
     const [showCreateQuiz, setShowCreateQuiz] = useState(false);
 
     return (
