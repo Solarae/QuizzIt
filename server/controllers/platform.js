@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-import { uploadImgToCloud } from "./util.js";
+import { uploadImgToCloud, queryBuilder } from "./util.js";
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -213,16 +213,8 @@ export const reportPlatform = async (req, res) => {
 }
 
 export const getPlatformsByFilter = async (req, res) => {
-    var query = {}
-    for(var key in req.query){ 
-        query[key] = {
-            "$regex": req.query[key], 
-            "$options": "i"
-        }
-    }
-
     try {
-        const platforms = await Platform.find(query);
+        const platforms = await queryBuilder(req.query, Platform)
         res.status(200).json({ platforms: platforms });
     } catch (error) {
         res.status(404).json({ msg: error.message })
