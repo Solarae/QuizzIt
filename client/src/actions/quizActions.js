@@ -20,6 +20,8 @@ import {
     REPORT_QUIZ,
     REPORT_QUIZ_FAIL,
     EDIT_PROFILE_SUCCESS,
+    EDIT_QUIZ_THUMBNAIL,
+    EDIT_QUIZ_THUMBNAIL_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -276,7 +278,7 @@ export const reportQuiz = ({ id, userId, text }) => async (dispatch) => {
     }
     const body = JSON.stringify({ userId, text })
     try {
-        const res = await axios.post(`${URL}/api/platforms/${id}/report`, body, config);
+        const res = await axios.post(`${URL}/api/quizzes/${id}/report`, body, config);
         if (res.data.errors) {
             dispatch({
                 type: REPORT_QUIZ_FAIL,
@@ -291,6 +293,32 @@ export const reportQuiz = ({ id, userId, text }) => async (dispatch) => {
         }
     } catch (error) {
         console.log("error message: " + error.message);
+    }
+}
+
+export const uploadImage = (id, image) => async (dispatch) => {
+    try {
+        const formData = new FormData()
+        formData.append('image', image)
+
+        const res = await axios.post(`${URL}/api/quizzes/${id}/upload`, formData); 
+        console.log(res)
+        if (res.data.errors) {
+            dispatch({
+                type: EDIT_QUIZ_THUMBNAIL_FAIL,
+                payload: res.data
+            })
+        } else {
+            dispatch({
+                type: EDIT_QUIZ_THUMBNAIL,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_QUIZ_THUMBNAIL_FAIL
+        })
     }
 }
 

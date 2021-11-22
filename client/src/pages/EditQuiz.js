@@ -40,7 +40,7 @@ function EditQuiz() {
 
     return (
         <>
-            <Banner></Banner>
+            <Banner isEdit={true}></Banner>
 
             <div style={{ height: "10vh" }}></div>
 

@@ -31,7 +31,7 @@ function Quiz() {
     
     return (
         <>
-            <Banner></Banner>      
+            <Banner isEdit={false}></Banner>      
 
             <div style={{ height: "10vh" }}></div>
                 <Container>

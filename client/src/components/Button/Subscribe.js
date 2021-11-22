@@ -8,7 +8,7 @@ function Subscribe({ handleLeave, handleJoin, platform }) {
     return (
         <React.Fragment>
             {user && platform.subscribers.some((s) => s.userId === user.id) ?
-            <Button onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>Unsubscribe</Button>
+            <Button disabled={user.id===platform.owner} onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>{user.id===platform.owner ? "Owner" : "Unsubscribe"}</Button>
             : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
         </React.Fragment>
     )
