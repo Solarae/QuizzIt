@@ -12,7 +12,7 @@ export const uploadImgToCloud = async (img) =>{
     }
 }
 
-export const queryBuilder = async (queries, model) => {
+export const queryBuilder = (queries, model) => {
     var query = {}
     var operations = []
 
@@ -72,16 +72,17 @@ export const queryBuilder = async (queries, model) => {
             q = q.sort(op.sort)
         }     
     }
+    return q
+}
 
-    // Pagination
-
-    const pageSize = parseInt(queries.limit) || 10
-    const page = parseInt(queries.offset) || 0
-    const totalCount = await model.countDocuments(query)
+export const paginateQuery = async (q, model, limit, offset) => {
+    const pageSize = parseInt(limit) || 10
+    const page = parseInt(offset) || 0
+    const totalCount = await model.countDocuments(q)
     console.log(totalCount)
     const pages = Math.ceil(totalCount / pageSize)
     console.log(pages)
     q = q.limit(pageSize).skip(page * pageSize)
 
-    return {q, page, pages, totalCount}
+    return { q, page, pages, totalCount }
 }

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
-import { uploadImgToCloud, queryBuilder } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -214,7 +214,9 @@ export const reportPlatform = async (req, res) => {
 
 export const getPlatformsByFilter = async (req, res) => {
     try {
-        const { q, page, pages, totalCount } = await queryBuilder(req.query, Platform)
+        var query = queryBuilder(req.query, Platform)
+        console.log(query)
+        const { q, page, pages, totalCount } = await paginateQuery(query, Platform, req.query.limit, req.query.offset)
 
         if (page > pages) 
             return res.status(404).json({ msg: "Page doesn't exist" })
