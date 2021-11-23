@@ -214,8 +214,19 @@ export const reportPlatform = async (req, res) => {
 
 export const getPlatformsByFilter = async (req, res) => {
     try {
-        const platforms = await queryBuilder(req.query, Platform)
-        res.status(200).json({ platforms: platforms });
+        const { q, page, pages, totalCount } = await queryBuilder(req.query, Platform)
+
+        if (page > pages) 
+            return res.status(404).json({ msg: "Page doesn't exist" })
+        
+        const platforms = await q
+
+        res.status(200).json({ 
+            platforms: platforms,
+            page,
+            pages,
+            totalCount
+        });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }

@@ -1,4 +1,5 @@
 import cloudinary from "../utils/cloudinary.js";
+import Platform from '../models/Platform.js'
 
 export const uploadImgToCloud = async (img) =>{
     try {
@@ -11,7 +12,7 @@ export const uploadImgToCloud = async (img) =>{
     }
 }
 
-export const queryBuilder = (queries, model) => {
+export const queryBuilder = async (queries, model) => {
     var query = {}
     var operations = []
 
@@ -48,6 +49,8 @@ export const queryBuilder = (queries, model) => {
                 operation: 'sort',
                 sort: sort
             })
+        } else if (key === 'limit' || key === 'offset') {
+            break
         } else if (key === 'name') {
             query[key] = {
                 "$regex": queries[key], 
@@ -69,5 +72,16 @@ export const queryBuilder = (queries, model) => {
             q = q.sort(op.sort)
         }     
     }
-    return q
+
+    // Pagination
+
+    const pageSize = parseInt(queries.limit) || 10
+    const page = parseInt(queries.offset) || 0
+    const totalCount = await model.countDocuments(query)
+    console.log(totalCount)
+    const pages = Math.ceil(totalCount / pageSize)
+    console.log(pages)
+    q = q.limit(pageSize).skip(page * pageSize)
+
+    return {q, page, pages, totalCount}
 }
