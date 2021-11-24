@@ -86,7 +86,8 @@ export const deletePlatform = async (req, res) => {
 
 export const getPlatform = async (req, res) => {
     try {
-        const platform = await Platform.findById(req.params.id);
+        var query = queryBuilder(Platform.findById(req.params.id), req.query, Platform)
+        const platform = await query;
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
         res.status(200).json({ platform: platform });
     } catch (error) {

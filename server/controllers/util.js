@@ -12,7 +12,7 @@ export const uploadImgToCloud = async (img) =>{
     }
 }
 
-export const queryBuilder = (queries, model) => {
+export const queryBuilder = (q, queries, model) => {
     var query = {}
     var operations = []
 
@@ -60,8 +60,8 @@ export const queryBuilder = (queries, model) => {
             query[key] = queries[key]
         }
     }
-    
-    var q = model.find(query)
+   
+    q = q ? q : model.find(query)
     for (var o in operations) {
         const op = operations[o]
         if (op.operation === 'populate') {
@@ -72,6 +72,7 @@ export const queryBuilder = (queries, model) => {
             q = q.sort(op.sort)
         }     
     }
+    
     return q
 }
 
