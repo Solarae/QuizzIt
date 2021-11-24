@@ -28,7 +28,7 @@ export const searchPlatform = ({ query }) => async (dispatch) => {
         dispatch({
             type: SEARCH_PLATFORM_REQ
         });
-        const res = await axios.get(`${URL}/api/platforms/`, config);
+        const res = await axios.get(`${URL}/api/platforms`, config);
 
         if (res.data.errors) {
             dispatch({

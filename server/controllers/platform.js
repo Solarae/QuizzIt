@@ -215,7 +215,7 @@ export const reportPlatform = async (req, res) => {
 
 export const getPlatformsByFilter = async (req, res) => {
     try {
-        var query = queryBuilder(req.query, Platform)
+        var query = queryBuilder(null, req.query, Platform)
         console.log(query)
         const { q, page, pages, totalCount } = await paginateQuery(query, Platform, req.query.limit, req.query.offset)
 
