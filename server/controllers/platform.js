@@ -260,17 +260,22 @@ export const getPlatformMemberlist = async(req,res)=> {
 }
 export const getLeaderboardByType = async (req, res) => {
     const { type } = req.query
-    console.log(type)
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 10 
     
     if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
         return res.status(404).json({ msg: "Invalid leaderboard type" }); 
 
-    const select = { [`${type}_leaderboard`]: 1 }
-
     try {
-        const platform = await Platform.findById(req.params.id, select).populate()
+        const platform = await Platform.findById(req.params.id).slice(`${type}_leaderboard`, [skip,limit]).populate(`${type}_leaderboard.userId`, 'username')
         if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
-        res.status(200).json({ platform: platform });
+        const plat = await Platform.findById(req.params.id)
+
+        const leaderboardTotalCount = plat[`${type}_leaderboard`].length
+        const leaderboardPages = Math.ceil(leaderboardTotalCount / platform[`${type}_leaderboard`].length)
+        const leaderboardPage = skip / limit
+
+        res.status(200).json({ leaderboard: platform[`${type}_leaderboard`], leaderboardPage, leaderboardPages, leaderboardTotalCount });
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }

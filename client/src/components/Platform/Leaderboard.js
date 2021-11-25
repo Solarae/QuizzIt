@@ -1,27 +1,31 @@
-import React, { useState } from 'react'
-import { Image, Row, Col, Table, Nav, Card, Pagination } from 'react-bootstrap';
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Image, Row, Col, Table, Nav, Card } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux'
+import { getPlatformLeaderboard } from '../../actions/platformActions';
+import Pagination from '../Pagination'
 
 function Leaderboard({ platform }) {
-    const memberList = useSelector((state) => state.platforms.memberList)
+    const dispatch = useDispatch()
+    const [type, setType] = useState("daily")
+    const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
+    const leaderboard = useSelector((state) => state.platforms.leaderboard)
+    const pages = useSelector((state) => state.platforms.leaderboardPages)
+    const [page, setPage] = useState(1)
 
-    const [leaderboard, setLb] = useState({
-        type: "All",
-        lb: platform.allTime_leaderboard
-    })
-
-    // for pagination buttons
-    let active = 1;
-    let items = [];
-    for (let number = 1; number <= 5; number++) {
-        items.push(
-            <Pagination.Item key={number} active={number === active}>
-                {number}
-            </Pagination.Item>,
-        );
+    console.log(pages)
+    useEffect(() => {
+        console.log("CALLING API")
+        dispatch(getPlatformLeaderboard(
+            platform._id,
+            type,
+            page
+        ))
+    }, [page, type, dispatch]);
+    
+    if (isGetPlatLeaderboardLoading) {
+        return (<div>Loading...</div>)
     }
-
-
+    
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
@@ -33,81 +37,27 @@ function Leaderboard({ platform }) {
                 <Nav fill variant="tabs"
                 >
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Daily", lb: platform.daily_leaderboard })} disabled={leaderboard.type === "Daily"}>Daily</Nav.Link>
+                        <Nav.Link onClick={() => setType("daily")} disabled={type === "daily"}>Daily</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Weekly", lb: platform.weekly_leaderboard })} disabled={leaderboard.type === "Weekly"} >Weekly</Nav.Link>
+                        <Nav.Link onClick={() => setType("weekly")} disabled={type === "weekly"} >Weekly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Monthly", lb: platform.monthly_leaderboard })} disabled={leaderboard.type === "Monthly"}>Monthly</Nav.Link>
+                        <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Biannual", lb: platform.biannual_leaderboard })} disabled={leaderboard.type === "Biannual"}>6mo</Nav.Link>
+                        <Nav.Link onClick={() => setType("biannual")} disabled={type === "biannual"}>6mo</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Yearly", lb: platform.year_leaderboard })} disabled={leaderboard.type === "Yearly"}>Yearly</Nav.Link>
+                        <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "All", lb: platform.allTime_leaderboard })} disabled={leaderboard.type === "All"}>
+                        <Nav.Link onClick={() => setType("allTime")} disabled={type === "allTime"}>
                             All
                         </Nav.Link>
                     </Nav.Item>
                 </Nav>
                 <br />
-            </Row>
-
-            <Row className="justify-content-center" style={{ marginTop: "10px" }}>
-                <Card border="dark" style={{ width: '50%' }}>
-                    <Card.Body>
-                        <Card.Title>1</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[0] && memberList.find((m) => m.userId._id === leaderboard.lb[0].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[0].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[0] ? (leaderboard.lb[0].points + ' Points') : ""}
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </Row>
-
-            <Row className="justify-content-center" style={{ marginTop: "10px" }}>
-                <Card border="dark" style={{ width: '40%', marginRight: "10px" }}>
-                    <Card.Body>
-                        <Card.Title>2</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[1] && memberList.find((m) => m.userId._id === leaderboard.lb[1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[1].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[1] ? (leaderboard.lb[1].points + ' Points') : ""}
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card border="dark" style={{ width: '40%', marginLeft: "10px" }}>
-                    <Card.Body>
-                        <Card.Title>3</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[2] && memberList.find((m) => m.userId._id === leaderboard.lb[2].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[2].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[2] ? (leaderboard.lb[2].points + ' Points') : ""}
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
             </Row>
 
             <Row style={{ marginTop: "10px" }}>
@@ -120,17 +70,16 @@ function Leaderboard({ platform }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.from({ length: 7 }, (_, i) => i + 4).map((rank, _) =>
+                        {leaderboard.map((rank, index) =>
                             <tr>
-                                <td>{rank}</td>
+                                <td>{(page - 1) * 10 + index +1}</td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.username : "--"}
+                                    {rank.userId.username}
                                 </td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? leaderboard.lb[rank - 1].points : "--"}
+                                    {rank.points}
                                 </td>
                             </tr>
-
                         )}
                     </tbody>
                 </Table>
@@ -138,7 +87,7 @@ function Leaderboard({ platform }) {
 
             <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                 <Col>
-                    <Pagination className="justify-content-center">{items}</Pagination>
+                    <Pagination page={page} pages={pages} changePage={setPage} />
                 </Col>
             </Row>
 

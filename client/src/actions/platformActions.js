@@ -7,6 +7,7 @@ import {
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
     EDIT_MEMBER_ROLE_REQ,
+    GET_PLAT_LEADERBOARD_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -25,6 +26,8 @@ import {
     REPORT_PLATFORM_FAIL,
     EDIT_MEMBER_ROLE_SUCCESS,
     EDIT_MEMBER_ROLE_FAIL,
+    GET_PLAT_LEADERBOARD_SUCCESS,
+    GET_PLAT_LEADERBOARD_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
@@ -134,11 +137,12 @@ export const uploadImage = (id, image, type, userId) => async (dispatch) => {
     }
 }
 
-export const getPlatform = ({ id }) => async (dispatch) => {
+export const getPlatform = ({ id, params }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
+        params
     }
 
     try {
@@ -465,6 +469,32 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
         console.log("error message: " + error.message);
         dispatch({
             type: EDIT_MEMBER_ROLE_FAIL,
+        })
+    }
+}
+
+export const getPlatformLeaderboard = (platformId, type, page) => async (dispatch) => {
+    const config = {
+        params: {
+            type,
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_FAIL
         })
     }
 }

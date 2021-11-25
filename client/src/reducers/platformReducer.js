@@ -7,6 +7,7 @@ import {
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
     EDIT_MEMBER_ROLE_REQ,
+    GET_PLAT_LEADERBOARD_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -25,6 +26,8 @@ import {
     REPORT_PLATFORM_FAIL,
     EDIT_MEMBER_ROLE_SUCCESS,
     EDIT_MEMBER_ROLE_FAIL,
+    GET_PLAT_LEADERBOARD_SUCCESS,
+    GET_PLAT_LEADERBOARD_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM
 } from '../actions/types'
@@ -38,10 +41,15 @@ const initialState = {
     isLeaveLoading: false,
     isReportLoading: false,
     isEditRoleLoading: false,
+    isGetPlatLeaderboardLoading: false,
     platform: null,
     quizzesData: null,
     awardsData: null,
     memberList: null,
+    leaderboard: [], 
+    leaderboardPage: 0,
+    leaderboardPages: 1,
+    leaderboardTotalCount: 0,
     errors: null
 }
 
@@ -162,6 +170,18 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isEditRoleLoading: false,
             }
+        case GET_PLAT_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetPlatLeaderboardLoading: false,
+            }
+        case GET_PLAT_LEADERBOARD_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetPlatLeaderboardLoading: false,
+            }
         case GET_PLATFORM_REQ:
             return {
                 ...state,
@@ -202,12 +222,16 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 isEditRoleLoading: true 
             }
+        case GET_PLAT_LEADERBOARD_REQ:
+            return {
+                ...state,
+                isGetPlatLeaderboardLoading: true 
+            }
         case UPVOTE_PLATFORM:
             return {
                 ...state,
                 ...action.payload
             }
-
         case DOWNVOTE_PLATFORM:
             return{
                 ...state,
