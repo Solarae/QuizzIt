@@ -6,7 +6,7 @@ import { joinPlatform, leavePlatform } from '../../actions/platformActions'
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 
-function Subscribe({ platform }) {
+function Subscribe({ platform, size, style }) {
     const dispatch = useDispatch()
     const user = useSelector((state) => state.auth.user)
 
@@ -39,8 +39,8 @@ function Subscribe({ platform }) {
     return (
         <React.Fragment>
             {user && platform.subscribers.some((s) => s.userId === user.id) ?
-            <Button disabled={user.id===platform.owner} onClick={handleLeave} variant="secondary btn-lg" style={{ marginLeft: "10px" }}>{user.id===platform.owner ? "Owner" : "Unsubscribe"}</Button>
-            : <Button onClick={handleJoin} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Subscribe</Button>}
+            <Button size={size} disabled={user.id===platform.owner} onClick={handleLeave} variant="secondary btn-lg" style={{ ...style }}>{user.id===platform.owner ? "Owner" : "Unsubscribe"}</Button>
+            : <Button size={size} onClick={handleJoin} variant="primary btn-lg" style={{ ...style }}>Subscribe</Button>}
             
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
