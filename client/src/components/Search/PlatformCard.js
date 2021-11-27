@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Image, Row, Col } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
+import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
@@ -24,24 +24,6 @@ function PlatformCard({ platform }) {
 
     const routeToPlatform = () => {
         history.push(`/platform/${platform._id}`);
-    }
-
-    const handleJoin = () => {
-        if (user === null) {
-            handleShowSignIn()
-            return 
-        }
-        dispatch(joinPlatform({
-            userId: user.id,
-            platformId: platform._id
-        }))
-    }
-
-    const handleLeave = () => {
-        dispatch(leavePlatform({
-            userId: user.id,
-            platformId: platform._id
-        }))
     }
 
     const handleLike = () => {
@@ -93,7 +75,7 @@ function PlatformCard({ platform }) {
 
                     </Col >
                     <Col md={3} align="center" className="my-auto" style={{}}>
-                        <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform}/>
+                        <Subscribe platform={platform}/>
                     </Col>
                 </Row>
             </Card.Body>
