@@ -45,8 +45,8 @@ function Banner({ isEdit }) {
 
     useEffect(() => {
         console.log(quiz.platformId)
-        if (!platform) dispatch(getPlatform({ id: quiz.platformId}))
-    }, [dispatch, platform])    
+        dispatch(getPlatform({ id: quiz.platformId}))
+    }, [dispatch, quiz])    
 
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
