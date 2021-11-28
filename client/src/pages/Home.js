@@ -24,7 +24,7 @@ function Home() {
         console.log("searching");
 
         dispatch(searchPlatform({
-            query: { 'name': query }
+            query: { 'sort': "likes.totalLikes desc"}
         }))
 
         dispatch(searchQuiz({
@@ -49,7 +49,7 @@ function Home() {
                             </Row>
 
                             <Row xs={1} md={4} className="g-4 me-auto">
-                                {platforms.map((p, idx) => (
+                                {platforms.slice(0, 8).map((p, idx) => (
 
                                     <Col align="center">
                                         <PlatformCard platform={p}></PlatformCard>
@@ -63,7 +63,7 @@ function Home() {
                                 <h5><i class="bi bi-graph-up-arrow"></i>  Trending Quizzes</h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
-                                {quizzes.map((q, idx) => (
+                                {quizzes.slice(0, 8).map((q, idx) => (
 
                                     <Col align="center">
                                         <QuizCard quiz={q}></QuizCard>
