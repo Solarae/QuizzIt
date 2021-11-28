@@ -23,7 +23,7 @@ function MiniLeaderboard({ doc }) {
             history.push(`/platform/${id}/quiz/${qid}/leaderboard`)
         }
         else{
-            // history.push(`/leaderboard/global`)
+            history.push(`/leaderboard/global`)
         }
     }
 

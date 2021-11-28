@@ -11,6 +11,7 @@ import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
 import PlatformLeaderboard from './pages/PlatformLeaderboard';
+import GlobalLeaderboard from './pages/GlobalLeaderboard';
 import EditPlatform from './pages/EditPlatform';
 import Search from './pages/Search';
 
@@ -52,6 +53,7 @@ function App() {
         <Route path='/viewSubmission' exact component={ViewSubmission} />
         <Route path='/submission/reviewSubmission/:id' exact component={ReviewSubmission} />
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
+        <Route path='/leaderboard/global' exact component={GlobalLeaderboard} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>
