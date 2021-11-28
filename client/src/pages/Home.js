@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 
 import PlatformCard from '../components/Home/PlatformCard'
-import QuizCard from '../components/Home/QuizCard'
+import QuizCardMini from '../components/Cards/QuizCardMini'
 import MiniLeaderboard from '../components/Platform/MiniLeaderboard'
 
 import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
@@ -66,7 +66,7 @@ function Home() {
                                 {quizzes.slice(0, 8).map((q, idx) => (
 
                                     <Col align="center">
-                                        <QuizCard quiz={q}></QuizCard>
+                                        <QuizCardMini quiz={q}></QuizCardMini>
                                     </Col>
                                 ))}
                             </Row>
