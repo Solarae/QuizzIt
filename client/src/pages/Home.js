@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import PlatformCard from '../components/Home/PlatformCard'
 import QuizCardMini from '../components/Cards/QuizCardMini'
-import MiniLeaderboard from '../components/Platform/MiniLeaderboard'
+import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard'
 
 import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
 
@@ -75,7 +75,12 @@ function Home() {
 
                     </div>
                     <div className="col" style={{}}>
-                        <MiniLeaderboard platform={platforms[0]}></MiniLeaderboard>
+                        <Row>
+                            <Col align="center">
+                                <h3 >Global Leaderboard</h3>
+                            </Col>
+                        </Row>
+                        <MiniLeaderboard doc={platforms[0]}></MiniLeaderboard>
                     </div>
                 </div>
             </div>

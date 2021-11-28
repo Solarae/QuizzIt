@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
 import MemberList from '../components/Platform/MemberList.js'
-import MiniLeaderboard from '../components/Platform/MiniLeaderboard.js'
+import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -64,7 +64,12 @@ function Platform() {
 
                     </div>
                     <div className="col" style={{}}>
-                        <MiniLeaderboard platform={platform}></MiniLeaderboard>
+                        <Row>
+                            <Col align="center">
+                                <h3 >Platform Leaderboard</h3>
+                            </Col>
+                        </Row>
+                        <MiniLeaderboard doc={platform}></MiniLeaderboard>
                     </div>
                 </div>
             </div>

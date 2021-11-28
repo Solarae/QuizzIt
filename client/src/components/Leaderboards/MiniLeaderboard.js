@@ -1,37 +1,49 @@
 import React, { useState } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
-function MiniLeaderboard({ platform }) {
+function MiniLeaderboard({ doc }) {
     const history = useHistory()
+    const location = useLocation();
     const memberList = useSelector((state) => state.platforms.memberList)
 
     const [leaderboard, setLb] = useState({
         type: "All",
-        lb: platform.allTime_leaderboard
+        lb: doc.allTime_leaderboard
     })
 
-    if (!memberList){
+    let { id, qid } = useParams();  // get the platform ID and/or quiz ID from the url if this is a platform or quiz leaderboard
+
+    const routeToLeaderboardPage = () => {
+        if (id && !qid) {
+            history.push(`/platform/${id}/leaderboard`)
+        }
+        else if (id && qid){
+            history.push(`/platform/${id}/quiz/${qid}/leaderboard`)
+        }
+        else{
+            // history.push(`/leaderboard/global`)
+        }
+    }
+
+    if (!memberList) {
         return (<div>Loading...</div>)
     }
 
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
-                <h3>Platform Leaderboard</h3>
-            </Row>
-            <Row>
                 <Nav fill variant="tabs"
                 >
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Daily", lb: platform.daily_leaderboard })} disabled={leaderboard.type === "Daily"}>Daily</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Daily", lb: doc.daily_leaderboard })} disabled={leaderboard.type === "Daily"}>Daily</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Weekly", lb: platform.weekly_leaderboard })} disabled={leaderboard.type === "Weekly"}>Weekly</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "Weekly", lb: doc.weekly_leaderboard })} disabled={leaderboard.type === "Weekly"}>Weekly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item >
-                        <Nav.Link onClick={() => setLb({ type: "All", lb: platform.allTime_leaderboard })} disabled={leaderboard.type === "All"}>All</Nav.Link>
+                        <Nav.Link onClick={() => setLb({ type: "All", lb: doc.allTime_leaderboard })} disabled={leaderboard.type === "All"}>All</Nav.Link>
                     </Nav.Item>
                 </Nav>
                 <br />
@@ -119,7 +131,7 @@ function MiniLeaderboard({ platform }) {
             </Row>
 
             <Row>
-                <Button variant="primary" size="sm" onClick={() => { history.push(`/platform/${platform._id}/leaderboard`) }}>
+                <Button variant="primary" size="sm" onClick={routeToLeaderboardPage}>
                     View Leaderboard
                 </Button>
             </Row>

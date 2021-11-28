@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Platform/Banner.js'
-import Leaderboard from '../components/Platform/Leaderboard.js'
+import Leaderboard from '../components/Leaderboards/Leaderboard.js'
 import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -33,10 +33,15 @@ function Platform() {
             <div style={{ height: "50px" }}></div>
 
             <Container>
-                <p style={{ cursor: 'pointer', }} onClick={() => {history.push(`/platform/${id}`)}}><i class="bi bi-arrow-left"></i> Back to platform page</p>
+                <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}`) }}><i class="bi bi-arrow-left"></i> Back to platform page</p>
                 <Row style={{}}>
                     <Col className="justify-content-md-center" style={{}}>
-                        <Leaderboard platform={platform}></Leaderboard>
+                        <Row>
+                            <Col align="center">
+                                <h3 >Platform Leaderboard</h3>
+                            </Col>
+                        </Row>
+                        <Leaderboard></Leaderboard>
                     </Col>
                 </Row>
             </Container >

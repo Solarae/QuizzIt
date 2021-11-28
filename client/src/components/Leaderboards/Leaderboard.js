@@ -3,9 +3,11 @@ import { Image, Row, Col, Table, Nav, Card } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getPlatformLeaderboard } from '../../actions/platformActions';
 import Pagination from '../Pagination'
+import { useParams } from 'react-router-dom'
 
-function Leaderboard({ platform }) {
+function Leaderboard() {
     const dispatch = useDispatch()
+    let { id, qid } = useParams();  // get the platform ID and quiz ID from the url
     const [type, setType] = useState("daily")
     const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
     const leaderboard = useSelector((state) => state.platforms.leaderboard)
@@ -16,7 +18,7 @@ function Leaderboard({ platform }) {
     useEffect(() => {
         console.log("CALLING API")
         dispatch(getPlatformLeaderboard(
-            platform._id,
+            id,
             type,
             page
         ))
@@ -28,11 +30,6 @@ function Leaderboard({ platform }) {
     
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
-            <Row>
-                <Col align="center">
-                    <h3 >Platform Leaderboard</h3>
-                </Col>
-            </Row>
             <Row>
                 <Nav fill variant="tabs"
                 >
