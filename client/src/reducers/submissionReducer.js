@@ -5,13 +5,21 @@ import {
     GET_ONE_SUBMISSION_SUCCESS,
     GET_SUBMISSION_FAIL,
     GET_SUBMISSION_SUCCESS,
+    GET_SUBMISSIONS_REQ,
+    GET_SUBMISSIONS_SUCCESS,
+    GET_SUBMISSIONS_FAIL
 } from '../actions/types'
 
 const initialState = {
-    submission:null,
-    isLoading:true,
+    submissions: [],
+    page: 0,
+    pages: 1,
+    totalCount: 0 ,
+    submission: null,
+    isGetSubmissionLoading:true,
+    isGetSubmissionsLoading: false,
     singleSubmission:null,
-    isLoadingSingle:true
+    isGetSubmissionLoadingSingle:true
 }
 
 const submissionReducer = (state=initialState, action) => {
@@ -24,33 +32,45 @@ const submissionReducer = (state=initialState, action) => {
             return {
                 ...state,
             }
-            
         case GET_SUBMISSION_SUCCESS:
             return{
                 ...state,
                 ...action.payload,
-                isLoading:false,
+                isGetSubmissionLoading:false,
             }
-        
         case GET_SUBMISSION_FAIL:
             return{
                 ...state,
                 ...action.payload
             }
-        
+        case GET_SUBMISSIONS_REQ:
+            return {
+                ...state,
+                isGetSubmissionsLoading: true
+            }
+        case GET_SUBMISSIONS_SUCCESS:
+            return{
+                ...state,
+                ...action.payload,
+                isGetSubmissionsLoading: false,
+            }
+        case GET_SUBMISSIONS_FAIL:
+            return{
+                ...state,
+                ...action.payload,
+                isGetSubmissionsLoading:false,
+            }
         case GET_ONE_SUBMISSION_SUCCESS:
             return{
                 ...state,
                 ...action.payload,
-                isLoadingSingle:false,
+                isGetSubmissionLoadingSingle:false,
             }
         case GET_ONE_SUBMISSION_FAIL:
             return{
                 ...state,
                 ...action.payload
             }
-
-
         default:
             return state;
     }

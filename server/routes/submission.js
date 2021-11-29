@@ -1,13 +1,13 @@
 import express from 'express';
 import { 
-    createSubmission,getUserSubmissions, getQuizSubmissions, getSubmission
+    createSubmission, getSubmissions, getQuizSubmissions, getSubmission
    
 } from '../controllers/submission.js';
 
 const router = express.Router();
 
 //crud on submissions
-router.get("/getUserSubmissions/:id",getUserSubmissions);
+router.get("/", getSubmissions);
 router.post("/createSubmission",createSubmission);
 router.get("/getQuizSubmissions/:uid/:qid",getQuizSubmissions)
 router.get("/getSubmission/:id",getSubmission)
