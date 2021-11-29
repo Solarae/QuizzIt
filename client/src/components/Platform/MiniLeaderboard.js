@@ -1,25 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { getPlatformLeaderboard } from '../../actions/platformActions';
 
 function MiniLeaderboard({ platform }) {
+    const history = useHistory()
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
     const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
     const leaderboard = useSelector((state) => state.platforms.leaderboard)
-    const pages = useSelector((state) => state.platforms.leaderboardPages)
-    const [page, setPage] = useState(1)
 
-    console.log(pages)
     useEffect(() => {
         console.log("CALLING API")
         dispatch(getPlatformLeaderboard(
             platform._id,
             type,
-            page
+            1
         ))
-    }, [page, type, dispatch]);
+    }, [type, dispatch]);
     
     if (isGetPlatLeaderboardLoading) {
         return (<div>Loading...</div>)
@@ -65,7 +64,7 @@ function MiniLeaderboard({ platform }) {
                     <tbody>
                         {leaderboard.map((rank, index) =>
                             <tr>
-                                <td>{(page - 1) * 10 + index +1}</td>
+                                <td>{index + 1 }</td>
                                 <td>
                                     {rank.userId.username}
                                 </td>
