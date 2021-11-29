@@ -77,7 +77,7 @@ export const deletePlatform = async (req, res) => {
             { _id: { $in: platform.subscribers.map(s => s.userId ) } },
             { $pull: { platforms: platform._id } }
         )
-        console.log(count)
+        
         res.status(200).json({ platform: platform })
     } catch (error) {
         res.status(404).json({ msg: error.message })
@@ -216,7 +216,6 @@ export const reportPlatform = async (req, res) => {
 export const getPlatformsByFilter = async (req, res) => {
     try {
         var query = queryBuilder(null, req.query, Platform)
-        console.log(query)
         const { q, page, pages, totalCount } = await paginateQuery(query, Platform, req.query.limit, req.query.offset)
 
         if (page > pages) 
@@ -239,15 +238,15 @@ export const getPlatformMemberlist = async (req,res) => {
     const skip = parseInt(req.query.offset) || 0
     const limit = parseInt(req.query.limit) || 10 
     try {
-        const platform = await Platform.findById(req.params.id).slice(subscribers, [skip,limit]).populate(subscribers.userId, 'username')
+        const platform = await Platform.findById(req.params.id).slice(`subscribers`, [skip,limit]).populate(`subscribers.userId`, 'username')
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
         const plat = await Platform.findById(req.params.id)
         const memberListTotalCount = plat.subscribers.length
-        const memberListPages = Math.ceil(memberListTotalCount / platform.subscribers.length)
+        const memberListPages = Math.ceil(memberListTotalCount / limit )
         const memberListPage = skip / limit
 
-        return res.status(200).json( { members: platform.subscribers, memberListPage, memberListPages, memberListTotalCount } )
+        return res.status(200).json( { memberList: platform.subscribers, memberListPage, memberListPages, memberListTotalCount } )
 
     } catch (error) {
         res.status(500).json({msg:error.message})
@@ -268,7 +267,7 @@ export const getLeaderboardByType = async (req, res) => {
         const plat = await Platform.findById(req.params.id)
 
         const leaderboardTotalCount = plat[`${type}_leaderboard`].length
-        const leaderboardPages = Math.ceil(leaderboardTotalCount / platform[`${type}_leaderboard`].length)
+        const leaderboardPages = Math.ceil(leaderboardTotalCount / limit)
         const leaderboardPage = skip / limit
 
         res.status(200).json({ leaderboard: platform[`${type}_leaderboard`], leaderboardPage, leaderboardPages, leaderboardTotalCount });

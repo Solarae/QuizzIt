@@ -8,6 +8,7 @@ import {
     REPORT_PLATFORM_REQ,
     EDIT_MEMBER_ROLE_REQ,
     GET_PLAT_LEADERBOARD_REQ,
+    GET_MEMBERLIST_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -28,6 +29,8 @@ import {
     EDIT_MEMBER_ROLE_FAIL,
     GET_PLAT_LEADERBOARD_SUCCESS,
     GET_PLAT_LEADERBOARD_FAIL,
+    GET_MEMBERLIST_SUCCESS,
+    GET_MEMBERLIST_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
@@ -189,18 +192,18 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
                 })
             }
 
-            // get the memberlist 
-            let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
-            if (member_res.data.errors) {
-                dispatch({
-                    type: GET_PLATFORM_FAIL,
-                    payload: member_res.data
-                })
-            }
+            // // get the memberlist 
+            // let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
+            // if (member_res.data.errors) {
+            //     dispatch({
+            //         type: GET_PLATFORM_FAIL,
+            //         payload: member_res.data
+            //     })
+            // }
 
             res.data.quizzesData = quizzes; // pack the quizzes data with the platform
             res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
-            res.data.memberList = member_res.data.members; // pack the awards data with the platform
+            // res.data.memberList = member_res.data.members; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data

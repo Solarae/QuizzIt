@@ -1,24 +1,23 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Dropdown } from 'react-bootstrap';
+import { Table, Dropdown, Row, Col } from 'react-bootstrap';
 import RoleButton from './RoleButton.js'
+import Pagination from '../Pagination.js';
 import { getMemberList } from '../../actions/platformActions.js';
 
 function MemberList({ platform }) {
-    const history = useHistory()
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const isGetMemberlistLoading = useSelector((state) => state.platforms.isGetMemberlistLoading);
     const memberList = useSelector((state) => state.platforms.memberList)
-    const pages = useSelector((state) => state.platforms.leaderboardPages)
+    const pages = useSelector((state) => state.platforms.memberListPages)
     const [page, setPage] = useState(1)
 
     useEffect(() => {
         console.log("CALLING API")
         dispatch(getMemberList(
             platform._id,
-            type,
-            1
+            page
         ))
     }, [page, dispatch]);
     
@@ -38,6 +37,7 @@ function MemberList({ platform }) {
 
     return (
         <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
+            <Row>
             <Table hover>
                 <thead>
                     <tr>
@@ -59,7 +59,8 @@ function MemberList({ platform }) {
                             )}
                 </tbody>
             </Table>
-            
+            </Row>
+
             <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                 <Col>
                     <Pagination page={page} pages={pages} changePage={setPage} />
