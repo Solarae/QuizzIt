@@ -46,9 +46,6 @@ function Leaderboard({ platform }) {
                         <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
-                        <Nav.Link onClick={() => setType("biannual")} disabled={type === "biannual"}>6mo</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
                         <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>

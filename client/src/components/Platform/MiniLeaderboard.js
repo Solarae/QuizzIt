@@ -4,15 +4,24 @@ import { useHistory } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function MiniLeaderboard({ platform }) {
-    const history = useHistory()
-    const memberList = useSelector((state) => state.platforms.memberList)
+    const dispatch = useDispatch()
+    const [type, setType] = useState("daily")
+    const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
+    const leaderboard = useSelector((state) => state.platforms.leaderboard)
+    const pages = useSelector((state) => state.platforms.leaderboardPages)
+    const [page, setPage] = useState(1)
 
-    const [leaderboard, setLb] = useState({
-        type: "All",
-        lb: platform.allTime_leaderboard
-    })
-
-    if (!memberList){
+    console.log(pages)
+    useEffect(() => {
+        console.log("CALLING API")
+        dispatch(getPlatformLeaderboard(
+            platform._id,
+            type,
+            page
+        ))
+    }, [page, type, dispatch]);
+    
+    if (isGetPlatLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
 
@@ -22,74 +31,26 @@ function MiniLeaderboard({ platform }) {
                 <h3>Platform Leaderboard</h3>
             </Row>
             <Row>
-                <Nav fill variant="tabs"
-                >
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Daily", lb: platform.daily_leaderboard })} disabled={leaderboard.type === "Daily"}>Daily</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setLb({ type: "Weekly", lb: platform.weekly_leaderboard })} disabled={leaderboard.type === "Weekly"}>Weekly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item >
-                        <Nav.Link onClick={() => setLb({ type: "All", lb: platform.allTime_leaderboard })} disabled={leaderboard.type === "All"}>All</Nav.Link>
-                    </Nav.Item>
-                </Nav>
-                <br />
-            </Row>
-
-            <Row className="justify-content-center" style={{ marginTop: "10px" }}>
-                <Card border="dark" style={{ width: '50%' }}>
-                    <Card.Body>
-                        <Card.Title>1</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[0] && memberList.find((m) => m.userId._id === leaderboard.lb[0].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[0].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[0] ? (leaderboard.lb[0].points + ' Points') : ""}
-                            </Row>
-
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </Row>
-
-            <Row className="justify-content-center" style={{ marginTop: "10px" }}>
-                <Card border="dark" style={{ width: '40%', marginRight: "10px" }}>
-                    <Card.Body>
-                        <Card.Title>2</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[1] && memberList.find((m) => m.userId._id === leaderboard.lb[1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[1].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[1] ? (leaderboard.lb[1].points + ' Points') : ""}
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-                <Card border="dark" style={{ width: '40%', marginLeft: "10px" }}>
-                    <Card.Body>
-                        <Card.Title>3</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[2] && memberList.find((m) => m.userId._id === leaderboard.lb[2].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[2].userId).userId.username : "--"}
-                            </Row>
-                            <Row className="justify-content-center">
-                                {leaderboard.lb[2] ? (leaderboard.lb[2].points + ' Points') : ""}
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
+            <Nav fill variant="tabs">
+                <Nav.Item>
+                    <Nav.Link onClick={() => setType("daily")} disabled={type === "daily"}>Daily</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={() => setType("weekly")} disabled={type === "weekly"} >Weekly</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>
+                </Nav.Item>
+                <Nav.Item>
+                    <Nav.Link onClick={() => setType("allTime")} disabled={type === "allTime"}>
+                        All
+                    </Nav.Link>
+                </Nav.Item>
+            </Nav>
+            <br />
             </Row>
 
             <Row style={{ marginTop: "10px" }}>
@@ -102,22 +63,20 @@ function MiniLeaderboard({ platform }) {
                         </tr>
                     </thead>
                     <tbody>
-                        {Array.from({ length: 7 }, (_, i) => i + 4).map((rank, _) =>
+                        {leaderboard.map((rank, index) =>
                             <tr>
-                                <td>{rank}</td>
+                                <td>{(page - 1) * 10 + index +1}</td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId).userId.username : "--"}
+                                    {rank.userId.username}
                                 </td>
                                 <td>
-                                    {leaderboard.lb[rank - 1] && memberList.find((m) => m.userId._id === leaderboard.lb[rank - 1].userId) ? leaderboard.lb[rank - 1].points : "--"}
+                                    {rank.points}
                                 </td>
                             </tr>
-
                         )}
                     </tbody>
                 </Table>
             </Row>
-
             <Row>
                 <Button variant="primary" size="sm" onClick={() => { history.push(`/platform/${platform._id}/leaderboard`) }}>
                     View Leaderboard
