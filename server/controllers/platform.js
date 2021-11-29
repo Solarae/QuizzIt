@@ -235,29 +235,25 @@ export const getPlatformsByFilter = async (req, res) => {
     }
 }
 
-export const getPlatformMemberlist = async(req,res)=> {
-
-    let platformId = req.params.id
-
-
+export const getPlatformMemberlist = async (req,res) => {
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 10 
     try {
-        let platform = await Platform.findById(platformId).populate({
-            path:'subscribers',
-            populate:{
-                path:'userId',
-                model: 'User'
-            }
-        })
-
+        const platform = await Platform.findById(req.params.id).slice(subscribers, [skip,limit]).populate(subscribers.userId, 'username')
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
+        const plat = await Platform.findById(req.params.id)
+        const memberListTotalCount = plat.subscribers.length
+        const memberListPages = Math.ceil(memberListTotalCount / platform.subscribers.length)
+        const memberListPage = skip / limit
 
-        return res.status(200).json({members:platform.subscribers})
+        return res.status(200).json( { members: platform.subscribers, memberListPage, memberListPages, memberListTotalCount } )
 
     } catch (error) {
         res.status(500).json({msg:error.message})
     }
 }
+
 export const getLeaderboardByType = async (req, res) => {
     const { type } = req.query
     const skip = parseInt(req.query.offset) || 0

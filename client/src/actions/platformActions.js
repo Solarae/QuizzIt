@@ -498,3 +498,29 @@ export const getPlatformLeaderboard = (platformId, type, page) => async (dispatc
         })
     }
 }
+
+export const getMemberList = (platformId, page) => async (dispatch) => {
+    const config = {
+        params: {
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+
+    try {
+        dispatch({
+            type: GET_MEMBERLIST_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/memberList`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_MEMBERLIST_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_FAIL
+        })
+    }
+}

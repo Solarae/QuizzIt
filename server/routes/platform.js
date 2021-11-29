@@ -19,7 +19,7 @@ const router = express.Router();
 
 router.get('/:id', getPlatform);
 router.get('/', getPlatformsByFilter);
-router.get('/:id/getMemberList',getPlatformMemberlist)
+router.get('/:id/memberList', getPlatformMemberlist)
 router.get('/:id/leaderboard', getLeaderboardByType);
 router.post('/', createPlatform);
 router.post('/:id/delete', deletePlatform);

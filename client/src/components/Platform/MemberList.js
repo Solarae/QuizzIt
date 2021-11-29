@@ -2,9 +2,29 @@ import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Dropdown } from 'react-bootstrap';
 import RoleButton from './RoleButton.js'
+import { getMemberList } from '../../actions/platformActions.js';
 
-function MemberList({ platform, memberList }) {
+function MemberList({ platform }) {
+    const history = useHistory()
+    const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
+    const isGetMemberlistLoading = useSelector((state) => state.platforms.isGetMemberlistLoading);
+    const memberList = useSelector((state) => state.platforms.memberList)
+    const pages = useSelector((state) => state.platforms.leaderboardPages)
+    const [page, setPage] = useState(1)
+
+    useEffect(() => {
+        console.log("CALLING API")
+        dispatch(getMemberList(
+            platform._id,
+            type,
+            1
+        ))
+    }, [page, dispatch]);
+    
+    if (isGetMemberlistLoading) {
+        return (<div>Loading...</div>)
+    }
 
     const compareMember= (a, b) => {
         if (a.role==="Creator"){
@@ -26,18 +46,25 @@ function MemberList({ platform, memberList }) {
                     </tr>
                 </thead>
                 <tbody>
-                    {memberList.sort(compareMember).map((m) => (
-                        <tr>
-                            <td>{m.userId.username}</td>
-                            <td>
-                                { auth.user && auth.user.id===platform.owner ? <RoleButton platform={platform} member={m} ></RoleButton> : (m.role==="Consumer" ? "Member" : m.role)}
-                            </td>
-                        </tr>
-                    )
-                    )}
+                    { memberList.sort(compareMember).map((m, index) =>
+                                <tr>
+                                    <td>{(page - 1) * 10 + index +1}</td>
+                                    <td>
+                                        {m.userId.username}
+                                    </td>
+                                    <td>
+                                    { auth.user && auth.user.id===platform.owner ? <RoleButton platform={platform} member={m} ></RoleButton> : (m.role==="Consumer" ? "Member" : m.role)}
+                                    </td>
+                                </tr>
+                            )}
                 </tbody>
             </Table>
-
+            
+            <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Col>
+                    <Pagination page={page} pages={pages} changePage={setPage} />
+                </Col>
+            </Row>
         </div>
     )
 }
