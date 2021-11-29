@@ -81,9 +81,8 @@ export const paginateQuery = async (q, model, limit, offset) => {
     const skip = parseInt(offset) || 0
     const page = skip / pageSize
     const totalCount = await model.countDocuments(q)
-    console.log(`Total Count: ${totalCount}`)
     const pages = Math.ceil(totalCount / pageSize)
-    console.log(`Pages: ${pages}`)
+    
     q = q.limit(pageSize).skip(skip)
 
     return { q, page, pages, totalCount }

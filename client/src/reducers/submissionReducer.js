@@ -16,8 +16,8 @@ const initialState = {
     pages: 1,
     totalCount: 0 ,
     submission: null,
-    isGetSubmissionLoading:true,
-    isGetSubmissionsLoading: false,
+    isGetSubmissionLoading: true,
+    isGetSubmissionsLoading: true,
     singleSubmission:null,
     isGetSubmissionLoadingSingle:true
 }
@@ -32,16 +32,22 @@ const submissionReducer = (state=initialState, action) => {
             return {
                 ...state,
             }
+        case GET_SUBMISSIONS_REQ:
+            return {
+                ...state,
+                isGetSubmissionLoading: true
+            }
         case GET_SUBMISSION_SUCCESS:
             return{
                 ...state,
                 ...action.payload,
-                isGetSubmissionLoading:false,
+                isGetSubmissionLoading: false,
             }
         case GET_SUBMISSION_FAIL:
             return{
                 ...state,
-                ...action.payload
+                ...action.payload,
+                isGetSubmissionLoading: false
             }
         case GET_SUBMISSIONS_REQ:
             return {
@@ -58,13 +64,13 @@ const submissionReducer = (state=initialState, action) => {
             return{
                 ...state,
                 ...action.payload,
-                isGetSubmissionsLoading:false,
+                isGetSubmissionsLoading: false,
             }
         case GET_ONE_SUBMISSION_SUCCESS:
             return{
                 ...state,
                 ...action.payload,
-                isGetSubmissionLoadingSingle:false,
+                isGetSubmissionLoadingSingle: false,
             }
         case GET_ONE_SUBMISSION_FAIL:
             return{

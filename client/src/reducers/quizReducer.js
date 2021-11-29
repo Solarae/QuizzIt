@@ -32,7 +32,7 @@ const initialState = {
     isLoading: true,
     isCreateLoading: false,
     quiz: null,
-    isGetQuizLeaderboardLoading: false,
+    isGetQuizLeaderboardLoading: true,
     leaderboard: [], 
     leaderboardPage: 0,
     leaderboardPages: 1,

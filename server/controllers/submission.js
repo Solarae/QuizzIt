@@ -78,14 +78,15 @@ export const getQuizSubmissions = async (req,res)=>{
 
 export const getSubmissions = async (req,res)=>{
     try {
+        console.log(req.query)
         var query = queryBuilder(null, req.query, Submission)
+        //console.log(query)
         const { q, page, pages, totalCount } = await paginateQuery(query, Submission, req.query.limit, req.query.offset)
 
         if (page > pages) 
             return res.status(404).json({ msg: "Page doesn't exist" })
         
         const submissions = await q
-
         res.status(200).json({ 
             submissions: submissions,
             page,
@@ -99,24 +100,15 @@ export const getSubmissions = async (req,res)=>{
 
 
 export const getSubmission = async (req,res) =>{
-
-    const id = req.params.id
-
     try {
-
-        //find all the submissions based on provided userId
-        const submissions = await Submission.findById(id).populate('platformId').populate('quizId')
-            
-        res.status(200).json({singleSubmission:submissions})     
-        
-        
+        var query = queryBuilder(Submission.findById(req.params.id), req.query, Submission)
+        const submission = await query;
+        if (!submission) return res.status(200).json({ msg: "Platform doesn't exist" });
+        res.status(200).json({ submission });
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:error.message})  
     }
-
-
-
 }
 
 

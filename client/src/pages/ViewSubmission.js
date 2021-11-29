@@ -19,10 +19,10 @@ function ViewSubmission() {
         if (user) {
             dispatch(getSubmissions({
                 userId: user.id,
+                expand: 'platformId(select=name),quizId(select=name)',
+                sort: 'createdAt desc',
                 offset: 10 * (page - 1),
                 limit: 10,
-                sort: 'createdAt desc',
-                expand: 'platformId(select=name),quizId(select=name)'
             }))
         }
     }, [page, user, dispatch])

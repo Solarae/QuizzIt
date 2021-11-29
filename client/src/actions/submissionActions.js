@@ -77,24 +77,31 @@ export const getSubmissions = (query) => async (dispatch) => {
 }
 
 
-export const getOneSubmission = ( { id } ) => async(dispatch) =>{
-
+export const getSubmission = ( {id, query} ) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
 
     try {
-        console.log(id)
-        const res = await axios.get(`${URL}/api/submissions/getSubmission/${id}`)
+        dispatch({
+            type: GET_SUBMISSION_REQ
+        });
+
+        const res = await axios.get(`${URL}/api/submissions/${id}`, config)
 
         console.log(res.data)
         if (res.data.errors){
             dispatch({
-                type: GET_ONE_SUBMISSION_FAIL,
+                type: GET_SUBMISSION_FAIL,
                 payload: res.errors
             })
         }
         else{
             dispatch({
-                type: GET_ONE_SUBMISSION_SUCCESS,
-                payload:res.data
+                type: GET_SUBMISSION_SUCCESS,
+                payload: res.data
             })
         }
     } catch (error) {

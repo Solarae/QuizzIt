@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/", getSubmissions);
 router.post("/createSubmission",createSubmission);
 router.get("/getQuizSubmissions/:uid/:qid",getQuizSubmissions)
-router.get("/getSubmission/:id",getSubmission)
+router.get("/:id", getSubmission)
 
 
 export default router
