@@ -23,12 +23,20 @@ import {
     REPORT_QUIZ_FAIL,
     EDIT_QUIZ_THUMBNAIL,
     EDIT_QUIZ_THUMBNAIL_FAIL,
+    GET_QUIZ_LEADERBOARD_REQ,
+    GET_QUIZ_LEADERBOARD_SUCCESS,
+    GET_QUIZ_LEADERBOARD_FAIL
 } from '../actions/types'
 
 const initialState = {
     isLoading: true,
     isCreateLoading: false,
     quiz: null,
+    isGetQuizLeaderboardLoading: false,
+    leaderboard: [], 
+    leaderboardPage: 0,
+    leaderboardPages: 1,
+    leaderboardTotalCount: 0,
     errors: null
 }
 
@@ -162,6 +170,23 @@ const quizReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload
+            }
+        case GET_QUIZ_LEADERBOARD_REQ:
+            return {
+                ...state,
+                isGetQuizLeaderboardLoading: true 
+            }
+        case GET_QUIZ_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetQuizLeaderboardLoading: false,
+            }
+        case GET_QUIZ_LEADERBOARD_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetQuizLeaderboardLoading: false,
             }
         default:
             return state;

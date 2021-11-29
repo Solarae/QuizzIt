@@ -523,7 +523,7 @@ export const getMemberList = (platformId, page) => async (dispatch) => {
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
-            type: GET_PLAT_LEADERBOARD_FAIL
+            type: GET_MEMBERLIST_FAIL
         })
     }
 }

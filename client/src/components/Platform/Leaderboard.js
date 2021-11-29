@@ -12,7 +12,6 @@ function Leaderboard({ platform }) {
     const pages = useSelector((state) => state.platforms.leaderboardPages)
     const [page, setPage] = useState(1)
 
-    console.log(pages)
     useEffect(() => {
         console.log("CALLING API")
         dispatch(getPlatformLeaderboard(
@@ -34,8 +33,7 @@ function Leaderboard({ platform }) {
                 </Col>
             </Row>
             <Row>
-                <Nav fill variant="tabs"
-                >
+                <Nav fill variant="tabs">
                     <Nav.Item>
                         <Nav.Link onClick={() => setType("daily")} disabled={type === "daily"}>Daily</Nav.Link>
                     </Nav.Item>

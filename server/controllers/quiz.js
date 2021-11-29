@@ -213,6 +213,29 @@ export const getQuizzesByFilter = async (req, res) => {
     }
 }
 
+export const getLeaderboard = async (req, res) => {
+    const { type } = req.query
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 10 
+    
+    if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
+        return res.status(404).json({ msg: "Invalid leaderboard type" }); 
+
+    try {
+        const quiz = await Quiz.findById(req.params.id).slice(`${type}_leaderboard`, [skip,limit]).populate(`${type}_leaderboard.userId`, 'username')
+        if (!quiz) return res.status(200).json({ msg: "Quiz doesn't exist" });
+        const q = await Quiz.findById(req.params.id)
+
+        const leaderboardTotalCount = q[`${type}_leaderboard`].length
+        const leaderboardPages = Math.ceil(leaderboardTotalCount / limit)
+        const leaderboardPage = skip / limit
+
+        res.status(200).json({ leaderboard: quiz[`${type}_leaderboard`], leaderboardPage, leaderboardPages, leaderboardTotalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
 export const upvoteQuiz = async (req,res) =>{
 
     let quizId = req.params.id
