@@ -102,10 +102,7 @@ export const assignAwards = async (userId, platformId) => {
         const agg = await Submission.aggregate([
             { $match: { userId: ObjectId(userId), platformId: ObjectId(platformId) } },
             { $group: {
-                _id: {
-                    platformId: "$platformId",
-                    userId: "$userId"
-                },
+                _id: null,
                 submissionCount: { $sum: 1 },
                 totalPoints: { $sum: "$score" }
             }}
