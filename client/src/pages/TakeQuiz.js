@@ -67,6 +67,7 @@ function TakeQuiz() {
                     timeTaken: timer,
                 }))
             }
+            history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             return;
         }
 
