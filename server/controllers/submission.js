@@ -1,9 +1,9 @@
 import Quiz from "../models/Quiz.js"
 import Submission from "../models/Submission.js"
-import { queryBuilder, paginateQuery } from "./util.js";
+import { queryBuilder, paginateQuery, assignAwards } from "./util.js";
 
 export const createSubmission = async (req,res) =>{
-    const {quizId,answers,platformId,userId,timeTaken} = req.body
+    const { quizId, answers, platformId, userId, timeTaken } = req.body
     console.log(req.body)
 
     try {
@@ -14,9 +14,9 @@ export const createSubmission = async (req,res) =>{
         //calculate the score
 
         const questions = quiz.questions
-        const total_correct = 0
+        var total_correct = 0
         
-        const i = 0
+        var i = 0
         questions.forEach((question)=>{
             if(question != null){
                 if(question.answer === answers[i]){
@@ -41,8 +41,9 @@ export const createSubmission = async (req,res) =>{
         //save submission to quiz 
         quiz.submissions.push(created_submission)
         await quiz.save()
-        res.status(200).json({submission:created_submission})
 
+        res.status(200).json({submission:created_submission})
+        await assignAwards(userId, platformId)
     } catch (error) {
         console.log(error)
         return res.status(500).json({message:error.message})

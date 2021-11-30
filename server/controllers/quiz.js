@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-import { uploadImgToCloud } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 
 export const createQuiz = async (req,res) =>{
 
