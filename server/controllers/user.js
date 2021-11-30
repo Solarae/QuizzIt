@@ -223,17 +223,21 @@ export const deleteAccount = async (req, res) => {
 }
 
 export const getUsersByFilter = async (req, res) => {
-    var query = {}
-    for (var key in req.query) {
-        query[key] = {
-            "$regex": req.query[key],
-            "$options": "i"
-        }
-    }
-
     try {
-        const users = await User.find(query);
-        res.status(200).json({ users: users });
+        var query = queryBuilder(null, req.query, User)
+        const { q, page, pages, totalCount } = await paginateQuery(query, User, req.query.limit, req.query.offset)
+
+        if (page > pages) 
+            return res.status(404).json({ msg: "Page doesn't exist" })
+        
+        const users = await q
+
+        res.status(200).json({ 
+            users,
+            page,
+            pages,
+            totalCount
+        });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }

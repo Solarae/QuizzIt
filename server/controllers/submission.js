@@ -103,7 +103,7 @@ export const getSubmission = async (req,res) =>{
     try {
         var query = queryBuilder(Submission.findById(req.params.id), req.query, Submission)
         const submission = await query;
-        if (!submission) return res.status(200).json({ msg: "Platform doesn't exist" });
+        if (!submission) return res.status(200).json({ msg: "Submission doesn't exist" });
         res.status(200).json({ submission });
     } catch (error) {
         console.log(error)

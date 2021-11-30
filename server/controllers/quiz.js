@@ -38,19 +38,14 @@ export const createQuiz = async (req,res) =>{
 }
 
 export const getQuiz = async (req,res) => {
-    let quizId = req.params.id
-
     try {
-        let quiz = await Quiz.findById(quizId);
-
-        if(!quiz) return res.status(500).json({message:"Quiz not found with the provided id"})
-    
-        return res.status(200).json({ quiz : quiz })        
+        var query = queryBuilder(Quiz.findById(req.params.id), req.query, Quiz)
+        const quiz = await query;
+        if (!quiz) return res.status(200).json({ msg: "Quiz doesn't exist" });
+        res.status(200).json({ quiz });
     } catch (error) {
-        res.status(500).json({message:error,message})
+        res.status(404).json({ msg: error.message })
     }
-
-
 }
 
 export const getPlatformQuiz = async (req,res) =>{
@@ -197,17 +192,21 @@ export const deleteQuizQuestion = async (req,res) =>{
 }
 
 export const getQuizzesByFilter = async (req, res) => {
-    var query = {}
-    for(var key in req.query){ 
-        query[key] = {
-            "$regex": req.query[key], 
-            "$options": "i"
-        }
-    }
-
     try {
-        const quizzes = await Quiz.find(query);
-        res.status(200).json({ quizzes: quizzes });
+        var query = queryBuilder(null, req.query, Quiz)
+        const { q, page, pages, totalCount } = await paginateQuery(query, Quiz, req.query.limit, req.query.offset)
+
+        if (page > pages) 
+            return res.status(404).json({ msg: "Page doesn't exist" })
+        
+        const quizzes = await q
+
+        res.status(200).json({ 
+            quizzes,
+            page,
+            pages,
+            totalCount
+        });
     } catch (error) {
         res.status(404).json({ msg: error.message })
     }
