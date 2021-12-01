@@ -7,6 +7,7 @@ import axios from "axios"
 import { URL } from "../config"
 import SubmissionCard from "../components/Submission/SubmissionCard"
 import { getPlatformReport } from "../actions/reportActions"
+import ReportCard from "../components/Report/ReportCard"
 
 
 function ViewReport() {
@@ -81,7 +82,7 @@ function ViewReport() {
                                 return( 
                                     <>
                                         <Col>
-                                            {report.text}
+                                            <ReportCard report={report}></ReportCard>
                                         </Col>
                                     </>
                                 )

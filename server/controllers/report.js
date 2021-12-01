@@ -51,9 +51,9 @@ export const getPlatformReport = async (req,res) =>{
     try {
         let id = req.params.id
 
-        let platform = await Platform.findOne({platformId:id})
+        let reports = await Report.find({platformId:id})
     
-        return res.status(200).json({report:platform.reports})  
+        return res.status(200).json({report:reports})  
 
     } catch (error) {
         
