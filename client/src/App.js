@@ -25,6 +25,7 @@ import { useDispatch } from 'react-redux'
 import { getSignedIn } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
+import ViewReport from './pages/ViewReport.js';
 
 function App() {
   const dispatch = useDispatch()
@@ -52,6 +53,7 @@ function App() {
         <Route path='/viewSubmission' exact component={ViewSubmission} />
         <Route path='/submission/reviewSubmission/:id' exact component={ReviewSubmission} />
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
+        <Route path='/viewPlatformReport/:id' exact component={ViewReport} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>

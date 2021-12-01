@@ -88,3 +88,38 @@ export const paginateQuery = async (q, model, limit, offset) => {
 
     return { q, page, pages, totalCount }
 }
+
+
+export const checkIfModeratorOfPlatform = async (req,res) =>{
+
+
+    try {
+        let userId = req.params.uid
+        let platformId = req.params.pid
+    
+    
+        let platform = await Platform.findById(platformId)
+        if (!platform) return res.status(200).json({message:"Platform does not exist"}) 
+
+
+        let members = platform.subscribers
+
+        let user = members.filter( member => member.userId == userId )
+
+        console.log(user)
+
+        if(user[0] && user[0].role == "Moderator" ){
+            return res.status(200).json({user:user[0]})
+        }
+
+        return res.status(200).json({message:"User is not moderator"})
+    
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})       
+    }
+
+
+
+
+}
