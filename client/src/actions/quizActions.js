@@ -22,6 +22,9 @@ import {
     EDIT_PROFILE_SUCCESS,
     EDIT_QUIZ_THUMBNAIL,
     EDIT_QUIZ_THUMBNAIL_FAIL,
+    GET_QUIZ_LEADERBOARD_REQ,
+    GET_QUIZ_LEADERBOARD_SUCCESS,
+    GET_QUIZ_LEADERBOARD_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -327,3 +330,29 @@ export const setQuizLoading = () => {
       type: QUIZ_LOADING
     };
 };
+
+export const getQuizLeaderboard = (quizId, type, page) => async (dispatch) => {
+    const config = {
+        params: {
+            type,
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+    try {
+        dispatch({
+            type: GET_QUIZ_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/quizzes/${quizId}/leaderboard`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_QUIZ_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_QUIZ_LEADERBOARD_FAIL
+        })
+    }
+}

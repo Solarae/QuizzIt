@@ -14,7 +14,6 @@ function Leaderboard() {
     const pages = useSelector((state) => state.platforms.leaderboardPages)
     const [page, setPage] = useState(1)
 
-    console.log(pages)
     useEffect(() => {
         console.log("CALLING API")
         dispatch(getPlatformLeaderboard(
@@ -41,9 +40,6 @@ function Leaderboard() {
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("biannual")} disabled={type === "biannual"}>6mo</Nav.Link>
                     </Nav.Item>
                     <Nav.Item>
                         <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>

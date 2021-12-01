@@ -80,7 +80,7 @@ function Home() {
                                 <h3 >Global Leaderboard</h3>
                             </Col>
                         </Row>
-                        <MiniLeaderboard doc={platforms[0]}></MiniLeaderboard>
+                        <MiniLeaderboard lbType="global" doc={platforms[0]}></MiniLeaderboard>
                     </div>
                 </div>
             </div>
