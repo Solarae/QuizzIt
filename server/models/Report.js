@@ -28,6 +28,11 @@ const report = new mongoose.Schema({
         type:Date
     },
 
+    submittedBy:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    }
+
 })
 
 

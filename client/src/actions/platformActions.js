@@ -326,7 +326,7 @@ export const reportPlatform = ({ platformId, userId, text }) => async (dispatch)
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ userId, description:text })
+    const body = JSON.stringify({ submittedBy:userId, description:text })
     try {
         dispatch({
             type: REPORT_PLATFORM_REQ

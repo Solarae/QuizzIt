@@ -6,7 +6,6 @@ export const reportPlatform = async (req,res) =>{
 
 
     try {
-        console.log("EWgewg")
         let platformId = req.params.id
         let platform = await Platform.findById(platformId)
 
@@ -14,21 +13,19 @@ export const reportPlatform = async (req,res) =>{
 
 
 
-        let {description,timeSubmitted} = req.body
+        let {description,submittedBy} = req.body
     
     
         let report = new Report ({
             platformId: platformId,
             description: description,
-            timeSubmitted: timeSubmitted,
-            type: "platformReport"
-    
+            timeSubmitted: Date.now(),
+            submittedBy:submittedBy,
+            type: "platformReport",    
         })
     
     
         let createdReport = await report.save()
-    
-        if (!createdReport) return 
         
         return res.status(200).json({createdReport:createdReport})        
 
@@ -45,9 +42,22 @@ export const reportPlatform = async (req,res) =>{
 
 export const getReport = () =>{
 
+    
 }
 
 
-export const getPlatformReport = () =>{
+export const getPlatformReport = async (req,res) =>{
+
+    try {
+        let id = req.params.id
+
+        let report = await Platform.find({platformId:id})
+    
+        return res.status(200).json({report:report})  
+
+    } catch (error) {
+        
+        return res.status(500).json({message:error.message})
+    }
 
 }
