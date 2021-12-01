@@ -17,8 +17,6 @@ function Home() {
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
 
-    const query = ""
-    
     // dispatch the SEARCH request
     useEffect(() => {
         console.log("searching");
@@ -28,7 +26,8 @@ function Home() {
         }))
 
         dispatch(searchQuiz({
-            query: { 'name': query }
+            query: { 'sort': "likes.totalLikes desc" }
+            // query: { 'name': "" }
         }))
     }, []);
 
