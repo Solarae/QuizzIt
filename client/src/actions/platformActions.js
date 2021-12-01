@@ -326,12 +326,12 @@ export const reportPlatform = ({ platformId, userId, text }) => async (dispatch)
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ userId, text })
+    const body = JSON.stringify({ userId, description:text })
     try {
         dispatch({
             type: REPORT_PLATFORM_REQ
         });
-        const res = await axios.post(`${URL}/api/platforms/${platformId}/report`, body, config);
+        const res = await axios.post(`${URL}/api/reports/reportPlatform/${platformId}`, body, config);
         if (res.data.errors) {
             dispatch({
                 type: REPORT_PLATFORM_FAIL,
