@@ -50,7 +50,7 @@ const server = app.listen(PORT, () => console.log(`Server running on port: ${POR
 
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3000']
+        origin: ["http://localhost:3000", "https://quizz-it.netlify.app"]
     }
 })
 
