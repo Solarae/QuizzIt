@@ -244,6 +244,26 @@ export const getUsersByFilter = async (req, res) => {
     }
 }
 
+export const getInbox = async (req, res) => {
+    console.log("INSIDE INBOX")
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 5 
+
+    try {
+        const user = await User.findById(req.params.id).slice(`inbox`, [skip,limit])
+        const u = await User.findById(req.params.id)
+
+        const inboxTotalCount = u.inbox.length
+        const inboxPages = Math.ceil(inboxTotalCount / limit)
+        const inboxPage = (skip / limit) + 1
+
+        console.log(inboxPage)
+        res.status(200).json({ inbox: user.inbox, inboxPage, inboxPages, inboxTotalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
 // To change a field, say name, newValue should be
 // newValue = {
 //  name: "NewName"

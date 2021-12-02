@@ -1,4 +1,8 @@
 import {
+    GET_INBOX_REQ,
+    GET_INBOX_SUCCESS,
+    GET_INBOX_FAIL,
+    RECEIVE_NOTIFICATIONS,
     EDIT_PROFILE_SUCCESS,
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
@@ -111,4 +115,40 @@ export const updateUser = ({ newValue, userId }) => async (dispatch) => {
             type: EDIT_PROFILE_FAIL
         })
     }
+}
+
+export const getInbox = (id, page) => async (dispatch) => {
+    const config = {
+        params: {
+            offset: 5 * (page - 1),
+            limit: 5
+        }
+    }
+    dispatch({
+        type: GET_INBOX_REQ
+    })
+    try {
+        const res = await axios.get(`${URL}/api/users/${id}/inbox`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: GET_INBOX_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: GET_INBOX_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const receiveNotifications = (data) => (dispatch) => {
+    dispatch({
+        type: RECEIVE_NOTIFICATIONS,
+        payload: data
+    })
 }

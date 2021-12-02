@@ -1,20 +1,41 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Nav, Navbar, Container, Image, NavDropdown, Form, FormControl } from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
+import { getInbox } from '../actions/profileActions'
 import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
 import SignIn from './SignIn.js';
 import CreatePlatform from './CreatePlatform.js';
+import NavbarCollapse from 'react-bootstrap/esm/NavbarCollapse'
 
 function AppNavbar() {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth)
+  const isGetInboxLoading = useSelector(state => state.auth.isGetInboxLoading)
+  const inbox = useSelector(state => state.auth.inbox)
+  const socket = useSelector((state) => state.auth.socket)
+  const { inboxPage, inboxPages, inboxTotalCount} = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    socket?.on('getInbox', (data) => {
+      console.log(data)
+    })
+  }, [socket])
+
+  useEffect(() => {
+    if (auth.user) 
+    dispatch(getInbox(
+        auth.user.id,
+        1
+    ))
+  }, [auth.user, dispatch]);
+
   const onQueryChange = (e) => {
     setQuery(e.target.value)
   }
@@ -35,6 +56,14 @@ function AppNavbar() {
   const handleCloseCreatePlatform = useCallback(() => { setShowCreatePlatform(false) }, []);
   const handleShowCreatePlatform = () => { setShowCreatePlatform(true) };
 
+  const handleNotifScroll = ((e) => {
+    if ((e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) && inboxPage < inboxPages) 
+      dispatch(getInbox(
+        auth.user.id,
+        inboxPage + 1
+      )) 
+  })
+  
   return (
     <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
       <Container fluid>
@@ -92,7 +121,23 @@ function AppNavbar() {
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
         </Navbar.Collapse>
 
-        {auth.user && <i style={{color:"white", marginRight: "50px", fontSize: "1.5rem"}} class="bi bi-bell"></i>}
+        {auth.user && !isGetInboxLoading && (
+          <NavbarCollapse>
+            <Nav>
+              <NavDropdown
+                id='notification'
+                title= {
+                  <i style={{color:"white", marginRight: "50px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
+                }
+                >
+                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleNotifScroll(e)}>
+                  {inbox.map(i => <NavDropdown.Item key={i._id}>{i.message}</NavDropdown.Item>)}
+                  </div>
+
+              </NavDropdown>
+            </Nav>
+          </NavbarCollapse>)}
+        
 
         <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
         <SignUp show={showSignUp} handleClose={handleCloseSignUp} />

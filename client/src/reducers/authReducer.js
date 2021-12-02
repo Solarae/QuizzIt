@@ -9,13 +9,21 @@ import {
     EDIT_PROFILE_SUCCESS,
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
-    DELETE_PROFILE_FAIL
+    DELETE_PROFILE_FAIL,
+    GET_INBOX_REQ,
+    GET_INBOX_SUCCESS,
+    GET_INBOX_FAIL
 } from '../actions/types'
 
 const initialState = {
     isAuthenticated: null,
     user: null,
-    socket: null
+    socket: null,
+    inbox: [],
+    inboxPage: 1, 
+    inboxPages: 1, 
+    inboxTotalCount: 0,
+    isGetInboxLoading: true
 }
 
 const authReducer = (state = initialState, action) => {
@@ -72,6 +80,34 @@ const authReducer = (state = initialState, action) => {
             }
         case DELETE_PROFILE_FAIL:
             return state;
+        case GET_INBOX_REQ:
+            return {
+                ...state,
+                isGetInboxLoading: true
+            }
+        case GET_INBOX_SUCCESS:
+            return {
+                ...state,
+                inbox: [...state.inbox, ...action.payload.inbox],
+                inboxPage: action.payload.inboxPage,
+                inboxPages: action.payload.inboxPages,
+                inboxTotalCount: action.payload.inboxTotalCount,
+                isGetInboxLoading: false
+            }
+        case GET_INBOX_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetInboxLoading: false
+            }
+        case GET_INBOX_SUCCESS:
+            return {
+                ...state,
+                inbox: [...action.payload.inbox, ...state.inbox],
+                inboxPage: action.payload.inboxPage,
+                inboxPages: action.payload.inboxPages,
+                inboxTotalCount: action.payload.inboxTotalCount,
+            }
         default:
             return state;
     }
