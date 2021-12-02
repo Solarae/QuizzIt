@@ -1,5 +1,6 @@
 import {
     GET_SIGNED_IN,
+    CONNECT_SOCKET,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
@@ -13,7 +14,8 @@ import {
 
 const initialState = {
     isAuthenticated: null,
-    user: null
+    user: null,
+    socket: null
 }
 
 const authReducer = (state = initialState, action) => {
@@ -22,6 +24,11 @@ const authReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+            }
+        case CONNECT_SOCKET:
+            return {
+                ...state,
+                ...action.payload
             }
         case LOGIN_SUCCESS:
             return {

@@ -9,6 +9,8 @@ import User from '../models/User.js'
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
 
+import { io, onlineUsers } from '../index.js'
+
 export const uploadImgToCloud = async (img) =>{
     try {
         const res = await cloudinary.uploader.upload(img, {
@@ -141,6 +143,7 @@ export const assignAwards = async (userId, platformId) => {
             userId,
             { $addToSet: { awards: { $each: awardsObtained } } },
         )
+        io.to(onlineUsers.get(userId)).emit('Hello')
     } catch (error) {
         console.log(error)
     }

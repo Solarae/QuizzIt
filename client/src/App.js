@@ -7,6 +7,8 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import './App.css'; // overridden css after all other css
 
+import { io } from 'socket.io-client'
+
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Platform from './pages/Platform';
@@ -21,18 +23,31 @@ import QuizLeaderboard from './pages/QuizLeaderboard'
 import Upload from './pages/Upload'
 import CountDownTimer from './components/Quiz/CountDownTimer'
 
-import { useDispatch } from 'react-redux'
-import { getSignedIn } from './actions/authActions'
+import { useSelector, useDispatch } from 'react-redux'
+import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
 
 function App() {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.auth.user)
+  const socket = useSelector((state) => state.auth.socket)
   
-  // try logging in wth token  
+  // Try logging in wth token and setup socket
   useEffect(() => {
     dispatch(getSignedIn())
+    dispatch(connectSocket(io('http://localhost:5000')))
   }, []);
+
+  useEffect(() => {
+    if (socket && user) {
+      socket.emit('newUser', user.id)
+      socket.on("Hello", (data) => {
+        console.log("RECEIVED MESSAGE FROM SERVER")
+      });
+    }
+      
+  }, [socket, user]);
 
   return (
     <BrowserRouter>

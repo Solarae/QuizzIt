@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
+import { Server } from 'socket.io'
 
 import authRoutes from './routes/auth.js'
 import userRoutes from './routes/user.js'
@@ -18,7 +19,6 @@ dotenv.config()
 import { MONGO_URI } from './config.js';
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true}));
@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 
 
 mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
-    .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
+    .then(() => console.log(`MongoDB connected`))
     .catch(error => console.log(error.message));
 
 app.use('/api/auth', authRoutes);
@@ -43,6 +43,41 @@ app.use('/api/submissions',submissionRoutes)
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/awards', awardRoutes);
 
-// updateLeaderboardsJob.stop()
+// Setup Server
+const PORT = process.env.PORT || 5000;
 
-//duplicateDB()
+const server = app.listen(PORT, () => console.log(`Server running on port: ${PORT}`))
+
+const io = new Server(server, {
+    cors: {
+        origin: ['http://localhost:3000']
+    }
+})
+
+var onlineUsers = new Map()
+
+const getByValue = (searchValue, map) => {
+    for (const [key, value] of map.values()) {
+        if (value == searchValue)
+            return key
+    }
+    console.log(`Client has left`)
+    return null
+}
+
+io.on('connection', (socket) => {
+    console.log(`Client has connected`)
+
+    socket.on('newUser', (userId) => {
+        onlineUsers.set(userId, socket.id)
+        console.log(`${userId} has logged in`)
+    })
+
+    socket.on('disconnect', () => {
+        onlineUsers.delete(getByValue(socket.id, onlineUsers))
+        console.log(onlineUsers.size)
+        console.log(`Client has left`)
+    })
+})
+
+export { io, onlineUsers }

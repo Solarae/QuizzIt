@@ -1,10 +1,11 @@
 import {
     GET_SIGNED_IN,
+    CONNECT_SOCKET,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
     LOGOUT_SUCCESS,
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -153,4 +154,12 @@ export const tokenConfig = (getState) => {
     if (token) config.headers['x-auth-token'] = token
 
     return config
+}
+
+export const connectSocket = (socket) => (dispatch) => {
+    console.log(socket)
+    dispatch({
+        type: CONNECT_SOCKET,
+        payload: { socket }
+    })
 }
