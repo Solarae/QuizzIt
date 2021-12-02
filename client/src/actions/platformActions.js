@@ -7,6 +7,8 @@ import {
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
     EDIT_MEMBER_ROLE_REQ,
+    GET_PLAT_LEADERBOARD_REQ,
+    GET_MEMBERLIST_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -25,6 +27,10 @@ import {
     REPORT_PLATFORM_FAIL,
     EDIT_MEMBER_ROLE_SUCCESS,
     EDIT_MEMBER_ROLE_FAIL,
+    GET_PLAT_LEADERBOARD_SUCCESS,
+    GET_PLAT_LEADERBOARD_FAIL,
+    GET_MEMBERLIST_SUCCESS,
+    GET_MEMBERLIST_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
@@ -134,11 +140,12 @@ export const uploadImage = (id, image, type, userId) => async (dispatch) => {
     }
 }
 
-export const getPlatform = ({ id }) => async (dispatch) => {
+export const getPlatform = ({ id, params }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
+        params
     }
 
     try {
@@ -185,18 +192,18 @@ export const getPlatform = ({ id }) => async (dispatch) => {
                 })
             }
 
-            // get the memberlist 
-            let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
-            if (member_res.data.errors) {
-                dispatch({
-                    type: GET_PLATFORM_FAIL,
-                    payload: member_res.data
-                })
-            }
+            // // get the memberlist 
+            // let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
+            // if (member_res.data.errors) {
+            //     dispatch({
+            //         type: GET_PLATFORM_FAIL,
+            //         payload: member_res.data
+            //     })
+            // }
 
             res.data.quizzesData = quizzes; // pack the quizzes data with the platform
             res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
-            res.data.memberList = member_res.data.members; // pack the awards data with the platform
+            // res.data.memberList = member_res.data.members; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data
@@ -465,6 +472,58 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
         console.log("error message: " + error.message);
         dispatch({
             type: EDIT_MEMBER_ROLE_FAIL,
+        })
+    }
+}
+
+export const getPlatformLeaderboard = (platformId, type, page) => async (dispatch) => {
+    const config = {
+        params: {
+            type,
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_FAIL
+        })
+    }
+}
+
+export const getMemberList = (platformId, page) => async (dispatch) => {
+    const config = {
+        params: {
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+
+    try {
+        dispatch({
+            type: GET_MEMBERLIST_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/memberList`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_MEMBERLIST_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_MEMBERLIST_FAIL
         })
     }
 }

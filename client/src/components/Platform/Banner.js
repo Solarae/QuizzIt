@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
-import { joinPlatform, leavePlatform, upvotePlatform, downvotePlatform } from '../../actions/platformActions'
+import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,24 +24,6 @@ function Banner({ platform }) {
     const [showSignUp, setShowSignUp] = useState(false);
     const handleCloseSignUp = () => { setShowSignUp(false) };
     const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
-
-    const handleJoin = () => {
-        if (auth.user === null) {
-            handleShowSignIn()
-            return
-        }
-        dispatch(joinPlatform({
-            userId: auth.user.id,
-            platformId: platform._id
-        }))
-    }
-
-    const handleLeave = () => {
-        dispatch(leavePlatform({
-            userId: auth.user.id,
-            platformId: platform._id
-        }))
-    }
 
     const handleLike = () => {
         if (auth.user === null) {
@@ -116,8 +98,8 @@ function Banner({ platform }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" >Edit</Button></Link> : <span></span>}
-                                    <Subscribe handleLeave={handleLeave} handleJoin={handleJoin} platform={platform} />
+                                    {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" style={{marginRight: "10px"}} >Edit</Button></Link> : <span></span>}
+                                    <Subscribe platform={platform} />
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

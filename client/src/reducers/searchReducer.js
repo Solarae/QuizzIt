@@ -12,9 +12,9 @@ import {
 } from '../actions/types'
 
 const initialState = {
-    isSearchPlatformLoading: false,
-    isSearchQuizLoading: false,
-    isSearchUserLoading: false,
+    isSearchPlatformLoading: true,
+    isSearchQuizLoading: true,
+    isSearchUserLoading: true,
     platforms: null,
     quizzes: null,
     users: null,

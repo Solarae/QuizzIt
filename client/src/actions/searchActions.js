@@ -15,20 +15,22 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
-export const searchPlatform = ({ query }) => async (dispatch) => {
+export const searchPlatform = ({ query, page, limit }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
         params: {
-            ...query
+            ...query,
+            offset: limit * (page - 1),
+            limit: limit 
         }
     }
     try {
         dispatch({
             type: SEARCH_PLATFORM_REQ
         });
-        const res = await axios.get(`${URL}/api/platforms/`, config);
+        const res = await axios.get(`${URL}/api/platforms`, config);
 
         if (res.data.errors) {
             dispatch({
@@ -50,13 +52,15 @@ export const searchPlatform = ({ query }) => async (dispatch) => {
     }
 }
 
-export const searchQuiz = ({ query }) => async (dispatch) => {
+export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
         params: {
-            ...query
+            ...query,
+            offset: limit * (page - 1),
+            limit: limit 
         }
     }
 

@@ -7,14 +7,14 @@ import { getPlatform } from '../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
-function Platform() {
+function GlobalLeaderboard() {
     const dispatch = useDispatch()
     const history = useHistory()
     const [errors, setErrors] = useState({});
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
-    let { id } = useParams();  // get the platform ID from the url
+    const id = "" // id for platform that contains global leaderboards 
 
     // dispatch the GET_PLATFORM request on initial render
     useEffect(() => {
@@ -28,17 +28,12 @@ function Platform() {
     }
     return (
         <div className="justify-content-between">
-            {Object.keys(platform).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
-
-            <div style={{ height: "50px" }}></div>
-
             <Container>
-                <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}`) }}><i class="bi bi-arrow-left"></i> Back to platform page</p>
                 <Row style={{}}>
                     <Col className="justify-content-md-center" style={{}}>
                         <Row>
                             <Col align="center">
-                                <h3 >Platform Leaderboard</h3>
+                                <h3 >Global Leaderboard</h3>
                             </Col>
                         </Row>
                         <Leaderboard></Leaderboard>
@@ -49,4 +44,4 @@ function Platform() {
         </div >
     )
 }
-export default Platform;
+export default GlobalLeaderboard;
