@@ -18,6 +18,7 @@ function ViewReport() {
     let {id} = useParams()
     let reports = useSelector((state)=>state.report.report)
     
+    const [reportState,setReportState] = useState()
 
     let isLoading = useSelector((state)=> state.report.isLoading)
 
@@ -55,6 +56,7 @@ function ViewReport() {
             dispatch(getPlatformReport({
                 id
             }))
+            setReportState(reports)
         }
 
     },[dispatch,user])
@@ -78,16 +80,19 @@ function ViewReport() {
     
                     <Col xs={7} className="g-4">
     
-                        {reports.map( (report,idx) => {
+                        {reportState ? 
+                        
+                        reportState.map( (report,idx) => {
                                 return( 
                                     <>
                                         <Col>
-                                            <ReportCard report={report}></ReportCard>
+                                            <ReportCard id={report._id} report={report} reportState={reportState} setReportState={setReportState}   ></ReportCard>
                                         </Col>
                                     </>
                                 )
-                        })}
-    
+                        })
+                        :
+                        <h1>loading</h1>}
                         
                     </Col>
     

@@ -51,13 +51,29 @@ export const getPlatformReport = async (req,res) =>{
     try {
         let id = req.params.id
 
-        let reports = await Report.find({platformId:id})
+        let reports = await Report.find({platformId:id}).populate("platformId").populate("submittedBy")
     
         return res.status(200).json({report:reports})  
 
     } catch (error) {
         
         return res.status(500).json({message:error.message})
+    }
+
+}
+
+
+export const deleteReport = async(req,res) =>{
+
+    try {
+        let id = req.params.id
+        let report = await Report.findOneAndDelete({_id:id})
+
+        return res.status(200).json({report:report})  
+
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})      
     }
 
 }

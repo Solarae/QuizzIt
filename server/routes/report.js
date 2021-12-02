@@ -1,7 +1,7 @@
 import express from 'express';
 
 import { 
-    reportPlatform,getReport,getPlatformReport
+    reportPlatform,getReport,getPlatformReport,deleteReport
 } from '../controllers/report.js';
 
 import {checkIfModeratorOfPlatform} from "../controllers/util.js"
@@ -17,7 +17,7 @@ router.get("/checkIfModeratorOfPlatform/:uid/:pid",checkIfModeratorOfPlatform)
 
 router.post("/reportPlatform/:id",reportPlatform)
 
-
+router.delete("/deleteReport/:id",deleteReport)
 
 
 
