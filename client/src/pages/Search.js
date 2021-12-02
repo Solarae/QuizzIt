@@ -28,7 +28,7 @@ function Search() {
     const query = new URLSearchParams(location_search).get('query');
 
     // available filters (none, platform, quiz, user)
-    const [filter, setFilter] = useState("none");
+    const [filter, setFilter] = useState("quiz");
 
     // available sorts (oldest, newest)
     const [sort, setSort] = useState("oldest");

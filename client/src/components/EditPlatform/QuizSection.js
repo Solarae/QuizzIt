@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Container, Row, Col, } from 'react-bootstrap';
-import QuizCard from '../Platform/QuizCard.js'
+import QuizCardMini from '../Cards/QuizCardMini.js'
 import CreateQuiz from './CreateQuiz.js'
 
 function QuizSection({ quizzesData }) {
@@ -17,7 +17,7 @@ function QuizSection({ quizzesData }) {
                 </Col>
                 {quizzesData.length > 0 && quizzesData.map((quiz, idx) => (
                     <Col align="center">
-                        <QuizCard quiz={quiz}></QuizCard>
+                        <QuizCardMini quiz={quiz}></QuizCardMini>
                     </Col>
                 ))}
             </Row>
