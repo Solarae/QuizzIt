@@ -28,7 +28,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
-import { URL } from '../config.js'
+import { URL } from './config'
 
 function App() {
   const dispatch = useDispatch()
