@@ -1,10 +1,13 @@
 import axios from 'axios';
-import { React, useState } from 'react'
+import { React, useState} from 'react'
 import { Col, Card, Button } from 'react-bootstrap';
+import { deletePlatform } from '../../actions/platformActions';
 import { URL } from '../../config';
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router';
 
-function ReportCard({ report,reportState,setReportState,id }) {
-
+function ReportCard({ user, report,reportState,setReportState,id }) {
+    const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
         let newReports = reportState.filter((report)=>{
             return report._id != e.target.id
@@ -15,8 +18,12 @@ function ReportCard({ report,reportState,setReportState,id }) {
         await axios.delete(`${URL}/api/reports/deleteReport/${report._id}`)
 
     }
+    const history = useHistory()
 
-
+    const handleDeletePlatform = async (e) =>{
+        dispatch(deletePlatform({userId: user.id , platformId:report.platformId._id}))
+        history.push('/')
+    }
 
 
 
@@ -29,7 +36,7 @@ function ReportCard({ report,reportState,setReportState,id }) {
 
                 
                 <Button id={id} variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
-                {/* <Button variant="danger" onClick={handleDeletePlatform}> Delete Platform </Button>   */}
+                <Button variant="danger" onClick={handleDeletePlatform}> Delete Platform </Button>  
                 
                 
 

@@ -61,7 +61,36 @@ export const getPlatformReport = async (req,res) =>{
     }
 
 }
+//find all platforms the user is a moderator of
+export const getAllManagedPlatform = async (req,res) =>{
+    try {
+        let userId = req.params.id
 
+        let result = []
+
+        let platforms = await Platform.find()
+
+        platforms.forEach(platform => {
+            
+            let members = platform.subscribers
+
+            let user = members.filter((member) => member._id == userId )
+
+            if (user[0] && user[0].role == "Moderator" || user[0].role == "Admin"){
+                result.push(platform._id)
+            }
+        })
+
+        console.log(data)
+
+        return res.status(200).json({platforms:result})
+
+
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+}
 
 export const deleteReport = async(req,res) =>{
 

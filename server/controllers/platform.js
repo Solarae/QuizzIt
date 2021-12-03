@@ -53,23 +53,23 @@ export const deletePlatform = async (req, res) => {
     const { userId, confirmPassword } = req.body
     const errors = {}
 
-    try {
+    // try {
         const platform = await Platform.findById(req.params.id);
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
-        const owner = await User.findById(platform.owner);
+        // const owner = await User.findById(platform.owner);
 
-        if (userId !== String(platform.owner)) {
-            errors.invalidOwner = "You don't have delete permissions";
-            return res.status(200).json({ errors: errors });
-        }
+        // if (userId !== String(platform.owner)) {
+        //     errors.invalidOwner = "You don't have delete permissions";
+        //     return res.status(200).json({ errors: errors });
+        // }
 
         // check if confirmPassword matches with owner's password
-        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
-        if (!isMatch) {
-            errors.invalidPassword = "Incorrect Password";
-            return res.status(200).json({ errors: errors });
-        }
+        // const isMatch = await bcrypt.compare(confirmPassword, owner.password);
+        // if (!isMatch) {
+        //     errors.invalidPassword = "Incorrect Password";
+        //     return res.status(200).json({ errors: errors });
+        // }
 
         await platform.remove();
 
@@ -79,9 +79,9 @@ export const deletePlatform = async (req, res) => {
         )
         console.log(count)
         res.status(200).json({ platform: platform })
-    } catch (error) {
-        res.status(404).json({ msg: error.message })
-    }
+    // } catch (error) {
+    //     res.status(404).json({ msg: error.message })
+    // }
 }
 
 export const getPlatform = async (req, res) => {

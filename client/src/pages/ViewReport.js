@@ -39,7 +39,7 @@ function ViewReport() {
 
                 // console.log(res)
                 //if res.user is null,it means that user is not moderator
-                if(res.data.user){
+                if(res.data && res.data.user){
                     console.log("is true")
                     return true
                 }else{
@@ -86,7 +86,7 @@ function ViewReport() {
                                 return( 
                                     <>
                                         <Col>
-                                            <ReportCard id={report._id} report={report} reportState={reportState} setReportState={setReportState}   ></ReportCard>
+                                            <ReportCard user={user} id={report._id} report={report} reportState={reportState} setReportState={setReportState}   ></ReportCard>
                                         </Col>
                                     </>
                                 )
