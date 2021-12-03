@@ -7,6 +7,9 @@ import { queryBuilder, paginateQuery } from "./util.js";
 import { JWT_SECRET } from '../config.js';
 import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
 
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId;
+
 export const signin = async (req, res) => {
     const { username, password } = req.body;
     const { errors, valid } = validateSignInInput(username, password);
@@ -259,6 +262,25 @@ export const getInbox = async (req, res) => {
 
         console.log(inboxPage)
         res.status(200).json({ inbox: user.inbox, inboxPage, inboxPages, inboxTotalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const readNotification = async (req, res) => {
+    console.log("INSIDE READ NOTIFICATION")
+    try {
+        const user = await User.findOneAndUpdate(
+            { _id: req.params.id, "inbox._id": req.params.nid },
+            { $set: { "inbox.$.read": true } },
+            { new: true }
+        )
+     
+        const index = user.inbox.findIndex((i => i._id.toString() === req.params.nid))
+        
+        res.status(200).json({ 
+            updatedNotification: user.inbox[index], 
+            index });
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }

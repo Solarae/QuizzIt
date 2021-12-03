@@ -1,10 +1,11 @@
 import express from 'express';
-import { getUsersByFilter, getInbox, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser } from '../controllers/user.js';
+import { getUsersByFilter, getInbox, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser, readNotification } from '../controllers/user.js';
 
 const router = express.Router();
 
 router.get('/', getUsersByFilter)
 router.get('/:id/inbox', getInbox)
+router.post('/:id/inbox/notification/:nid/read', readNotification)
 router.post('/signin', signin);
 router.post('/tokenSignin', tokenSignin);
 router.post('/signup', signup);

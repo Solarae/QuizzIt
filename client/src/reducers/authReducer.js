@@ -12,7 +12,10 @@ import {
     DELETE_PROFILE_FAIL,
     GET_INBOX_REQ,
     GET_INBOX_SUCCESS,
-    GET_INBOX_FAIL
+    GET_INBOX_FAIL,
+    RECEIVE_NOTIFICATIONS,
+    READ_NOTIFICATION_SUCCESS,
+    READ_NOTIFICATION_FAIL
 } from '../actions/types'
 
 const initialState = {
@@ -100,13 +103,25 @@ const authReducer = (state = initialState, action) => {
                 ...action.payload,
                 isGetInboxLoading: false
             }
-        case GET_INBOX_SUCCESS:
+        case RECEIVE_NOTIFICATIONS:
             return {
                 ...state,
                 inbox: [...action.payload.inbox, ...state.inbox],
                 inboxPage: action.payload.inboxPage,
                 inboxPages: action.payload.inboxPages,
                 inboxTotalCount: action.payload.inboxTotalCount,
+            }
+        case READ_NOTIFICATION_SUCCESS:
+            const newInbox = [...state.inbox]
+            newInbox[action.payload.index] = action.payload.updatedNotification
+            return {
+                ...state,
+                inbox: newInbox
+            }
+        case READ_NOTIFICATION_FAIL:
+            return {
+                ...state,
+                ...action.payload
             }
         default:
             return state;

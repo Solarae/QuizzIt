@@ -3,6 +3,8 @@ import {
     GET_INBOX_SUCCESS,
     GET_INBOX_FAIL,
     RECEIVE_NOTIFICATIONS,
+    READ_NOTIFICATION_SUCCESS,
+    READ_NOTIFICATION_FAIL,
     EDIT_PROFILE_SUCCESS,
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
@@ -151,4 +153,25 @@ export const receiveNotifications = (data) => (dispatch) => {
         type: RECEIVE_NOTIFICATIONS,
         payload: data
     })
+}
+
+export const readNotification = (userId, notifId) => async (dispatch) => {
+    try {
+        const res = await axios.post(`${URL}/api/users/${userId}/inbox/notification/${notifId}/read`)
+        
+        if (res.data.errors) {
+            dispatch({
+                type: READ_NOTIFICATION_SUCCESS,
+                payload: res.data
+            })
+        } else {
+            dispatch({
+                type: READ_NOTIFICATION_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    
 }

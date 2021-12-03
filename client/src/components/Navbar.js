@@ -3,7 +3,7 @@ import { Nav, Navbar, Container, Image, NavDropdown, Form, FormControl } from 'r
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
-import { getInbox } from '../actions/profileActions'
+import { getInbox, receiveNotifications, readNotification } from '../actions/profileActions'
 import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
@@ -17,14 +17,16 @@ function AppNavbar() {
   const isGetInboxLoading = useSelector(state => state.auth.isGetInboxLoading)
   const inbox = useSelector(state => state.auth.inbox)
   const socket = useSelector((state) => state.auth.socket)
-  const { inboxPage, inboxPages, inboxTotalCount} = useSelector((state) => state.auth)
+  const { inboxPage, inboxPages } = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [query, setQuery] = useState("");
 
   useEffect(() => {
     socket?.on('getInbox', (data) => {
-      console.log(data)
+      dispatch((
+        receiveNotifications(data)
+        ))
     })
   }, [socket])
 
@@ -63,6 +65,15 @@ function AppNavbar() {
         inboxPage + 1
       )) 
   })
+
+  const unreadCount = () => {
+    var count = 0
+    inbox.forEach(i => {
+      if (!i.read)
+        count++
+    })
+    return count
+  }
   
   return (
     <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
@@ -127,11 +138,18 @@ function AppNavbar() {
               <NavDropdown
                 id='notification'
                 title= {
-                  <i style={{color:"white", marginRight: "50px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
+                    {
+                      unreadCount() > 0 &&
+                      <div style={{color:"red"}}>{unreadCount()}</div>
+                    }
+                  </div>
+                  
                 }
                 >
                   <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleNotifScroll(e)}>
-                  {inbox.map(i => <NavDropdown.Item key={i._id}>{i.message}</NavDropdown.Item>)}
+                  {inbox.map(i => <NavDropdown.Item key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
                   </div>
 
               </NavDropdown>

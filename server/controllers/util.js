@@ -111,9 +111,6 @@ export const assignAwards = async (userId, platformId) => {
         ])
 
         const user_agg = agg[0]
-
-        console.log(`User submission count is ${user_agg.submissionCount}`)
-        console.log(`User total points is ${user_agg.totalPoints}`)
         
         // Get all awards for current platform
         const user = await User.findById(userId)
@@ -128,8 +125,6 @@ export const assignAwards = async (userId, platformId) => {
                 ]
             }}
         ])
-
-        console.log(awards)
 
         var awardsObtained = []
         var messages = []
@@ -157,10 +152,12 @@ export const assignAwards = async (userId, platformId) => {
             const data = {
                 inbox: slicedUser.inbox,
                 inboxTotalCount: updatedUser.inbox.length,
-                inboxPages: Math.ceil(inboxTotalCount / 5),
+                inboxPages: Math.ceil(updatedUser.inbox.length / 5),
                 inboxPage: 1
             }
-            onlineUsers.get(userId) && io.to(onlineUsers.get(userId)).emit('getInbox', data)
+            
+            if (onlineUsers.get(userId)) 
+                io.to(onlineUsers.get(userId)).emit('getInbox', data)
         }  
     } catch (error) {
         console.log(error)
