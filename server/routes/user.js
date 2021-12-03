@@ -1,5 +1,6 @@
 import express from 'express';
 import { getUsersByFilter, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser } from '../controllers/user.js';
+import {checkIfAdmin} from '../controllers/util.js'
 
 const router = express.Router();
 
@@ -10,5 +11,6 @@ router.post('/signup', signup);
 router.post('/edit', editAccount);
 router.post('/delete', deleteAccount);
 router.post('/update', updateUser);
+router.get('/checkIfAdmin/:id',checkIfAdmin)
 
 export default router;

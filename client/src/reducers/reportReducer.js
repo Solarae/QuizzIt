@@ -25,7 +25,8 @@ const reportReducer = (state = initialState,action) => {
         case GET_PLATFORM_REPORT_FAIL:
             return{
                 ...state,
-                ...action.payload
+                ...action.payload,
+                isLoading:false
             }
 
         default:

@@ -42,17 +42,15 @@ export const reportPlatform = async (req,res) =>{
 
 export const getReport = () =>{
 
-    
+    return "sss"
 }
 
 
-export const getPlatformReport = async (req,res) =>{
+export const getPlatformReport =  async (req,res) =>{
+
 
     try {
-        let id = req.params.id
-
-        let reports = await Report.find({platformId:id}).populate("platformId").populate("submittedBy")
-    
+        let reports = await Report.find().populate("platformId").populate("submittedBy")
         return res.status(200).json({report:reports})  
 
     } catch (error) {

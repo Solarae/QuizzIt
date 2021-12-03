@@ -1,5 +1,6 @@
 import cloudinary from "../utils/cloudinary.js";
 import Platform from '../models/Platform.js'
+import User from "../models/User.js";
 
 export const uploadImgToCloud = async (img) =>{
     try {
@@ -122,4 +123,20 @@ export const checkIfModeratorOfPlatform = async (req,res) =>{
 
 
 
+}
+
+
+export const checkIfAdmin = async (req,res) => {
+    try {
+        let id = req.params.id
+
+        let user = await User.findById(id)
+    
+        if(!user) return res.status(200).json({message:"User does not exist"})
+    
+        return user.role == "Admin" ? res.status(200).json({user:user}) : res.status(200).json() 
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})       
+    }
 }

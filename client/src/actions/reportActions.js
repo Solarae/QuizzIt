@@ -5,9 +5,9 @@ import { GET_PLATFORM_REPORT_FAIL, GET_PLATFORM_REPORT_SUCCESS } from "./types"
 
 
 
-export const getPlatformReport = ({id}) => async (dispatch) =>  {
+export const getPlatformReport = () => async (dispatch) =>  {
 
-    let res = await axios.get(`${URL}/api/reports/getPlatformReport/${id}`)
+    let res = await axios.get(`${URL}/api/reports`)
 
 
     try {

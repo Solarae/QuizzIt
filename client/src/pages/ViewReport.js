@@ -15,10 +15,9 @@ function ViewReport() {
     const dispatch = useDispatch()
 
     let user = useSelector((state)=> state.auth.user  )
-    let {id} = useParams()
     let reports = useSelector((state)=>state.report.report)
     
-    const [reportState,setReportState] = useState()
+    const [reportState,setReportState] = useState([])
 
     let isLoading = useSelector((state)=> state.report.isLoading)
 
@@ -27,36 +26,29 @@ function ViewReport() {
     //fetch the reports that belong to the specified platform
     useEffect(()=>{
         console.log("calling use effect")
+        // const checkIfAdmin = async () =>{
+        //     console.log(user.id)
+        //     //check if user is admin
+        //     let res = await axios.get(`${URL}/api/users/checkIfAdmin/${user.id}`)
+            
+        //     //proceed to fetch report if user is moderator of this platform
 
-        const checkIfModerator = async () =>{
-            console.log("calling this func")
-            //check if user is moderator for this platform
-            if(user){
-                console.log("here")
-                let res = await axios.get(`${URL}/api/reports/checkIfModeratorOfPlatform/${user.id}/${id}`)
-                
-                //proceed to fetch report if user is moderator of this platform
-
-                // console.log(res)
-                //if res.user is null,it means that user is not moderator
-                if(res.data && res.data.user){
-                    console.log("is true")
-                    return true
-                }else{
-                    console.log("is false")
-                    return false
-                }
-
-            }
-            return false
-        }
+        //     //if res.user is null,it means that user is not moderator
+        //     if(res.data && res.data.user){
+        //         console.log("is true")
+        //         return true
+        //     }else{
+        //         console.log("is false")
+        //         return false
+        //     }
+        // }
 
 
-        if(checkIfModerator()){
-            dispatch(getPlatformReport({
-                id
-            }))
+        if(user){
+            dispatch(getPlatformReport())
+            console.log(reports)
             setReportState(reports)
+            console.log(reportState)
         }
 
     },[dispatch,user])
@@ -68,7 +60,6 @@ function ViewReport() {
 
 
     console.log(reports)
-
 
 
     if(reports){
@@ -101,6 +92,9 @@ function ViewReport() {
     
         )
     }
+
+   
+    
 
 
     return(
