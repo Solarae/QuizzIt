@@ -26,7 +26,8 @@ export const getSignedIn = async (req, res) => {
                 id: loggedInUser._id,
                 username: loggedInUser.username,
                 email: loggedInUser.email,
-                likes: loggedInUser.likes,  
+                likes: loggedInUser.likes,
+                role:loggedInUser.role  
             }
         })
     } catch (error) {
@@ -67,7 +68,8 @@ export const signin = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                likes: user.likes,           
+                likes: user.likes,  
+                role:user.role         
             }
         })
     } catch (error) {
