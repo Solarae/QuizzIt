@@ -81,3 +81,16 @@ export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>
 
 
 }
+
+
+export const getQuizReport = ({id})=> async(dispatch) =>{
+
+    let res = await axios.get(`${URL}/api/reports/getQuizReport/${id}`)
+    console.log(res.data)
+    dispatch({
+        type:GET_PLATFORM_REPORT_SUCCESS,
+        payload:res.data
+    })   
+
+
+}

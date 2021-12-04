@@ -117,7 +117,7 @@ export const checkIfModeratorOfPlatform = async (req,res) =>{
 
         console.log(user)
 
-        if(user[0] && user[0].role == "Moderator" ){
+        if(user[0] && (user[0].role == "Moderator" || user[0].role == "Creator" ) ){
             return res.status(200).json({user:user[0]})
         }
 

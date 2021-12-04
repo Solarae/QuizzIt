@@ -10,7 +10,7 @@ import { getPlatformReport } from "../actions/reportActions"
 import ReportCard from "../components/Report/ReportCard"
 
 
-function ViewReport() {
+function ViewPlatformReport() {
     
     const dispatch = useDispatch()
 
@@ -94,4 +94,4 @@ function ViewReport() {
 
 }
 
-export default ViewReport
+export default ViewPlatformReport

@@ -51,7 +51,7 @@ export const reportQuiz = async (req,res) =>{
     
     
         let report = new Report ({
-            platformId: quizId,
+            quizId: quizId,
             description: description,
             timeSubmitted: Date.now(),
             submittedBy:submittedBy,
@@ -81,7 +81,7 @@ export const getReport = () =>{
 export const getPlatformReport =  async (req,res) =>{
 
     try {
-        let reports = await Report.find().populate("platformId").populate("submittedBy")
+        let reports = await Report.find({type:"platformReport"}).populate("platformId").populate("submittedBy")
         console.log(reports)
         return res.status(200).json({report:reports})  
 
@@ -168,6 +168,37 @@ export const deleteManyPlatformReport = async(req,res) => {
     } catch (error) {
         return res.status(500).json({message:error.message})      
     }
+
+
+
+}
+
+
+export const getQuizReport = async (req,res) =>{
+
+    try {
+        let platformId = req.params.id
+
+        //get every quiz reports
+        let reports = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
+        
+        //filter out the quiz reports that belong to the given platformId
+        reports.filter((report)=>{
+
+            let platformIdOfQuiz = report.quizId.platformId
+            return platformId == platformIdOfQuiz
+            
+        })
+
+
+        return res.status(200).json({report:reports})  
+
+    } catch (error) {
+        
+        return res.status(500).json({message:error.message})
+    }
+
+
 
 
 
