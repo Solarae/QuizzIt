@@ -17,7 +17,7 @@ function Friends() {
         ))
     }, [page, dispatch]);
     
-    if (isGetFriendsLoading) {
+    if (isGetFriendsLoading && friends.length === 0) {
         return (<div>Loading...</div>)
     }
     
