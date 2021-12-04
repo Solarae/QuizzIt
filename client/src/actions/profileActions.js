@@ -18,7 +18,12 @@ import {
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAIL,
-    RECEIVE_FRIENDREQUEST
+    RECEIVE_FRIENDREQUEST,
+    GET_FRIENDS_REQ,
+    GET_FRIENDS_SUCCESS,
+    GET_FRIENDS_FAIL,
+    UNFRIEND_SUCCESS,
+    UNFRIEND_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -194,7 +199,7 @@ export const getFriendRequests = (id, currMax) => async (dispatch) => {
             limit: 5
         }
     }
-    
+
     if (currMax === 0) 
         dispatch({
             type: GET_FRIENDREQUESTS_REQ
@@ -221,7 +226,7 @@ export const getFriendRequests = (id, currMax) => async (dispatch) => {
 
 export const sendFriendRequest = (id, recipientId) => async (dispatch) => {
     try {
-        const res = await axios.get(`${URL}/api/users/${recipientId}/friendRequests/${id}/send`)
+        const res = await axios.post(`${URL}/api/users/${recipientId}/friendRequests/${id}/send`)
         if (res.data.errors) {
             dispatch({
                 type: SEND_FRIENDREQUEST_FAIL,
@@ -284,4 +289,56 @@ export const receiveFriendRequest = (friendRequest) => (dispatch) => {
         type: RECEIVE_FRIENDREQUEST,
         payload: friendRequest
     })
+}
+
+export const getFriends = (id, query, page) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query,
+            offset: 10 * (page - 1),
+            limit: 10
+        }
+    }
+    
+    dispatch({
+        type: GET_FRIENDS_REQ
+    })
+   
+    try {
+        const res = await axios.get(`${URL}/api/users/${id}/friends`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: GET_FRIENDS_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: GET_FRIENDS_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const unfriend = (id, userId) => async (dispatch) => {
+    try {
+        const res = await axios.post(`${URL}/api/users/${id}/friends/${userId}/unfriend`)
+        if (res.data.errors) {
+            dispatch({
+                type: UNFRIEND_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: UNFRIEND_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
 }

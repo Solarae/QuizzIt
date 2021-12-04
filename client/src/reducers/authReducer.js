@@ -25,7 +25,12 @@ import {
     ACCEPT_FRIENDREQUEST_FAIL,
     DECLINE_FRIENDREQUEST_SUCCESS,
     DECLINE_FRIENDREQUEST_FAIL,
-    RECEIVE_FRIENDREQUEST
+    RECEIVE_FRIENDREQUEST,
+    GET_FRIENDS_REQ,
+    GET_FRIENDS_SUCCESS,
+    GET_FRIENDS_FAIL,
+    UNFRIEND_SUCCESS,
+    UNFRIEND_FAIL
 } from '../actions/types'
 
 const initialState = {
@@ -38,7 +43,12 @@ const initialState = {
     isGetInboxLoading: true,
     friendRequests: [],
     friendRequestsTotalCount: 0,
-    isGetFriendRequestsLoading: true
+    isGetFriendRequestsLoading: true,
+    friends: [],
+    friendsPage: 1,
+    friendsPages: 1,
+    friendsTotalCount: 0,
+    isGetFriendsLoading: true
 }
 
 const authReducer = (state = initialState, action) => {
@@ -164,6 +174,10 @@ const authReducer = (state = initialState, action) => {
         case ACCEPT_FRIENDREQUEST_SUCCESS:
             return {
                 ...state,
+                user: {
+                    ...state.user,
+                    friends: [...state.user.friends, action.payload.uid]
+                },
                 friendRequests: state.friendRequests.filter(u => u._id !== action.payload.uid),
                 friendRequestsTotalCount: state.friendRequestsTotalCount - 1
             }
@@ -188,6 +202,36 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 friendRequests: [action.payload.friendRequest, ...state.friendRequests],
                 friendRequestsTotalCount: state.friendRequestsTotalCount + 1
+            }
+        case GET_FRIENDS_REQ:
+            return {
+                ...state,
+                isGetFriendsLoading: true
+            }
+        case GET_FRIENDS_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetFriendsLoading: false
+            }
+        case GET_FRIENDS_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetFriendsLoading: false
+            }
+        case UNFRIEND_SUCCESS:
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    friends: state.user.friends.filter(uid => uid !== action.payload.uid)
+                }
+            }
+        case UNFRIEND_FAIL:
+            return {
+                ...state,
+                ...action.payload 
             }
         default:
             return state;

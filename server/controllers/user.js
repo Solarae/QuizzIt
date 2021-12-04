@@ -185,7 +185,8 @@ export const editAccount = async (req, res) => {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                likes: newUser.likes
+                likes: newUser.likes,
+                friends: newUser.friends
             }
         })
     } catch (error) {
@@ -305,7 +306,7 @@ export const sendFriendRequest = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.id,
-            { $push: { friendRequests: req.params.uid }},
+            { $push: { friendRequests: { $each: [req.params.uid], $position: 0 }}},
             { new: true }
         )
 
@@ -400,14 +401,15 @@ export const getFriends = async (req, res) => {
 
 export const unfriend = async (req, res) => {
     console.log("INSIDE DELETE FRIEND")
+  
     try {
-        const user = await User.findByIdAndUpdate(
+        await User.findByIdAndUpdate(
             req.params.id,
             { $pull: { friends: req.params.uid }},
             { new: true }
         )
 
-        res.status(200).json({user});
+        res.status(200).json({uid: req.params.uid});
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }
@@ -436,7 +438,8 @@ export const updateUser = async (req, res) => {
                     id: updatedUser._id,
                     username: updatedUser.username,
                     email: updatedUser.email,
-                    likes: updatedUser.likes
+                    likes: updatedUser.likes,
+                    friends: updatedUser.friends
                 }
             });
     } catch (error) {
