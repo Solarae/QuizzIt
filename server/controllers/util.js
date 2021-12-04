@@ -61,7 +61,7 @@ export const queryBuilder = (q, queries, model) => {
             })
         } else if (key === 'limit' || key === 'offset') {
             break
-        } else if (key === 'name') {
+        } else if (key === 'name' || key === 'username') {
             query[key] = {
                 "$regex": queries[key], 
                 "$options": "i"
@@ -164,9 +164,6 @@ export const assignAwards = async (userId, platformId) => {
         ])
 
         const user_agg = agg[0]
-
-        console.log(`User submission count is ${user_agg.submissionCount}`)
-        console.log(`User total points is ${user_agg.totalPoints}`)
         
         // Get all awards for current platform
         const user = await User.findById(userId)
@@ -182,21 +179,37 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
-        console.log(awards)
-
         var awardsObtained = []
-
+        var messages = []
         awards.forEach((award) => {
             if ((award.requirementType === 'Point' && user_agg.totalPoints >= award.requirementCount) ||
-                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount )
-                awardsObtained.push(award._id)
+                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount ) {
+                    awardsObtained.push(award._id)
+                    messages.push({
+                        message: `You've received earned the ${award.title}`,
+                        read: false 
+                    })
+                }
         })
         
-        await User.findByIdAndUpdate(
-            userId,
-            { $addToSet: { awards: { $each: awardsObtained } } },
-        )
-        io.to(onlineUsers.get(userId)).emit('Hello')
+        if (awardsObtained.length) {
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { $addToSet: { awards: { $each: awardsObtained } } ,
+                 $push: { inbox : { $each: messages, $position: 0 } } },
+                { new: true }
+            )
+    
+            
+            if (onlineUsers.get(userId)) {
+                const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
+                
+                io.to(onlineUsers.get(userId)).emit('getInbox', {
+                    inbox: slicedUser.inbox,
+                })
+            }
+                
+        }  
     } catch (error) {
         console.log(error)
     }

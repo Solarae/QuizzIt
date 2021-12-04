@@ -18,7 +18,6 @@ export const getSignedIn = async (req, res) => {
         }
 
         const loggedInUser = await User.findOne({ _id: userId });
-        console.log("loggedInUser: " + loggedInUser);
 
         return res.status(200).json({
             isAuthenticated: true,
@@ -27,7 +26,8 @@ export const getSignedIn = async (req, res) => {
                 username: loggedInUser.username,
                 email: loggedInUser.email,
                 likes: loggedInUser.likes,
-                role:loggedInUser.role  
+                friends: loggedInUser.friends,  
+                role: loggedInUser.role  
             }
         })
     } catch (error) {
@@ -68,8 +68,9 @@ export const signin = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                likes: user.likes,  
-                role:user.role         
+                likes: user.likes,
+                friends: user.friends, 
+                role: user.role         
             }
         })
     } catch (error) {
@@ -124,7 +125,9 @@ export const signup = async (req, res) => {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                likes: newUser.likes
+                likes: newUser.likes,
+                friends: newUser.friends,
+                role: newUser.role
             }
         })
 

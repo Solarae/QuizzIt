@@ -75,6 +75,11 @@ io.on('connection', (socket) => {
         console.log(`${userId} has logged in`)
     })
 
+    socket.on('logout', (userId) => {
+        onlineUsers.delete(userId)
+        console.log(`${userId} has logged out`)
+    })
+
     socket.on('disconnect', () => {
         onlineUsers.delete(getByValue(socket.id, onlineUsers))
         console.log(onlineUsers.size)
