@@ -9,6 +9,9 @@ import QuizCard from '../components/Search/QuizCard'
 import UserCard from '../components/Search/UserCard'
 
 import { searchPlatform, searchQuiz, searchUser } from '../actions/searchActions.js'
+import {
+    RESET_MAX_PAGES
+} from '../actions/types'
 
 import mongoose from 'mongoose'
 
@@ -19,6 +22,7 @@ function Search() {
     const platforms = useSelector((state) => state.search.platforms)
     const quizzes = useSelector((state) => state.search.quizzes)
     const users = useSelector((state) => state.search.users)
+    const maxPages = useSelector((state) => state.search.maxPages)
 
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
@@ -33,6 +37,8 @@ function Search() {
     // available sorts (oldest, newest)
     const [sort, setSort] = useState("oldest");
 
+    const [page, setPage] = useState(1);
+    
     // dispatch the SEARCH request
     useEffect(() => {
         console.log("searching");
@@ -40,7 +46,7 @@ function Search() {
         if (filter === "none" || filter === "platform") {
             dispatch(searchPlatform({
                 query: { 'name': query },
-                page: 1,
+                page: page,
                 limit: 4
             }))
         }
@@ -48,7 +54,7 @@ function Search() {
         if (filter === "none" || filter === "quiz") {
             dispatch(searchQuiz({
                 query: { 'name': query },
-                page: 1,
+                page: page,
                 limit: 4
             }))
         }
@@ -56,11 +62,19 @@ function Search() {
         if (filter === "none" || filter === "user") {
             dispatch(searchUser({
                 query: { 'username': query },
-                page: 1,
+                page: page,
                 limit: 4
             }))
         }
-    }, [query, filter, sort, dispatch]);
+    }, [query, filter, sort, page, dispatch]);
+
+    // reset the page and max pages when query or filter changes
+    useEffect(() => {
+        dispatch({
+            type: RESET_MAX_PAGES
+        })
+        setPage(1)
+    }, [query, filter, dispatch]);
 
     // compares the creation time of mongodb documents a and b
     const compareDates = (a, b) => {
@@ -136,7 +150,7 @@ function Search() {
                         :
                         ((filter === "quiz" || filter === "none") && <p>No Quiz Results</p>)
                     }
-                    
+
                     {/* Search results for users */}
                     {filter === "none" && <hr />}
                     {(filter === "user" || filter === "none") && <h3>Users</h3>}
@@ -147,6 +161,21 @@ function Search() {
                         :
                         ((filter === "user" || filter === "none") && <p>No User Results</p>)
                     }
+
+                    <Row style={{ marginTop: "40px", marginBottom: "80px" }}>
+                        <Col className="d-flex justify-content-center" >
+                            <Pagination >
+                                <Pagination.Prev disabled={page === 1} onClick={() => { setPage(page - 1) }} />
+                                {Array.from({ length: maxPages }).map((_, i) => (
+                                    <Pagination.Item onClick={() => setPage(i + 1)} key={i + 1} active={page === i + 1}>
+                                        {i + 1}
+                                    </Pagination.Item>
+                                ))}
+
+                                <Pagination.Next disabled={page === maxPages} onClick={() => { setPage(page + 1) }} />
+                            </Pagination>
+                        </Col>
+                    </Row>
                 </Container>
             </div>
 

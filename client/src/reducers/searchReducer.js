@@ -8,7 +8,8 @@ import {
     SEARCH_USER_REQ,
     SEARCH_USER_SUCCESS,
     SEARCH_USER_FAIL,
-    SEARCH_UPDATE_PLATFORM
+    SEARCH_UPDATE_PLATFORM,
+    RESET_MAX_PAGES
 } from '../actions/types'
 
 const initialState = {
@@ -18,6 +19,9 @@ const initialState = {
     platforms: null,
     quizzes: null,
     users: null,
+    page: 0,
+    maxPages: 0,
+    totalCount: 0 ,
     errors: null
 }
 
@@ -32,6 +36,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
                 isSearchPlatformLoading: false,
                 errors: null 
             }
@@ -50,6 +55,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
                 isSearchQuizLoading: false,
                 errors: null 
             }
@@ -68,6 +74,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
                 isSearchUserLoading: false,
                 errors: null 
             }
@@ -89,6 +96,11 @@ const searchReducer = (state = initialState, action) => {
             return{
                 ...state,
                 platforms: updatedPlatforms
+            }
+        case RESET_MAX_PAGES:
+            return{
+                ...state,
+                maxPages: 0 
             }
         default:
             return state;
