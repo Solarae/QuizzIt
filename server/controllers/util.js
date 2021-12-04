@@ -61,7 +61,7 @@ export const queryBuilder = (q, queries, model) => {
             })
         } else if (key === 'limit' || key === 'offset') {
             break
-        } else if (key === 'name') {
+        } else if (key === 'name' || key === 'username') {
             query[key] = {
                 "$regex": queries[key], 
                 "$options": "i"

@@ -28,6 +28,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
+import { URL } from './config'
 
 function App() {
   const dispatch = useDispatch()
@@ -37,7 +38,7 @@ function App() {
   // Try logging in wth token and setup socket
   useEffect(() => {
     dispatch(getSignedIn())
-    dispatch(connectSocket(io('http://localhost:5000')))
+    dispatch(connectSocket(io(URL)))
   }, []);
 
   useEffect(() => {
