@@ -291,14 +291,14 @@ export const receiveFriendRequest = (friendRequest) => (dispatch) => {
     })
 }
 
-export const getFriends = (id, query, page) => async (dispatch) => {
+export const getFriends = (id, page) => async (dispatch) => {
     const config = {
         params: {
-            ...query,
             offset: 10 * (page - 1),
             limit: 10
         }
     }
+    console.log(page)
     
     dispatch({
         type: GET_FRIENDS_REQ
@@ -324,6 +324,7 @@ export const getFriends = (id, query, page) => async (dispatch) => {
 }
 
 export const unfriend = (id, userId) => async (dispatch) => {
+    console.log(id)
     try {
         const res = await axios.post(`${URL}/api/users/${id}/friends/${userId}/unfriend`)
         if (res.data.errors) {

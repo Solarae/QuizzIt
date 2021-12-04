@@ -76,13 +76,12 @@ const authReducer = (state = initialState, action) => {
                 isAuthenticated: true
             }
         case LOGIN_FAIL:
-            return state;
-        case LOGOUT_SUCCESS:
             return {
-                ...state,
-                isAuthenticated: null,
-                user: null
+                ...initialState,
+                socket: state.socket
             }
+        case LOGOUT_SUCCESS:
+            return initialState
         case REGISTER_FAIL:
             return {
                 ...state,
@@ -221,12 +220,15 @@ const authReducer = (state = initialState, action) => {
                 isGetFriendsLoading: false
             }
         case UNFRIEND_SUCCESS:
+            console.log(state.friends)
+            console.log(state.friends.filter(f => f._id !== action.payload.uid))
             return {
                 ...state,
                 user: {
                     ...state.user,
                     friends: state.user.friends.filter(uid => uid !== action.payload.uid)
-                }
+                },
+                friends: state.friends.filter(f => f._id !== action.payload.uid)
             }
         case UNFRIEND_FAIL:
             return {

@@ -123,7 +123,8 @@ export const signup = async (req, res) => {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                likes: newUser.likes
+                likes: newUser.likes,
+                friends: newUser.friends
             }
         })
 

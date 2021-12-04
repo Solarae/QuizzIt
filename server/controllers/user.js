@@ -383,14 +383,14 @@ export const declineFriendRequest = async (req, res) => {
 export const getFriends = async (req, res) => {
     console.log("INSIDE GET FRIEND")
     const skip = parseInt(req.query.offset) || 0
-    const limit = parseInt(req.query.limit) || 5
+    const limit = parseInt(req.query.limit) || 10
 
     try {
         const user = await User.findById(req.params.id).slice('friends', [skip,limit]).populate('friends', 'username')
         const u = await User.findById(req.params.id)
 
         const friendsTotalCount = u.friends.length
-        const friendsPages = Math.ceil(inboxTotalCount / limit)
+        const friendsPages = Math.ceil(friendsTotalCount / limit)
         const friendsPage = (skip / limit) + 1
 
         res.status(200).json({ friends: user.friends, friendsPage, friendsPages, friendsTotalCount });
@@ -406,6 +406,12 @@ export const unfriend = async (req, res) => {
         await User.findByIdAndUpdate(
             req.params.id,
             { $pull: { friends: req.params.uid }},
+            { new: true }
+        )
+
+        await User.findByIdAndUpdate(
+            req.params.uid,
+            { $pull: { friends: req.params.id }},
             { new: true }
         )
 
