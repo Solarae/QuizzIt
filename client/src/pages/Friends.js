@@ -11,11 +11,12 @@ function Friends() {
     const [page, setPage] = useState(1)
 
     useEffect(() => {
-        dispatch(getFriends(
-            user.id,
-            page
-        ))
-    }, [page, dispatch]);
+        if (user)
+            dispatch(getFriends(
+                user.id,
+                page
+            ))
+    }, [user, page, dispatch]);
     
     if (isGetFriendsLoading && friends.length === 0) {
         return (<div>Loading...</div>)
