@@ -7,8 +7,7 @@ import { queryBuilder, paginateQuery } from "./util.js";
 import { JWT_SECRET } from '../config.js';
 import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
 
-import mongoose from 'mongoose'
-const ObjectId = mongoose.Types.ObjectId;
+import { io, onlineUsers } from '../index.js'
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -281,6 +280,136 @@ export const readNotification = async (req, res) => {
         res.status(200).json({ 
             updatedNotification: user.inbox[index], 
             index });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const getFriendRequests = async (req, res) => {
+    console.log("INSIDE GET FRIEND REQUESTS")
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 5 
+
+    try {
+        const user = await User.findById(req.params.id).slice('friendRequests', [skip,limit]).populate('friendRequests', 'username')
+        const u = await User.findById(req.params.id)
+
+        const friendRequestsTotalCount = u.friendRequests.length
+        const friendRequestsPages = Math.ceil(inboxTotalCount / limit)
+        const friendRequestsPage = (skip / limit) + 1
+
+        res.status(200).json({ friendRequests: user.friendRequests, friendRequestsPage, friendRequestsPages, friendRequestsTotalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const sendFriendRequest = async (req, res) => {
+    console.log("INSIDE SEND FRIEND REQ")
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { $addToSet: { friendRequests: req.params.uid }},
+            { new: true }
+        )
+
+        if (!user) return res.status(400).json({msg:"User does not exist"})
+        
+        res.status(200).json({ 
+            userId: req.params.uid });
+        
+        if (onlineUsers.get(req.params.id)) {
+            const slicedUser = await User.findById(req.params.id).slice('friendRequests', [0,5]).populate('friendRequests', 'username')
+            io.to(onlineUsers.get(req.params.id)).emit('getInbox', {
+                friendRequests: slicedUser.friendRequests,
+                friendRequestsTotalCount: user.friendRequests.length,
+                friendRequestsPages: Math.ceil(user.friendRequests.length / 5),
+                friendRequestPage: 1
+            })
+        } 
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const acceptFriendRequest = async (req, res) => {
+    console.log("INSIDE ACCEPT FRIEND REQ")
+    try {
+        const sender = await User.findByIdAndUpdate(
+            req.params.uid,
+            { $push: { friends: req.params.id} },
+            { new: true }
+        )
+
+        if (!sender) return res.status(400).json({msg:"User does not exist"})
+
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { $pull: { friendRequests: req.params.uid },
+            $push: { friends: req.params.uid} },
+            { new: true }
+        )
+
+        res.status(200).json({user});
+
+        if (onlineUsers.get(req.params.uid)) {
+            const slicedUser = await User.findById(req.params.uid).slice('friendRequests', [0,5]).populate('friendRequests', 'username')
+            io.to(onlineUsers.get(req.params.uid)).emit('getInbox', {
+                friendRequests: slicedUser.friendRequests,
+                friendRequestsTotalCount: user.friendRequests.length,
+                friendRequestsPages: Math.ceil(user.friendRequests.length / 5),
+                friendRequestPage: 1
+            })
+        } 
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const declineFriendRequest = async (req, res) => {
+    console.log("INSIDE DECLINE FRIEND REQ")
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { $pull: { friendRequests: req.params.uid }},
+            { new: true }
+        )
+
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const getFriends = async (req, res) => {
+    console.log("INSIDE GET FRIEND")
+    const skip = parseInt(req.query.offset) || 0
+    const limit = parseInt(req.query.limit) || 5
+
+    try {
+        const user = await User.findById(req.params.id).slice('friends', [skip,limit]).populate('friends', 'username')
+        const u = await User.findById(req.params.id)
+
+        const friendsTotalCount = u.friends.length
+        const friendsPages = Math.ceil(inboxTotalCount / limit)
+        const friendsPage = (skip / limit) + 1
+
+        res.status(200).json({ friends: user.friends, friendsPage, friendsPages, friendsTotalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+export const unfriend = async (req, res) => {
+    console.log("INSIDE DELETE FRIEND")
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { $pull: { friends: req.params.uid }},
+            { new: true }
+        )
+
+        res.status(200).json({user});
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }

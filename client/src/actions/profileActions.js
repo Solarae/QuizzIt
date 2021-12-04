@@ -5,10 +5,20 @@ import {
     RECEIVE_NOTIFICATIONS,
     READ_NOTIFICATION_SUCCESS,
     READ_NOTIFICATION_FAIL,
+    GET_FRIENDREQUESTS_REQ,
+    GET_FRIENDREQUESTS_SUCCESS,
+    GET_FRIENDREQUESTS_FAIL,
+    SEND_FRIENDREQUEST_SUCCESS,
+    SEND_FRIENDREQUEST_FAIL,
+    ACCEPT_FRIENDREQUEST_SUCCESS,
+    ACCEPT_FRIENDREQUEST_FAIL,
+    DECLINE_FRIENDREQUEST_SUCCESS,
+    DECLINE_FRIENDREQUEST_FAIL,
     EDIT_PROFILE_SUCCESS,
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
-    DELETE_PROFILE_FAIL
+    DELETE_PROFILE_FAIL,
+    RECEIVE_FRIENDREQUEST
 } from '../actions/types'
 
 import axios from 'axios'
@@ -161,7 +171,7 @@ export const readNotification = (userId, notifId) => async (dispatch) => {
         
         if (res.data.errors) {
             dispatch({
-                type: READ_NOTIFICATION_SUCCESS,
+                type: READ_NOTIFICATION_FAIL,
                 payload: res.data
             })
         } else {
@@ -173,5 +183,100 @@ export const readNotification = (userId, notifId) => async (dispatch) => {
     } catch (error) {
         console.log(error)
     }
-    
+}
+
+export const getFriendRequests = (id, page) => async (dispatch) => {
+    const config = {
+        params: {
+            offset: 5 * (page - 1),
+            limit: 5
+        }
+    }
+    dispatch({
+        type: GET_FRIENDREQUESTS_REQ
+    })
+    try {
+        const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: GET_FRIENDREQUESTS_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: GET_FRIENDREQUESTS_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const sendFriendRequest = (id, recipientId) => async (dispatch) => {
+    try {
+        const res = await axios.get(`${URL}/api/users/${recipientId}/friendRequests/${id}/send`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: SEND_FRIENDREQUEST_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: SEND_FRIENDREQUEST_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const acceptFriendRequest = (id, userId) => async (dispatch) => {
+    try {
+        const res = await axios.get(`${URL}/api/users/${id}/friendRequests/${userId}/accept`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: ACCEPT_FRIENDREQUEST_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: ACCEPT_FRIENDREQUEST_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const acceptFriendRequest = (id, userId) => async (dispatch) => {
+    try {
+        const res = await axios.get(`${URL}/api/users/${id}/friendRequests/${userId}/decline`, config)
+        if (res.data.errors) {
+            dispatch({
+                type: DECLINE_FRIENDREQUEST_FAIL,
+                payload: res.data
+            })
+        } else {
+            console.log(res.data)
+            dispatch({
+                type: DECLINE_FRIENDREQUEST_SUCCESS,
+                payload: res.data
+            })
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+    }
+}
+
+export const receiveFriendRequest = (data) => (dispatch) => {
+    dispatch({
+        type: RECEIVE_FRIENDREQUEST,
+        payload: data
+    })
 }

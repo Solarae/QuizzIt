@@ -42,6 +42,12 @@ const userSchema = new mongoose.Schema({
             type: Boolean
         }
     }],
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }],
+    friendRequests: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }],
     likes: {
         likedPlatforms: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Platform'

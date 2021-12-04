@@ -147,17 +147,18 @@ export const assignAwards = async (userId, platformId) => {
                 { new: true }
             )
     
-            const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
-    
-            const data = {
-                inbox: slicedUser.inbox,
-                inboxTotalCount: updatedUser.inbox.length,
-                inboxPages: Math.ceil(updatedUser.inbox.length / 5),
-                inboxPage: 1
-            }
             
-            if (onlineUsers.get(userId)) 
-                io.to(onlineUsers.get(userId)).emit('getInbox', data)
+            if (onlineUsers.get(userId)) {
+                const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
+                
+                io.to(onlineUsers.get(userId)).emit('getInbox', {
+                    inbox: slicedUser.inbox,
+                    inboxTotalCount: updatedUser.inbox.length,
+                    inboxPages: Math.ceil(updatedUser.inbox.length / 5),
+                    inboxPage: 1
+                })
+            }
+                
         }  
     } catch (error) {
         console.log(error)
