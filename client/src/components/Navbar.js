@@ -119,6 +119,66 @@ function AppNavbar() {
           <i class="bi bi-search" onClick={handleSearch} style={{ color: "white", fontSize: "1.5rem", marginLeft: "2px", marginTop: "2px", cursor: "pointer" }} ></i>
         </Form>
 
+        {auth.user && !isGetInboxLoading && (
+          <NavbarCollapse class='ml-auto'>
+            <Nav>
+              <NavDropdown
+                id='notification'
+                title= {
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
+                    {
+                      inboxTotalUnreadCount > 0 &&
+                      <div style={{color:"red"}}>{inboxTotalUnreadCount}</div>
+                    }
+                  </div>
+                }
+                show={showNotifications}
+                onToggle={(isOpen, event) => {
+                  if (event.source !== 'select')
+                    setShowNotifications(isOpen)
+                }}
+                >
+                  <div style={{maxHeight: '200px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'notification')}>
+                  {inbox.map(i => <NavDropdown.Item style={ {color: i.read ? 'black': 'red'}} key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
+                  </div>
+
+              </NavDropdown>
+            </Nav>
+          </NavbarCollapse>)}
+
+          {auth.user && !isGetFriendRequestsLoading && (
+          <NavbarCollapse class='ml-auto'>
+            <Nav>
+              <NavDropdown
+                id='friendRequests'
+                title= {
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-people"></i>
+                    {
+                      friendRequestsTotalCount> 0 &&
+                      <div style={{color:"red"}}>{friendRequestsTotalCount}</div>
+                    }
+                  </div>  
+                }
+                show={showFriendRequests}
+                onToggle={(isOpen, event) => {
+                  if (event.source !== 'select')
+                    setShowFriendRequests(isOpen)
+                }}
+                >
+                  <div style={{maxHeight: '200px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
+                  {friendRequests.map(u => <NavDropdown.Item key={u._id}>
+                    {u.username}
+                    <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
+                    <i className="bi bi-check2-circle" style={{float: 'right'}} onClick={() => dispatch(acceptFriendRequest(auth.user.id, u._id))}></i>
+                    </NavDropdown.Item>)}
+                  </div>
+
+              </NavDropdown>
+            </Nav>
+          </NavbarCollapse>)}
+
         <Navbar.Collapse id="responsive-navbar-nav" class='ml-auto' style={{ marginRight: "8%" }}>
           {auth.isAuthenticated ?
             (
@@ -153,65 +213,7 @@ function AppNavbar() {
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
         </Navbar.Collapse>
 
-        {auth.user && !isGetInboxLoading && (
-          <NavbarCollapse>
-            <Nav>
-              <NavDropdown
-                id='notification'
-                title= {
-                  <div style={{display: "flex", justifyContent: "center"}}>
-                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
-                    {
-                      inboxTotalUnreadCount > 0 &&
-                      <div style={{color:"red"}}>{inboxTotalUnreadCount}</div>
-                    }
-                  </div>
-                }
-                show={showNotifications}
-                onToggle={(isOpen, event) => {
-                  if (event.source !== 'select')
-                    setShowNotifications(isOpen)
-                }}
-                >
-                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'notification')}>
-                  {inbox.map(i => <NavDropdown.Item style={ {color: i.read ? 'black': 'red'}} key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
-                  </div>
-
-              </NavDropdown>
-            </Nav>
-          </NavbarCollapse>)}
-
-          {auth.user && !isGetFriendRequestsLoading && (
-          <NavbarCollapse>
-            <Nav>
-              <NavDropdown
-                id='friendRequests'
-                title= {
-                  <div style={{display: "flex", justifyContent: "center"}}>
-                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-people"></i>
-                    {
-                      friendRequestsTotalCount> 0 &&
-                      <div style={{color:"red"}}>{friendRequestsTotalCount}</div>
-                    }
-                  </div>  
-                }
-                show={showFriendRequests}
-                onToggle={(isOpen, event) => {
-                  if (event.source !== 'select')
-                    setShowFriendRequests(isOpen)
-                }}
-                >
-                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
-                  {friendRequests.map(u => <NavDropdown.Item key={u._id}>
-                    {u.username}
-                    <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
-                    <i className="bi bi-check2-circle" style={{float: 'right'}} onClick={() => dispatch(acceptFriendRequest(auth.user.id, u._id))}></i>
-                    </NavDropdown.Item>)}
-                  </div>
-
-              </NavDropdown>
-            </Nav>
-          </NavbarCollapse>)}
+        
         
 
         <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
