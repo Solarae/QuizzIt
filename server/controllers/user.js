@@ -355,7 +355,9 @@ export const acceptFriendRequest = async (req, res) => {
         res.status(200).json({uid: req.params.uid});
 
         if (onlineUsers.get(req.params.uid)) {
-            io.to(onlineUsers.get(req.params.uid)).emit('getInbox', [other.inbox[0]])
+            io.to(onlineUsers.get(req.params.uid)).emit('getInbox', { 
+                inbox: [other.inbox[0]]
+            })
         } 
     } catch (error) {
         res.status(404).json({ msg: error.message }) 

@@ -103,9 +103,9 @@ const authReducer = (state = initialState, action) => {
         case GET_INBOX_SUCCESS:
             return {
                 ...state,
-                inbox: [...action.payload, ...state.inbox],
+                inbox: [...action.payload.inbox, ...state.inbox],
                 inboxTotalUnreadCount: action.payload.inboxTotalUnreadCount,
-                inboxTotalCount: state.inboxTotalCount + action.payload.length,
+                inboxTotalCount: action.payload.inboxTotalCount,
                 isGetInboxLoading: false
             }
         case GET_INBOX_FAIL:
@@ -117,9 +117,9 @@ const authReducer = (state = initialState, action) => {
         case RECEIVE_NOTIFICATIONS:
             return {
                 ...state,
-                inbox: [...action.payload, ...state.inbox],
-                inboxTotalUnreadCount: action.payload.inboxTotalUnreadCount,
-                inboxTotalCount: state.inboxTotalCount + action.payload.length,
+                inbox: [...action.payload.inbox, ...state.inbox],
+                inboxTotalUnreadCount: state.inboxTotalUnreadCount + action.payload.inbox.length,
+                inboxTotalCount: state.inboxTotalCount + action.payload.inbox.length,
             }
         case READ_NOTIFICATION_SUCCESS:
             const newInbox = [...state.inbox]

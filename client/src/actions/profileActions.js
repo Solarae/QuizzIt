@@ -136,9 +136,11 @@ export const getInbox = (id, currMax) => async (dispatch) => {
             limit: 5
         }
     }
-    dispatch({
-        type: GET_INBOX_REQ
-    })
+
+    if (currMax === 0)
+        dispatch({
+            type: GET_INBOX_REQ
+        })
     try {
         const res = await axios.get(`${URL}/api/users/${id}/inbox`, config)
         if (res.data.errors) {
@@ -192,11 +194,11 @@ export const getFriendRequests = (id, currMax) => async (dispatch) => {
             limit: 5
         }
     }
-    if (currMax === 0) {
+    
+    if (currMax === 0) 
         dispatch({
             type: GET_FRIENDREQUESTS_REQ
         })
-    }
    
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)

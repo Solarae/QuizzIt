@@ -40,7 +40,7 @@ function AppNavbar() {
     if (auth.user) {
       dispatch(getInbox(
         auth.user.id,
-        1
+        0
       ))
       dispatch(getFriendRequests(
         auth.user.id,
@@ -71,10 +71,12 @@ function AppNavbar() {
   const handleShowCreatePlatform = () => { setShowCreatePlatform(true) };
 
   const [showFriendRequests, setShowFriendRequests] = useState(false)
+  const [showNotifications, setShowNotifications] = useState(false)
 
   const handleScroll = ((e, type) => {
     if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
       if (type === 'notification' && inbox.length < inboxTotalCount) {
+        console.log("CALL DISPATCH")
         dispatch(getInbox(
           auth.user.id,
           inbox.length
@@ -149,7 +151,7 @@ function AppNavbar() {
 
         {auth.user && !isGetInboxLoading && (
           <NavbarCollapse>
-            <Nav onSelect={() => console.log("SELECT")}>
+            <Nav>
               <NavDropdown
                 id='notification'
                 title= {
@@ -161,7 +163,11 @@ function AppNavbar() {
                     }
                   </div>
                 }
-                onSelect={() => console.log("SELECT")}
+                show={showNotifications}
+                onToggle={(isOpen, event) => {
+                  if (event.source !== 'select')
+                    setShowNotifications(isOpen)
+                }}
                 >
                   <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'notification')}>
                   {inbox.map(i => <NavDropdown.Item key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}

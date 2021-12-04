@@ -153,9 +153,6 @@ export const assignAwards = async (userId, platformId) => {
                 
                 io.to(onlineUsers.get(userId)).emit('getInbox', {
                     inbox: slicedUser.inbox,
-                    inboxTotalCount: updatedUser.inbox.length,
-                    inboxPages: Math.ceil(updatedUser.inbox.length / 5),
-                    inboxPage: 1
                 })
             }
                 
