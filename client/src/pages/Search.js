@@ -39,19 +39,25 @@ function Search() {
 
         if (filter === "none" || filter === "platform") {
             dispatch(searchPlatform({
-                query: { 'name': query }
+                query: { 'name': query },
+                page: 1,
+                limit: 4
             }))
         }
 
         if (filter === "none" || filter === "quiz") {
             dispatch(searchQuiz({
-                query: { 'name': query }
+                query: { 'name': query },
+                page: 1,
+                limit: 4
             }))
         }
 
         if (filter === "none" || filter === "user") {
             dispatch(searchUser({
-                query: { 'username': query }
+                query: { 'username': query },
+                page: 1,
+                limit: 4
             }))
         }
     }, [query, filter, sort, dispatch]);
