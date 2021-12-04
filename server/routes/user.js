@@ -1,6 +1,5 @@
 import express from 'express';
 import { getUsersByFilter, getInbox, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser, readNotification, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest, getFriends, unfriend } from '../controllers/user.js';
-import { getUsersByFilter, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser } from '../controllers/user.js';
 import {checkIfAdmin, checkIfModeratorOfPlatform} from '../controllers/util.js'
 
 const router = express.Router();
