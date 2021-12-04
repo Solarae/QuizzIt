@@ -111,7 +111,7 @@ function Home() {
                                 <h3 >Global Leaderboard</h3>
                             </Col>
                         </Row>
-                        <MiniLeaderboard lbType="global" doc={platforms[0]}></MiniLeaderboard>
+                        {platforms.length!==0 && <MiniLeaderboard lbType="global" doc={platforms[0]}></MiniLeaderboard>}
                     </div>
                 </div>
             </div>
