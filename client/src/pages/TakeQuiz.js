@@ -101,8 +101,11 @@ function TakeQuiz() {
         setqno(qno+1)
         setQuestion(quiz.questions[qno+1])
     }
-
-   
+    
+    const handleJumpto = (idx) => {
+        setqno(idx)
+        setQuestion(quiz.questions[idx])
+    }
 
     return (
         <>
@@ -112,30 +115,25 @@ function TakeQuiz() {
             <CountDownTimer duration={calculateTime} counter={timerIncrement}></CountDownTimer>
 
             <Container className="row justify-content-center">
-                <Col xs={1} className="g-4"></Col>
-                <Col xs={7} className="g-4">
                     <div style={{ height: "3vh" }}></div>
-                    {/* <Col>
+                <Col xs={3}>
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
-                                <TakeQuestionCard quizId={qid} question={question} questionNumber={idx} questionInput={questionInput}></TakeQuestionCard>
+                                <Button variant={idx==qno?"secondary":"primary"} onClick={() => {handleJumpto(idx)}}>{idx+1}</Button>
                             </Col>
                             <div style={{ height: '20px'}}></div>
                         </>
                         ))}
-                    </Col>
-                    <Col> */}
+                </Col>
+                <Col>
                     <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput}></TakeQuestionCard>
 
                     <Button variant="primary" onClick={handleSubmit}>Submit</Button>
 
                     <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
                     <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
-                    {/* </Col> */}
-                    
                 </Col>
-                <Col xs={6} className="g-4"></Col>
             </Container>
         </>
     )
