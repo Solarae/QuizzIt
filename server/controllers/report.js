@@ -1,6 +1,7 @@
 import Report from '../models/Report.js'
 import Platform from '../models/Platform.js'
-
+import User from '../models/User.js'
+import bcrypt from "bcryptjs";
 
 export const reportPlatform = async (req,res) =>{
 
@@ -113,6 +114,18 @@ export const deleteManyPlatformReport = async(req,res) => {
 
     try {
         let id = req.params.id
+        let {confirmPassword,userId} = req.body
+
+
+        let report = await Report.find().populate("platformId").populate("submittedBy")
+        const user = await User.findById(userId)
+
+        //don't delete reports if confirm password is wrong
+        const isMatch = await bcrypt.compare(confirmPassword, user.password);
+        if (!isMatch) {
+            return res.status(200).json({ report:report });
+        }
+
 
         await Report.deleteMany({platformId:id})
         let newReport = await Report.find().populate("platformId").populate("submittedBy")

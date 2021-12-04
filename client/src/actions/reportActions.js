@@ -52,9 +52,16 @@ export const deletePlatformReport = ({id}) => async (dispatch) => {
 }
 
 
-export const deleteManyPlatformReport = ({id}) =>async(dispatch) =>{
+export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>async(dispatch) =>{
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId, confirmPassword })
+    
 
-    let res = await axios.delete(`${URL}/api/reports/deleteManyPlatformReport/${id}`)   
+    let res = await axios.post(`${URL}/api/reports/deleteManyPlatformReport/${platformId}`,body,config)   
     console.log(res.data)
     try {
         dispatch({

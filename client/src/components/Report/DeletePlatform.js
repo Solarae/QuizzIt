@@ -60,9 +60,13 @@ function DeletePlatform({ show, handleClose,id }) {
         e.preventDefault();
 
         //delete all the reports associated with the platform
-        dispatch(deleteManyPlatformReport({
-            id:id
-        }))
+        dispatch(deleteManyPlatformReport(
+            {
+                userId: auth.user.id,
+                platformId: id,
+                confirmPassword: values.password,
+            }
+        ))
 
 
         //delete the platform

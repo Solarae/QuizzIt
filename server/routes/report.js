@@ -32,7 +32,7 @@ router.get("/checkIfModeratorOfPlatform/:uid/:pid",checkIfModeratorOfPlatform)
 router.post("/reportPlatform/:id",reportPlatform)
 
 router.delete("/deleteReport/:id",deleteReport)
-router.delete("/deleteManyPlatformReport/:id",deleteManyPlatformReport)
+router.post("/deleteManyPlatformReport/:id",deleteManyPlatformReport)
 
 
 
