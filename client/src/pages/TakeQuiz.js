@@ -19,23 +19,24 @@ function TakeQuiz() {
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const [questionsAttempted, setQuestionsAttempted] = useState()
     const [timer, setTimer] = useState(0)
+    const [qno, setqno] = useState(0)
+    const [question, setQuestion] = useState(quiz.questions[qno])
+    
 
     const history = useHistory()
-
     const timerIncrement = () => { setTimer(timer + 1) }
-    
     let { qid } = useParams()
 
-    useEffect(() => {
-        dispatch(getQuiz(qid))
-    }, [dispatch, qid])
-        
     useEffect(() => {
         if (!isLoading && quiz.time == (timer/60)) {
             handleSubmit()
         }
     }, [timer])
     
+    useEffect(() => {
+        console.log(quiz.questions)
+    }, [])
+
     if (isLoading) {
         return ( <div> Loading... </div> )
     }
@@ -67,6 +68,7 @@ function TakeQuiz() {
                     timeTaken: timer,
                 }))
             }
+            history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             return;
         }
 
@@ -82,7 +84,6 @@ function TakeQuiz() {
     }
 
     const calculateTime = () => {
-        console.log(quiz.time)
         const time = quiz.time
         const hrs = Math.floor(time/60)
         // console.log(hrs)
@@ -90,6 +91,18 @@ function TakeQuiz() {
         const secs = 0
         return {hrs, mins, secs}
     }
+    
+    const handlePrev = () => {
+        setqno(qno-1)
+        setQuestion(quiz.questions[qno-1])       
+    }
+
+    const handleNext = () => {
+        setqno(qno+1)
+        setQuestion(quiz.questions[qno+1])
+    }
+
+   
 
     return (
         <>
@@ -102,7 +115,7 @@ function TakeQuiz() {
                 <Col xs={1} className="g-4"></Col>
                 <Col xs={7} className="g-4">
                     <div style={{ height: "3vh" }}></div>
-
+                    {/* <Col>
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
@@ -111,11 +124,18 @@ function TakeQuiz() {
                             <div style={{ height: '20px'}}></div>
                         </>
                         ))}
-                        <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                    </Col>
+                    <Col> */}
+                    <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput}></TakeQuestionCard>
+
+                    <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+
+                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
+                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
+                    {/* </Col> */}
                     
                 </Col>
                 <Col xs={6} className="g-4"></Col>
-                {/* <Button variant="primary" onClick={handleSubmit}>Submit</Button> */}
             </Container>
         </>
     )
