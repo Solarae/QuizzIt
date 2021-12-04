@@ -2,6 +2,7 @@ import Report from '../models/Report.js'
 import Platform from '../models/Platform.js'
 import User from '../models/User.js'
 import bcrypt from "bcryptjs";
+import Quiz from '../models/Quiz.js';
 
 export const reportPlatform = async (req,res) =>{
 
@@ -35,10 +36,40 @@ export const reportPlatform = async (req,res) =>{
     } catch (error) {
         return res.status(500).json({message:error.message})
     }
-
-
-
 }
+
+export const reportQuiz = async (req,res) =>{
+    try {
+        let quizId = req.params.id
+        let quiz = await Quiz.findById(quizId)
+
+        if(!quiz) return res.status(500).json({message:"invalid quizId"})
+
+
+
+        let {description,submittedBy} = req.body
+    
+    
+        let report = new Report ({
+            platformId: quizId,
+            description: description,
+            timeSubmitted: Date.now(),
+            submittedBy:submittedBy,
+            type: "quizReport",    
+        })
+    
+    
+        let createdReport = await report.save()
+        
+        return res.status(200).json({createdReport:createdReport})        
+
+
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})
+    }
+}
+
 
 
 export const getReport = () =>{

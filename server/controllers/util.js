@@ -5,7 +5,6 @@ import Platform from '../models/Platform.js'
 import User from "../models/User.js";
 import Quiz from "../models/Quiz.js"
 import Submission from "../models/Submission.js"
-import User from '../models/User.js'
 
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;

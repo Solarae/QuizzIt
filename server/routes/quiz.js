@@ -5,9 +5,10 @@ import {
     createQuiz,
     deleteQuiz, editQuiz,
     addQuizQuestion, editQuizQuestion,getQuestion,getPlatformQuiz,
-    deleteQuizQuestion,getQuiz,getQuizzesByFilter, upvoteQuiz, downvoteQuiz, reportQuiz,
+    deleteQuizQuestion,getQuiz,getQuizzesByFilter, upvoteQuiz, downvoteQuiz, 
     uploadImage, getLeaderboard
 } from '../controllers/quiz.js';
+import { reportQuiz } from '../controllers/report.js';
 
 const router = express.Router();
 
