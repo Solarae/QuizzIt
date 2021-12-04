@@ -25,28 +25,20 @@ function ViewReport() {
     //fetch the reports that belong to the specified platform
     useEffect(()=>{
         console.log("calling use effect")
-        // const checkIfAdmin = async () =>{
-        //     console.log(user.id)
-        //     //check if user is admin
-        //     let res = await axios.get(`${URL}/api/users/checkIfAdmin/${user.id}`)
-            
-        //     //proceed to fetch report if user is moderator of this platform
 
-        //     //if res.user is null,it means that user is not moderator
-        //     if(res.data && res.data.user){
-        //         console.log("is true")
-        //         return true
-        //     }else{
-        //         console.log("is false")
-        //         return false
-        //     }
-        // }
+        const fetchData = async () =>{
+            if(user){
+                //check if user is admin
+                let res = await axios.get(`${URL}/api/users/checkIfAdmin/${user.id}`)
 
-        if(user){
-            dispatch(getPlatformReport())
-            console.log(reports)
-
+                if (res.data && res.data.user){
+                    dispatch(getPlatformReport())
+                    console.log(reports)
+                }
+            }
         }
+
+        fetchData()
 
     },[dispatch,user])
 
