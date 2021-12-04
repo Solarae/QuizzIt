@@ -11,6 +11,7 @@ import { io } from 'socket.io-client'
 
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Friends from './pages/Friends'
 import Platform from './pages/Platform';
 import PlatformLeaderboard from './pages/PlatformLeaderboard';
 import GlobalLeaderboard from './pages/GlobalLeaderboard';
@@ -58,6 +59,7 @@ function App() {
         <Route path='/' exact component={Home} />
         <Route path='/search' exact component={Search} />
         <Route path='/profile' exact component={Profile} />
+        <Route path='/friends' exact component={Friends} />
         <Route path='/platform/:id' exact component={Platform} />
         <Route path='/platform/:id/leaderboard' exact component={PlatformLeaderboard} />
         <Route path='/platform/:id/edit' exact component={EditPlatform} />
