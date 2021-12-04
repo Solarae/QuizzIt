@@ -1,5 +1,5 @@
 import React,{useState, useEffect, useCallback, useRef } from 'react'
-import { Image, Button, Overlay, Tooltip } from 'react-bootstrap';
+import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -12,6 +12,7 @@ import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import LikeDislike from '../Button/LikeDislike';
 import { useHistory } from 'react-router-dom';
+import Report from './Report';
 
 function Banner({ isEdit }) {
     const dispatch = useDispatch()
@@ -47,7 +48,7 @@ function Banner({ isEdit }) {
         console.log(quiz.platformId)
         dispatch(getPlatform({ id: quiz.platformId}))
     }, [dispatch, quiz])    
-
+    const [showReportToast, setShowReportToast] = useState(false);
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
     }
@@ -130,6 +131,22 @@ function Banner({ isEdit }) {
             </div>
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+            
+            <Report setShowReportToast={setShowReportToast} quizId={quiz._id} show={showReport} handleClose={handleCloseReport}></Report>
+            <Toast
+                show={showReportToast}
+                animation
+                autohide={true}
+                delay={2500}
+                onClose={()=>{setShowReportToast(false)}}
+                className="position-absolute top-0 end-0"
+                style={{ marginRight: "5px", marginTop: "5px", width:"auto", fontSize:"12pt" }}
+            >
+                <Toast.Body>Report Submitted</Toast.Body>
+            </Toast>
+
+
+
         </div>
     )
 }
