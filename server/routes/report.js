@@ -10,8 +10,21 @@ const router = express.Router();
 
 
 router.get("/:id",getReport)
+
+
+
+
+
 router.get("/",getPlatformReport)
+
+
+
+
+
 // router.get("/getReportForUser/:id",getAllReportForUser)
+
+
+
 router.get("/checkIfModeratorOfPlatform/:uid/:pid",checkIfModeratorOfPlatform)
 
 

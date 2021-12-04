@@ -9,13 +9,14 @@ import { useHistory } from 'react-router';
 function ReportCard({ user, report,reportState,setReportState,id }) {
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
-        let newReports = reportState.filter((report)=>{
-            return report._id != e.target.id
-        })
-        setReportState(newReports)
+        // dispatch(deleteReport({
+        //     id:report._id
+        // }))
+        let newReport = await axios.delete(`${URL}/api/reports/deleteReport/${report._id}`)
+        console.log(newReport.data.report)
+        setReportState(newReport.data.report)
 
-        //make backend call to delete report
-        await axios.delete(`${URL}/api/reports/deleteReport/${report._id}`)
+
 
     }
     const history = useHistory()

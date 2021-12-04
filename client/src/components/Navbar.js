@@ -85,6 +85,7 @@ function AppNavbar() {
                   <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link className="text-white">View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/viewSubmission'><Nav.Link className="text-white">View Submissions</Nav.Link></LinkContainer></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><LinkContainer to='/viewPlatformReport'><Nav.Link className="text-white">View Platform Reports</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Divider />
                   <NavDropdown.Item className="text-light" onClick={() => dispatch(logout(history))} href="#">Logout</NavDropdown.Item>
                 </NavDropdown>

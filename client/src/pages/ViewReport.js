@@ -17,7 +17,7 @@ function ViewReport() {
     let user = useSelector((state)=> state.auth.user  )
     let reports = useSelector((state)=>state.report.report)
     
-    const [reportState,setReportState] = useState([])
+    const [reportState,setReportState] = useState()
 
     let isLoading = useSelector((state)=> state.report.isLoading)
 
@@ -43,7 +43,6 @@ function ViewReport() {
         //     }
         // }
 
-
         if(user){
             dispatch(getPlatformReport())
             console.log(reports)
@@ -51,7 +50,7 @@ function ViewReport() {
             console.log(reportState)
         }
 
-    },[dispatch,user])
+    },[dispatch,user,isLoading,reportState])
 
 
     if (isLoading) {
@@ -60,38 +59,37 @@ function ViewReport() {
 
 
     console.log(reports)
+    console.log(reportState)
+
+    return(
+        <>
+
+            <Container className="row justify-content-center">
 
 
-    if(reports){
-        return(
-            <>
+                <Col xs={7} className="g-4">
+                    {console.log(reportState)}
+                    {reportState ? 
+                    
+                    reportState.map( (report,idx) => {
+                            return( 
+                                <>
+                                    <Col>
+                                        <ReportCard user={user} id={report._id} report={report} reportState={reportState} setReportState={setReportState}   ></ReportCard>
+                                    </Col>
+                                </>
+                            )
+                    })
+                    :
+                    <h1>loading</h1>}
+                    
+                </Col>
+
+            </Container>
+        </>
+
+    )
     
-                <Container className="row justify-content-center">
-    
-    
-                    <Col xs={7} className="g-4">
-    
-                        {reportState ? 
-                        
-                        reportState.map( (report,idx) => {
-                                return( 
-                                    <>
-                                        <Col>
-                                            <ReportCard user={user} id={report._id} report={report} reportState={reportState} setReportState={setReportState}   ></ReportCard>
-                                        </Col>
-                                    </>
-                                )
-                        })
-                        :
-                        <h1>loading</h1>}
-                        
-                    </Col>
-    
-                </Container>
-            </>
-    
-        )
-    }
 
    
     
