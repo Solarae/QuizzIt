@@ -5,19 +5,14 @@ import { deletePlatform } from '../../actions/platformActions';
 import { URL } from '../../config';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
+import { deletePlatformReport } from '../../actions/reportActions';
 
-function ReportCard({ user, report,reportState,setReportState,id }) {
+function ReportCard({ user, report }) {
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
-        // dispatch(deleteReport({
-        //     id:report._id
-        // }))
-        let newReport = await axios.delete(`${URL}/api/reports/deleteReport/${report._id}`)
-        console.log(newReport.data.report)
-        setReportState(newReport.data.report)
-
-
-
+        dispatch(deletePlatformReport({
+            id:report._id
+        }))
     }
     const history = useHistory()
 
@@ -36,7 +31,7 @@ function ReportCard({ user, report,reportState,setReportState,id }) {
                 <Card.Title style={{fontSize: "16pt"}}>{report.description}</Card.Title>
 
                 
-                <Button id={id} variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
+                <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
                 <Button variant="danger" onClick={handleDeletePlatform}> Delete Platform </Button>  
                 
                 

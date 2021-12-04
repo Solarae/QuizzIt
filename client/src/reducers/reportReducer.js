@@ -1,4 +1,4 @@
-import { GET_PLATFORM_REPORT_FAIL, GET_PLATFORM_REPORT_SUCCESS } from "../actions/types"
+import { DELETE_REPORT_FAIL, DELETE_REPORT_SUCCESS, GET_PLATFORM_REPORT_FAIL, GET_PLATFORM_REPORT_SUCCESS } from "../actions/types"
 
 
 
@@ -27,6 +27,17 @@ const reportReducer = (state = initialState,action) => {
                 ...state,
                 ...action.payload,
                 isLoading:false
+            }
+        
+        case DELETE_REPORT_SUCCESS:
+            return{
+                ...state,
+                ...action.payload
+            }
+        case DELETE_REPORT_FAIL:
+            return{
+                ...state,
+                ...action.payload
             }
 
         default:
