@@ -129,10 +129,10 @@ export const updateUser = ({ newValue, userId }) => async (dispatch) => {
     }
 }
 
-export const getInbox = (id, page) => async (dispatch) => {
+export const getInbox = (id, currMax) => async (dispatch) => {
     const config = {
         params: {
-            offset: 5 * (page - 1),
+            offset: currMax,
             limit: 5
         }
     }
@@ -158,10 +158,10 @@ export const getInbox = (id, page) => async (dispatch) => {
     }
 }
 
-export const receiveNotifications = (data) => (dispatch) => {
+export const receiveNotifications = (notifications) => (dispatch) => {
     dispatch({
         type: RECEIVE_NOTIFICATIONS,
-        payload: data
+        payload: notifications
     })
 }
 
@@ -185,16 +185,19 @@ export const readNotification = (userId, notifId) => async (dispatch) => {
     }
 }
 
-export const getFriendRequests = (id, page) => async (dispatch) => {
+export const getFriendRequests = (id, currMax) => async (dispatch) => {
     const config = {
         params: {
-            offset: 5 * (page - 1),
+            offset: currMax,
             limit: 5
         }
     }
-    dispatch({
-        type: GET_FRIENDREQUESTS_REQ
-    })
+    if (currMax === 0) {
+        dispatch({
+            type: GET_FRIENDREQUESTS_REQ
+        })
+    }
+   
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)
         if (res.data.errors) {
@@ -216,7 +219,7 @@ export const getFriendRequests = (id, page) => async (dispatch) => {
 
 export const sendFriendRequest = (id, recipientId) => async (dispatch) => {
     try {
-        const res = await axios.get(`${URL}/api/users/${recipientId}/friendRequests/${id}/send`, config)
+        const res = await axios.get(`${URL}/api/users/${recipientId}/friendRequests/${id}/send`)
         if (res.data.errors) {
             dispatch({
                 type: SEND_FRIENDREQUEST_FAIL,
@@ -236,7 +239,7 @@ export const sendFriendRequest = (id, recipientId) => async (dispatch) => {
 
 export const acceptFriendRequest = (id, userId) => async (dispatch) => {
     try {
-        const res = await axios.get(`${URL}/api/users/${id}/friendRequests/${userId}/accept`, config)
+        const res = await axios.post(`${URL}/api/users/${id}/friendRequests/${userId}/accept`)
         if (res.data.errors) {
             dispatch({
                 type: ACCEPT_FRIENDREQUEST_FAIL,
@@ -254,9 +257,9 @@ export const acceptFriendRequest = (id, userId) => async (dispatch) => {
     }
 }
 
-export const acceptFriendRequest = (id, userId) => async (dispatch) => {
+export const declineFriendRequest = (id, userId) => async (dispatch) => {
     try {
-        const res = await axios.get(`${URL}/api/users/${id}/friendRequests/${userId}/decline`, config)
+        const res = await axios.post(`${URL}/api/users/${id}/friendRequests/${userId}/decline`)
         if (res.data.errors) {
             dispatch({
                 type: DECLINE_FRIENDREQUEST_FAIL,
@@ -274,9 +277,9 @@ export const acceptFriendRequest = (id, userId) => async (dispatch) => {
     }
 }
 
-export const receiveFriendRequest = (data) => (dispatch) => {
+export const receiveFriendRequest = (friendRequest) => (dispatch) => {
     dispatch({
         type: RECEIVE_FRIENDREQUEST,
-        payload: data
+        payload: friendRequest
     })
 }

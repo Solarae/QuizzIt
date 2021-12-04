@@ -11,7 +11,7 @@ router.post('/:id/friendRequests/:uid/send', sendFriendRequest)
 router.post('/:id/friendRequests/:uid/accept', acceptFriendRequest)
 router.post('/:id/friendRequests/:uid/decline', declineFriendRequest)
 router.get('/:id/friends', getFriends)
-router.post('/:id/friends/:userId/delete', unFriend)
+router.post('/:id/friends/:userId/delete', unfriend)
 router.post('/signin', signin);
 router.post('/tokenSignin', tokenSignin);
 router.post('/signup', signup);

@@ -3,7 +3,9 @@ import { Nav, Navbar, Container, Image, NavDropdown, Form, FormControl } from 'r
 import { LinkContainer } from 'react-router-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../actions/authActions'
-import { getInbox, receiveNotifications, readNotification } from '../actions/profileActions'
+import { getInbox, receiveNotifications, readNotification, 
+  getFriendRequests, acceptFriendRequest, declineFriendRequest,
+  receiveFriendRequest } from '../actions/profileActions'
 import { useHistory } from 'react-router-dom'
 
 import SignUp from './SignUp.js';
@@ -14,28 +16,38 @@ import NavbarCollapse from 'react-bootstrap/esm/NavbarCollapse'
 function AppNavbar() {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth)
-  const isGetInboxLoading = useSelector(state => state.auth.isGetInboxLoading)
-  const inbox = useSelector(state => state.auth.inbox)
   const socket = useSelector((state) => state.auth.socket)
-  const { inboxPage, inboxPages } = useSelector((state) => state.auth)
+  const { isGetInboxLoading, inbox, inboxTotalUnreadCount, inboxTotalCount } = useSelector((state) => state.auth)
+  const { isGetFriendRequestsLoading, friendRequests, friendRequestsTotalCount } = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [query, setQuery] = useState("");
-
   useEffect(() => {
-    socket?.on('getInbox', (data) => {
+    socket?.on('getInbox', (notifications) => {
       dispatch((
-        receiveNotifications(data)
+        receiveNotifications(notifications)
         ))
     })
+    socket?.on('receiveFriendRequest', (friendRequest) => {
+      dispatch((
+        receiveFriendRequest(friendRequest)
+        ))
+    })
+  
   }, [socket])
 
   useEffect(() => {
-    if (auth.user) 
-    dispatch(getInbox(
+    if (auth.user) {
+      dispatch(getInbox(
         auth.user.id,
         1
-    ))
+      ))
+      dispatch(getFriendRequests(
+        auth.user.id,
+        0
+      ))
+    }
+    
   }, [auth.user, dispatch]);
 
   const onQueryChange = (e) => {
@@ -58,23 +70,26 @@ function AppNavbar() {
   const handleCloseCreatePlatform = useCallback(() => { setShowCreatePlatform(false) }, []);
   const handleShowCreatePlatform = () => { setShowCreatePlatform(true) };
 
-  const handleNotifScroll = ((e) => {
-    if ((e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) && inboxPage < inboxPages) 
-      dispatch(getInbox(
-        auth.user.id,
-        inboxPage + 1
-      )) 
+  const [showFriendRequests, setShowFriendRequests] = useState(false)
+
+  const handleScroll = ((e, type) => {
+    if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
+      if (type === 'notification' && inbox.length < inboxTotalCount) {
+        dispatch(getInbox(
+          auth.user.id,
+          inbox.length
+        )) 
+      } else if (type === 'friendRequests' && friendRequests.length < friendRequestsTotalCount) {
+        console.log("CALLING DISPATCH")
+        dispatch(getFriendRequests(
+          auth.user.id,
+          friendRequests.length
+        )) 
+      }
+      
+    }
   })
 
-  const unreadCount = () => {
-    var count = 0
-    inbox.forEach(i => {
-      if (!i.read)
-        count++
-    })
-    return count
-  }
-  
   return (
     <Navbar className="navbar-custom" collapseOnSelect expand="lg" bg="dark" variant="dark" style={{ minWidth: "1300px !important;" }}>
       <Container fluid>
@@ -134,22 +149,54 @@ function AppNavbar() {
 
         {auth.user && !isGetInboxLoading && (
           <NavbarCollapse>
-            <Nav>
+            <Nav onSelect={() => console.log("SELECT")}>
               <NavDropdown
                 id='notification'
                 title= {
                   <div style={{display: "flex", justifyContent: "center"}}>
                     <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-bell"></i>
                     {
-                      unreadCount() > 0 &&
-                      <div style={{color:"red"}}>{unreadCount()}</div>
+                      inboxTotalUnreadCount > 0 &&
+                      <div style={{color:"red"}}>{inboxTotalUnreadCount}</div>
                     }
                   </div>
-                  
                 }
+                onSelect={() => console.log("SELECT")}
                 >
-                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleNotifScroll(e)}>
+                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'notification')}>
                   {inbox.map(i => <NavDropdown.Item key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
+                  </div>
+
+              </NavDropdown>
+            </Nav>
+          </NavbarCollapse>)}
+
+          {auth.user && !isGetFriendRequestsLoading && (
+          <NavbarCollapse>
+            <Nav>
+              <NavDropdown
+                id='friendRequests'
+                title= {
+                  <div style={{display: "flex", justifyContent: "center"}}>
+                    <i style={{color:"white", marginRight: "5px", fontSize: "1.5rem"}} class="bi bi-people"></i>
+                    {
+                      friendRequestsTotalCount> 0 &&
+                      <div style={{color:"red"}}>{friendRequestsTotalCount}</div>
+                    }
+                  </div>  
+                }
+                show={showFriendRequests}
+                onToggle={(isOpen, event) => {
+                  if (event.source !== 'select')
+                    setShowFriendRequests(isOpen)
+                }}
+                >
+                  <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
+                  {friendRequests.map(u => <NavDropdown.Item key={u._id}>
+                    {u.username}
+                    <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
+                    <i className="bi bi-check2-circle" style={{float: 'right'}} onClick={() => dispatch(acceptFriendRequest(auth.user.id, u._id))}></i>
+                    </NavDropdown.Item>)}
                   </div>
 
               </NavDropdown>

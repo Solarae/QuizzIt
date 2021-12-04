@@ -252,15 +252,13 @@ export const getInbox = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5 
 
     try {
-        const user = await User.findById(req.params.id).slice(`inbox`, [skip,limit])
-        const u = await User.findById(req.params.id)
+        const slicedUser = await User.findById(req.params.id).slice(`inbox`, [skip,limit])
+        const user = await User.findById(req.params.id)
 
-        const inboxTotalCount = u.inbox.length
-        const inboxPages = Math.ceil(inboxTotalCount / limit)
-        const inboxPage = (skip / limit) + 1
-
-        console.log(inboxPage)
-        res.status(200).json({ inbox: user.inbox, inboxPage, inboxPages, inboxTotalCount });
+        res.status(200).json({ 
+            inbox: slicedUser.inbox,
+            inboxTotalUnreadCount: user.inbox.filter(i => !i.read).length,
+            inboxTotalCount: user.inbox.length });
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }
@@ -294,11 +292,9 @@ export const getFriendRequests = async (req, res) => {
         const user = await User.findById(req.params.id).slice('friendRequests', [skip,limit]).populate('friendRequests', 'username')
         const u = await User.findById(req.params.id)
 
-        const friendRequestsTotalCount = u.friendRequests.length
-        const friendRequestsPages = Math.ceil(inboxTotalCount / limit)
-        const friendRequestsPage = (skip / limit) + 1
-
-        res.status(200).json({ friendRequests: user.friendRequests, friendRequestsPage, friendRequestsPages, friendRequestsTotalCount });
+        res.status(200).json({ 
+            friendRequests: user.friendRequests, 
+            friendRequestsTotalCount: u.friendRequests.length });
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }
@@ -309,7 +305,7 @@ export const sendFriendRequest = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             req.params.id,
-            { $addToSet: { friendRequests: req.params.uid }},
+            { $push: { friendRequests: req.params.uid }},
             { new: true }
         )
 
@@ -319,12 +315,9 @@ export const sendFriendRequest = async (req, res) => {
             userId: req.params.uid });
         
         if (onlineUsers.get(req.params.id)) {
-            const slicedUser = await User.findById(req.params.id).slice('friendRequests', [0,5]).populate('friendRequests', 'username')
-            io.to(onlineUsers.get(req.params.id)).emit('getInbox', {
-                friendRequests: slicedUser.friendRequests,
-                friendRequestsTotalCount: user.friendRequests.length,
-                friendRequestsPages: Math.ceil(user.friendRequests.length / 5),
-                friendRequestPage: 1
+            const sender = await User.findById(req.params.uid).select('username')
+            io.to(onlineUsers.get(req.params.id)).emit('receiveFriendRequest', {
+                friendRequest: sender
             })
         } 
     } catch (error) {
@@ -350,16 +343,19 @@ export const acceptFriendRequest = async (req, res) => {
             { new: true }
         )
 
-        res.status(200).json({user});
+        const other = await User.findByIdAndUpdate(
+            req.params.uid,
+            { $push: { inbox : {
+                message: `${user.username} has accepted your friend request`,
+                read: false
+            } } },
+            { new: true }
+        )
+
+        res.status(200).json({uid: req.params.uid});
 
         if (onlineUsers.get(req.params.uid)) {
-            const slicedUser = await User.findById(req.params.uid).slice('friendRequests', [0,5]).populate('friendRequests', 'username')
-            io.to(onlineUsers.get(req.params.uid)).emit('getInbox', {
-                friendRequests: slicedUser.friendRequests,
-                friendRequestsTotalCount: user.friendRequests.length,
-                friendRequestsPages: Math.ceil(user.friendRequests.length / 5),
-                friendRequestPage: 1
-            })
+            io.to(onlineUsers.get(req.params.uid)).emit('getInbox', [other.inbox[0]])
         } 
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
@@ -369,13 +365,13 @@ export const acceptFriendRequest = async (req, res) => {
 export const declineFriendRequest = async (req, res) => {
     console.log("INSIDE DECLINE FRIEND REQ")
     try {
-        const user = await User.findByIdAndUpdate(
+        await User.findByIdAndUpdate(
             req.params.id,
             { $pull: { friendRequests: req.params.uid }},
             { new: true }
         )
 
-        res.status(200).json(user);
+        res.status(200).json({uid: req.params.uid});
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }
