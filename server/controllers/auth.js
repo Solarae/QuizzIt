@@ -18,7 +18,6 @@ export const getSignedIn = async (req, res) => {
         }
 
         const loggedInUser = await User.findOne({ _id: userId });
-        console.log("loggedInUser: " + loggedInUser);
 
         return res.status(200).json({
             isAuthenticated: true,
