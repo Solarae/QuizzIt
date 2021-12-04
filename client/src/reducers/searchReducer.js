@@ -20,7 +20,9 @@ const initialState = {
     quizzes: null,
     users: null,
     page: 0,
-    maxPages: 0,
+    platformPages: 0,
+    quizPages: 0,
+    userPages: 0,
     totalCount: 0 ,
     errors: null
 }
@@ -36,7 +38,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
+                platformPages: action.payload.pages,
                 isSearchPlatformLoading: false,
                 errors: null 
             }
@@ -44,7 +46,8 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                isSearchPlatformLoading: false
+                isSearchPlatformLoading: false,
+                platforms: null
             }
         case SEARCH_QUIZ_REQ:
             return {
@@ -55,7 +58,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
+                quizPages: action.payload.pages,
                 isSearchQuizLoading: false,
                 errors: null 
             }
@@ -63,7 +66,8 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                isSearchQuizLoading: false
+                isSearchQuizLoading: false,
+                quizzes: null
             }
         case SEARCH_USER_REQ:
             return {
@@ -74,7 +78,7 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                maxPages: action.payload.pages > state.maxPages ? action.payload.pages : state.maxPages,
+                userPages: action.payload.pages,
                 isSearchUserLoading: false,
                 errors: null 
             }
@@ -82,7 +86,8 @@ const searchReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
-                isSearchUserLoading: false
+                isSearchUserLoading: false,
+                users: null
             }
         case SEARCH_UPDATE_PLATFORM:
             let updatedPlatforms = state.platforms 
@@ -100,7 +105,9 @@ const searchReducer = (state = initialState, action) => {
         case RESET_MAX_PAGES:
             return{
                 ...state,
-                maxPages: 0 
+                platformPages: 0,
+                quizPages: 0,
+                userPages: 0,
             }
         default:
             return state;

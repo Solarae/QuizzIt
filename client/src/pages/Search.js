@@ -22,7 +22,11 @@ function Search() {
     const platforms = useSelector((state) => state.search.platforms)
     const quizzes = useSelector((state) => state.search.quizzes)
     const users = useSelector((state) => state.search.users)
-    const maxPages = useSelector((state) => state.search.maxPages)
+
+    const platformPages = useSelector((state) => state.search.platformPages)
+    const quizPages = useSelector((state) => state.search.quizPages)
+    const userPages = useSelector((state) => state.search.userPages)
+    const maxPages = Math.max(platformPages, quizPages, userPages)
 
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
