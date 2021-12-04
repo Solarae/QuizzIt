@@ -1,25 +1,29 @@
 import axios from 'axios';
-import { React, useState} from 'react'
+import { React, useCallback, useState} from 'react'
 import { Col, Card, Button } from 'react-bootstrap';
 import { deletePlatform } from '../../actions/platformActions';
 import { URL } from '../../config';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
 import { deletePlatformReport } from '../../actions/reportActions';
+import DeletePlatform from './DeletePlatform';
 
 function ReportCard({ user, report }) {
+
+
+    const [showDelete, setShowDelete] = useState(false);
+    const handleCloseDelete = useCallback(() => { setShowDelete(false) }, []);
+    const handleShowDelete = () => { setShowDelete(true) };
+
+
+
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
         dispatch(deletePlatformReport({
             id:report._id
         }))
     }
-    const history = useHistory()
 
-    const handleDeletePlatform = async (e) =>{
-        dispatch(deletePlatform({userId: user.id , platformId:report.platformId._id}))
-        history.push('/')
-    }
 
 
 
@@ -32,7 +36,8 @@ function ReportCard({ user, report }) {
 
                 
                 <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
-                <Button variant="danger" onClick={handleDeletePlatform}> Delete Platform </Button>  
+                <Button variant="danger" onClick={handleShowDelete}> Delete Platform </Button>  
+                <DeletePlatform id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
                 
                 
 

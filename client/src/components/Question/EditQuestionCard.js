@@ -21,4 +21,4 @@ function EditQuestionCard({ quizId, question }) {
         </Card>
     )
 }
-export default EditQuestionCard;
+export default EditQuestionCard; 

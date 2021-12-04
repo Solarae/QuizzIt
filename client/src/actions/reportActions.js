@@ -50,3 +50,27 @@ export const deletePlatformReport = ({id}) => async (dispatch) => {
 
 
 }
+
+
+export const deleteManyPlatformReport = ({id}) =>async(dispatch) =>{
+
+    let res = await axios.delete(`${URL}/api/reports/deleteManyPlatformReport/${id}`)   
+    console.log(res.data)
+    try {
+        dispatch({
+            type:DELETE_REPORT_SUCCESS,
+            payload:res.data
+        })
+        
+
+    } catch (error) {
+        dispatch({
+            type:DELETE_REPORT_FAIL,
+            payload:res.data
+        })
+    }
+
+
+
+
+}
