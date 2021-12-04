@@ -13,8 +13,6 @@ import {
     RESET_MAX_PAGES
 } from '../actions/types'
 
-import mongoose from 'mongoose'
-
 function Search() {
     const dispatch = useDispatch()
 
@@ -46,10 +44,11 @@ function Search() {
     // dispatch the SEARCH request
     useEffect(() => {
         console.log("searching");
+        const sortQuery = sort==="oldest" ? "_id asc" : "_id desc"
 
         if (filter === "none" || filter === "platform") {
             dispatch(searchPlatform({
-                query: { 'name': query },
+                query: { 'name': query, 'sort': sortQuery },
                 page: page,
                 limit: 4
             }))
@@ -57,7 +56,7 @@ function Search() {
 
         if (filter === "none" || filter === "quiz") {
             dispatch(searchQuiz({
-                query: { 'name': query },
+                query: { 'name': query, 'sort': sortQuery },
                 page: page,
                 limit: 4
             }))
@@ -65,7 +64,7 @@ function Search() {
 
         if (filter === "none" || filter === "user") {
             dispatch(searchUser({
-                query: { 'username': query },
+                query: { 'username': query, 'sort': sortQuery },
                 page: page,
                 limit: 4
             }))
@@ -79,19 +78,6 @@ function Search() {
         })
         setPage(1)
     }, [query, filter, dispatch]);
-
-    // compares the creation time of mongodb documents a and b
-    const compareDates = (a, b) => {
-        if (sort === "oldest") {
-            return mongoose.Types.ObjectId(a._id).getTimestamp() - mongoose.Types.ObjectId(b._id).getTimestamp()
-        }
-        else if (sort === "newest") {
-            return mongoose.Types.ObjectId(b._id).getTimestamp() - mongoose.Types.ObjectId(a._id).getTimestamp()
-        }
-        else {
-            return 0;
-        }
-    }
 
 
     if (isSearchPlatformLoading || isSearchQuizLoading || isSearchUserLoading) {
@@ -137,7 +123,7 @@ function Search() {
                     {/* Search results for platforms */}
                     {(filter === "platform" || filter === "none") && <h3>Platforms</h3>}
                     {(filter === "platform" || filter === "none") && platforms && platforms.length > 0 ?
-                        platforms.sort(compareDates).map((p, idx) => (
+                        platforms.map((p, idx) => (
                             <PlatformCard platform={p}></PlatformCard>
                         ))
                         :
@@ -148,7 +134,7 @@ function Search() {
                     {filter === "none" && <hr />}
                     {(filter === "quiz" || filter === "none") && <h3>Quizzes</h3>}
                     {(filter === "quiz" || filter === "none") && quizzes && quizzes.length > 0 ?
-                        quizzes.sort(compareDates).map((q, idx) => (
+                        quizzes.map((q, idx) => (
                             <QuizCard quiz={q}></QuizCard>
                         ))
                         :
@@ -159,7 +145,7 @@ function Search() {
                     {filter === "none" && <hr />}
                     {(filter === "user" || filter === "none") && <h3>Users</h3>}
                     {(filter === "user" || filter === "none") && users && users.length > 0 ?
-                        users.sort(compareDates).map((user, idx) => (
+                        users.map((user, idx) => (
                             <UserCard user={user}></UserCard>
                         ))
                         :
