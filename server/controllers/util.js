@@ -2,9 +2,9 @@ import cloudinary from "../utils/cloudinary.js";
 
 import Award from '../models/Award.js'
 import Platform from '../models/Platform.js'
+import User from "../models/User.js";
 import Quiz from "../models/Quiz.js"
 import Submission from "../models/Submission.js"
-import User from '../models/User.js'
 
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
@@ -97,6 +97,59 @@ export const paginateQuery = async (q, model, limit, offset) => {
 
     return { q, page, pages, totalCount }
 }
+
+
+export const checkIfModeratorOfPlatform = async (req,res) =>{
+
+
+    try {
+        let userId = req.params.uid
+        let platformId = req.params.pid
+    
+    
+        let platform = await Platform.findById(platformId)
+        if (!platform) return res.status(200).json({message:"Platform does not exist"}) 
+
+
+        let members = platform.subscribers
+
+        let user = members.filter( member => member.userId == userId )
+
+        console.log(user)
+
+        if(user[0] && (user[0].role == "Moderator" || user[0].role == "Creator" ) ){
+            return res.status(200).json({user:user[0]})
+        }
+
+        return res.status(200).json({message:"User is not moderator"})
+    
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})       
+    }
+
+
+
+
+}
+
+
+export const checkIfAdmin = async (req,res) => {
+    try {
+        let id = req.params.id
+
+        let user = await User.findById(id)
+    
+        if(!user) return res.status(200).json({message:"User does not exist"})
+    
+        return user.role == "Admin" ? res.status(200).json({user:user}) : res.status(200).json() 
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})   
+        
+    }
+}
+
 
 export const assignAwards = async (userId, platformId) => {
     try {

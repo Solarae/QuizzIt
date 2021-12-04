@@ -58,19 +58,35 @@ export const deletePlatform = async (req, res) => {
         if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
 
         const owner = await User.findById(platform.owner);
+        const user = await User.findById(userId)
 
-        if (userId !== String(platform.owner)) {
+        if (userId !== String(platform.owner) && user.role != "Admin") {
             errors.invalidOwner = "You don't have delete permissions";
             return res.status(200).json({ errors: errors });
         }
 
-        // check if confirmPassword matches with owner's password
-        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
-        if (!isMatch) {
-            errors.invalidPassword = "Incorrect Password";
-            return res.status(200).json({ errors: errors });
+        //if not an admin,check owner password
+        if(user.role!="Admin"){
+            // check if confirmPassword matches with owner's password
+            const isMatch = await bcrypt.compare(confirmPassword, owner.password);
+            if (!isMatch) {
+                errors.invalidPassword = "Incorrect Password";
+                return res.status(200).json({ errors: errors });
+            }
         }
 
+        //if admin,check admin's password
+        else{
+            //check if confirmPassword matches with admin's password
+            const isMatch = await bcrypt.compare(confirmPassword, user.password);
+            if (!isMatch) {
+                errors.invalidPassword = "Incorrect Password";
+                return res.status(200).json({ errors: errors });
+            }
+        }
+
+        
+        //proceed to remove platform
         await platform.remove();
 
         const count = await User.updateMany(

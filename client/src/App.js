@@ -29,6 +29,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
+import ViewPlatformReport from './pages/ViewPlatformReport.js';
+import ViewQuizReport from './pages/ViewQuizReport.js'
 import { URL } from './config'
 
 function App() {
@@ -71,6 +73,8 @@ function App() {
         <Route path='/viewSubmission' exact component={ViewSubmission} />
         <Route path='/submission/reviewSubmission/:id' exact component={ReviewSubmission} />
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
+        <Route path='/viewPlatformReport' exact component={ViewPlatformReport} />
+        <Route path='/viewQuizReport/:id' exact component={ViewQuizReport} />
         <Route path='/leaderboard/global' exact component={GlobalLeaderboard} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>

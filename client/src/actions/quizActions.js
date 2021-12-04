@@ -279,7 +279,7 @@ export const reportQuiz = ({ id, userId, text }) => async (dispatch) => {
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ userId, text })
+    const body = JSON.stringify({ submittedBy:userId, description:text })
     try {
         const res = await axios.post(`${URL}/api/quizzes/${id}/report`, body, config);
         if (res.data.errors) {
