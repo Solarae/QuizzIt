@@ -144,7 +144,10 @@ function AppNavbar() {
                   <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/viewSubmission'><Nav.Link className="text-white">View Submissions</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Divider />
-                  <NavDropdown.Item className="text-light" onClick={() => dispatch(logout(history))} href="#">Logout</NavDropdown.Item>
+                  <NavDropdown.Item className="text-light" onClick={() => {
+                    dispatch(logout(history))
+                    socket?.emit("logout", auth.user.id);
+                  }} href="#">Logout</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
@@ -171,7 +174,7 @@ function AppNavbar() {
                 }}
                 >
                   <div style={{maxHeight: '100px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'notification')}>
-                  {inbox.map(i => <NavDropdown.Item key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
+                  {inbox.map(i => <NavDropdown.Item style={ {color: i.read ? 'black': 'red'}} key={i._id} onClick={() => dispatch(readNotification(auth.user.id, i._id))}>{i.message}</NavDropdown.Item>)}
                   </div>
 
               </NavDropdown>
