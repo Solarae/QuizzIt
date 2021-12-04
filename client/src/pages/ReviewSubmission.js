@@ -1,47 +1,33 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getOneSubmission, getSubmissions } from "../actions/submissionActions"
+import { getSubmission } from "../actions/submissionActions"
 import { Col, Container, ListGroup, Table } from "react-bootstrap"
 import { useParams } from "react-router"
-import axios from "axios"
-import { URL } from "../config"
 import SubmissionCard from "../components/Submission/SubmissionCard"
 
-
 function ReviewSubmission() {
-    
     const dispatch = useDispatch()
+    const user = useSelector((state)=> state.auth.user  )
+    const {id} = useParams()
+    const submission = useSelector((state)=>state.submission.submission)
 
-    let user = useSelector((state)=> state.auth.user  )
-    let {id} = useParams()
-    let submission = useSelector((state)=>state.submission.singleSubmission)
-    
-
-
-
-    let isLoading = useSelector((state)=> state.submission.isLoadingSingle)
-
-
+    const isGetSubmissionLoading = useSelector((state)=> state.submission.isGetSubmissionLoading)
 
     //fetch the submission id
     useEffect(()=>{
-
+        console.log("CALLING DISPATCH")
         if(user)
-            dispatch(getOneSubmission({
-                id
+            dispatch(getSubmission({
+                id,
+                query: {
+                    expand: 'platformId(select=name),quizId(select=name,questions)'
+                }
             }))
     },[dispatch,user])
 
-    console.log(submission)
-
-
-
-    if (isLoading) {
+    if (isGetSubmissionLoading) {
         return ( <div> Loading... </div> )
     }
-
-
-
 
     return(
         <>

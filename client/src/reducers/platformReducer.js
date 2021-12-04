@@ -8,6 +8,7 @@ import {
     REPORT_PLATFORM_REQ,
     EDIT_MEMBER_ROLE_REQ,
     GET_PLAT_LEADERBOARD_REQ,
+    GET_MEMBERLIST_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -28,6 +29,8 @@ import {
     EDIT_MEMBER_ROLE_FAIL,
     GET_PLAT_LEADERBOARD_SUCCESS,
     GET_PLAT_LEADERBOARD_FAIL,
+    GET_MEMBERLIST_SUCCESS,
+    GET_MEMBERLIST_FAIL,
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM
 } from '../actions/types'
@@ -41,11 +44,15 @@ const initialState = {
     isLeaveLoading: false,
     isReportLoading: false,
     isEditRoleLoading: false,
-    isGetPlatLeaderboardLoading: false,
+    isGetPlatLeaderboardLoading: true,
+    isGetMemberListLoading: true,
     platform: null,
     quizzesData: null,
     awardsData: null,
-    memberList: null,
+    memberList: [],
+    memberListPage: 0,
+    memberListPages: 1,
+    memberListTotalCount: 0,
     leaderboard: [], 
     leaderboardPage: 0,
     leaderboardPages: 1,
@@ -182,6 +189,18 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isGetPlatLeaderboardLoading: false,
             }
+        case GET_MEMBERLIST_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetMemberlistLoading: false,
+            }
+        case GET_MEMBERLIST_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetMemberlistLoading: false,
+            }
         case GET_PLATFORM_REQ:
             return {
                 ...state,
@@ -226,6 +245,11 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isGetPlatLeaderboardLoading: true 
+            }
+        case GET_MEMBERLIST_REQ:
+            return {
+                ...state,
+                isGetMemberlistLoading: true 
             }
         case UPVOTE_PLATFORM:
             return {

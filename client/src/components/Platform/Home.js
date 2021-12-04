@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Row, Col, Dropdown } from 'react-bootstrap';
-import QuizCard from './QuizCard.js';
+import QuizCardMini from '../Cards/QuizCardMini.js';
 import mongoose from 'mongoose'
 
 function Home({ quizzesData }) {
@@ -41,7 +41,7 @@ function Home({ quizzesData }) {
                         <Row xs={1} md={4} className="g-4 me-auto">
                             {quizzesData.sort(compareDates).map((quiz, idx) => (
                                 <Col align="center">
-                                    <QuizCard quiz={quiz}></QuizCard>
+                                    <QuizCardMini quiz={quiz}></QuizCardMini>
                                 </Col>
                             ))}
                         </Row>

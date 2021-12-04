@@ -18,7 +18,7 @@ function AppNavbar() {
   const onQueryChange = (e) => {
     setQuery(e.target.value)
   }
-  const handleSearch = (e) =>{
+  const handleSearch = (e) => {
     e.preventDefault();
     history.push(`/search?query=${query}`)
   }
@@ -95,6 +95,8 @@ function AppNavbar() {
               </Nav>
             ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
         </Navbar.Collapse>
+
+        {auth.user && <i style={{color:"white", marginRight: "50px", fontSize: "1.5rem"}} class="bi bi-bell"></i>}
 
         <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
         <SignUp show={showSignUp} handleClose={handleCloseSignUp} />

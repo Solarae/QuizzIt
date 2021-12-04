@@ -1,50 +1,46 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getSubmissions } from "../actions/submissionActions"
-import { Table } from "react-bootstrap"
-import { Link } from "react-router-dom"
+import { Table, Row, Col } from "react-bootstrap"
 import { useHistory } from 'react-router-dom';
-
+import Pagination from '../components/Pagination'
 
 function ViewSubmission() {
-    
     const dispatch = useDispatch()
-
-    let user = useSelector((state)=> state.auth.user)
-    let submission = useSelector((state)=> state.submission.submission)
-    const isLoading = useSelector((state) => state.submission.isLoading)
-    console.log(submission)
-    // let id = user.id
-
-
+    const user = useSelector((state)=> state.auth.user)
+    const submissions = useSelector((state)=> state.submission.submissions)
+    const isGetSubmissionLoading = useSelector((state) => state.submission.isGetSubmissionLoading)
+    const pages = useSelector((state) => state.submission.pages)
+    const [page, setPage] = useState(1)
 
     //fetch the submissions made by this user
+    
     useEffect(()=>{
-        if(user){
+        if (user) {
             dispatch(getSubmissions({
-                id:user.id
+                userId: user.id,
+                expand: 'platformId(select=name),quizId(select=name)',
+                sort: 'createdAt desc',
+                offset: 10 * (page - 1),
+                limit: 10,
             }))
         }
-    },[dispatch,user])
+    }, [page, user, dispatch])
 
     const history = useHistory()
 
     const handleOnclick = (e) =>{
-        let submissionId = e.target.getAttribute('submissionId')
-        
+        const submissionId = e.target.getAttribute('submissionId')
         history.push(`/submission/reviewSubmission/${submissionId}`)
-
     }
 
-
-
-    if (isLoading) {
+    if (isGetSubmissionLoading) {
         return ( <div> Loading... </div> )
     }
 
     return(
-
         <div>
+            <Row>
             <Table striped bordered hover className='mt-5'>
                 <thead>
                     <tr>
@@ -57,7 +53,7 @@ function ViewSubmission() {
                     </tr>
                 </thead>
                 <tbody>
-                    {submission.map((submission)=>{
+                    {submissions.map((submission)=>{
                         return( 
                                 <tr submissionId={submission._id} onClick={handleOnclick}>
                                         <td className="display:block" submissionId={submission._id} >{submission.createdAt}</td>
@@ -67,17 +63,21 @@ function ViewSubmission() {
                                         <td submissionId={submission._id}>{submission.timeTaken} seconds</td>
                                         <td submissionId={submission._id}>{submission.point}</td>
                                 </tr>
-                        )
+                            )
                     })
-
                     }
                 </tbody>
             </Table>
+            </Row>
+
+            <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
+                <Col>
+                    <Pagination page={page} pages={pages} changePage={setPage} />
+                </Col>
+            </Row>
+            
         </div>
-
     )
-
-
 }
 
 export default ViewSubmission
