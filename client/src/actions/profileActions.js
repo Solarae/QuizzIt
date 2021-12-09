@@ -1,4 +1,7 @@
 import {
+    GET_PROFILE_REQ,
+    GET_PROFILE_SUCCESS,
+    GET_PROFILE_FAIL,
     GET_INBOX_REQ,
     GET_INBOX_SUCCESS,
     GET_INBOX_FAIL,
@@ -32,6 +35,51 @@ import axios from 'axios'
 import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
+
+export const getProfile = ({ id }) => async (dispatch) => {
+    console.log("Getting: " + id)
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            _id: id,
+            offset: 0,
+            limit: 1
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PROFILE_REQ
+        });
+        const res = await axios.get(`${URL}/api/users/`, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: GET_PROFILE_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            if (res.data.users.length !== 1) {
+                dispatch({
+                    type: GET_PROFILE_FAIL,
+                    payload: res.data
+                })
+            }
+            dispatch({
+                type: GET_PROFILE_SUCCESS,
+                payload: {profile: res.data.users[0]} 
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PROFILE_FAIL
+        })
+    }
+
+}
 
 export const editProfile = ({ id, username, email, password, currentPassword, history, callback }) => async (dispatch) => {
     const config = {
