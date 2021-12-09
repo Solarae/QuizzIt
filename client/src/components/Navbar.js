@@ -199,7 +199,7 @@ function AppNavbar() {
                   }
                   menuVariant="dark"
                 >
-                  <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link className="text-white">View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><LinkContainer to={`/profile/${auth.user.id}`}><Nav.Link className="text-white">My Profile</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/friends'><Nav.Link className="text-white">Friends</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/viewSubmission'><Nav.Link className="text-white">View Submissions</Nav.Link></LinkContainer></NavDropdown.Item>
