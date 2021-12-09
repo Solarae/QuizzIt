@@ -1,5 +1,8 @@
 import bcrypt from "bcryptjs";
 
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId;
+
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
 import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
@@ -269,8 +272,62 @@ export const getPlatformMemberlist = async (req,res) => {
     }
 }
 
+export const searchLeaderboard = async (req, res) => {
+    const { type, name } = req.query 
+
+    if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
+    return res.status(404).json({ msg: "Invalid leaderboard type" }); 
+
+    try {
+        const user = await User.findOne({ username: name })
+        if (!user) return res.status(404).json({ msg: "User doesn't exist "} )
+
+        const [ info ] = await Platform.aggregate([
+            { $match: {_id: ObjectId(req.params.id) } },
+            { $project: {
+                index: {
+                    $indexOfArray: [
+                      "$daily_leaderboard.userId",
+                      user._id
+                    ]
+                  },
+            }}
+        ])
+
+        if (!info) return res.status(404).json({ msg: "Platform doesn't exist "} )
+
+        const skip = Math.floor(info.index / 10) * 10
+
+        const [ leaderboardInfo ] = await Platform.aggregate([
+            { $match: { _id: ObjectId(req.params.id) } },
+            { $project: {
+                leaderboard: {
+                    $slice: [`$${type}_leaderboard`, skip, 10]
+                },
+                totalCount: {
+                    $size: `$${type}_leaderboard`
+                }
+            }}
+            
+        ])
+
+        if (!leaderboardInfo) return res.status(404).json({ msg: "Platform doesn't exist "} )
+
+        const leaderboardPage = skip / 10
+        const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / 10 )
+
+        res.status(200).json({ 
+            leaderboard: leaderboardInfo.leaderboard, 
+            leaderboardPage, 
+            leaderboardPages ,
+            leaderboardTotalCount: leaderboardInfo.totalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
 export const getLeaderboardByType = async (req, res) => {
-    const { type } = req.query
+    const { type, userId } = req.query
     const skip = parseInt(req.query.offset) || 0
     const limit = parseInt(req.query.limit) || 10 
     
@@ -278,15 +335,67 @@ export const getLeaderboardByType = async (req, res) => {
         return res.status(404).json({ msg: "Invalid leaderboard type" }); 
 
     try {
-        const platform = await Platform.findById(req.params.id).slice(`${type}_leaderboard`, [skip,limit]).populate(`${type}_leaderboard.userId`, 'username')
-        if (!platform) return res.status(200).json({ msg: "Platform doesn't exist" });
-        const plat = await Platform.findById(req.params.id)
+        var projectQuery
+        
+        if (userId) {
+            const user = await User.findById(userId)
+            if (!user) res.status(404).json({ msg: "User doesn't exist" });
+            projectQuery = {
+                leaderboard: {
+                    $slice: [{ $filter: { 
+                        input: `$${type}_leaderboard`,
+                        as: "rank", 
+                        cond:  { $in: ["$$rank.userId", user.friends] } 
+                    }}, skip, limit]
+                },
+                totalCount: {
+                    $size: { $filter: { 
+                        input: `$${type}_leaderboard`,
+                        as: "rank", 
+                        cond:  { $in: ["$$rank.userId", user.friends] } 
+                    }}
+                }
+            }
+        } else {
+            projectQuery = {
+                leaderboard: {
+                    $slice: [`$${type}_leaderboard`, skip, limit]
+                },
+                totalCount: {
+                    $size: `$${type}_leaderboard`
+                }
+            }
+        }
+        
+        const [ leaderboardInfo ] = await Platform.aggregate([
+            { $match: { _id: ObjectId(req.params.id) } },
+            { $project: projectQuery },
+            { $lookup: {
+                from: "users",
+                localField: "leaderboard.userId",
+                foreignField: "_id",
+                as: "populatedLeaderboard"
+             }},
+            { $project: {
+                _id: 1,
+                totalCount: 1,
+                populatedLeaderboard: {
+                    _id: 1,
+                    username: 1
+                }
+            }}
+        ])
 
-        const leaderboardTotalCount = plat[`${type}_leaderboard`].length
-        const leaderboardPages = Math.ceil(leaderboardTotalCount / limit)
-        const leaderboardPage = skip / limit
-
-        res.status(200).json({ leaderboard: platform[`${type}_leaderboard`], leaderboardPage, leaderboardPages, leaderboardTotalCount });
+        if (!leaderboardInfo) return res.status(404).json({ msg: "Platform doesn't exist "} )
+        const leaderboardPage = (skip / limit) + 1
+        const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / limit)
+       
+        res.status(200).json({
+            leaderboard: leaderboardInfo.populatedLeaderboard,
+            leaderboardPage,
+            leaderboardPages,
+            leaderboardTotalCount: leaderboardInfo.totalCount
+        })
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }
