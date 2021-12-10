@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom'
 
 import Subscribe from '../Button/Subscribe'
 
-function PlatformCard({ platform }) {
+function PlatformCard({ platform, showSubscribe=true }) {
     const history = useHistory()
 
     const routeToPlatform = () => {
@@ -24,7 +24,7 @@ function PlatformCard({ platform }) {
                             <p className="text-muted" style={{ fontSize: "9pt" }}><i className="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers</p>
                         </Row>
 
-                        <Subscribe size="sm" platform={platform} style={{ width: "100%" }} />
+                        {showSubscribe && <Subscribe size="sm" platform={platform} style={{ width: "100%" }} />}
                     </Col>
                 </Row>
             </Card.Body>
