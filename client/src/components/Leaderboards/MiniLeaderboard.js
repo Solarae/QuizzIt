@@ -16,8 +16,10 @@ function MiniLeaderboard({ lbType, doc }) {
         if (lbType === "platform" || lbType === "global") {
             dispatch(getPlatformLeaderboard(
                 doc._id,
-                type,
-                1
+                { type,
+                offset: 0,
+                limit: 10,
+                }
             ))
         }
     }, [type, dispatch]);
@@ -77,7 +79,7 @@ function MiniLeaderboard({ lbType, doc }) {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td>
-                                    {rank.userId.username}
+                                    {rank.username}
                                 </td>
                                 <td>
                                     {rank.points}
