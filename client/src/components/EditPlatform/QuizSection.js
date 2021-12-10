@@ -17,7 +17,7 @@ function QuizSection({ quizzesData }) {
                 </Col>
                 {quizzesData.length > 0 && quizzesData.map((quiz, idx) => (
                     <Col align="center">
-                        <QuizCardMini quiz={quiz}></QuizCardMini>
+                        <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
                     </Col>
                 ))}
             </Row>

@@ -5,7 +5,7 @@ import { useHistory, useLocation } from 'react-router-dom'
 import mongoose from 'mongoose'
 import moment from 'moment'
 
-function QuizCardMini({ quiz }) {
+function QuizCardMini({ quiz, showPlatform = true }) {
     const history = useHistory()
     let location = useLocation()
 
@@ -27,7 +27,7 @@ function QuizCardMini({ quiz }) {
 
     return (
         <Card>
-            <Card.Body style={{ cursor: isEdit ? "pointer" : ""}} onClick={isEdit ? routeToQuizEdit : ()=>{}}>
+            <Card.Body style={{ cursor: isEdit ? "pointer" : "" }} onClick={isEdit ? routeToQuizEdit : () => { }}>
                 <Row>
                     <Col className="my-auto" align="center" >
                         {isEdit && (<i className="bi bi-pencil-square position-absolute top-0 start-100 translate-middle" style={{ fontSize: "1.3rem" }}></i>)}
@@ -35,15 +35,16 @@ function QuizCardMini({ quiz }) {
 
                         <Row>
                             {
-                                isHome &&
-                                <Col md={3} className="my-auto" style={{ padding: "0px" }}>
-                                    <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformIcon ? quiz.platformIcon : '/quizzit_logo.png'} thumbnail />
-                                </Col>
-                                
+                                showPlatform &&
+                                (
+                                    <Col md={3} className="my-auto" style={{ padding: "0px" }}>
+                                        <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformIcon ? quiz.platformIcon : '/quizzit_logo.png'} thumbnail />
+                                    </Col>)
+
                             }
-                            <Col align="start" style={{ padding: isHome ? "0px" : "" }}>
+                            <Col align="start" style={{ padding: showPlatform ? "0px" : "" }}>
                                 <p className="fs-5 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
-                                {isHome && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformName}</p>}
+                                {showPlatform && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformName}</p>}
                                 <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                             </Col>
                         </Row>

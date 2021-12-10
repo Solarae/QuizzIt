@@ -41,7 +41,7 @@ function Home({ quizzesData }) {
                         <Row xs={1} md={4} className="g-4 me-auto">
                             {quizzesData.sort(compareDates).map((quiz, idx) => (
                                 <Col align="center">
-                                    <QuizCardMini quiz={quiz}></QuizCardMini>
+                                    <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
                                 </Col>
                             ))}
                         </Row>
