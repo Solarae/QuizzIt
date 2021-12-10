@@ -51,6 +51,25 @@ export const deletePlatformReport = ({id}) => async (dispatch) => {
 
 }
 
+export const deleteQuizReport = ({id}) => async (dispatch) => {
+    let res = await axios.delete(`${URL}/api/reports/deleteQuizReport/${id}`)
+
+
+    try {
+        dispatch({
+            type:DELETE_REPORT_SUCCESS,
+            payload:res.data
+        })
+    } catch (error) {
+        dispatch({
+            type:DELETE_REPORT_FAIL,
+            payload:res.data
+        })
+    }
+
+
+}
+
 
 export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>async(dispatch) =>{
     const config = {

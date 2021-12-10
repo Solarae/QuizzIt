@@ -26,8 +26,7 @@ const DeleteQuizModal = ({ quiz, show, setShow }) => {
           quizId: quiz._id,
       }
     ))
-    // dispatch(deleteQuiz({ id:quiz._id }))
-    // history.push(`/platform/${id}`)
+    dispatch(deleteQuiz({ id:quiz._id }))
   }
 
   return (
@@ -36,6 +35,7 @@ const DeleteQuizModal = ({ quiz, show, setShow }) => {
       <Form onSubmit={handleSubmit}>
           <Modal.Body>
               Are you sure you want to delete this quiz? This action cannot be undone!
+              Note:deleting this quiz also deletes the reports associated with this quiz!
           </Modal.Body>
           <Modal.Footer className="justify-content-between"> 
               <Button variant="primary" type="submit"> Delete </Button> 

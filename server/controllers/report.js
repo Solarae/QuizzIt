@@ -127,7 +127,24 @@ export const deleteReport = async(req,res) =>{
     try {
         let id = req.params.id
         await Report.findOneAndDelete({_id:id})
-        let newReport = await Report.find().populate("platformId").populate("submittedBy")
+        let newReport = await Report.find({type:"platformReport"}).populate("platformId").populate("submittedBy")
+
+
+        return res.status(200).json({report:newReport})  
+
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})      
+    }
+
+}
+
+export const deleteQuizReport = async(req,res) =>{
+
+    try {
+        let id = req.params.id
+        await Report.findOneAndDelete({_id:id})
+        let newReport = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy").populate("platformId")
 
 
         return res.status(200).json({report:newReport})  
@@ -181,7 +198,7 @@ export const deleteManyQuizReport = async(req,res) => {
         let {userId} = req.body
 
         await Report.deleteMany({quizId:id})
-        let newReport = await Report.find().populate("quizId").populate("submittedBy")
+        let newReport = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
         
 
         return res.status(200).json({report:newReport})  

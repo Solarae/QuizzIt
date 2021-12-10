@@ -5,7 +5,7 @@ import { deletePlatform } from '../../actions/platformActions';
 import { URL } from '../../config';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
-import { deletePlatformReport } from '../../actions/reportActions';
+import { deletePlatformReport, deleteQuizReport } from '../../actions/reportActions';
 import DeletePlatform from './DeletePlatform';
 import DeleteQuizModal from '../Quiz/Modal/deleteQuizModal';
 
@@ -21,7 +21,7 @@ function ReportCard({ user, report }) {
 
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
-        dispatch(deletePlatformReport({
+        dispatch(deleteQuizReport({
             id:report._id
         }))
     }
