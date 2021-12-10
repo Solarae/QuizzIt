@@ -12,7 +12,8 @@ import {
     upvotePlatform,
     downvotePlatform,
     uploadImage,
-    editMemberRole
+    editMemberRole,
+    searchLeaderboard
 } from '../controllers/platform.js';
 
 const router = express.Router();
@@ -21,6 +22,7 @@ router.get('/:id', getPlatform);
 router.get('/', getPlatformsByFilter);
 router.get('/:id/memberList', getPlatformMemberlist)
 router.get('/:id/leaderboard', getLeaderboardByType);
+router.get('/:id/leaderboard/search', searchLeaderboard);
 router.post('/', createPlatform);
 router.post('/:id/delete', deletePlatform);
 router.post('/:id/update', updatePlatform);

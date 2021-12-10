@@ -331,7 +331,7 @@ export const acceptFriendRequest = async (req, res) => {
     try {
         const sender = await User.findByIdAndUpdate(
             req.params.uid,
-            { $push: { friends: req.params.id} },
+            { $addToSet: { friends: req.params.id} },
             { new: true }
         )
 
@@ -340,7 +340,7 @@ export const acceptFriendRequest = async (req, res) => {
         const user = await User.findByIdAndUpdate(
             req.params.id,
             { $pull: { friendRequests: req.params.uid },
-            $push: { friends: req.params.uid} },
+            $addToSet: { friends: req.params.uid} },
             { new: true }
         )
 
