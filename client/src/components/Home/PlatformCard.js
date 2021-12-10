@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Card, Image, Row, Col } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router-dom'
 
 import Subscribe from '../Button/Subscribe'
@@ -10,6 +11,7 @@ function PlatformCard({ platform }) {
     const routeToPlatform = () => {
         history.push(`/platform/${platform._id}`);
     }
+    const user = useSelector(state=>state.auth.user)
 
     return (
         <Card border="">
@@ -23,7 +25,7 @@ function PlatformCard({ platform }) {
                         <Row style={{}}>
                             <p className="text-muted" style={{ fontSize: "9pt" }}><i className="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers</p>
                         </Row>
-
+                        {(user && platform.subscribers.some((s) => s.role == "Moderator" && s.userId==user.id)) ? <h4>Moderator</h4>:<></> }
                         <Subscribe size="sm" platform={platform} style={{ width: "100%" }} />
                     </Col>
                 </Row>

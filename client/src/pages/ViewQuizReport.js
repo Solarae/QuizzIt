@@ -59,16 +59,18 @@ function ViewQuizReport() {
 
                 <Col xs={7} className="g-4">
                     {reports ? 
-                    
-                    reports.map( (report,idx) => {
-                            return( 
-                                <>
-                                    <Col>
-                                        <ReportCard user={user} report={report}  ></ReportCard>
-                                    </Col>
-                                </>
-                            )
-                    })
+                    reports.length>0 ?
+                        reports.map( (report,idx) => {
+                                return( 
+                                    <>
+                                        <Col>
+                                            <ReportCard user={user} report={report}  ></ReportCard>
+                                        </Col>
+                                    </>
+                                )
+                        })
+                        :<h1>There are no quiz reports right now for this platform</h1>
+
                     :
                     <h1>loading</h1>}
                     
