@@ -173,6 +173,29 @@ export const deleteManyPlatformReport = async(req,res) => {
 
 }
 
+export const deleteManyQuizReport = async(req,res) => {
+
+
+    try {
+        let id = req.params.id
+        let {userId} = req.body
+
+        await Report.deleteMany({quizId:id})
+        let newReport = await Report.find().populate("quizId").populate("submittedBy")
+        
+
+        return res.status(200).json({report:newReport})  
+
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({message:error.message})      
+    }
+
+
+
+}
+
 
 export const getQuizReport = async (req,res) =>{
 
@@ -183,7 +206,7 @@ export const getQuizReport = async (req,res) =>{
         let reports = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
         
         //filter out the quiz reports that belong to the given platformId
-        reports.filter((report)=>{
+        let newReport = reports.filter((report)=>{
 
             let platformIdOfQuiz = report.quizId.platformId
             return platformId == platformIdOfQuiz
@@ -191,10 +214,10 @@ export const getQuizReport = async (req,res) =>{
         })
 
 
-        return res.status(200).json({report:reports})  
+        return res.status(200).json({report:newReport})  
 
     } catch (error) {
-        
+        console.log(error)
         return res.status(500).json({message:error.message})
     }
 

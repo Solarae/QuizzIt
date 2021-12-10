@@ -1,8 +1,9 @@
 // import Close from "./times-solid.svg";
 import { Form, Button, Modal } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { deleteQuiz } from '../../../actions/quizActions';
 import { useHistory } from 'react-router-dom'
+import { deleteManyPlatformReport, deleteManyQuizReport } from '../../../actions/reportActions';
 
 const DeleteQuizModal = ({ quiz, show, setShow }) => {
   const dispatch = useDispatch()
@@ -10,13 +11,23 @@ const DeleteQuizModal = ({ quiz, show, setShow }) => {
   const closeModal = (err) =>{
     setShow(!show)
   }
-
+  
+  const id = quiz.platformId
+  const auth = useSelector((state)=>state.auth)
   const handleSubmit = (e) =>{
     e.preventDefault()
     setShow(!show)
-    let id = quiz.platformId
-    dispatch(deleteQuiz({ id:quiz._id }))
-    history.push(`/platform/${id}`)
+
+
+    //delete all reports associated with quiz
+    dispatch(deleteManyQuizReport(
+      {
+          userId: auth.user.id,
+          quizId: quiz._id,
+      }
+    ))
+    // dispatch(deleteQuiz({ id:quiz._id }))
+    // history.push(`/platform/${id}`)
   }
 
   return (

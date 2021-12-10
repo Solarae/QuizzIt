@@ -76,6 +76,32 @@ export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>
             payload:res.data
         })
     }
+}
+
+export const deleteManyQuizReport = ({quizId,userId}) =>async(dispatch) =>{
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    }
+    const body = JSON.stringify({ userId })
+    
+
+    let res = await axios.post(`${URL}/api/reports/deleteManyQuizReport/${quizId}`,body,config)   
+    console.log(res.data)
+    try {
+        dispatch({
+            type:DELETE_REPORT_SUCCESS,
+            payload:res.data
+        })
+        
+
+    } catch (error) {
+        dispatch({
+            type:DELETE_REPORT_FAIL,
+            payload:res.data
+        })
+    }
 
 
 
