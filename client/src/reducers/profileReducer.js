@@ -6,6 +6,10 @@ import {
 
 const initialState = {
     profile: null,
+    likedPlatforms: [],
+    likedQuizzes: [],
+    awards: [],
+    createdPlatforms: [],
     isGetProfileLoading: false
 }
 

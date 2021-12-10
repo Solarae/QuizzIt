@@ -38,7 +38,7 @@ axios.defaults.withCredentials = true;
 
 export const getProfile = ({ id }) => async (dispatch) => {
     console.log("Getting: " + id)
-    const config = {
+    let config = {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -52,7 +52,7 @@ export const getProfile = ({ id }) => async (dispatch) => {
         dispatch({
             type: GET_PROFILE_REQ
         });
-        const res = await axios.get(`${URL}/api/users/`, config);
+        let res = await axios.get(`${URL}/api/users/`, config);
 
         if (res.data.errors) {
             dispatch({
@@ -67,9 +67,63 @@ export const getProfile = ({ id }) => async (dispatch) => {
                     payload: res.data
                 })
             }
+            const user = res.data.users[0]
+
+            // get likedPlatforms, likedQuizzes, awards, createdPlatforms
+            let likedPlatforms = []
+            for (const pid of user.likes.likedPlatforms) {
+                res = await axios.get(`${URL}/api/platforms/${pid}`,);
+                if (!res.data.errors) {
+                    likedPlatforms.push(res.data.platform)
+                }
+            }
+
+            let likedQuizzes = []
+            for (const qid of user.likes.likedQuizzes) {
+                let quiz = null
+                let res = await axios.get(`${URL}/api/quizzes/${qid}`,);
+                if (!res.data.quiz || res.data.errors) {
+                    continue
+                }
+                quiz = res.data.quiz
+                res = await axios.get(`${URL}/api/platforms/${quiz.platformId}`,);
+                if (!res.data.platform || res.data.errors) {
+                    continue
+                }
+                quiz.platformName = res.data.platform.name
+                quiz.platformIcon = res.data.platform.icon
+                likedQuizzes.push(quiz)
+            }
+
+            let awards = []
+            for (const aid of user.awards) {
+                res = await axios.get(`${URL}/api/awards/${aid}`,);
+                if (!res.data.errors) {
+                    awards.push(res.data.award)
+                }
+            }
+
+            let createdPlatforms = []
+            let config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'owner': user._id
+                }
+            }
+            res = await axios.get(`${URL}/api/platforms`, config);
+            createdPlatforms = res.data.platforms
+
             dispatch({
                 type: GET_PROFILE_SUCCESS,
-                payload: {profile: res.data.users[0]} 
+                payload: {
+                    profile: user,
+                    likedPlatforms: likedPlatforms,
+                    likedQuizzes: likedQuizzes,
+                    awards: awards,
+                    createdPlatforms: createdPlatforms
+                }
             });
         }
     } catch (error) {
@@ -223,7 +277,7 @@ export const receiveNotifications = (notifications) => (dispatch) => {
 export const readNotification = (userId, notifId) => async (dispatch) => {
     try {
         const res = await axios.post(`${URL}/api/users/${userId}/inbox/notification/${notifId}/read`)
-        
+
         if (res.data.errors) {
             dispatch({
                 type: READ_NOTIFICATION_FAIL,
@@ -248,11 +302,11 @@ export const getFriendRequests = (id, currMax) => async (dispatch) => {
         }
     }
 
-    if (currMax === 0) 
+    if (currMax === 0)
         dispatch({
             type: GET_FRIENDREQUESTS_REQ
         })
-   
+
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)
         if (res.data.errors) {
@@ -347,11 +401,11 @@ export const getFriends = (id, page) => async (dispatch) => {
         }
     }
     console.log(page)
-    
+
     dispatch({
         type: GET_FRIENDS_REQ
     })
-   
+
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friends`, config)
         if (res.data.errors) {
