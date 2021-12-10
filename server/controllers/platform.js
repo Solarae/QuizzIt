@@ -287,8 +287,8 @@ export const searchLeaderboard = async (req, res) => {
             { $project: {
                 index: {
                     $indexOfArray: [
-                      "$daily_leaderboard.userId",
-                      user._id
+                        `$${type}_leaderboard.userId`,
+                        user._id
                     ]
                   },
             }}

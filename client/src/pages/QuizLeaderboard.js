@@ -25,21 +25,13 @@ function QuizLeaderboard() {
     }
     return (
         <div className="justify-content-between">
-            {/* {Object.keys(platform).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>} */}
-            <Banner></Banner>
-
-            <div style={{ height: "10vh" }}></div>
-
+            {Object.keys(quiz).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
+            <div style={{ height: "50px" }}></div>
             <Container>
-                <p style={{ cursor: 'pointer', }} onClick={() => {history.push(`/platform/${id}/quiz/${qid}`)}}><i class="bi bi-arrow-left"></i> Back to quiz page</p>
-                <Row style={{}}>
-                    <Col className="justify-content-md-center" style={{}}>
-                        <Leaderboard quiz={quiz}></Leaderboard>
-                    </Col>
-                </Row>
+                <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}/quiz/${qid}`) }}><i class="bi bi-arrow-left"></i> Back to Quiz Page</p>
+                <Leaderboard></Leaderboard>
             </Container >
-
-        </div>
+        </div >
     )
 }
 export default QuizLeaderboard;

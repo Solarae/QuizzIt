@@ -25,7 +25,9 @@ import {
     EDIT_QUIZ_THUMBNAIL_FAIL,
     GET_QUIZ_LEADERBOARD_REQ,
     GET_QUIZ_LEADERBOARD_SUCCESS,
-    GET_QUIZ_LEADERBOARD_FAIL
+    GET_QUIZ_LEADERBOARD_FAIL,
+    SEARCH_QUIZ_LEADERBOARD_SUCCESS,
+    SEARCH_QUIZ_LEADERBOARD_FAIL
 } from '../actions/types'
 
 const initialState = {
@@ -183,6 +185,18 @@ const quizReducer = (state = initialState, action) => {
                 isGetQuizLeaderboardLoading: false,
             }
         case GET_QUIZ_LEADERBOARD_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetQuizLeaderboardLoading: false,
+            }
+        case SEARCH_QUIZ_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetQuizLeaderboardLoading: false,
+            }
+        case SEARCH_QUIZ_LEADERBOARD_FAIL:
             return {
                 ...state,
                 ...action.payload,
