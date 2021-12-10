@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useRef } from 'react'
 import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
-import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -9,7 +8,6 @@ import { Link, useLocation } from 'react-router-dom'
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import Report from './Report.js'
-import LikeDislike from '../Button/LikeDislike';
 import Subscribe from '../Button/Subscribe';
 
 function Banner({ platform }) {
@@ -24,41 +22,6 @@ function Banner({ platform }) {
     const [showSignUp, setShowSignUp] = useState(false);
     const handleCloseSignUp = () => { setShowSignUp(false) };
     const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
-
-    const handleLike = () => {
-        if (auth.user === null) {
-            handleShowSignIn()
-            return
-        }
-        dispatch(upvotePlatform({
-            userId: auth.user.id,
-            platformId: platform._id
-        }))
-
-
-        // dispatch(updateUser({
-        //     newValue: { likes: likes },
-        //     userId: auth.user.id
-        // }))
-
-    }
-
-    const handleDislike = () => {
-        if (auth.user === null) {
-            handleShowSignIn()
-            return
-        }
-        dispatch(downvotePlatform({
-            userId: auth.user.id,
-            platformId: platform._id
-        }))
-
-        // dispatch(updateUser({
-        //     newValue: { likes: likes },
-        //     userId: auth.user.id
-        // }))
-
-    }
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
@@ -87,7 +50,6 @@ function Banner({ platform }) {
                         <div style={{ marginLeft: "2%" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
                                 <i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers
-                                <LikeDislike style={{marginLeft:"30px"}} handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {platform.description}

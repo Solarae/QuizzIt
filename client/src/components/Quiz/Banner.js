@@ -90,7 +90,7 @@ function Banner({ isEdit }) {
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
                                 {quiz.submissions.length} submissions
-                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedQuizzes' dislikedKey="dislikedQuizzes" object={quiz}> </LikeDislike>
+                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike}> </LikeDislike>
                             </p>
                             <p className="lead fw-normal">
                                 {quiz.description}
