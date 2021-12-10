@@ -21,7 +21,6 @@ function TakeQuiz() {
     const [timer, setTimer] = useState(0)
     const [qno, setqno] = useState(0)
     const [question, setQuestion] = useState(quiz.questions[qno])
-    
 
     const history = useHistory()
     const timerIncrement = () => { setTimer(timer + 1) }
@@ -129,10 +128,12 @@ function TakeQuiz() {
                 <Col>
                     <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput}></TakeQuestionCard>
 
+                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
+
+                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
+
                     <Button variant="primary" onClick={handleSubmit}>Submit</Button>
 
-                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
-                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
                 </Col>
             </Container>
         </>
