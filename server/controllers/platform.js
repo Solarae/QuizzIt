@@ -307,8 +307,39 @@ export const searchLeaderboard = async (req, res) => {
                 totalCount: {
                     $size: `$${type}_leaderboard`
                 }
-            }}
-            
+            }},
+            { $lookup: {
+                from: "users",
+                localField: "leaderboard.userId",
+                foreignField: "_id",
+                as: "populatedLeaderboard"
+            }},
+            { $set: {
+                leaderboard: {
+                    $map: {
+                        input: "$leaderboard",
+                        as: "rank",
+                        in: {
+                            $mergeObjects: [
+                                "$$rank",
+                                { $arrayElemAt: [
+                                    "$populatedLeaderboard",
+                                    { $indexOfArray: [ "$populatedLeaderboard._id", "$$rank.userId" ] }
+                                ]}
+                            ]
+                        }
+                    }
+                }
+            }},
+            { $project: {
+                _id: 1,
+                totalCount: 1,
+                leaderboard: {
+                    _id: 1,
+                    points: 1,
+                    username: 1
+                }
+            }} 
         ])
 
         if (!leaderboardInfo) return res.status(404).json({ msg: "Platform doesn't exist "} )
@@ -375,23 +406,41 @@ export const getLeaderboardByType = async (req, res) => {
                 localField: "leaderboard.userId",
                 foreignField: "_id",
                 as: "populatedLeaderboard"
-             }},
+            }},
+            { $set: {
+                leaderboard: {
+                    $map: {
+                        input: "$leaderboard",
+                        as: "rank",
+                        in: {
+                            $mergeObjects: [
+                                "$$rank",
+                                { $arrayElemAt: [
+                                    "$populatedLeaderboard",
+                                    { $indexOfArray: [ "$populatedLeaderboard._id", "$$rank.userId" ] }
+                                ]}
+                            ]
+                        }
+                    }
+                }
+            }},
             { $project: {
                 _id: 1,
                 totalCount: 1,
-                populatedLeaderboard: {
+                leaderboard: {
                     _id: 1,
+                    points: 1,
                     username: 1
                 }
             }}
         ])
-
+        
         if (!leaderboardInfo) return res.status(404).json({ msg: "Platform doesn't exist "} )
         const leaderboardPage = (skip / limit) + 1
         const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / limit)
        
         res.status(200).json({
-            leaderboard: leaderboardInfo.populatedLeaderboard,
+            leaderboard: leaderboardInfo.leaderboard,
             leaderboardPage,
             leaderboardPages,
             leaderboardTotalCount: leaderboardInfo.totalCount

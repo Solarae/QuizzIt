@@ -476,12 +476,10 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
     }
 }
 
-export const getPlatformLeaderboard = (platformId, type, page) => async (dispatch) => {
+export const getPlatformLeaderboard = (platformId, query) => async (dispatch) => {
     const config = {
         params: {
-            type,
-            offset: 10 * (page - 1),
-            limit: 10
+            ...query
         }
     }
     try {
@@ -489,6 +487,30 @@ export const getPlatformLeaderboard = (platformId, type, page) => async (dispatc
             type: GET_PLAT_LEADERBOARD_REQ
         })
         const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_FAIL
+        })
+    }
+}
+
+export const searchLeaderboard = (platformId, query) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard/search`, config)
         console.log(res.data)
         dispatch({
             type: GET_PLAT_LEADERBOARD_SUCCESS,
