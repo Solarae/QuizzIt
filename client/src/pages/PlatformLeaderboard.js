@@ -34,16 +34,7 @@ function Platform() {
 
             <Container>
                 <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}`) }}><i class="bi bi-arrow-left"></i> Back to platform page</p>
-                <Row style={{}}>
-                    <Col className="justify-content-md-center" style={{}}>
-                        <Row>
-                            <Col align="center">
-                                <h3 >Platform Leaderboard</h3>
-                            </Col>
-                        </Row>
-                        <Leaderboard></Leaderboard>
-                    </Col>
-                </Row>
+                <Leaderboard></Leaderboard>
             </Container >
 
         </div >

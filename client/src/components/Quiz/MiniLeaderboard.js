@@ -8,15 +8,19 @@ function MiniLeaderboard({ quiz }) {
     const history = useHistory()
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
-    const isGetQuizLeaderboardLoading = useSelector((state) => state.quiz.isGetQuizLeaderboardLoading);
-    const leaderboard = useSelector((state) => state.quiz.leaderboard)
+    const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
+                    { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
+                    { queryStr: 'allTime', type: 'All Time' } ]
+    const {isGetQuizLeaderboardLoading, leaderboard} = useSelector((state) => state.quiz);
 
     useEffect(() => {
-        console.log("CALLING API")
         dispatch(getQuizLeaderboard(
             quiz._id,
-            type,
-            1
+            {   
+                type,
+                offset: 0,
+                limit: 10,
+            }
         ))
     }, [type, dispatch]);
     
@@ -31,23 +35,11 @@ function MiniLeaderboard({ quiz }) {
             </Row>
             <Row>
                 <Nav fill variant="tabs">
-                <Nav.Item>
-                    <Nav.Link onClick={() => setType("daily")} disabled={type === "daily"}>Daily</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link onClick={() => setType("weekly")} disabled={type === "weekly"} >Weekly</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                    <Nav.Link onClick={() => setType("allTime")} disabled={type === "allTime"}>
-                        All
-                    </Nav.Link>
-                </Nav.Item>
+                {types.map((t) => 
+                        <Nav.Item>
+                            <Nav.Link onClick={() => setType(t.queryStr)}>{t.type}</Nav.Link>
+                        </Nav.Item>
+                    )}
             </Nav>
                 <br />
             </Row>
@@ -66,7 +58,7 @@ function MiniLeaderboard({ quiz }) {
                             <tr>
                                 <td>{index + 1 }</td>
                                 <td>
-                                    {rank.userId.username}
+                                    {rank.username}
                                 </td>
                                 <td>
                                     {rank.points}
