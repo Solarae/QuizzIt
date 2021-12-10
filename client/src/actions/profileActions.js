@@ -343,3 +343,22 @@ export const unfriend = (id, userId) => async (dispatch) => {
         console.log("error message: " + error.message);
     }
 }
+
+export const uploadImage = (id, image) => async (dispatch) => {
+    try {
+        const formData = new FormData()
+        formData.append('image', image)
+
+        const res = await axios.post(`${URL}/api/users/${id}/upload`, formData); 
+        dispatch({
+            type: EDIT_PROFILE_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: EDIT_PROFILE_FAIL,
+            payload: error.response.data
+        })
+    }
+}
