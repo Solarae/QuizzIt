@@ -107,6 +107,7 @@ export const editQuiz = async (req,res) =>{
 export const uploadImage = async (req, res) => {
     try {
         const quiz = await Quiz.findById(req.params.id)
+        if (!quiz) return res.status(404).json({ errors: { quizDNE: 'Quiz does not exist'} } )
         const cloud = await uploadImgToCloud(req.file.path)
 
         const updatedQuiz = await Quiz.findByIdAndUpdate(
@@ -394,116 +395,73 @@ export const searchLeaderboard = async (req, res) => {
 }
 
 export const upvoteQuiz = async (req,res) =>{
+    const userId = req.body 
 
-    let quizId = req.params.id
-    let { userId } = req.body
     try {
+        const quiz = await Quiz.findById(req.params.id)
+        if (!quiz) return res.status(404).json({ errors: { quizDNE: 'Quiz does not exist'} } )
 
-        //check if the user already liked the quiz
-        let user = await User.findById(userId)
-        let likedQuizzes = user.likes.likedQuizzes
-        let dislikedQuizzes = user.likes.dislikedQuizzes
-
-        //if already liked, then unlike it and then return
-        if(likedQuizzes.includes(quizId)){
-            //decrement the like on quiz
-            let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalLikes':-1}} , {new:true} )
-
-            //remove from liked quizzes
-            likedQuizzes.pull(quizId)
-            let updatedUser = await user.save()
-            let userPayload = {
-                id: updatedUser._id,
-                username: updatedUser.username,
-                email: updatedUser.email,
-                likes: updatedUser.likes
-            }
-            return res.status(200).json({quiz:quiz,user:userPayload})
+        if (quiz.likedBy.includes(userId)) {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { 'likes.likedBy': userId } },
+                { $inc: { 'likes.totalLikes': -1 }}, 
+                { new: true } )
+            return res.status(200).json({ quiz: updatedQuiz })
+        } else if (quiz.dislikedBy.includes(userId)) {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { 'likes.dislikedBy': userId } },
+                { $push: { 'likes.likedBy': userId } },
+                { $inc: { 'likes.totalDislikes': -1, 'likes.totalLikes': 1 }}, 
+                { new: true } )
+            return res.status(200).json({ quiz: updatedQuiz })
+        } else {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $push: { 'likes.likedBy': userId } },
+                { $inc: { 'likes.totalLikes': 1 }}, 
+                { new: true } 
+            )
+            return res.status(200).json({ quiz:updatedQuiz })
         }
-        //if the quiz is already disliked, then undo dislike
-        else if (dislikedQuizzes.includes(quizId)){
-            dislikedQuizzes.pull(quizId)
-            await user.save()
-            await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalDislikes':-1}})
-        }
-    
-        //perform upvote/like
-        likedQuizzes.push(quizId)
-        let updatedUser = await user.save()
-        let userPayload = {
-            id: updatedUser._id,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            likes: updatedUser.likes
-        }
-
-        let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalLikes':1}} , {new:true} )
-
-        if (!quiz) {return res.status(400).json({msg:"Quiz ID not found"})}
-
-        return res.status(200).json({quiz:quiz,user:userPayload})
-
     } catch (error) {
-        return res.status(500).json({message:error.message})
+        return res.status(500).json({ message:error.message })
     }
-
 }
 
-export const downvoteQuiz = async (req,res) =>{
+export const downvoteQuiz = async (req,res) => {
+    const userId = req.body
 
-    let quizId = req.params.id
-    let {userId} = req.body
     try {
+        const quiz = await Quiz.findById(req.params.id)
+        if (!quiz) return res.status(404).json({ errors: { quizDNE: 'Quiz does not exist'} } )
 
-        //check if the user already disliked the quiz
-        let user = await User.findById(userId)
-        let likedQuizzes    = user.likes.likedQuizzes 
-        let dislikedQuizzes = user.likes.dislikedQuizzes
-
-
-        //if already disliked, then unlike it and return
-        if(dislikedQuizzes.includes(quizId)){
-            //decrement the dislike on quiz
-            let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalDislikes':-1}} , {new:true} )
-
-            //remove from disliked quizzes
-            dislikedQuizzes.pull(quizId)
-            let updatedUser = await user.save()
-            let userPayload = {
-                id: updatedUser._id,
-                username: updatedUser.username,
-                email: updatedUser.email,
-                likes: updatedUser.likes
-            }
-            return res.status(200).json({quiz:quiz,user:userPayload})
+        if (quiz.dislikedBy.includes(userId)) {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { 'likes.dislikedBy': userId } },
+                { $inc: { 'likes.totalDislikes': -1 }}, 
+                { new: true } )
+            return res.status(200).json({ quiz: updatedQuiz })
+        } else if (quiz.likedBy.includes(userId)) {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $pull: { 'likes.likedBy': userId } },
+                { $push: { 'likes.dislikedBy': userId } },
+                { $inc: { 'likes.totalDislikes': 1, 'likes.totalLikes': -1 }}, 
+                { new: true } )
+            return res.status(200).json({ quiz: updatedQuiz })
+        } else {
+            const updatedQuiz = await Quiz.findByIdAndUpdate(
+                req.params.id,
+                { $push: { 'likes.dislikedBy': userId } },
+                { $inc: { 'likes.totalDislikes': 1 }}, 
+                { new: true } 
+            )
+            return res.status(200).json({ quiz:updatedQuiz })
         }
-
-        //else if the quiz is already liked, then undo like
-        else if (likedQuizzes.includes(quizId)){
-            likedQuizzes.pull(quizId)
-            await user.save()
-            await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalLikes':-1}})
-
-
-        }
-        //perform downvote/dislike
-        dislikedQuizzes.push(quizId)
-        let updatedUser = await user.save()
-        let userPayload = {
-            id: updatedUser._id,
-            username: updatedUser.username,
-            email: updatedUser.email,
-            likes: updatedUser.likes
-        }
-
-        let quiz = await Quiz.findByIdAndUpdate(quizId, {$inc:{'likes.totalDislikes':1}} , {new:true} )
-
-        if (!quiz) {return res.status(400).json({msg:"Quiz ID not found"})}
-
-        return res.status(200).json({quiz:quiz,user:userPayload})
-
     } catch (error) {
-        return res.status(500).json({message:error.message})
+        return res.status(500).json({ message:error.message })
     }
-
 }

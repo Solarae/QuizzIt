@@ -19,6 +19,7 @@ router.post('/signup', signup);
 router.post('/edit', editAccount);
 router.post('/delete', deleteAccount);
 router.post('/update', updateUser);
+router.post('/:id/upload', upload.single("image"), uploadImage)
 router.get('/checkIfAdmin/:id',checkIfAdmin)
 router.get("/checkIfModeratorOfPlatform/:uid/:pid",checkIfModeratorOfPlatform)
 

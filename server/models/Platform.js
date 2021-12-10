@@ -84,24 +84,6 @@ const platformSchema = new mongoose.Schema ({
             type: Number
         },
     }],
-    likes: {
-        likesThisHour: {
-            type: Number,
-            default: 0
-        },
-        dislikesThisHour: {
-            type: Number,
-            default: 0
-        },
-        totalLikes: {
-            type: Number,
-            default: 0
-        },
-        totalDislikes: {
-            type: Number,
-            default: 0
-        }
-    },
     reports: [{ 
         userId: {
             type: mongoose.Schema.Types.ObjectId, 

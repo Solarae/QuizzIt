@@ -132,15 +132,6 @@ export const updatePlatform = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        // check if confirmPassword matches with owner's password\
-        /*
-        const isMatch = await bcrypt.compare(confirmPassword, owner.password);
-        if (!isMatch) {
-            errors.invalidPassword = "Incorrect Password";
-            return res.status(200).json({ errors: errors });
-        }
-        */
-
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id, 
             { $set: newValue }, 
@@ -171,9 +162,6 @@ export const joinPlatform = async (req, res) => {
             { new: true }
         )
         
-        user.platforms.push(platform._id)
-        await user.save();
-
         res.status(200).json({ platform: updatedPlatform });
     } catch (error) {
         res.status(404).json({ msg: error.message })
@@ -185,21 +173,14 @@ export const leavePlatform = async (req, res) => {
 
     try {
         const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+        if (!user) return res.status(404).json({ errors: { userDNE: 'User does not exist'} })
 
         const platform = await Platform.findById(req.params.id);
-        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+        if (!platform) return res.status(404).json({ errors: { platDNE: 'Platform does not exist'} })
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id,
             { $pull: { subscribers: { userId: user._id } } },
-            { new: true }
-        )
-        // platform.subscribers.pull(user._id)
-        // await platform.save();
-
-        await user.update(
-            { $pull: { platforms: platform._id } },
             { new: true }
         )
 
@@ -214,10 +195,10 @@ export const reportPlatform = async (req, res) => {
 
     try {
         const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ msg: "User doesn't exist" })
+        if (!user) return res.status(404).json({ errors: { userDNE: 'User does not exist'} })
 
         const platform = await Platform.findById(req.params.id);
-        if (!platform) return res.status(404).json({ msg: "Platform doesn't exist" })
+        if (!platform) return res.status(404).json({ errors: { platDNE: 'Platform does not exist'} })
 
         platform.reports.push({
             userId: user._id,
