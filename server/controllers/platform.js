@@ -274,13 +274,13 @@ export const getPlatformMemberlist = async (req,res) => {
 
 export const searchLeaderboard = async (req, res) => {
     const { type, name } = req.query 
-
+    
     if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
-    return res.status(404).json({ msg: "Invalid leaderboard type" }); 
+    return res.status(404).json({ errors: { invalidLeaderboardType: 'Invalid leaderboard type'}}); 
 
     try {
         const user = await User.findOne({ username: name })
-        if (!user) return res.status(404).json({ msg: "User doesn't exist "} )
+        if (!user) return res.status(404).json({ errors: { userDNE: 'User does not exist'} } )
 
         const [ info ] = await Platform.aggregate([
             { $match: {_id: ObjectId(req.params.id) } },

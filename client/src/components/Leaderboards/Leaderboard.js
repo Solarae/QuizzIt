@@ -12,8 +12,8 @@ function Leaderboard() {
     let { id } = useParams();  // get the platform ID and quiz ID from the url
     const params = new URLSearchParams(useLocation().search);
     
-    const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
-    const leaderboard = useSelector((state) => state.platforms.leaderboard)
+    const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
+    
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
                     { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
                     { queryStr: 'allTime', type: 'All Time' } ]
@@ -54,6 +54,9 @@ function Leaderboard() {
     if (isGetPlatLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
+
+    if (errors)
+        return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
     
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>

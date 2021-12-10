@@ -34,7 +34,9 @@ import {
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
-    SEARCH_UPDATE_PLATFORM
+    SEARCH_UPDATE_PLATFORM,
+    SEARCH_PLAT_LEADERBOARD_SUCCESS,
+    SEARCH_PLAT_LEADERBOARD_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -513,13 +515,13 @@ export const searchLeaderboard = (platformId, query) => async (dispatch) => {
         const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard/search`, config)
         console.log(res.data)
         dispatch({
-            type: GET_PLAT_LEADERBOARD_SUCCESS,
+            type: SEARCH_PLAT_LEADERBOARD_SUCCESS,
             payload: res.data
         })
     } catch (error) {
-        console.log("error message: " + error.message);
         dispatch({
-            type: GET_PLAT_LEADERBOARD_FAIL
+            type: SEARCH_PLAT_LEADERBOARD_FAIL,
+            payload: error.response.data
         })
     }
 }

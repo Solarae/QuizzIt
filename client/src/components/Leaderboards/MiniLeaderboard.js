@@ -8,9 +8,8 @@ function MiniLeaderboard({ lbType, doc }) {
     const history = useHistory()
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
-    const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
-    const leaderboard = useSelector((state) => state.platforms.leaderboard)
-
+    const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
+   
     useEffect(() => {
         console.log("CALLING API")
         if (lbType === "platform" || lbType === "global") {
@@ -39,6 +38,8 @@ function MiniLeaderboard({ lbType, doc }) {
     if (isGetPlatLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
+
+    
 
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
