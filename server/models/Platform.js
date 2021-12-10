@@ -36,9 +36,10 @@ const platformSchema = new mongoose.Schema ({
             enum: ['Consumer', 'Moderator', 'Creator']
         }
     }],
-    quizzes: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
-    }],
+    quizCount: {
+        type: Number,
+        default: 0
+    },
     daily_leaderboard: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,

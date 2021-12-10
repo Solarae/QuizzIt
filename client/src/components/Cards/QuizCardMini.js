@@ -44,7 +44,7 @@ function QuizCardMini({ quiz }) {
                             <Col align="start" style={{ padding: isHome ? "0px" : "" }}>
                                 <p className="fs-5 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
                                 {isHome && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformName}</p>}
-                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
+                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissionCount} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                             </Col>
                         </Row>
                     </Col>

@@ -27,6 +27,10 @@ const userSchema = new mongoose.Schema({
     icon_cloud_id: {
         type: String
     },
+    platformsJoined: {
+        type: Number,
+        default: 0
+    },
     awards: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Award'
     }],

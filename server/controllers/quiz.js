@@ -24,12 +24,7 @@ export const createQuiz = async (req,res) =>{
 
         let createdQuiz = await newQuiz.save();
 
-
-        platform.quizzes.push(
-            createdQuiz._id
-        );  
-
-        await platform.save()
+        await Platform.findById(platformId, { $inc: { 'quizCount': 1 } })
 
         res.status(200).json({ quiz: createdQuiz })
 
@@ -73,14 +68,8 @@ export const deleteQuiz = async (req,res) =>{
 
         if(!quiz) return res.status(500).json({message:"Quiz not found"})
 
-        //removing reference
-        let platformId = quiz.platformId
-        let platform = await Platform.findById(platformId)
-
-        platform.quizzes.pull(quiz._id)
-        await platform.save()
+        await Platform.findById(platformId, { $inc: { 'quizCount': -1 } })
     
-
         //delete the quiz
         await quiz.remove()
 

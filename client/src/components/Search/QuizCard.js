@@ -29,7 +29,7 @@ function QuizCard({ quiz }) {
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
                         </Row>
                         <Row style={{ height: "20%" }}>
-                            <p><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
+                            <p><i class="bi bi-people-fill"></i> {quiz.submissionCount} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                         </Row>
                         <Row style={{ height: "20%" }} >
                             <Col>

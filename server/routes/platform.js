@@ -30,8 +30,6 @@ router.post('/:id/upload', upload.single("image"), uploadImage)
 router.post('/:id/join', joinPlatform);
 router.post('/:id/leave', leavePlatform);
 router.post('/:id/report', reportPlatform);
-router.post('/:id/upvote',upvotePlatform)
-router.post('/:id/downvote',downvotePlatform)
 router.post('/:id/editRole', editMemberRole)
 
 

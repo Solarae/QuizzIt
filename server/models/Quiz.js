@@ -24,10 +24,10 @@ const quizSchema = new mongoose.Schema ({
         ref: 'Platform',
         required: true 
     },
-    submissions: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Submission' 
-    }],
+    submissionCount: { 
+        type: Number,
+        default: 0
+    },
     questions: [{
         question: {
             type: String,
