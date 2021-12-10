@@ -6,8 +6,10 @@ import { useHistory } from 'react-router-dom'
 import FriendUnfriend from '../Button/FriendUnfriend'
 
 function UserCard({ user }) {
+    const history = useHistory()
+    
     const routeToUser = () => {
-        // history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
+        history.push(`/profile/${user._id}`);
     }
 
     return (
