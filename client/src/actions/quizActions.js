@@ -365,7 +365,7 @@ export const searchLeaderboard = (quizId, query) => async (dispatch) => {
     }
     try {
         dispatch({
-            type: GET_PLAT_LEADERBOARD_REQ
+            type: GET_QUIZ_LEADERBOARD_REQ
         })
         const res = await axios.get(`${URL}/api/quizzes/${quizId}/leaderboard/search`, config)
         console.log(res.data)

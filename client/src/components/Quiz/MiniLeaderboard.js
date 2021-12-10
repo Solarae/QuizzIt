@@ -37,7 +37,7 @@ function MiniLeaderboard({ quiz }) {
                 <Nav fill variant="tabs">
                 {types.map((t) => 
                         <Nav.Item>
-                            <Nav.Link onClick={() => setType(t.queryStr)} disabled={type === "daily"}>{t.type}</Nav.Link>
+                            <Nav.Link onClick={() => setType(t.queryStr)}>{t.type}</Nav.Link>
                         </Nav.Item>
                     )}
             </Nav>

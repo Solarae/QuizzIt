@@ -2,7 +2,8 @@ import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
 import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
-import Report from "../models/Report.js";
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId;
 
 export const createQuiz = async (req,res) =>{
 
@@ -214,6 +215,7 @@ export const getQuizzesByFilter = async (req, res) => {
 }
 
 export const getLeaderboard = async (req, res) => {
+    console.log(req.params.id)
     const { type, userId } = req.query
     const skip = parseInt(req.query.offset) || 0
     const limit = parseInt(req.query.limit) || 10 

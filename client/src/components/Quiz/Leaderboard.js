@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Row, Col, Table, Nav, Card } from 'react-bootstrap';
+import { Image, Row, Col, Table, Nav, Button, Form, FormControl, Card, NavItem } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getQuizLeaderboard, searchLeaderboard } from '../../actions/quizActions';
 import Pagination from '../Pagination'
+import { useParams, useLocation, useHistory } from 'react-router-dom'
+import { LinkContainer } from 'react-router-bootstrap';
 
 function Leaderboard({ quiz }) {
     const dispatch = useDispatch()
@@ -28,7 +30,7 @@ function Leaderboard({ quiz }) {
 
     useEffect(() => {
         if (name !== '') {
-            dispatch(searchLeaderboard(id, { type, name }))
+            dispatch(searchLeaderboard(qid, { type, name }))
         } else {
             var query = filter === 'friends' && user ? {
                 type,
@@ -42,7 +44,7 @@ function Leaderboard({ quiz }) {
             }
             
             dispatch(getQuizLeaderboard(
-                id,
+                qid,
                 query
             ))
         }

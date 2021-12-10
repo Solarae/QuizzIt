@@ -25,7 +25,7 @@ function QuizLeaderboard() {
     }
     return (
         <div className="justify-content-between">
-            {Object.keys(quiz).length !== 0 ? <Banner platform={platform} ></Banner> : <div></div>}
+            {Object.keys(quiz).length !== 0 ? <Banner isEdit={false} ></Banner> : <div></div>}
             <div style={{ height: "50px" }}></div>
             <Container>
                 <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}/quiz/${qid}`) }}><i class="bi bi-arrow-left"></i> Back to Quiz Page</p>
