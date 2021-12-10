@@ -121,8 +121,8 @@ function Banner({ platform }) {
                     </div>
                 </div>
             </div>
-            <div>
-                <h4 className="ms-5 mt-1">{platform.name}</h4>
+            <div className="ms-5 mt-1" style={{ width: '150px', textAlign: "center" }}>
+                <h4>{platform.name}</h4>
             </div>
 
             <Report setShowReportToast={setShowReportToast} platformId={platform._id} show={showReport} handleClose={handleCloseReport}></Report>
