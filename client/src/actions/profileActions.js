@@ -83,21 +83,13 @@ export const getProfile = ({ id }) => async (dispatch) => {
             subscribedPlatforms = res.data.platforms
 
             let likedQuizzes = []
-            for (const qid of user.likes.likedQuizzes) {
-                let quiz = null
-                let res = await axios.get(`${URL}/api/quizzes/${qid}`,);
-                if (!res.data.quiz || res.data.errors) {
-                    continue
-                }
-                quiz = res.data.quiz
-                res = await axios.get(`${URL}/api/platforms/${quiz.platformId}`,);
-                if (!res.data.platform || res.data.errors) {
-                    continue
-                }
-                quiz.platformName = res.data.platform.name
-                quiz.platformIcon = res.data.platform.icon
-                likedQuizzes.push(quiz)
+            config.params = {
+                'likes.likedBy': user._id,
+                'expand' : "platformId(select=name,icon)",
             }
+            res = await axios.get(`${URL}/api/quizzes/`, config);
+            if (res.data.errors) dispatch({type: GET_PROFILE_FAIL, payload: res.data})
+            likedQuizzes = res.data.quizzes
 
             let awards = []
             for (const aid of user.awards) {
