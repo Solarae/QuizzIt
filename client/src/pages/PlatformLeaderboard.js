@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Platform/Banner.js'
 import Leaderboard from '../components/Leaderboards/Leaderboard.js'
-import { getPlatform } from '../actions/platformActions'
+import { getPlatform, searchLeaderboard, getPlatformLeaderboard } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
@@ -10,12 +10,28 @@ import { useHistory, useParams } from 'react-router-dom'
 function Platform() {
     const dispatch = useDispatch()
     const history = useHistory()
-    const [errors, setErrors] = useState({});
+
     const platform = useSelector((state) => state.platforms.platform)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
-    let { id } = useParams();  // get the platform ID from the url
+    const { isGetPlatLeaderboardLoading, leaderboard, leaderboardPage, leaderboardPages, errors } = useSelector((state) => state.platforms);
 
+    const { id } = useParams();  // get the platform ID from the url
+    const url = `/platform/${id}/leaderboard`
+
+    const leaderboardProps = {
+        doc: 'Platform',
+        id,
+        url,
+        isGetLeaderboardLoading: isGetPlatLeaderboardLoading,
+        leaderboard,
+        apiPage: leaderboardPage,
+        pages: leaderboardPages,
+        errors,
+        searchLeaderboard,
+        getLeaderboard: getPlatformLeaderboard
+    }
+    
     // dispatch the GET_PLATFORM request on initial render
     useEffect(() => {
         dispatch(getPlatform({
@@ -34,7 +50,7 @@ function Platform() {
 
             <Container>
                 <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}`) }}><i class="bi bi-arrow-left"></i> Back to platform page</p>
-                <Leaderboard></Leaderboard>
+                <Leaderboard {...leaderboardProps}></Leaderboard>
             </Container >
 
         </div >

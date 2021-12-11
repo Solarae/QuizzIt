@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Quiz/Banner.js'
-import Leaderboard from '../components/Quiz/Leaderboard.js'
-import { getQuiz } from '../actions/quizActions'
+import Leaderboard from '../components/Leaderboards/Leaderboard.js'
+import { getQuiz, getQuizLeaderboard, searchLeaderboard } from '../actions/quizActions'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
@@ -10,12 +10,27 @@ import { useHistory, useParams } from 'react-router-dom'
 function QuizLeaderboard() {
     const dispatch = useDispatch()
     const history = useHistory()
-    const [errors, setErrors] = useState({});
+    
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading);
 
-    let { qid } = useParams(); 
-    let { id } = useParams();
+    const { isGetQuizLeaderboardLoading, leaderboard, leaderboardPage, leaderboardPages, errors } = useSelector((state) => state.quiz);
+
+    const { id, qid} = useParams();  // get the platform ID from the url
+    const url = `/platform/${id}/quiz/${qid}/leaderboard`
+
+    const leaderboardProps = {
+        doc: 'Quiz',
+        id: qid,
+        url,
+        isGetLeaderboardLoading: isGetQuizLeaderboardLoading,
+        leaderboard,
+        apiPage: leaderboardPage,
+        pages: leaderboardPages,
+        errors,
+        searchLeaderboard,
+        getLeaderboard: getQuizLeaderboard
+    }
     useEffect(() => {
         dispatch(getQuiz(qid))
     }, [qid, dispatch]);
@@ -29,7 +44,7 @@ function QuizLeaderboard() {
             <div style={{ height: "50px" }}></div>
             <Container>
                 <p style={{ cursor: 'pointer', }} onClick={() => { history.push(`/platform/${id}/quiz/${qid}`) }}><i class="bi bi-arrow-left"></i> Back to Quiz Page</p>
-                <Leaderboard></Leaderboard>
+                <Leaderboard {...leaderboardProps}></Leaderboard>
             </Container >
         </div >
     )

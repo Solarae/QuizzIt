@@ -13,7 +13,7 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
-export const getLeaderboard = (query) => async (dispatch) => {
+export const getLeaderboard = ({ query }) => async (dispatch) => {
     const config = {
         params: {
             ...query
@@ -37,7 +37,7 @@ export const getLeaderboard = (query) => async (dispatch) => {
     }
 }
 
-export const searchLeaderboard = (query) => async (dispatch) => {
+export const searchLeaderboard = ({ query }) => async (dispatch) => {
     const config = {
         params: {
             ...query

@@ -38,6 +38,10 @@ const submission = new mongoose.Schema({
     userId:{
         type:mongoose.Types.ObjectId,
         ref:'User'
+    },
+    attemptNumber: {
+        type: Number,
+        default: 1
     }
 }, { timestamps: true } )
 

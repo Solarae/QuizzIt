@@ -2,11 +2,10 @@ import { React, useEffect } from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
 
 import Banner from '../components/Quiz/Banner'
-import { getQuiz } from '../actions/quizActions'
-import { getPlatform } from '../actions/platformActions'
+import { getQuiz, getQuizLeaderboard } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
-import MiniLeaderboard from '../components/Quiz/MiniLeaderboard.js'
+import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
 
 
 function Quiz() {
@@ -16,7 +15,20 @@ function Quiz() {
     const quiz = useSelector((state) => state.quiz.quiz)
     const history = useHistory()
 
-    let { qid } = useParams()
+    const { isGetQuizLeaderboardLoading, leaderboard, errors} = useSelector((state) => state.quiz)
+
+    const { id, qid } = useParams();  // get the platform ID from the url
+    const url = `/platform/${id}/quiz/${qid}/leaderboard`
+
+    const leaderboardProps = {
+        doc: 'Quiz',
+        id: qid,
+        url,
+        isGetLeaderboardLoading: isGetQuizLeaderboardLoading,
+        leaderboard,
+        errors,
+        getLeaderboard: getQuizLeaderboard
+    }
 
     useEffect(() => {
         dispatch(getQuiz(qid))
@@ -52,11 +64,7 @@ function Quiz() {
                     <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>View Submissions</Button>
                 </div>
                 </Col>
-                <Col>
-                    <div className="col" style={{}}>
-                        <MiniLeaderboard quiz={quiz}></MiniLeaderboard>
-                    </div>
-                </Col>
+                <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
                 </Container>
         </>
     )

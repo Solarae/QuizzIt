@@ -154,24 +154,27 @@ export const checkIfAdmin = async (req,res) => {
 
 export const assignAwards = async (userId, platformId) => {
     try {
-         // Get total count / total points for platform
-        const agg = await Submission.aggregate([
+         // Get total distinct submission / total points for platform
+        const [ user_agg ]  = await Submission.aggregate([
             { $match: { userId: ObjectId(userId), platformId: ObjectId(platformId) } },
             { $group: {
-                _id: null,
+                _id: "$quizId",
                 submissionCount: { $sum: 1 },
-                totalPoints: { $sum: "$score" }
+                points: { $sum: "$score" }
+            }},
+            { $group: {
+                _id: "$quizId",
+                submissionCount: { $sum: 1 },
+                totalPoints: { $sum: "$points" }
             }}
         ])
 
-        const user_agg = agg[0]
         
-        // Get all awards for current platform
+        // Get all awards for user
         const user = await User.findById(userId)
 
-        // Get all awards for current platform
+        // Get all unobtained awards in Platform
         const awards = await Award.aggregate([
-            // { $match: { platformId: ObjectId(platformId) } }
             { $match: {
                 $and: [
                     { platformId: ObjectId(platformId) },
@@ -228,4 +231,49 @@ export const createGlobal = async () => {
             console.log(error)
         }
     }
+}
+
+export const recaclulateScore = async (quizId) => {
+   
+    try {
+        const quiz = await Quiz.findById(quizId)
+        const questions = quiz.questions
+        // Get all submissions
+        const submissions = await Submission.find()
+
+        var userIds = []
+        for (s in submissions) {
+            var total_correct = 0
+            var i = 0
+            const answers = s.answers
+            questions.forEach((question)=>{
+                if( question != null ) {
+                    if (question.answer === answers[i]) {
+                        total_correct+=1
+                    }
+                    i+=1
+                } 
+            })
+            // First Attempt; Recalculate points awarded
+            if (s.attemptNumber === 1) {
+                await Submission.findByIdAndUpdate(
+                    s._id,
+                    { $set: { score: total_correct, pointsAwarded: total_correct } }
+                )
+                userIds.push(s.userId)
+            } else {
+                await Submission.findByIdAndUpdate(s._id,
+                    { $set: { score: total_correct } }
+                )
+            }
+        }
+
+        for (uid in userIds) {
+            await assignAwards(uid, quiz.platformId)
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+    
+
 }

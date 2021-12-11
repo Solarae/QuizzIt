@@ -324,7 +324,7 @@ export const searchLeaderboard = async (req, res) => {
 
         if (!leaderboardInfo) return res.status(404).json({ msg: "Platform doesn't exist "} )
 
-        const leaderboardPage = skip / 10
+        const leaderboardPage = (skip / 10) + 1
         const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / 10 )
 
         res.status(200).json({ 

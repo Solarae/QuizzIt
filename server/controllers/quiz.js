@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery, recaclulateScore } from "./util.js";
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -158,11 +158,16 @@ export const editQuizQuestion = async (req,res) =>{
         let questionIndex = quiz.questions.findIndex((q)=> q._id.toString() === question._id)
 
         console.log(questionIndex)
+
+        const oldQuestion = quiz.questions[questionIndex]
         quiz.questions[questionIndex] = question
 
         let newQuiz = await quiz.save()
 
         res.status(200).json({quiz:newQuiz})
+
+        if (oldQuestion.answer !== question.answer)
+            await recaclulateScore(quizId)
     } catch (error) {
         res.status(500).json({message:error.message})
     }
@@ -300,7 +305,8 @@ export const getLeaderboard = async (req, res) => {
 
 export const searchLeaderboard = async (req, res) => {
     const { type, name } = req.query 
-    
+    console.log("Calling search")
+    console.log(req.params.id)
     if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
     return res.status(404).json({ errors: { invalidLeaderboardType: 'Invalid leaderboard type'}}); 
 
@@ -320,11 +326,11 @@ export const searchLeaderboard = async (req, res) => {
             }}
         ])
 
-        if (!info) return res.status(404).json({ msg: "Platform doesn't exist "} )
+        if (!info) return res.status(404).json({ msg: "Quiz doesn't exist "} )
 
         const skip = Math.floor(info.index / 10) * 10
 
-        const [ leaderboardInfo ] = await Platform.aggregate([
+        const [ leaderboardInfo ] = await Quiz.aggregate([
             { $match: { _id: ObjectId(req.params.id) } },
             { $project: {
                 leaderboard: {
@@ -370,7 +376,7 @@ export const searchLeaderboard = async (req, res) => {
 
         if (!leaderboardInfo) return res.status(404).json({ msg: "Quiz doesn't exist "} )
 
-        const leaderboardPage = skip / 10
+        const leaderboardPage = (skip / 10) + 1
         const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / 10 )
 
         res.status(200).json({ 

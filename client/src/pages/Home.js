@@ -5,9 +5,10 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import PlatformCard from '../components/Home/PlatformCard'
 import QuizCardMini from '../components/Cards/QuizCardMini'
-import MiniGlobalLB from '../components/Leaderboards/MiniGlobalLB'
+import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard'
 
 import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
+import { getLeaderboard } from '../actions/globalActions.js'
 
 function Home() {
     const dispatch = useDispatch()
@@ -17,6 +18,7 @@ function Home() {
     const isSearchPlatformLoading = useSelector((state) => state.search.isSearchPlatformLoading);
     const isSearchQuizLoading = useSelector((state) => state.search.isSearchQuizLoading);
 
+    const { isGetGlobalLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.global);
     const maxLimit = 16 // max number of platforms or quizzes to show
 
     const [platformLimit, setPlatformLimit] = useState(9) // how many platforms to query 
@@ -27,6 +29,17 @@ function Home() {
     const [quizLimit, setQuizLimit] = useState(9) // how many quizzes to query 
     const showMoreQuizzes = () => {
         setQuizLimit(quizLimit + 4)
+    }
+
+    const url = `leaderboard`
+
+    const leaderboardProps = {
+        doc: 'Global',
+        url,
+        isGetLeaderboardLoading: isGetGlobalLeaderboardLoading,
+        leaderboard,
+        errors,
+        getLeaderboard: getLeaderboard
     }
 
     // dispatch the SEARCH request
@@ -108,14 +121,7 @@ function Home() {
 
 
                     </div>
-                    <div className="col" style={{}}>
-                        <Row>
-                            <Col align="center">
-                                <h3 >Global Leaderboard</h3>
-                            </Col>
-                        </Row>
-                        {platforms.length!==0 && <MiniGlobalLB></MiniGlobalLB>}
-                    </div>
+                    <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
                 </div>
             </div>
         </div >
