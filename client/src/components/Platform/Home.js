@@ -1,24 +1,36 @@
-import React, { useState } from 'react'
-import { Row, Col, Dropdown } from 'react-bootstrap';
+import React, { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import QuizCardMini from '../Cards/QuizCardMini.js';
-import mongoose from 'mongoose'
+import { getQuizzes } from '../../actions/platformActions.js';
 
-function Home({ quizzesData }) {
+function Home() {
+    const dispatch = useDispatch()
+    const auth = useSelector((state) => state.auth)
+    const platform = useSelector((state) => state.platforms.platform)
+    const { isGetQuizzesLoading, quizzes } = useSelector((state) => state.platforms);
+    const pages = useSelector((state) => state.platforms.quizPages)
+    const [page, setPage] = useState(1)
+    const [sort, setSort] = useState('submissionCount desc')
 
-    // available sorts (oldest, newest)
-    const [sort, setSort] = useState("newest");
-
-    // compares the creation time of mongo documents a and b
-    const compareDates = (a, b) => {
-        if (sort === "oldest") {
-            return mongoose.Types.ObjectId(a._id).getTimestamp() - mongoose.Types.ObjectId(b._id).getTimestamp()
-        }
-        else if (sort === "newest") {
-            return mongoose.Types.ObjectId(b._id).getTimestamp() - mongoose.Types.ObjectId(a._id).getTimestamp()
-        }
-        else {
-            return 0;
-        }
+    useEffect(() => {
+        console.log("CALLING API")
+        dispatch(getQuizzes(
+            {
+                platformId: platform._id,
+                sort,
+                offset: 0,
+                limit: 4 * page
+            }
+        ))
+    }, [sort, page, dispatch]);
+    
+    const showMoreQuizzes = () => {
+        if (page < pages)
+            setPage(page + 1)
+    }
+    if (isGetQuizzesLoading && !quizzes) {
+        return (<div>Loading...</div>)
     }
 
     return (
@@ -30,31 +42,36 @@ function Home({ quizzesData }) {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                    <Dropdown.Item href="" onClick={() => { setSort("oldest") }}>Oldest {sort === "oldest" && <i class="bi bi-check"></i>}</Dropdown.Item>
-                    <Dropdown.Item href="" onClick={() => { setSort("newest") }}>Newest {sort === "newest" && <i class="bi bi-check"></i>}</Dropdown.Item>
+                <Dropdown.Item href="" onClick={() => { setSort("submissionCount desc") }}>Popular {sort === "submissionCount desc" && <i class="bi bi-check"></i>}</Dropdown.Item>
+                    <Dropdown.Item href="" onClick={() => { setSort("_id desc") }}>Oldest {sort === "_id desc" && <i class="bi bi-check"></i>}</Dropdown.Item>
+                    <Dropdown.Item href="" onClick={() => { setSort("_id asc") }}>Newest {sort === "_id asc" && <i class="bi bi-check"></i>}</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
-
-            <div>
-                {quizzesData && quizzesData.length > 0 ?
-                    (
+            {console.log(quizzes)}
+            {quizzes && quizzes.length > 0 ?
+                (
+                    <div>
                         <Row xs={1} md={4} className="g-4 me-auto">
-                            {quizzesData.sort(compareDates).map((quiz, idx) => (
-                                <Col align="center">
-                                    <QuizCardMini quiz={quiz}></QuizCardMini>
-                                </Col>
-                            ))}
+                        {quizzes.map((quiz, idx) => (
+                            <Col align="center">
+                                <QuizCardMini quiz={quiz}></QuizCardMini>
+                            </Col>
+                        ))}
                         </Row>
-                    )
-                    :
-                    (
-                        <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
-                            This platform does not have any quizzes yet
-                        </div>
-                    )
+                        <Row >
+                            {page < pages && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                        </Row>
+                    </div>
+                )
+                :
+                (
+                    <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
+                        This platform does not have any quizzes yet
+                    </div>
+                )
 
-                }
-            </div>
+            }
+          
 
         </div>
     )

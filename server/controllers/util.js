@@ -90,7 +90,7 @@ export const queryBuilder = (q, queries, model) => {
 export const paginateQuery = async (q, model, limit, offset) => {
     const pageSize = parseInt(limit) || 10
     const skip = parseInt(offset) || 0
-    const page = skip / pageSize
+    const page = (skip / pageSize) + 1
     const totalCount = await model.countDocuments(q)
     const pages = Math.ceil(totalCount / pageSize)
     
