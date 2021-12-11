@@ -240,10 +240,9 @@ export const recaclulateScore = async (quizId) => {
         // Get all submissions
         const submissions = await Submission.find({quizId})
 
-        var userIds = []
-        var a = [...new Map(submissions.map(v => [v.userId.toString(), v])).values()]
+        var uniqueUsers = [...new Map(submissions.map(v => [v.userId.toString(), v])).values()]
        
-        for (const s of submissions) {
+        await Promise.all(submissions.map(async (s) => {
             var total_correct = 0
             var i = 0
             const answers = s.answers
@@ -261,17 +260,14 @@ export const recaclulateScore = async (quizId) => {
                     s._id,
                     { $set: { score: total_correct, pointsAwarded: total_correct } }
                 )
-                userIds.push(s.userId)
             } else {
                 await Submission.findByIdAndUpdate(s._id,
                     { $set: { score: total_correct } }
                 )
             }
-        }
-        
-        await Promise.all(userIds.map(async (uid) => await assignAwards(uid, quiz.platformId)));
+        }));
 
-        // userIds.forEach( async (uid) => await assignAwards(uid, quiz.platformId))
+        await Promise.all(uniqueUsers.map(async (user) => await assignAwards(user.userId, quiz.platformId)));
         
     } catch (error) {
         console.log(error.message)
