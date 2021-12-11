@@ -28,7 +28,9 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
         history.push(`${url}?type=${type}&userName=${queryName}`)
     }
 
-    const setPage = (page) => history.push(`${url}?type=${type}&filter=${filter}&page=${page}`)
+    const setPage = (page) => {
+        console.log(page)
+        history.push(`${url}?type=${type}&filter=${filter}&page=${page}`)}
     
     useEffect(() => {
         if (name) {

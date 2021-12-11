@@ -84,14 +84,14 @@ function Pagination({ page, pages, changePage }) {
             <div>
                 <button
                 //className="pagination__prev"
-                onClick={() => changePage((page) => page - 1)}
+                onClick={() => changePage(page - 1)}
                 disabled={page === 1}
                 >
                 &#171;
                 </button>
                 {middlePagination}
                 <button
-                onClick={() => changePage((page) => page + 1)}
+                onClick={() => changePage(page + 1)}
                 disabled={page === pages}
                 >
                 &#187;
