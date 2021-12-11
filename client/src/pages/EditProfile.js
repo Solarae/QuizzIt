@@ -6,6 +6,7 @@ import { uploadImage } from '../actions/profileActions.js'
 
 import Banner from '../components/Profile/Banner';
 import EditProfileModal from '../components/Profile/EditProfile';
+import UploadImage from '../components/UploadImage';
 import DeleteProfile from '../components/Profile/DeleteProfile';
 
 import { getProfile } from '../actions/profileActions'
@@ -38,9 +39,10 @@ function EditProfile() {
     const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
     const handleShowDeleteModal = () => { setShowDeleteModal(true) };
 
-    const handleEditThumbnail = (e) => {
-        e.preventDefault();
-        dispatch(uploadImage(id, e.target.files[0]))
+    const [showIconModal, setShowIconModal] = useState(false);
+
+    const handleEditThumbnail = (image) => {
+        dispatch(uploadImage(id, image))
     }
 
     if (!auth.user || isGetProfileLoading) {
@@ -56,15 +58,6 @@ function EditProfile() {
 
             <Container>
                 <h2 className='text-center m-3'>Profile Settings</h2>
-
-                <Row className="justify-content-md-center">
-                    <Col md={4}>
-                        <Form.Group controlId="formIconFile" className="mb-3">
-                            <Form.Label>Profile Icon</Form.Label>
-                            <Form.Control type="file" onChange={handleEditThumbnail} />
-                        </Form.Group>
-                    </Col>
-                </Row>
 
                 <Row className="justify-content-md-center">
                     <Col md={4}>
@@ -97,6 +90,14 @@ function EditProfile() {
                 </Row>
 
                 <br />
+                
+                <Row className="justify-content-md-center">
+                    <Col align='center' md={4}>
+                        <Button onClick={setShowIconModal} variant="outline-primary">Change Icon</Button>
+                    </Col>
+                </Row>
+
+                <br />
 
                 <Row className="justify-content-md-center">
                     <Col align='center' md={4}>
@@ -116,7 +117,7 @@ function EditProfile() {
                 <EditProfileModal type="Email" show={showEmailModal} handleClose={handleCloseEmailModal}></EditProfileModal>
                 <EditProfileModal type="Password" show={showPasswordModal} handleClose={handleClosePasswordModal}></EditProfileModal>
                 <DeleteProfile show={showDeleteModal} handleClose={handleCloseDeleteModal}></DeleteProfile>
-
+                <UploadImage type="circle" handleUpload={handleEditThumbnail} show={showIconModal} handleClose={()=>setShowIconModal(false)} defaultImageUrl={auth.user.icon && auth.user.icon !== "" ? auth.user.icon : "/quizzit_logo.png" }></UploadImage>
             </Container>
         </div>
     )
