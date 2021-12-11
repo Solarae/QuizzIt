@@ -10,15 +10,15 @@ function QuizCardMini({ quiz }) {
     let location = useLocation()
 
     const routeToQuiz = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`);
     }
 
     const routeToQuizEdit = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/edit`);
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}/edit`);
     }
 
     const routeToPlatform = () => {
-        history.push(`/platform/${quiz.platformId}`);
+        history.push(`/platform/${quiz.platformId._id}`);
     }
 
     const createdAt = mongoose.Types.ObjectId(quiz._id).getTimestamp();

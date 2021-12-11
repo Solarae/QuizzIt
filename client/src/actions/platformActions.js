@@ -389,7 +389,7 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
     }
 }
 
-export const getPlatformLeaderboard = (platformId, query) => async (dispatch) => {
+export const getPlatformLeaderboard = ( {id, query} ) => async (dispatch) => {
     const config = {
         params: {
             ...query
@@ -399,7 +399,7 @@ export const getPlatformLeaderboard = (platformId, query) => async (dispatch) =>
         dispatch({
             type: GET_PLAT_LEADERBOARD_REQ
         })
-        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard`, config)
+        const res = await axios.get(`${URL}/api/platforms/${id}/leaderboard`, config)
         console.log(res.data)
         dispatch({
             type: GET_PLAT_LEADERBOARD_SUCCESS,
@@ -414,7 +414,7 @@ export const getPlatformLeaderboard = (platformId, query) => async (dispatch) =>
     }
 }
 
-export const searchLeaderboard = (platformId, query) => async (dispatch) => {
+export const searchLeaderboard = ({ id, query }) => async (dispatch) => {
     const config = {
         params: {
             ...query
@@ -424,7 +424,7 @@ export const searchLeaderboard = (platformId, query) => async (dispatch) => {
         dispatch({
             type: GET_PLAT_LEADERBOARD_REQ
         })
-        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard/search`, config)
+        const res = await axios.get(`${URL}/api/platforms/${id}/leaderboard/search`, config)
         console.log(res.data)
         dispatch({
             type: SEARCH_PLAT_LEADERBOARD_SUCCESS,

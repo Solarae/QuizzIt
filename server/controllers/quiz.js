@@ -300,7 +300,8 @@ export const getLeaderboard = async (req, res) => {
 
 export const searchLeaderboard = async (req, res) => {
     const { type, name } = req.query 
-    
+    console.log("Calling search")
+    console.log(req.params.id)
     if (type !== 'daily' && type !== 'weekly' && type !== 'monthly' && type !== 'year' && type !== 'allTime')
     return res.status(404).json({ errors: { invalidLeaderboardType: 'Invalid leaderboard type'}}); 
 
@@ -320,11 +321,11 @@ export const searchLeaderboard = async (req, res) => {
             }}
         ])
 
-        if (!info) return res.status(404).json({ msg: "Platform doesn't exist "} )
+        if (!info) return res.status(404).json({ msg: "Quiz doesn't exist "} )
 
         const skip = Math.floor(info.index / 10) * 10
 
-        const [ leaderboardInfo ] = await Platform.aggregate([
+        const [ leaderboardInfo ] = await Quiz.aggregate([
             { $match: { _id: ObjectId(req.params.id) } },
             { $project: {
                 leaderboard: {
@@ -370,7 +371,7 @@ export const searchLeaderboard = async (req, res) => {
 
         if (!leaderboardInfo) return res.status(404).json({ msg: "Quiz doesn't exist "} )
 
-        const leaderboardPage = skip / 10
+        const leaderboardPage = (skip / 10) + 1
         const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / 10 )
 
         res.status(200).json({ 

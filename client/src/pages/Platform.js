@@ -5,21 +5,33 @@ import Banner from '../components/Platform/Banner.js'
 import Home from '../components/Platform/Home.js'
 import MemberList from '../components/Platform/MemberList.js'
 import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
-import { getPlatform } from '../actions/platformActions'
+import { getPlatform, getPlatformLeaderboard } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 function Platform() {
     const dispatch = useDispatch()
-    const [errors, setErrors] = useState({});
     const platform = useSelector((state) => state.platforms.platform)
     const quizzesData = useSelector((state) => state.platforms.quizzesData)
     const memberList = useSelector((state) => state.platforms.memberList)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
-    const isEditRoleLoading = useSelector((state) => state.platforms.isEditRoleLoading);
+    const isEditRoleLoading = useSelector((state) => state.platforms.isEditRoleLoading)
+    
+    const { isGetPlatLeaderboardLoading, leaderboard, errors} = useSelector((state) => state.platforms)
 
-    let { id } = useParams();  // get the platform ID from the url
+    const { id } = useParams();  // get the platform ID from the url
+    const url = `/platform/${id}/leaderboard`
+
+    const leaderboardProps = {
+        doc: 'Platform',
+        id,
+        url,
+        isGetLeaderboardLoading: isGetPlatLeaderboardLoading,
+        leaderboard,
+        errors,
+        getLeaderboard: getPlatformLeaderboard
+    }
 
     // dispatch the GET_PLATFORM request on initial render
     useEffect(() => {
@@ -63,14 +75,9 @@ function Platform() {
                         {showHome && Object.keys(platform).length !== 0 ? <Home quizzesData={quizzesData}></Home> : <MemberList platform={platform} memberList={memberList}></MemberList>}
 
                     </div>
-                    <div className="col" style={{}}>
-                        <Row>
-                            <Col align="center">
-                                <h3 >Platform Leaderboard</h3>
-                            </Col>
-                        </Row>
-                        <MiniLeaderboard></MiniLeaderboard>
-                    </div>
+                    
+                    <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    
                 </div>
             </div>
         </div >
