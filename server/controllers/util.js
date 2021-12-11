@@ -5,6 +5,7 @@ import Platform from '../models/Platform.js'
 import User from "../models/User.js";
 import Quiz from "../models/Quiz.js"
 import Submission from "../models/Submission.js"
+import Global from "../models/Global.js"
 
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
@@ -212,5 +213,19 @@ export const assignAwards = async (userId, platformId) => {
         }  
     } catch (error) {
         console.log(error)
+    }
+}
+
+export const createGlobal = async () => {
+    const count = await Global.countDocuments({})
+    
+    if (count === 0) {
+        try {
+            const global = new Global()
+            await global.save()
+            console.log("Global Store Created")
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
