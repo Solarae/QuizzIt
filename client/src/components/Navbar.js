@@ -188,10 +188,12 @@ function AppNavbar() {
                   id="nav-dropdown"
                   title={
                     <div>
-                      <Image roundedCircle
-                        src="/favicon.ico"
-                        alt="user pic"
-                        style={{ height: "40px", width: "40px" }}
+                      <Image 
+                        className="bg-dark"
+                        src={auth.user.thumbnail && auth.user.thumbnail !== "" ? auth.user.thumbnail : "/quizzit_logo.png"}
+                        style={{ height: "40px", width: "40px", border:'solid', padding:'0', marginRight:'5px' }}
+                        roundedCircle 
+                        fluid 
                       />
                       {auth.user.username}
                     </div>

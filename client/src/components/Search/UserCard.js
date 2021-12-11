@@ -17,7 +17,7 @@ function UserCard({ user }) {
             <Card.Body>
                 <Row>
                     <Col md={3} className="my-auto" align="center" >
-                        <Image style={{ width: "150px", height: "150px", cursor: 'pointer' }} onClick={routeToUser} className="bg-dark" src={user.icon ? user.icon : "/quizzit_logo.png"} thumbnail roundedCircle />
+                        <Image style={{ width: "150px", height: "150px", cursor: 'pointer', border:'solid', padding:'0' }} onClick={routeToUser} className="bg-dark" src={user.thumbnail && user.thumbnail !== "" ? user.thumbnail : "/quizzit_logo.png"} roundedCircle fluid />
                     </Col>
                     <Col style={{}}>
                         <Row style={{ height: "20%" }}>

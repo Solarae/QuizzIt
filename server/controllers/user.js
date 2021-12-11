@@ -37,6 +37,7 @@ export const signin = async (req, res) => {
             token,
             user: {
                 id: user._id,
+                thumbnail: user.thumbnail,
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
@@ -51,7 +52,7 @@ export const signin = async (req, res) => {
 export const tokenSignin = async (req, res) => {
     const { userToken } = req.body;
     const errors = {}
-            
+
     try {
         const decodedToken= jwtDecode(userToken)
         const user = await User.findById(decodedToken.user.id)
@@ -67,6 +68,7 @@ export const tokenSignin = async (req, res) => {
             token,
             user: {
                 id: user._id,
+                thumbnail: user.thumbnail,
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
@@ -183,6 +185,7 @@ export const editAccount = async (req, res) => {
             success: true,
             user: {
                 id: newUser._id,
+                thumbnail: newUser.thumbnail,
                 username: newUser.username,
                 email: newUser.email,
                 likes: newUser.likes,
@@ -442,6 +445,7 @@ export const updateUser = async (req, res) => {
             {
                 user: {
                     id: updatedUser._id,
+                    thumbnail: updatedUser.thumbnail,
                     username: updatedUser.username,
                     email: updatedUser.email,
                     likes: updatedUser.likes,
@@ -469,6 +473,7 @@ export const uploadImage = async (req, res) => {
         res.status(200).json({
             user: {
                 id: updatedUser._id,
+                thumbnail: updatedUser.thumbnail,
                 username: updatedUser.username,
                 email: updatedUser.email,
                 likes: updatedUser.likes,
