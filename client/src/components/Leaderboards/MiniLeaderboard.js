@@ -44,7 +44,7 @@ function MiniLeaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, e
             <Row>
                 <Nav fill variant="tabs">
                     {types.map((t) => 
-                        <Nav.Item>
+                        <Nav.Item key={t.queryStr}>
                             <Nav.Link onClick={() => setType(t.queryStr)} disabled={type === t.queryStr}>{t.type}</Nav.Link>
                         </Nav.Item>
                     )}

@@ -87,7 +87,7 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
                 <Nav fill variant="tabs"
                 >   
                     {types.map((t) => 
-                        <Nav.Item>
+                        <Nav.Item key={t.queryStr}>
                             <LinkContainer to={`${url}?type=${t.queryStr}&filter=${filter}`}><Nav.Link>{t.type}</Nav.Link></LinkContainer>
                         </Nav.Item>
                     )}
