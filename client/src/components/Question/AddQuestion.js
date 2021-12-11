@@ -14,6 +14,7 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         option4:"",
         answer:""
     });
+    const [optionState,setOptionState] = useState("a")
     
     const closeModal = (err) => {
         if (err) {
@@ -48,7 +49,7 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
             return;
         }
 
-        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: values.answer, callback: closeModal }))
+        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: optionState, callback: closeModal }))
     }
     
     let options = ['option1', 'option2', 'option3', 'option4']
@@ -74,8 +75,14 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
                     </Form.Group>
                         {optionList}
                     <Form.Group className="mb-3">
-                        <Form.Label>Answer</Form.Label>
-                        <Form.Control type="text" placeholder="Answer" name="answer" onChange={onChange} />
+                        <Form.Label>Answer:</Form.Label>
+                        {/* <Form.Control type="text" placeholder="Answer" name="answer" onChange={onChange} /> */}
+                        <Form.Control as="select" value={optionState} onChange={e=> setOptionState(e.target.value)}>
+                            <option value="a">Option 1</option>
+                            <option value="b">Option 2</option>
+                            <option value="c">Option 3</option>
+                            <option value="d">Option 4</option>
+                        </Form.Control>
                     </Form.Group>
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (
