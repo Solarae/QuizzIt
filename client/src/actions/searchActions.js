@@ -78,6 +78,9 @@ export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
         }
         else {
             console.log(res.data.quizzes)
+
+            res.data.quizzes = res.data.quizzes.filter((q) => q.platformId) // remove quiz for global quiz leaderboard (or any quiz without platformId )
+
             // get the platform icon/name for each quiz
             for (let q of res.data.quizzes) {
                 let platformConfig = {
