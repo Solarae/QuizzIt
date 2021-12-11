@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getLeaderboard } from '../../actionsActions';
+import { getLeaderboard } from '../../actions/globalActions';
 
 function MiniGlobalLB() {
     const history = useHistory()
     const dispatch = useDispatch()
-    const [type, setType] = useState("daily")
-    const { id } = useParams();  
+    const [type, setType] = useState("daily")  
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
                     { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
                     { queryStr: 'allTime', type: 'All Time' } ]
@@ -16,8 +15,7 @@ function MiniGlobalLB() {
     const { isGetGlobalLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.global);
    
     useEffect(() => {
-        dispatch(getGlobalLeaderboard(
-            id,
+        dispatch(getLeaderboard(
             { type,
             offset: 0,
             limit: 10,
@@ -77,4 +75,4 @@ function MiniGlobalLB() {
         </div>
     )
 }
-export default MiniLeaderboard;
+export default MiniGlobalLB;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getPlatformLeaderboard } from '../../actions/platformActions';
 

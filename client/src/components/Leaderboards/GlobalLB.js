@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Row, Col, Table, Nav, Button, Form, FormControl, Card, NavItem } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { getLeaderboard, searchLeaderboard } from '../../actionsActions';
+import { getLeaderboard, searchLeaderboard } from '../../actions/globalActions';
 import Pagination from '../Pagination'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';

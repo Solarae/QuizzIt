@@ -77,18 +77,7 @@ export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
             })
         }
         else {
-            console.log(res.data.quizzes)
-            // get the platform icon/name for each quiz
-            for (let q of res.data.quizzes) {
-                let platformConfig = {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-                let plat_res = await axios.get(`${URL}/api/platforms/${q.platformId}`, platformConfig); // get the platform 
-                q.platformName = plat_res.data.platform.name
-                q.platformIcon = plat_res.data.platform.icon
-            }
+            console.log(res.data)
             
             dispatch({
                 type: SEARCH_QUIZ_SUCCESS,

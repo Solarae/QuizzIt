@@ -40,7 +40,10 @@ function Home() {
         }))
 
         dispatch(searchQuiz({
-            query: { 'sort': "likes.totalLikes desc" },
+            query: {
+                'expand' : "platformId(select=name,icon)",
+                'sort': "likes.totalLikes desc" 
+            },
             page: 1,
             limit: quizLimit
         }))

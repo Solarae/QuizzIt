@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { getQuizLeaderboard } from '../../actions/quizActions';
 
-function MiniLeaderboard({ quiz }) {
+function MiniLeaderboard() {
     const history = useHistory()
+    const { id, qid } = useParams();
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
@@ -15,7 +16,7 @@ function MiniLeaderboard({ quiz }) {
 
     useEffect(() => {
         dispatch(getQuizLeaderboard(
-            quiz._id,
+            qid,
             {   
                 type,
                 offset: 0,
@@ -70,7 +71,7 @@ function MiniLeaderboard({ quiz }) {
             </Row>
 
             <Row>
-                <Button variant="primary" size="sm" onClick={()=>{history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/leaderboard`)}}>
+                <Button variant="primary" size="sm" onClick={()=>{history.push(`/platform/${id}/quiz/${qid}/leaderboard`)}}>
                     View Leaderboard
                 </Button>
             </Row>

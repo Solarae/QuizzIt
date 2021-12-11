@@ -20,7 +20,7 @@ const globalReducer = (state = initialState, action) => {
         case GET_GLOBAL_LEADERBOARD_REQ:
             return {
                 ...state,
-                isGetGlobalLeaderboardLoading
+                isGetGlobalLeaderboardLoading: true
             }
         case GET_GLOBAL_LEADERBOARD_SUCCESS:
         case GET_GLOBAL_LEADERBOARD_FAIL:
@@ -35,3 +35,5 @@ const globalReducer = (state = initialState, action) => {
             return state
     }
 }
+
+export default globalReducer

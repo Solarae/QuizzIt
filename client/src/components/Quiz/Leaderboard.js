@@ -6,7 +6,7 @@ import Pagination from '../Pagination'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
 
-function Leaderboard({ quiz }) {
+function Leaderboard() {
     const dispatch = useDispatch()
     const history = useHistory()
     let { id, qid } = useParams();  // get the platform ID and quiz ID from the url

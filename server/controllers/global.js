@@ -1,6 +1,9 @@
 import Global from '../models/Global.js'
 import User from '../models/User.js'
 
+import mongoose from 'mongoose'
+const ObjectId = mongoose.Types.ObjectId;
+
 export const getLeaderboard = async (req, res) => {
     const { type, userId } = req.query
     const skip = parseInt(req.query.offset) || 0
