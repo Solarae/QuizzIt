@@ -1,7 +1,7 @@
 import Quiz from "../models/Quiz.js"
 import User from '../models/User.js'
 import Platform from "../models/Platform.js"
-import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery, recaclulateScore } from "./util.js";
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -158,11 +158,16 @@ export const editQuizQuestion = async (req,res) =>{
         let questionIndex = quiz.questions.findIndex((q)=> q._id.toString() === question._id)
 
         console.log(questionIndex)
+
+        const oldQuestion = quiz.questions[questionIndex]
         quiz.questions[questionIndex] = question
 
         let newQuiz = await quiz.save()
 
         res.status(200).json({quiz:newQuiz})
+
+        if (oldQuestion.answer !== question.answer)
+            await recaclulateScore(quizId)
     } catch (error) {
         res.status(500).json({message:error.message})
     }

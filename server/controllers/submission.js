@@ -25,15 +25,32 @@ export const createSubmission = async (req,res) =>{
                 i+=1
             } 
         })
-        console.log(total_correct)
-        const newSubmission = new Submission({
-            quizId:quizId,
-            answers:answers,
-            platformId:platformId,
-            userId:userId,
-            timeTaken,
-            score:total_correct
-        })
+        
+        const count = await Submission.countDocuments({ quizId, userId })
+
+        var newSubmission
+        if (count) {
+            newSubmission = new Submission({
+                pointsAwarded: 0,
+                quizId:quizId,
+                answers:answers,
+                platformId:platformId,
+                userId:userId,
+                timeTaken,
+                score:total_correct,
+                attemptNumber: count + 1
+            })
+        } else {
+            newSubmission = new Submission({
+                pointsAwarded: total_correct,
+                quizId:quizId,
+                answers:answers,
+                platformId:platformId,
+                userId:userId,
+                timeTaken,
+                score:total_correct
+            })
+        }
         
         //save submission
         const created_submission = await newSubmission.save()
