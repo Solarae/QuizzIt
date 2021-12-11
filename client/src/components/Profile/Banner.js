@@ -21,7 +21,7 @@ function Banner({ user }) {
             <Row className="p-3 p-md-1 bg-white" >
                 <Col className="justify-content-center"  >
                     <Row className="justify-content-center" >
-                        <Image style={{ width: "10vw", height: "10vw", border:'solid', padding:'0' }} className="bg-dark" src={user.thumbnail && user.thumbnail !== "" ? user.thumbnail : "/quizzit_logo.png"} roundedCircle fluid />
+                        <Image style={{ width: "10vw", height: "10vw", border:'solid', padding:'0' }} className="bg-dark" src={user.icon && user.icon !== "" ? user.icon : "/quizzit_logo.png"} roundedCircle fluid />
                     </Row>
                     <Row align="center">
                         <h4 >{user.username}</h4>

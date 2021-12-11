@@ -37,10 +37,10 @@ export const signin = async (req, res) => {
             token,
             user: {
                 id: user._id,
-                thumbnail: user.thumbnail,
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
+                icon: user.icon,
                 token
             }
         })
@@ -68,7 +68,7 @@ export const tokenSignin = async (req, res) => {
             token,
             user: {
                 id: user._id,
-                thumbnail: user.thumbnail,
+                icon: user.icon,
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
@@ -185,7 +185,7 @@ export const editAccount = async (req, res) => {
             success: true,
             user: {
                 id: newUser._id,
-                thumbnail: newUser.thumbnail,
+                icon: newUser.icon,
                 username: newUser.username,
                 email: newUser.email,
                 likes: newUser.likes,
@@ -445,7 +445,7 @@ export const updateUser = async (req, res) => {
             {
                 user: {
                     id: updatedUser._id,
-                    thumbnail: updatedUser.thumbnail,
+                    icon: updatedUser.icon,
                     username: updatedUser.username,
                     email: updatedUser.email,
                     likes: updatedUser.likes,
@@ -465,7 +465,7 @@ export const uploadImage = async (req, res) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id, 
-            { $set: { thumbnail: cloud.secure_url, thumbnail_cloud_id: cloud.public_id } }, 
+            { $set: { icon: cloud.secure_url, icon_cloud_id: cloud.public_id } }, 
             { new: true }
         );
         if (!updatedUser) return res.status(200).json({ msg: "Something went wrong with updating quiz" });
@@ -473,7 +473,7 @@ export const uploadImage = async (req, res) => {
         res.status(200).json({
             user: {
                 id: updatedUser._id,
-                thumbnail: updatedUser.thumbnail,
+                icon: updatedUser.icon,
                 username: updatedUser.username,
                 email: updatedUser.email,
                 likes: updatedUser.likes,

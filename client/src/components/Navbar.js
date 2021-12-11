@@ -190,8 +190,8 @@ function AppNavbar() {
                     <div>
                       <Image 
                         className="bg-dark"
-                        src={auth.user.thumbnail && auth.user.thumbnail !== "" ? auth.user.thumbnail : "/quizzit_logo.png"}
-                        style={{ height: "40px", width: "40px", border:'solid', padding:'0', marginRight:'5px' }}
+                        src={auth.user.icon && auth.user.icon !== "" ? auth.user.icon : "/quizzit_logo.png"}
+                        style={{ height: "40px", width: "40px", border:'solid', borderColor: "white", padding:'0', marginRight:'5px' }}
                         roundedCircle 
                         fluid 
                       />
