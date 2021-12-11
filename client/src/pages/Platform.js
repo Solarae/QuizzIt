@@ -69,7 +69,7 @@ function Platform() {
                                 <h3 >Platform Leaderboard</h3>
                             </Col>
                         </Row>
-                        <MiniLeaderboard lbType="platform" doc={platform}></MiniLeaderboard>
+                        <MiniLeaderboard></MiniLeaderboard>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 import PlatformCard from '../components/Home/PlatformCard'
 import QuizCardMini from '../components/Cards/QuizCardMini'
-import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard'
+import MiniGlobalLB from '../components/Leaderboards/MiniGlobalLB'
 
 import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
 
@@ -111,7 +111,7 @@ function Home() {
                                 <h3 >Global Leaderboard</h3>
                             </Col>
                         </Row>
-                        {platforms.length!==0 && <MiniLeaderboard lbType="global" doc={platforms[0]}></MiniLeaderboard>}
+                        {platforms.length!==0 && <MiniGlobalLB></MiniGlobalLB>}
                     </div>
                 </div>
             </div>

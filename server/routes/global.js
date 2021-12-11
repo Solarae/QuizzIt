@@ -4,7 +4,7 @@ import { getLeaderboard, searchLeaderboard } from '../controllers/global.js'
 
 const router = express.Router()
 
-router.get('/:id/leaderboard', getLeaderboard)
-router.get('/:id/leaderboard/search', searchLeaderboard)
+router.get('/leaderboard', getLeaderboard)
+router.get('/leaderboard/search', searchLeaderboard)
 
 export default router

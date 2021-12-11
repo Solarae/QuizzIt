@@ -10,6 +10,7 @@ export const getLeaderboard = async (req, res) => {
         return res.status(404).json({ msg: "Invalid leaderboard type" }); 
 
     try {
+        const id = await getGlobalId()
         var projectQuery
         
         if (userId) {
@@ -43,7 +44,7 @@ export const getLeaderboard = async (req, res) => {
         }
         
         const [ leaderboardInfo ] = await Global.aggregate([
-            { $match: { _id: ObjectId(req.params.id) } },
+            { $match: { _id: ObjectId(id) } },
             { $project: projectQuery },
             { $lookup: {
                 from: "users",
@@ -101,11 +102,13 @@ export const searchLeaderboard = async (req, res) => {
     return res.status(404).json({ errors: { invalidLeaderboardType: 'Invalid leaderboard type'}}); 
 
     try {
+        const id = await getGlobalId()
+    
         const user = await User.findOne({ username: name })
         if (!user) return res.status(404).json({ errors: { userDNE: 'User does not exist'} } )
 
         const [ info ] = await Global.aggregate([
-            { $match: {_id: ObjectId(req.params.id) } },
+            { $match: {_id: ObjectId(id) } },
             { $project: {
                 index: {
                     $indexOfArray: [
@@ -121,7 +124,7 @@ export const searchLeaderboard = async (req, res) => {
         const skip = Math.floor(info.index / 10) * 10
 
         const [ leaderboardInfo ] = await Global.aggregate([
-            { $match: { _id: ObjectId(req.params.id) } },
+            { $match: { _id: ObjectId(id) } },
             { $project: {
                 leaderboard: {
                     $slice: [`$${type}_leaderboard`, skip, 10]
@@ -174,6 +177,15 @@ export const searchLeaderboard = async (req, res) => {
             leaderboardPage, 
             leaderboardPages ,
             leaderboardTotalCount: leaderboardInfo.totalCount });
+    } catch (error) {
+        res.status(404).json({ msg: error.message }) 
+    }
+}
+
+const getGlobalId = async () => {
+    try {
+        const [ global ] = await Global.find({})
+        return global._id
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }

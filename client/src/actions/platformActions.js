@@ -408,7 +408,8 @@ export const getPlatformLeaderboard = (platformId, query) => async (dispatch) =>
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
-            type: GET_PLAT_LEADERBOARD_FAIL
+            type: GET_PLAT_LEADERBOARD_FAIL,
+            payload: error.response.data
         })
     }
 }
