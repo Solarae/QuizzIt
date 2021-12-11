@@ -9,8 +9,6 @@ import {
     getPlatformsByFilter,
     getPlatformMemberlist,
     getLeaderboardByType,
-    upvotePlatform,
-    downvotePlatform,
     uploadImage,
     editMemberRole,
     searchLeaderboard
