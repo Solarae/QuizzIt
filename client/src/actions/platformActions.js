@@ -34,7 +34,9 @@ import {
     UPVOTE_PLATFORM,
     DOWNVOTE_PLATFORM,
     EDIT_PROFILE_SUCCESS,
-    SEARCH_UPDATE_PLATFORM
+    SEARCH_UPDATE_PLATFORM,
+    SEARCH_PLAT_LEADERBOARD_SUCCESS,
+    SEARCH_PLAT_LEADERBOARD_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -329,12 +331,12 @@ export const reportPlatform = ({ platformId, userId, text }) => async (dispatch)
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ userId, text })
+    const body = JSON.stringify({ submittedBy:userId, description:text })
     try {
         dispatch({
             type: REPORT_PLATFORM_REQ
         });
-        const res = await axios.post(`${URL}/api/platforms/${platformId}/report`, body, config);
+        const res = await axios.post(`${URL}/api/reports/reportPlatform/${platformId}`, body, config);
         if (res.data.errors) {
             dispatch({
                 type: REPORT_PLATFORM_FAIL,
@@ -476,12 +478,10 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
     }
 }
 
-export const getPlatformLeaderboard = (platformId, type, page) => async (dispatch) => {
+export const getPlatformLeaderboard = (platformId, query) => async (dispatch) => {
     const config = {
         params: {
-            type,
-            offset: 10 * (page - 1),
-            limit: 10
+            ...query
         }
     }
     try {
@@ -498,6 +498,30 @@ export const getPlatformLeaderboard = (platformId, type, page) => async (dispatc
         console.log("error message: " + error.message);
         dispatch({
             type: GET_PLAT_LEADERBOARD_FAIL
+        })
+    }
+}
+
+export const searchLeaderboard = (platformId, query) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PLAT_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/platforms/${platformId}/leaderboard/search`, config)
+        console.log(res.data)
+        dispatch({
+            type: SEARCH_PLAT_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        dispatch({
+            type: SEARCH_PLAT_LEADERBOARD_FAIL,
+            payload: error.response.data
         })
     }
 }

@@ -34,6 +34,20 @@ const userSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Platform'
     }],
+    inbox: [{
+        message: {
+            type: String
+        },
+        read: {
+            type: Boolean
+        }
+    }],
+    friends: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }],
+    friendRequests: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'User'
+    }],
     likes: {
         likedPlatforms: [{
             type: mongoose.Schema.Types.ObjectId, ref: 'Platform'

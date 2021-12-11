@@ -8,16 +8,20 @@ function MiniLeaderboard({ lbType, doc }) {
     const history = useHistory()
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
-    const isGetPlatLeaderboardLoading = useSelector((state) => state.platforms.isGetPlatLeaderboardLoading);
-    const leaderboard = useSelector((state) => state.platforms.leaderboard)
-
+    const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
+                    { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
+                    { queryStr: 'allTime', type: 'All Time' } ]
+                    
+    const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
+   
     useEffect(() => {
-        console.log("CALLING API")
         if (lbType === "platform" || lbType === "global") {
             dispatch(getPlatformLeaderboard(
                 doc._id,
-                type,
-                1
+                { type,
+                offset: 0,
+                limit: 10,
+                }
             ))
         }
     }, [type, dispatch]);
@@ -38,27 +42,17 @@ function MiniLeaderboard({ lbType, doc }) {
         return (<div>Loading...</div>)
     }
 
+    
+
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
                 <Nav fill variant="tabs">
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("daily")} disabled={type === "daily"}>Daily</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("weekly")} disabled={type === "weekly"} >Weekly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("monthly")} disabled={type === "monthly"}>Monthly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("yearly")} disabled={type === "yearly"}>Yearly</Nav.Link>
-                    </Nav.Item>
-                    <Nav.Item>
-                        <Nav.Link onClick={() => setType("allTime")} disabled={type === "allTime"}>
-                            All
-                        </Nav.Link>
-                    </Nav.Item>
+                    {types.map((t) => 
+                        <Nav.Item>
+                            <Nav.Link onClick={() => setType(t.queryStr)} disabled={type === "daily"}>{t.type}</Nav.Link>
+                        </Nav.Item>
+                    )}
                 </Nav>
                 <br />
             </Row>
@@ -77,7 +71,7 @@ function MiniLeaderboard({ lbType, doc }) {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td>
-                                    {rank.userId.username}
+                                    {rank.username}
                                 </td>
                                 <td>
                                     {rank.points}

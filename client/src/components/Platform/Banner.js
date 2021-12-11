@@ -1,8 +1,8 @@
-import React, { useState, useCallback, useRef } from 'react'
+import React, { useState, useCallback, useRef, useEffect } from 'react'
 import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
 import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
-
+import axios from 'axios'
 import { useSelector, useDispatch } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 
@@ -11,6 +11,7 @@ import SignIn from '../SignIn.js';
 import Report from './Report.js'
 import LikeDislike from '../Button/LikeDislike';
 import Subscribe from '../Button/Subscribe';
+import { URL } from '../../config';
 
 function Banner({ platform }) {
     const dispatch = useDispatch()
@@ -76,6 +77,24 @@ function Banner({ platform }) {
 
     const [showReportToast, setShowReportToast] = useState(false);
 
+
+    const [isModerator,setIsModerator] = useState(false)
+    useEffect(() => {
+
+        const fetchRole = async () =>{
+            if(auth.user){
+                //check if user is moderator of platform
+                console.log(platform)
+                let res = await axios.get(`${URL}/api/users/checkIfModeratorOfPlatform/${auth.user.id}/${platform._id}`)
+                console.log(res.data)
+                if (res.data && res.data.user){
+                    setIsModerator(true)
+                }
+            }
+        }
+        fetchRole()
+    }, [dispatch,platform,auth.user])    
+
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${platform.banner})` }}>
@@ -99,6 +118,7 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" style={{marginRight: "10px"}} >Edit</Button></Link> : <span></span>}
+                                    { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> }{' '}
                                     <Subscribe platform={platform} />
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"

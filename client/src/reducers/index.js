@@ -5,6 +5,7 @@ import quizReducer from './quizReducer'
 import awardReducer from './awardReducer'
 import searchReducer from './searchReducer'
 import submissionReducer from './submissionReducer'
+import reportReducer from './reportReducer'
 
 export default combineReducers({
     auth: authReducer,
@@ -12,5 +13,6 @@ export default combineReducers({
     quiz: quizReducer,
     awards: awardReducer,
     search: searchReducer,
-    submission: submissionReducer
+    submission: submissionReducer,
+    report: reportReducer
 })

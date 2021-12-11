@@ -2,9 +2,9 @@ import cloudinary from "../utils/cloudinary.js";
 
 import Award from '../models/Award.js'
 import Platform from '../models/Platform.js'
+import User from "../models/User.js";
 import Quiz from "../models/Quiz.js"
 import Submission from "../models/Submission.js"
-import User from '../models/User.js'
 
 import mongoose from 'mongoose'
 const ObjectId = mongoose.Types.ObjectId;
@@ -61,7 +61,7 @@ export const queryBuilder = (q, queries, model) => {
             })
         } else if (key === 'limit' || key === 'offset') {
             break
-        } else if (key === 'name') {
+        } else if (key === 'name' || key === 'username') {
             query[key] = {
                 "$regex": queries[key], 
                 "$options": "i"
@@ -98,6 +98,59 @@ export const paginateQuery = async (q, model, limit, offset) => {
     return { q, page, pages, totalCount }
 }
 
+
+export const checkIfModeratorOfPlatform = async (req,res) =>{
+
+
+    try {
+        let userId = req.params.uid
+        let platformId = req.params.pid
+    
+    
+        let platform = await Platform.findById(platformId)
+        if (!platform) return res.status(200).json({message:"Platform does not exist"}) 
+
+
+        let members = platform.subscribers
+
+        let user = members.filter( member => member.userId == userId )
+
+        console.log(user)
+
+        if(user[0] && (user[0].role == "Moderator" || user[0].role == "Creator" ) ){
+            return res.status(200).json({user:user[0]})
+        }
+
+        return res.status(200).json({message:"User is not moderator"})
+    
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})       
+    }
+
+
+
+
+}
+
+
+export const checkIfAdmin = async (req,res) => {
+    try {
+        let id = req.params.id
+
+        let user = await User.findById(id)
+    
+        if(!user) return res.status(200).json({message:"User does not exist"})
+    
+        return user.role == "Admin" ? res.status(200).json({user:user}) : res.status(200).json() 
+
+    } catch (error) {
+        return res.status(500).json({message:error.message})   
+        
+    }
+}
+
+
 export const assignAwards = async (userId, platformId) => {
     try {
          // Get total count / total points for platform
@@ -111,9 +164,6 @@ export const assignAwards = async (userId, platformId) => {
         ])
 
         const user_agg = agg[0]
-
-        console.log(`User submission count is ${user_agg.submissionCount}`)
-        console.log(`User total points is ${user_agg.totalPoints}`)
         
         // Get all awards for current platform
         const user = await User.findById(userId)
@@ -129,21 +179,37 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
-        console.log(awards)
-
         var awardsObtained = []
-
+        var messages = []
         awards.forEach((award) => {
             if ((award.requirementType === 'Point' && user_agg.totalPoints >= award.requirementCount) ||
-                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount )
-                awardsObtained.push(award._id)
+                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount ) {
+                    awardsObtained.push(award._id)
+                    messages.push({
+                        message: `You've received earned the ${award.title}`,
+                        read: false 
+                    })
+                }
         })
         
-        await User.findByIdAndUpdate(
-            userId,
-            { $addToSet: { awards: { $each: awardsObtained } } },
-        )
-        io.to(onlineUsers.get(userId)).emit('Hello')
+        if (awardsObtained.length) {
+            const updatedUser = await User.findByIdAndUpdate(
+                userId,
+                { $addToSet: { awards: { $each: awardsObtained } } ,
+                 $push: { inbox : { $each: messages, $position: 0 } } },
+                { new: true }
+            )
+    
+            
+            if (onlineUsers.get(userId)) {
+                const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
+                
+                io.to(onlineUsers.get(userId)).emit('getInbox', {
+                    inbox: slicedUser.inbox,
+                })
+            }
+                
+        }  
     } catch (error) {
         console.log(error)
     }

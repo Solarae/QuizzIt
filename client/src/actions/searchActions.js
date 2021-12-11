@@ -77,6 +77,7 @@ export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
             })
         }
         else {
+            console.log(res.data.quizzes)
             // get the platform icon/name for each quiz
             for (let q of res.data.quizzes) {
                 let platformConfig = {
@@ -102,13 +103,15 @@ export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
     }
 }
 
-export const searchUser = ({ query }) => async (dispatch) => {
+export const searchUser = ({ query, page, limit }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         },
         params: {
-            ...query
+            ...query,
+            offset: limit * (page - 1),
+            limit: limit 
         }
     }
     try {

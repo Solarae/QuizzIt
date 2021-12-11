@@ -24,7 +24,9 @@ import {
     EDIT_QUIZ_THUMBNAIL_FAIL,
     GET_QUIZ_LEADERBOARD_REQ,
     GET_QUIZ_LEADERBOARD_SUCCESS,
-    GET_QUIZ_LEADERBOARD_FAIL
+    GET_QUIZ_LEADERBOARD_FAIL,
+    SEARCH_QUIZ_LEADERBOARD_SUCCESS,
+    SEARCH_QUIZ_LEADERBOARD_FAIL
 } from '../actions/types'
 
 import axios from 'axios'
@@ -279,7 +281,7 @@ export const reportQuiz = ({ id, userId, text }) => async (dispatch) => {
             'Content-Type': 'application/json'
         },
     }
-    const body = JSON.stringify({ userId, text })
+    const body = JSON.stringify({ submittedBy:userId, description:text })
     try {
         const res = await axios.post(`${URL}/api/quizzes/${id}/report`, body, config);
         if (res.data.errors) {
@@ -331,12 +333,10 @@ export const setQuizLoading = () => {
     };
 };
 
-export const getQuizLeaderboard = (quizId, type, page) => async (dispatch) => {
+export const getQuizLeaderboard = (quizId, query) => async (dispatch) => {
     const config = {
         params: {
-            type,
-            offset: 10 * (page - 1),
-            limit: 10
+            ...query
         }
     }
     try {
@@ -353,6 +353,30 @@ export const getQuizLeaderboard = (quizId, type, page) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_QUIZ_LEADERBOARD_FAIL
+        })
+    }
+}
+
+export const searchLeaderboard = (quizId, query) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    try {
+        dispatch({
+            type: GET_QUIZ_LEADERBOARD_REQ
+        })
+        const res = await axios.get(`${URL}/api/quizzes/${quizId}/leaderboard/search`, config)
+        console.log(res.data)
+        dispatch({
+            type: SEARCH_QUIZ_LEADERBOARD_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        dispatch({
+            type: SEARCH_QUIZ_LEADERBOARD_FAIL,
+            payload: error.response.data
         })
     }
 }

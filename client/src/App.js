@@ -11,6 +11,7 @@ import { io } from 'socket.io-client'
 
 import Home from './pages/Home';
 import Profile from './pages/Profile';
+import Friends from './pages/Friends'
 import Platform from './pages/Platform';
 import PlatformLeaderboard from './pages/PlatformLeaderboard';
 import GlobalLeaderboard from './pages/GlobalLeaderboard';
@@ -28,6 +29,9 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
+import ViewPlatformReport from './pages/ViewPlatformReport.js';
+import ViewQuizReport from './pages/ViewQuizReport.js'
+import { URL } from './config'
 
 function App() {
   const dispatch = useDispatch()
@@ -37,7 +41,7 @@ function App() {
   // Try logging in wth token and setup socket
   useEffect(() => {
     dispatch(getSignedIn())
-    dispatch(connectSocket(io('http://localhost:5000')))
+    dispatch(connectSocket(io(URL)))
   }, []);
 
   useEffect(() => {
@@ -57,6 +61,7 @@ function App() {
         <Route path='/' exact component={Home} />
         <Route path='/search' exact component={Search} />
         <Route path='/profile' exact component={Profile} />
+        <Route path='/friends' exact component={Friends} />
         <Route path='/platform/:id' exact component={Platform} />
         <Route path='/platform/:id/leaderboard' exact component={PlatformLeaderboard} />
         <Route path='/platform/:id/edit' exact component={EditPlatform} />
@@ -68,6 +73,8 @@ function App() {
         <Route path='/viewSubmission' exact component={ViewSubmission} />
         <Route path='/submission/reviewSubmission/:id' exact component={ReviewSubmission} />
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
+        <Route path='/viewPlatformReport' exact component={ViewPlatformReport} />
+        <Route path='/viewQuizReport/:id' exact component={ViewQuizReport} />
         <Route path='/leaderboard/global' exact component={GlobalLeaderboard} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>

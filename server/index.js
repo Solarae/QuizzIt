@@ -11,6 +11,7 @@ import platformRoutes from './routes/platform.js'
 import quizRoutes from './routes/quiz.js'
 import submissionRoutes from './routes/submission.js'
 import awardRoutes from './routes/award.js'
+import reportRoutes from './routes/report.js'
 
 import { updateLeaderboardsJob, duplicateDB } from './schedule.js'
 
@@ -42,6 +43,7 @@ app.use('/api/platforms', platformRoutes);
 app.use('/api/submissions',submissionRoutes)
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/awards', awardRoutes);
+app.use('/api/reports', reportRoutes)
 
 // Setup Server
 const PORT = process.env.PORT || 5000;
@@ -50,7 +52,7 @@ const server = app.listen(PORT, () => console.log(`Server running on port: ${POR
 
 const io = new Server(server, {
     cors: {
-        origin: ['http://localhost:3000']
+        origin: ["http://localhost:3000", "https://quizz-it.netlify.app"]
     }
 })
 
@@ -71,6 +73,11 @@ io.on('connection', (socket) => {
     socket.on('newUser', (userId) => {
         onlineUsers.set(userId, socket.id)
         console.log(`${userId} has logged in`)
+    })
+
+    socket.on('logout', (userId) => {
+        onlineUsers.delete(userId)
+        console.log(`${userId} has logged out`)
     })
 
     socket.on('disconnect', () => {

@@ -3,9 +3,9 @@ import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
+import FriendUnfriend from '../Button/FriendUnfriend'
 
 function UserCard({ user }) {
-
     const routeToUser = () => {
         // history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
     }
@@ -26,8 +26,11 @@ function UserCard({ user }) {
                                 Member of {user.platforms.length} platforms
                             </p>
                         </Row>
-                        <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>
+                        <Row style={{ height: "20%", marginTop: "10px" }}>
                             <p><i class="bi bi-award-fill"></i> {user.awards.length} Awards</p>
+                        </Row>
+                        <Row style={{ height: "20%", marginTop: "10px", marginBottom: "-5px" }}>
+                            <FriendUnfriend uid={user._id}/>
                         </Row>
                     </Col >
                 </Row>
