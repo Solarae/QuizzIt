@@ -583,6 +583,7 @@ export const uploadImage = async (req, res) => {
         }
         console.log(req.body, req.file, req.files)
         const cloud = await uploadImgToCloud(req.file.path)
+        console.log(cloud)
         const newValues = {
             [type]: cloud.secure_url,
             [`${type}_cloud_id`]: cloud.public_id
