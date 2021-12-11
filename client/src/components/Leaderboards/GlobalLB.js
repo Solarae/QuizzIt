@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Row, Col, Table, Nav, Button, Form, FormControl, Card, NavItem } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import { getQuizLeaderboard, searchLeaderboard } from '../../actions/quizActions';
+import { getLeaderboard, searchLeaderboard } from '../../actions/globalActions';
 import Pagination from '../Pagination'
 import { useParams, useLocation, useHistory } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
 
-function Leaderboard() {
+function GlobalLB() {
     const dispatch = useDispatch()
     const history = useHistory()
-    let { id, qid } = useParams();  // get the platform ID and quiz ID from the url
     const params = new URLSearchParams(useLocation().search);
     
-    const { isGetQuizLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.quiz);
+    const { isGetGlobalLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.global);
     
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
                     { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
@@ -21,16 +20,16 @@ function Leaderboard() {
     const filter = params.get('filter') || ''
     const page = parseInt(params.get('page')) || 1
     const { user } = useSelector((state) => state.auth)
-    const pages = useSelector((state) => state.quiz.leaderboardPages)
-    const setPage = (page) => history.push(`/platform/${id}/quiz/${qid}/leaderboard?type=${type}&filter=${filter}&page=${page}`)
+    const pages = useSelector((state) => state.global.leaderboardPages)
+    const setPage = (page) => history.push(`/leaderboard?type=${type}&filter=${filter}&page=${page}`)
     
     const [name, setQueryName] = useState(params.get('userName') || '');
     const onQueryChange = (e) => setQueryName(e.target.value)
-    const handleSearch = () => history.push(`/platform/${id}/quiz/${qid}/leaderboard?type=${type}&userName=${name}`)
+    const handleSearch = () => history.push(`/leaderboard?type=${type}&userName=${name}`)
 
     useEffect(() => {
         if (name !== '') {
-            dispatch(searchLeaderboard(qid, { type, name }))
+            dispatch(searchLeaderboard({ type, name }))
         } else {
             var query = filter === 'friends' && user ? {
                 type,
@@ -43,26 +42,25 @@ function Leaderboard() {
                 limit: 10
             }
             
-            dispatch(getQuizLeaderboard(
-                qid,
+            dispatch(getLeaderboard(
                 query
             ))
         }
         
     }, [user, page, type, dispatch]);
     
-    if (isGetQuizLeaderboardLoading) {
+    if (isGetGlobalLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
 
     if (errors)
         return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
-
+    
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
                 <Col align="center">
-                    <h3 >Quiz Leaderboard</h3>
+                    <h3 >Global Leaderboard</h3>
                 </Col>
                 <Col>
                 <Form className="d-flex me-auto" style={{ marginLeft: "2%", width: "30%" }} onSubmit={handleSearch}>
@@ -82,13 +80,13 @@ function Leaderboard() {
                 >   
                     {types.map((t) => 
                         <Nav.Item>
-                            <LinkContainer to={`/platform/${id}/quiz/${qid}/leaderboard?type=${t.queryStr}&filter=${filter}`}><Nav.Link>{t.type}</Nav.Link></LinkContainer>
+                            <LinkContainer to={`/leaderboard?type=${t.queryStr}&filter=${filter}`}><Nav.Link>{t.type}</Nav.Link></LinkContainer>
                         </Nav.Item>
                     )}
                 </Nav>
                 <br />
             </Row>
-            <Row><Button onClick={() => history.push(`/platform/${id}/quiz/${qid}/leaderboard?type=${type}&filter=friends`)}>Friends Only</Button></Row>
+            <Row><Button onClick={() => history.push(`/leaderboard?type=${type}&filter=friends`)}>Friends Only</Button></Row>
             <Row style={{ marginTop: "10px" }}>
                 <Table hover>
                     <thead>
@@ -120,26 +118,7 @@ function Leaderboard() {
                 </Col>
             </Row>
 
-         {/* <Row className="justify-content-center" style={{ marginTop: "10px" }}>
-                <Card border="dark" style={{ width: '50%' }}>
-                    <Card.Body>
-                        <Card.Title>1</Card.Title>
-                        <Card.Text >
-                            <Row className="justify-content-center">
-                                <Image style={{ width: "80px", height: "80px" }} src="/quizzit_logo.png" roundedCircle thumbnail />
-                            </Row>
-                            <Row className="justify-content-center">
-                                Username
-                            </Row>
-                            <Row className="justify-content-center">
-                                100 Points
-                            </Row>
-                        </Card.Text>
-                    </Card.Body>
-                </Card>
-            </Row> */}
         </div>
-
     )
 }
-export default Leaderboard;
+export default GlobalLB

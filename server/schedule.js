@@ -1,12 +1,11 @@
-import User from './models/User.js'
 import Submission from './models/Submission.js'
 import Platform from './models/Platform.js'
-
+import Global from './models/Global.js'
 import cron from 'node-cron'
 
 import { startOfYesterday, startOfToday, endOfToday, startOfWeek, startOfMonth, startOfYear } from 'date-fns'
 
-const TYPES = ['platform', 'quiz']
+const TYPES = ['platform', 'quiz', 'global']
 const TIMES = ['daily', 'weekly', 'monthly', 'year', 'allTime']
 
 const updateLeaderboards = async () => {
@@ -23,10 +22,13 @@ const updateLeaderboards = async () => {
 const updateLeaderboard = async (type, time) => {
     try {
         var collectionName
-        if (type == 'platform')
+        if (type === 'platform')
             collectionName = 'platforms'
-        else
+        else if (type === 'quiz')
             collectionName = 'quizzes'
+        else {
+            collectionName = 'globals'
+        }
         const end = endOfToday()
         var start
         if (time === 'daily') {
@@ -38,30 +40,52 @@ const updateLeaderboard = async (type, time) => {
         } else {
             start = startOfYear(end)
         }
-        const groupQuery1 = {
+
+        const calculatePoints = type === 'global' ?
+        {
+            _id: {
+                userId: "$userId",
+            },
+            points: {
+                $sum: "$score"
+            }
+        } :
+        {
             _id: {
                 [`${type}Id`]: `$${type}Id`,
                 userId: "$userId",
             },
-              points: {
+            points: {
                 $sum: "$score"
             }
         }
-        const groupQuery = {
+
+        const [ global ] = await Global.find({})
+        const createLeaderboard = type === 'global' ? 
+        {
+            _id: global._id,
+            [`${time}_leaderboard`]: {
+                $push: {
+                    userId: "$_id.userId",
+                    points: "$points"
+                }
+            }
+        } : 
+        {
             _id: `$_id.${type}Id`,
             [`${time}_leaderboard`]: {
-                    $push: {
-                        userId: "$_id.userId",
-                        points: "$points"
-                    }
+                $push: {
+                    userId: "$_id.userId",
+                    points: "$points"
                 }
+            }
         }
         if (time != 'allTime') {
             await Submission.aggregate([
                 { $match: { createdAt: { $gte: start, $lt: end } } },
-                { $group: groupQuery1 },
+                { $group: calculatePoints },
                 { $sort: { points: -1 } },
-                { $group: groupQuery },
+                { $group: createLeaderboard },
                 { $merge: {
                     into: collectionName,
                     on: "_id",
@@ -69,10 +93,10 @@ const updateLeaderboard = async (type, time) => {
                 } }
             ])
         } else {
-            await Submission.aggregate([
-                { $group: groupQuery1 },
+            const results = await Submission.aggregate([
+                { $group: calculatePoints },
                 { $sort: { points: -1 } },
-                { $group: groupQuery },
+                { $group: createLeaderboard },
                 { $merge: {
                     into: collectionName,
                     on: "_id",
@@ -80,6 +104,7 @@ const updateLeaderboard = async (type, time) => {
                 } }
             ])
         }
+        
     } catch (error) {
         console.log(error.message)
     }
@@ -90,3 +115,4 @@ export const duplicateDB = async () => {
 }
 
 export const updateLeaderboardsJob = cron.schedule('0 0 * * *', updateLeaderboards);
+//export const updateLeaderboardsJob = cron.schedule('*/1 * * * *', updateLeaderboards);

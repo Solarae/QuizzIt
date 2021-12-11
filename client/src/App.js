@@ -77,7 +77,7 @@ function App() {
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
         <Route path='/viewPlatformReport' exact component={ViewPlatformReport} />
         <Route path='/viewQuizReport/:id' exact component={ViewQuizReport} />
-        <Route path='/leaderboard/global' exact component={GlobalLeaderboard} />
+        <Route path='/leaderboard' exact component={GlobalLeaderboard} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>

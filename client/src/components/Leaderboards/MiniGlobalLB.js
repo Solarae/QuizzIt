@@ -1,23 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { getPlatformLeaderboard } from '../../actions/platformActions';
+import { getLeaderboard } from '../../actions/globalActions';
 
-function MiniLeaderboard() {
+function MiniGlobalLB() {
     const history = useHistory()
     const dispatch = useDispatch()
-    const [type, setType] = useState("daily")
-    const { id } = useParams();  
+    const [type, setType] = useState("daily")  
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
                     { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
                     { queryStr: 'allTime', type: 'All Time' } ]
                     
-    const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
+    const { isGetGlobalLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.global);
    
     useEffect(() => {
-        dispatch(getPlatformLeaderboard(
-            id,
+        dispatch(getLeaderboard(
             { type,
             offset: 0,
             limit: 10,
@@ -25,9 +23,9 @@ function MiniLeaderboard() {
         ))
     }, [type, dispatch]);
 
-    const routeToLeaderboardPage = () => history.push(`/platform/${id}/leaderboard`)
+    const routeToLeaderboardPage = () => history.push(`/leaderboard`)
 
-    if (isGetPlatLeaderboardLoading) {
+    if (isGetGlobalLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
 
@@ -77,4 +75,4 @@ function MiniLeaderboard() {
         </div>
     )
 }
-export default MiniLeaderboard;
+export default MiniGlobalLB;

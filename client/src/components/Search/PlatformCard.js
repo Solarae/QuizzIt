@@ -3,7 +3,6 @@ import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import LikeDislike from '../Button/LikeDislike';
 import Subscribe from '../Button/Subscribe'
 import SignIn from '../SignIn';
 import SignUp from '../SignUp';

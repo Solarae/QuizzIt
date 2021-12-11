@@ -38,14 +38,14 @@ function QuizCardMini({ quiz, showPlatform = true }) {
                                 showPlatform &&
                                 (
                                     <Col md={3} className="my-auto" style={{ padding: "0px" }}>
-                                        <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformIcon ? quiz.platformIcon : '/quizzit_logo.png'} thumbnail />
+                                        <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformId.icon ? quiz.platformId.icon : '/quizzit_logo.png'} thumbnail />
                                     </Col>)
 
                             }
                             <Col md={showPlatform ? 9 : 12} align="start" style={{ padding: showPlatform ? "0px" : ""}}>
                                 <p className="fs-5 text" style={{ cursor: 'pointer', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}} onClick={routeToQuiz}>{quiz.name}</p>
-                                {showPlatform && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt", whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }} onClick={routeToPlatform}>{quiz.platformName}</p>}
-                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
+                                {showPlatform && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt", whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }} onClick={routeToPlatform}>{quiz.platformId.name}</p>}
+                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissionCount} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                                 <p className="text-muted" align="right" style={{ marginTop: "-10px", marginBottom:"-10px", fontSize: "9pt"}}><i class="bi bi-stopwatch"></i> {quiz.time} min</p>
                             </Col>
                         </Row>
