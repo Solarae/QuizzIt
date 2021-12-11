@@ -69,14 +69,18 @@ export const getProfile = ({ id }) => async (dispatch) => {
             }
             const user = res.data.users[0]
 
-            // get likedPlatforms, likedQuizzes, awards, createdPlatforms
-            let likedPlatforms = []
-            for (const pid of user.likes.likedPlatforms) {
-                res = await axios.get(`${URL}/api/platforms/${pid}`,);
-                if (!res.data.errors) {
-                    likedPlatforms.push(res.data.platform)
+            // get subscribedPlatforms, likedQuizzes, awards, createdPlatforms
+            let subscribedPlatforms = []
+            config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'subscribers.userId': user._id
                 }
             }
+            res = await axios.get(`${URL}/api/platforms`, config);
+            subscribedPlatforms = res.data.platforms
 
             let likedQuizzes = []
             for (const qid of user.likes.likedQuizzes) {
@@ -104,7 +108,7 @@ export const getProfile = ({ id }) => async (dispatch) => {
             }
 
             let createdPlatforms = []
-            let config = {
+            config = {
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -119,7 +123,7 @@ export const getProfile = ({ id }) => async (dispatch) => {
                 type: GET_PROFILE_SUCCESS,
                 payload: {
                     profile: user,
-                    likedPlatforms: likedPlatforms,
+                    subscribedPlatforms: subscribedPlatforms,
                     likedQuizzes: likedQuizzes,
                     awards: awards,
                     createdPlatforms: createdPlatforms

@@ -12,7 +12,7 @@ import { getProfile } from '../actions/profileActions'
 function Profile() {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
-    const { profile, likedPlatforms, likedQuizzes, awards, createdPlatforms, isGetProfileLoading } = useSelector((state) => state.profile)
+    const { profile, subscribedPlatforms, likedQuizzes, awards, createdPlatforms, isGetProfileLoading } = useSelector((state) => state.profile)
 
     let { id } = useParams();  // get the user ID from the url
 
@@ -40,13 +40,13 @@ function Profile() {
                         <Container>
                             <Row className="">
                                 <Col xs lg="6">
-                                    <h5><i class="bi bi-hand-thumbs-up-fill"></i> Liked Platforms</h5>
+                                    <h5><i class="bi bi-hand-thumbs-up-fill"></i> Subscribed Platforms</h5>
                                 </Col>
                             </Row>
 
                             <Row xs={1} md={4} className="g-4 me-auto">
-                                {(!likedPlatforms || likedPlatforms.length === 0) && <p>No Liked Platforms</p>}
-                                {likedPlatforms && likedPlatforms.map((p, idx) => (
+                                {(!subscribedPlatforms || subscribedPlatforms.length === 0) && <p>No Subscribed Platforms</p>}
+                                {subscribedPlatforms && subscribedPlatforms.map((p, idx) => (
 
                                     <Col align="center">
                                         <PlatformCard platform={p} showSubscribe={false}></PlatformCard>

@@ -6,7 +6,7 @@ import {
 
 const initialState = {
     profile: null,
-    likedPlatforms: [],
+    subscribedPlatforms: [],
     likedQuizzes: [],
     awards: [],
     createdPlatforms: [],
