@@ -24,6 +24,12 @@ const userSchema = new mongoose.Schema({
     banner_cloud_id: {
         type: String 
     },
+    thumbnail: {
+        type: String 
+    },
+    thumbnail_cloud_id: {
+        type: String 
+    },
     icon_cloud_id: {
         type: String
     },
