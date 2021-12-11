@@ -18,7 +18,7 @@ function PlatformCard({ platform, showSubscribe=true }) {
                     <Col className="my-auto" align="center" style={{  }} >
                         <Image onClick={routeToPlatform} style={{ width: "75px", height: "75px", cursor: "pointer" }} className="bg-dark" src={platform.icon ? platform.icon : '/quizzit_logo.png'} thumbnail />
                         <Row style={{ marginBottom: "-10px" }}>
-                            <p className="fs-5 text" onClick={routeToPlatform} style={{ cursor: "pointer" }}>{platform.name}</p>
+                            <p className="fs-5 text" onClick={routeToPlatform} style={{ cursor: "pointer", whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }}>{platform.name}</p>
                         </Row>
                         <Row style={{}}>
                             <p className="text-muted" style={{ fontSize: "9pt" }}><i className="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers</p>

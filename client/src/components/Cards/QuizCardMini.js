@@ -42,9 +42,9 @@ function QuizCardMini({ quiz, showPlatform = true }) {
                                     </Col>)
 
                             }
-                            <Col align="start" style={{ padding: showPlatform ? "0px" : "" }}>
-                                <p className="fs-5 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
-                                {showPlatform && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformName}</p>}
+                            <Col md={showPlatform ? 9 : 12} align="start" style={{ padding: showPlatform ? "0px" : ""}}>
+                                <p className="fs-5 text" style={{ cursor: 'pointer', whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}} onClick={routeToQuiz}>{quiz.name}</p>
+                                {showPlatform && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt", whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis' }} onClick={routeToPlatform}>{quiz.platformName}</p>}
                                 <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                                 <p className="text-muted" align="right" style={{ marginTop: "-10px", marginBottom:"-10px", fontSize: "9pt"}}><i class="bi bi-stopwatch"></i> {quiz.time} min</p>
                             </Col>
