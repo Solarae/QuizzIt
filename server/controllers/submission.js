@@ -55,7 +55,7 @@ export const createSubmission = async (req,res) =>{
         //save submission
         const created_submission = await newSubmission.save()
 
-        await Quiz.findById(quizId, { $inc: { 'submissionCount': 1 } })
+        await Quiz.findByIdAndUpdate(quizId, { $inc: { 'submissionCount': 1 } })
 
         res.status(200).json({submission:created_submission})
         await assignAwards(userId, platformId)

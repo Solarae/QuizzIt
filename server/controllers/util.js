@@ -159,7 +159,6 @@ export const assignAwards = async (userId, platformId) => {
             { $match: { userId: ObjectId(userId), platformId: ObjectId(platformId) } },
             { $group: {
                 _id: "$quizId",
-                submissionCount: { $sum: 1 },
                 points: { $sum: "$score" }
             }},
             { $group: {
@@ -169,7 +168,7 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
-        
+        console.log(user_agg)
         // Get all awards for user
         const user = await User.findById(userId)
 
@@ -239,10 +238,12 @@ export const recaclulateScore = async (quizId) => {
         const quiz = await Quiz.findById(quizId)
         const questions = quiz.questions
         // Get all submissions
-        const submissions = await Submission.find()
+        const submissions = await Submission.find({quizId})
 
         var userIds = []
-        for (s in submissions) {
+        var a = [...new Map(submissions.map(v => [v.userId.toString(), v])).values()]
+       
+        for (const s of submissions) {
             var total_correct = 0
             var i = 0
             const answers = s.answers
@@ -267,10 +268,11 @@ export const recaclulateScore = async (quizId) => {
                 )
             }
         }
+        
+        await Promise.all(userIds.map(async (uid) => await assignAwards(uid, quiz.platformId)));
 
-        for (uid in userIds) {
-            await assignAwards(uid, quiz.platformId)
-        }
+        // userIds.forEach( async (uid) => await assignAwards(uid, quiz.platformId))
+        
     } catch (error) {
         console.log(error.message)
     }
