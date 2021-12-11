@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Container, Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import { uploadImage } from '../actions/profileActions.js'
 
 import Banner from '../components/Profile/Banner';
 import EditProfileModal from '../components/Profile/EditProfile';
@@ -13,7 +14,7 @@ function EditProfile() {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const { profile, isGetProfileLoading } = useSelector((state) => state.profile)
-    
+
     let { id } = useParams()
     useEffect(() => {
         dispatch(getProfile({
@@ -37,6 +38,11 @@ function EditProfile() {
     const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
     const handleShowDeleteModal = () => { setShowDeleteModal(true) };
 
+    const handleEditThumbnail = (e) => {
+        e.preventDefault();
+        dispatch(uploadImage(id, e.target.files[0]))
+    }
+
     if (!auth.user || isGetProfileLoading) {
         return (
             <div>Loading...</div>
@@ -45,11 +51,21 @@ function EditProfile() {
 
     return (
         <div className="justify-content-between">
-            
+
             <Banner user={profile}></Banner>
 
             <Container>
                 <h2 className='text-center m-3'>Profile Settings</h2>
+
+                <Row className="justify-content-md-center">
+                    <Col md={4}>
+                        <Form.Group controlId="formIconFile" className="mb-3">
+                            <Form.Label>Profile Icon</Form.Label>
+                            <Form.Control type="file" onChange={handleEditThumbnail} />
+                        </Form.Group>
+                    </Col>
+                </Row>
+
                 <Row className="justify-content-md-center">
                     <Col md={4}>
                         <Form.Label>Username</Form.Label>
@@ -103,6 +119,6 @@ function EditProfile() {
 
             </Container>
         </div>
-            )
+    )
 }
-            export default EditProfile
+export default EditProfile
