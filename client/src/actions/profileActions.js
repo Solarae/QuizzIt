@@ -156,7 +156,7 @@ export const editProfile = ({ id, username, email, password, currentPassword, hi
         // send any request errors to callback function
         callback(res.data.errors);
 
-        history.push('/profile')
+        history.push(`/profile/${id}/edit`)
     } catch (error) {
         console.log(error.message)
         dispatch({
