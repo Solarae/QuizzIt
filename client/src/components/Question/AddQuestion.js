@@ -32,8 +32,9 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         });
         setErrors({});
         handleClose();
+        setError()
     }
-    
+    const [error,setError] = useState()
     const onChange = (e) => {
         setValues({...values, [e.target.name]: e.target.value });
     }
@@ -44,12 +45,22 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         let optionValues = [] // Currently options exsist as individual k:v pairs in values, get a list of them instead
         options.forEach(x => optionValues.push(values[x]))
         console.log(optionValues)
-
+        let set = new Set()
         if ((values.question === '') || (optionValues.includes(''))) {
             return;
         }
 
-        dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: optionState, callback: closeModal }))
+        var bool = true
+        optionValues.forEach((choice)=>{
+            if(set.has(choice)){
+                setError("Choices cannot have the same value")
+                bool=false
+            }
+            set.add(choice)
+        })
+
+        if(bool===true)
+            dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: optionState, callback: closeModal }))
     }
     
     let options = ['option1', 'option2', 'option3', 'option4']
@@ -96,6 +107,13 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
                         </Alert>
                     </Form.Text>
                 )}
+                {error ? <Form.Text className="text-muted">
+                            <Alert variant={'danger'}>
+                                {error}
+                            </Alert>
+                          </Form.Text>:
+                          <></>
+                }
                 <Modal.Footer className="justify-content-between"> 
                     <Button variant="primary" type="submit"> Add </Button> 
                 </Modal.Footer>
