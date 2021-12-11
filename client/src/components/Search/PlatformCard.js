@@ -64,7 +64,7 @@ function PlatformCard({ platform }) {
                             <p className="fs-4 text" onClick={routeToPlatform} style={{ cursor: "pointer" }}>{platform.name}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizzes.length} Quizzes</p>
+                            <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizCount} Quizzes</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
                             <p>{platform.description}</p>

@@ -38,9 +38,7 @@ export const createSubmission = async (req,res) =>{
         //save submission
         const created_submission = await newSubmission.save()
 
-        //save submission to quiz 
-        quiz.submissions.push(created_submission)
-        await quiz.save()
+        await Quiz.findById(quizId, { $inc: { 'submissionCount': 1 } })
 
         res.status(200).json({submission:created_submission})
         await assignAwards(userId, platformId)
@@ -50,9 +48,6 @@ export const createSubmission = async (req,res) =>{
     }    
 
 }
-
-
-
 
 export const getQuizSubmissions = async (req,res)=>{
 
