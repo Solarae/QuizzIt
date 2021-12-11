@@ -56,7 +56,7 @@ function Search() {
 
         if (filter === "none" || filter === "quiz") {
             dispatch(searchQuiz({
-                query: { 'name': query, 'sort': sortQuery },
+                query: { 'name': query, 'sort': sortQuery, 'expand' : "platformId(select=name,icon)" },
                 page: page,
                 limit: 4
             }))

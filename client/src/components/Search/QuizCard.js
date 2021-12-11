@@ -8,11 +8,11 @@ function QuizCard({ quiz }) {
     const history = useHistory()
 
     const routeToQuiz = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`);
     }
 
     const routeToPlatform = () => {
-        history.push(`/platform/${quiz.platformId}`);
+        history.push(`/platform/${quiz.platformId._id}`);
     }
 
     const createdAt = mongoose.Types.ObjectId(quiz._id).getTimestamp();
@@ -30,7 +30,7 @@ function QuizCard({ quiz }) {
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken
+                            <p><i class="bi bi-people-fill"></i> {quiz.submissionsCount} Taken
                                 <i class="bi bi-dot" />
                                 {moment(createdAt).fromNow()}
                                 <i class="bi bi-dot" />
@@ -40,8 +40,8 @@ function QuizCard({ quiz }) {
                         </Row>
                         <Row style={{ height: "25%" }} >
                             <Col>
-                                <Image style={{ width: "40px", height: "40px", marginRight: "5px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformIcon ? quiz.platformIcon : '/quizzit_logo.png'} thumbnail />
-                                <span style={{ cursor: "pointer" }} onClick={routeToPlatform}>{quiz.platformName}</span>
+                                <Image style={{ width: "40px", height: "40px", marginRight: "5px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformId.icon ? quiz.platformId.icon : '/quizzit_logo.png'} thumbnail />
+                                <span style={{ cursor: "pointer" }} onClick={routeToPlatform}>{quiz.platformId.name}</span>
                             </Col>
                         </Row>
                         <Row style={{ height: "25%", marginTop: "10px", marginBottom: "-5px" }}>
