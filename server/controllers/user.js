@@ -466,7 +466,15 @@ export const uploadImage = async (req, res) => {
         );
         if (!updatedUser) return res.status(200).json({ msg: "Something went wrong with updating quiz" });
 
-        res.status(200).json({ user: updatedUser });
+        res.status(200).json({
+            user: {
+                id: updatedUser._id,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                likes: updatedUser.likes,
+                friends: updatedUser.friends
+            }
+        });
     } catch (error) {
         console.log(error)
         res.status(404).json({ msg: error.message })
