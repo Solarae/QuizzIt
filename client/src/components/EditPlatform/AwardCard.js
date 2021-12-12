@@ -5,7 +5,7 @@ import EditAward from './EditAward.js'
 function AwardCard({ award, edit }) {
     const [showEdit, setShowEdit] = useState(false);
 
-    const popover = (showEditControls ? <span></span> :
+    const popover = (edit ? <span></span> :
         <Popover id="popover-basic">
             <Popover.Header as="h3">Description</Popover.Header>
             <Popover.Body>

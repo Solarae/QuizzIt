@@ -52,7 +52,7 @@ function Home() {
                 (
                     <div>
                         <Row xs={1} md={4} className="g-4 me-auto">
-                            {quizzesData.sort(compareDates).map((quiz, idx) => (
+                            {quizzes.map((quiz, idx) => (
                                 <Col align="center">
                                     <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
                                 </Col>
