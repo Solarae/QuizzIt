@@ -46,6 +46,10 @@ function EditProfile() {
         dispatch(uploadImage(id, image))
     }
 
+    if (!auth.user || auth.user.id !==id){
+        return <div>You do not have permisison to access this page.</div>
+    }
+    
     if (!auth.user || isGetProfileLoading) {
         return (
             <Loading />
