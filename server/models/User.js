@@ -18,11 +18,8 @@ const userSchema = new mongoose.Schema({
         enum: ['User', 'Admin'],
         default: 'User'
     },
-    banner: {
-        type: String 
-    },
-    banner_cloud_id: {
-        type: String 
+    icon: {
+        type: String
     },
     icon_cloud_id: {
         type: String
