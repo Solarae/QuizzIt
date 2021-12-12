@@ -10,6 +10,7 @@ import SignIn from '../SignIn.js';
 import Report from './Report.js'
 import Subscribe from '../Button/Subscribe';
 import CreateQuiz from '../EditPlatform/CreateQuiz'
+import { URL } from '../../config.js';
 
 function Banner({ platform }) {
     const dispatch = useDispatch()

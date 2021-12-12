@@ -213,7 +213,7 @@ export const deleteManyQuizReport = async(req,res) => {
         let {userId} = req.body
 
         await Report.deleteMany({quizId:id})
-        let newReport = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
+        let newReport = await Report.find({type:"quizReport",quizId:id}).populate("quizId").populate("submittedBy")
         
 
         return res.status(200).json({report:newReport})  

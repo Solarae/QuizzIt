@@ -68,7 +68,7 @@ export const deleteQuiz = async (req,res) =>{
 
         if(!quiz) return res.status(500).json({message:"Quiz not found"})
 
-        await Platform.findByIdAndUpdate(platformId, { $inc: { 'quizCount': -1 } })
+        await Platform.findByIdAndUpdate(quiz.platformId, { $inc: { 'quizCount': -1 } })
     
         //delete the quiz
         await quiz.remove()
@@ -76,6 +76,7 @@ export const deleteQuiz = async (req,res) =>{
         res.status(200).json({message:"Success"})
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({message:error.message})
     }
 
