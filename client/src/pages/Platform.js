@@ -7,6 +7,7 @@ import AwardSection from '../components/EditPlatform/AwardSection.js'
 import MemberList from '../components/Platform/MemberList.js'
 import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
 import { getPlatform, getPlatformLeaderboard } from '../actions/platformActions'
+import Loading from '../components/Loading'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
@@ -44,7 +45,9 @@ function Platform() {
     const [tab, setTab] = useState('home');
 
     if (isGetLoading || !platform) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
     return (
         <div className="justify-content-between">
