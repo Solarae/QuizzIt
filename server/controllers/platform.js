@@ -6,6 +6,9 @@ const ObjectId = mongoose.Types.ObjectId;
 import User from '../models/User.js'
 import Platform from '../models/Platform.js'
 import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
+import Quiz from "../models/Quiz.js";
+import Submission from "../models/Submission.js";
+import Award from "../models/Award.js";
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -83,6 +86,14 @@ export const deletePlatform = async (req, res) => {
                 return res.status(200).json({ errors: errors });
             }
         }
+        //delete all the quizzes of the platform
+        await Quiz.deleteMany({platformId:req.params.id})
+
+        //delete all the awards owned by platform
+        await Award.deleteMany({platformId:req.params.id})
+
+        //delete all the submissions from same platform
+        await Submission.deleteMany({platformId:req.params.id})
 
         //proceed to remove platform
         await platform.remove();
@@ -444,6 +455,7 @@ export const uploadImage = async (req, res) => {
         }
         console.log(req.body, req.file, req.files)
         const cloud = await uploadImgToCloud(req.file.path)
+        console.log(cloud)
         const newValues = {
             [type]: cloud.secure_url,
             [`${type}_cloud_id`]: cloud.public_id

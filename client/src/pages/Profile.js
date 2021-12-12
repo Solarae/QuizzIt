@@ -80,7 +80,7 @@ function Profile() {
                         </Row>
                         <Row xs={1} md={3} align='center' className="justify-content-center">
                             {(!awards || awards.length === 0) && <p>No Awards</p>}
-                            {awards && awards.map((a, idx) => (
+                            {awards && awards.map((a, idx) => (a && 
                                 <Col align='center' style={{ marginBottom: "10px" }}>
                                     <OverlayTrigger
                                         placement="bottom"

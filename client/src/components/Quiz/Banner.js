@@ -11,8 +11,10 @@ import DeleteQuizModal from './Modal/deleteQuizModal';
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import LikeDislike from '../Button/LikeDislike';
-import { useHistory } from 'react-router-dom';
+import { useHistory,Link } from 'react-router-dom';
 import Report from './Report';
+import axios from "axios"
+import { URL } from '../../config';
 
 function Banner({ isEdit }) {
     const dispatch = useDispatch()
@@ -43,11 +45,25 @@ function Banner({ isEdit }) {
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
     const targetTooltip = useRef(null);
-
+    const [isModerator,setIsModerator] = useState(false)
     useEffect(() => {
+
+        // const fetchRole = async () =>{
+        //     if(auth.user && platform){
+        //         //check if user is moderator of platform
+        //         console.log(platform)
+        //         let res = await axios.get(`${URL}/api/users/checkIfModeratorOfPlatform/${auth.user.id}/${platform._id}`)
+        //         console.log(res.data)
+        //         if (res.data && res.data.user){
+        //             setIsModerator(true)
+        //         }
+        //     }
+        // }
+        // fetchRole()
         console.log(quiz.platformId)
         dispatch(getPlatform({ id: quiz.platformId}))
-    }, [dispatch, quiz])    
+    }, [dispatch, quiz,auth.user])    
+
     const [showReportToast, setShowReportToast] = useState(false);
     if (isGetLoading || !platform) {
         return (<div>Loading...</div>)
@@ -105,6 +121,7 @@ function Banner({ isEdit }) {
                                     {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
+                                    {/* { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> } */}
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

@@ -164,6 +164,7 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
             })
         }
         else {
+<<<<<<< HEAD
             // get the platform awards 
             // const awardsConfig = {
             //     headers: {
@@ -184,6 +185,8 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
             // res.data.quizzesData = quizzes; // pack the quizzes data with the platform
             // res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
             // res.data.memberList = member_res.data.members; // pack the awards data with the platform
+=======
+>>>>>>> af1952bedb4b8f577d49947ab3a15f95cfdc8c32
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data

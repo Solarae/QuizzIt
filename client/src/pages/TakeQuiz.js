@@ -17,11 +17,10 @@ function TakeQuiz() {
     const user = useSelector((state)=>state.auth.user)
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading)
-    const [questionsAttempted, setQuestionsAttempted] = useState()
+    const [questionsAttempted, setQuestionsAttempted] = useState([])
     const [timer, setTimer] = useState(0)
     const [qno, setqno] = useState(0)
     const [question, setQuestion] = useState(quiz.questions[qno])
-    
 
     const history = useHistory()
     const timerIncrement = () => { setTimer(timer + 1) }
@@ -42,9 +41,11 @@ function TakeQuiz() {
     }
     
     const questionInput = (e, idx, index) => {
+        // e.preventDefault()
         const newQuestionsAttempted = {...questionsAttempted}
         newQuestionsAttempted[index] = idx
         setQuestionsAttempted(newQuestionsAttempted)
+        console.log(questionsAttempted)
     }
 
     const handleSubmit = () => {
@@ -53,10 +54,7 @@ function TakeQuiz() {
         
         for (var key in questionsAttempted) {
             answers[key] = String.fromCharCode(questionsAttempted[key] + 97) 
-        }
-
-        console.log(timer)
-        
+        }        
 
         if (answers.includes(-1)) {
             if (timer/60 >= quiz.time) {
@@ -127,12 +125,14 @@ function TakeQuiz() {
                         ))}
                 </Col>
                 <Col>
-                    <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput}></TakeQuestionCard>
+                    <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput} answers={questionsAttempted}></TakeQuestionCard>
+
+                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
+
+                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
 
                     <Button variant="primary" onClick={handleSubmit}>Submit</Button>
 
-                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
-                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
                 </Col>
             </Container>
         </>

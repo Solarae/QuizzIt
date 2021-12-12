@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { editAward, deleteAward } from '../../actions/awardActions.js'
+import { editAward, deleteAward, getAwards } from '../../actions/awardActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -21,6 +21,7 @@ function EditAward({ award, show, handleClose }) {
     const history = useHistory()
 
     const awardErrors = useSelector((state) => state.awards.errors);
+    const platform = useSelector ((state)=> state.platforms.platform) 
     const isEditLoading = useSelector((state) => state.awards.isEditLoading)
     const prev_isEditLoading = usePrevious(isEditLoading)
 
@@ -68,6 +69,14 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal 
         handleClose();
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
 
         
     }, [isEditLoading, history, handleClose]);
@@ -84,9 +93,17 @@ function EditAward({ award, show, handleClose }) {
             setErrors({ ...awardErrors });
             return;
         }
-
+        
         // close the modal
         handleClose();
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
         
     }, [isDeleteLoading, history, handleClose]);
 
@@ -112,6 +129,7 @@ function EditAward({ award, show, handleClose }) {
                 requirementCount: Number(values.requirementCount)
             }
         ));
+        
     })
 
     const handleDelete = ((e) => {

@@ -151,16 +151,17 @@ export const editQuiz = ({ id, name, description, time }) => async (dispatch) =>
     }
 }
 
-export const deleteQuiz = ({ id }) => async (dispatch) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-
-    console.log(id)
+export const deleteQuiz = ({ id,query }) => async (dispatch) => {
     try {
-        const res = await axios.delete(`${URL}/api/quizzes/${id}`, config)
+        
+        await axios.delete(`${URL}/api/quizzes/${id}`)
+
+        const config = {
+            params: {
+                ...query
+            }
+        }
+        let res = await axios.get(`${URL}/api/reports/getQuizReport/${id}`,config)
 
         if (res.data.errors) {
             dispatch({

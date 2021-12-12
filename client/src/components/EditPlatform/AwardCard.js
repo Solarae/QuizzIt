@@ -18,15 +18,17 @@ function AwardCard({ award, edit }) {
     );
 
     return (
-        <Card bg="white" style={{ width: "220px" }} >
-            {edit && <i className="bi bi-pencil-square position-absolute top-0 start-100 translate-middle" style={{ fontSize: "1.3rem", cursor:"pointer" }} onClick={() => { setShowEdit(true) }}></i>}
-            <Card.Img variant="top" src={award.icon} style={{ width: "220px", height: "175px", background: "transparent" }} />
-            <Card.Footer className="text-center bg-light" >
-                <small className="text-muted text-center">{award.title}</small>
-            </Card.Footer>
+        <OverlayTrigger placement="bottom" overlay={popover}>
+            <Card bg="white" style={{ width: "220px" }} >
+                {edit && <i className="bi bi-pencil-square position-absolute top-0 start-100 translate-middle" style={{ fontSize: "1.3rem", cursor: "pointer" }} onClick={() => { setShowEdit(true) }}></i>}
+                <Card.Img variant="top" src={award.icon} style={{ width: "220px", height: "175px", background: "transparent" }} />
+                <Card.Footer className="text-center bg-light" >
+                    <small className="text-muted text-center">{award.title}</small>
+                </Card.Footer>
 
-            {edit && <EditAward award={award} show={showEdit} handleClose={() => { setShowEdit(false) }}></EditAward>}
-        </Card>
+                <EditAward award={award} show={showEdit} handleClose={() => { setShowEdit(false) }}></EditAward>
+            </Card>
+        </OverlayTrigger>
     )
 }
 export default AwardCard;

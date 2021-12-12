@@ -11,7 +11,7 @@ function ReviewSubmission() {
     const {id} = useParams()
     const submission = useSelector((state)=>state.submission.submission)
 
-    const isGetSubmissionLoading = useSelector((state)=> state.submission.isGetSubmissionLoading)
+    const isGetSubmissionLoading = useSelector((state)=> state.submission.isGetSubmissonLoadingSingle)
 
     //fetch the submission id
     useEffect(()=>{
@@ -25,10 +25,10 @@ function ReviewSubmission() {
             }))
     },[dispatch,user])
 
-    if (isGetSubmissionLoading) {
+    if (isGetSubmissionLoading || submission==null) {
         return ( <div> Loading... </div> )
     }
-
+    console.log(submission)
     return(
         <>
             <h2>Your score:{submission.score}/{submission.quizId.questions.length}</h2>
@@ -57,7 +57,6 @@ function ReviewSubmission() {
         </>
 
     )
-
 
 }
 

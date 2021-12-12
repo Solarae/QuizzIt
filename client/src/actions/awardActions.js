@@ -191,7 +191,7 @@ export const getAwards = (query) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_AWARDS_FAIL,
-            payload: error.response.data
+            payload: {...error.response.data, awards: []}
         })
     }
 }

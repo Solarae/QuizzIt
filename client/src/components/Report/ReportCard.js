@@ -5,11 +5,11 @@ import { deletePlatform } from '../../actions/platformActions';
 import { URL } from '../../config';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router';
-import { deletePlatformReport } from '../../actions/reportActions';
+import { deletePlatformReport, deleteQuizReport } from '../../actions/reportActions';
 import DeletePlatform from './DeletePlatform';
 import DeleteQuizModal from '../Quiz/Modal/deleteQuizModal';
 
-function ReportCard({ user, report }) {
+function ReportCard({ user, report,page }) {
 
 
     const [showDelete, setShowDelete] = useState(false);
@@ -21,14 +21,37 @@ function ReportCard({ user, report }) {
 
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
-        dispatch(deletePlatformReport({
-            id:report._id
+        dispatch(deleteQuizReport({
+            id:report._id,
+            query:{
+                userId: user.id,
+                expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                sort: 'timeSubmitted desc',
+                offset: 10 * (page - 1),
+                limit: 10
+            }
         }))
+    }
+
+    const handleDeletePlatformReport = async (e) =>{
+        dispatch(deletePlatformReport({
+                    id:report._id,
+                    query:{
+                        userId: user.id,
+                        expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                        sort: 'timeSubmitted desc',
+                        offset: 10 * (page - 1),
+                        limit: 10
+                    }
+                }
+        ))
+
+
     }
     
 
 
-    if(report.quizId){
+    if(report.type=="quizReport"){
         return(
             <Card style={{ width: "70vw" }} >
                 <Card.Header>Quiz Reported : {report.quizId.name}  </Card.Header>
@@ -40,7 +63,7 @@ function ReportCard({ user, report }) {
                     <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
                     {/* <Button variant="danger" onClick={handleShowDelete}> Delete Quiz </Button>  */}
                     <Button variant="danger" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete Quiz</Button>
-                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={report.quizId} />
+                    <DeleteQuizModal user={user} page={page} show={deleteModal} setShow = {setDeleteModal} quiz={report.quizId} />
                     
                     
 
@@ -60,9 +83,9 @@ function ReportCard({ user, report }) {
                 <Card.Title style={{fontSize: "16pt"}}>{report.description}</Card.Title>
 
                 
-                <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
+                <Button variant="warning" onClick={handleDeletePlatformReport}> Delete Report </Button> {' '}  
                 <Button variant="danger" onClick={handleShowDelete}> Delete Platform </Button>  
-                <DeletePlatform id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
+                <DeletePlatform page={page} id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
                 
                 
 

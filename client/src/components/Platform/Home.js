@@ -23,7 +23,7 @@ function Home() {
                 limit: 4 * page
             }
         ))
-    }, [sort, page, dispatch]);
+    }, [sort, page, platform, dispatch]);
     
     const showMoreQuizzes = () => {
         if (page < pages)
@@ -52,11 +52,14 @@ function Home() {
                 (
                     <div>
                         <Row xs={1} md={4} className="g-4 me-auto">
-                            {quizzes.map((quiz, idx) => (
-                                <Col align="center">
-                                    <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
-                                </Col>
-                            ))}
+                        {quizzes.map((quiz, idx) => (
+                            <Col align="center">
+                                <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
+                            </Col>
+                        ))}
+                        </Row>
+                        <Row >
+                            {page < pages && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
                         </Row>
                     </div>
                 )

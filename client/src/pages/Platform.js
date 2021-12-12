@@ -14,8 +14,6 @@ import { useParams } from 'react-router-dom'
 function Platform() {
     const dispatch = useDispatch()
     const platform = useSelector((state) => state.platforms.platform)
-    const quizzesData = useSelector((state) => state.platforms.quizzesData)
-    const awardsData = useSelector((state) => state.platforms.awardsData)
     const memberList = useSelector((state) => state.platforms.memberList)
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
     const isEditRoleLoading = useSelector((state) => state.platforms.isEditRoleLoading)
@@ -75,8 +73,8 @@ function Platform() {
                             </Row>
                         </Container>
 
-                        {tab === 'home' && <Home quizzesData={quizzesData}></Home>}
-                        {tab === 'awards' && (awardsData.length!==0 ? <AwardSection showEdit={false} awardsData={awardsData}></AwardSection> : <Col align='center'><br/><p>This platform does not have any awards</p></Col>)}
+                        {tab === 'home' && <Home ></Home>}
+                        {tab === 'awards' &&  <AwardSection showEdit={false} ></AwardSection>}
                         {tab === 'memberlist' && <MemberList platform={platform} memberList={memberList}></MemberList>}
 
                     </div>

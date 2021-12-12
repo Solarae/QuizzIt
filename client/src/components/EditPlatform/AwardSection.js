@@ -24,7 +24,7 @@ function AwardSection({edit}) {
                 limit: 4 * page
             }
         ))
-    }, [page, dispatch]);
+    }, [page, platform, dispatch]);
     
     const showMoreAwards = () => {
         if (page < pages)
@@ -45,7 +45,7 @@ function AwardSection({edit}) {
                 </Col>}
                 {awards.map((award, idx) => (
                     <Col align="center">
-                        <AwardCard award={award} edit={true}></AwardCard>
+                        <AwardCard award={award} edit={edit}></AwardCard>
                     </Col>
                 ))}
             </Row>

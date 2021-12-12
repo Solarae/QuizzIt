@@ -85,11 +85,12 @@ export const getProfile = ({ id }) => async (dispatch) => {
             let likedQuizzes = []
             config.params = {
                 'likes.likedBy': user._id,
-                'expand' : "platformId(select=name,icon)",
+                'expand': "platformId(select=name,icon)",
             }
             res = await axios.get(`${URL}/api/quizzes/`, config);
-            if (res.data.errors) dispatch({type: GET_PROFILE_FAIL, payload: res.data})
-            likedQuizzes = res.data.quizzes
+            if (!res.data.errors) {
+                likedQuizzes = res.data.quizzes
+            }
 
             let awards = []
             for (const aid of user.awards) {
@@ -446,7 +447,7 @@ export const uploadImage = (id, image) => async (dispatch) => {
         const formData = new FormData()
         formData.append('image', image)
 
-        const res = await axios.post(`${URL}/api/users/${id}/upload`, formData); 
+        const res = await axios.post(`${URL}/api/users/${id}/upload`, formData);
         dispatch({
             type: EDIT_PROFILE_SUCCESS,
             payload: res.data

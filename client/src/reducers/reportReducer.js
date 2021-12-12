@@ -6,6 +6,8 @@ import { DELETE_REPORT_FAIL, DELETE_REPORT_SUCCESS, GET_PLATFORM_REPORT_FAIL, GE
 const initialState = {
     report:null,
     isLoading:true,
+    page: 0,
+    pages: 1,
 }
 
 
