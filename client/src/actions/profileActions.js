@@ -48,90 +48,112 @@ export const getProfile = ({ id }) => async (dispatch) => {
             limit: 1
         }
     }
+
+    let res = null;
     try {
         dispatch({
             type: GET_PROFILE_REQ
         });
-        let res = await axios.get(`${URL}/api/users/`, config);
+        res = await axios.get(`${URL}/api/users/`, config);
 
-        if (res.data.errors) {
-            dispatch({
-                type: GET_PROFILE_FAIL,
-                payload: res.data
-            })
-        }
-        else {
-            if (res.data.users.length !== 1) {
-                dispatch({
-                    type: GET_PROFILE_FAIL,
-                    payload: res.data
-                })
-            }
-            const user = res.data.users[0]
-
-            // get subscribedPlatforms, likedQuizzes, awards, createdPlatforms
-            let subscribedPlatforms = []
-            config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    'subscribers.userId': user._id
-                }
-            }
-            res = await axios.get(`${URL}/api/platforms`, config);
-            if (!res.data.errors) {
-                subscribedPlatforms = res.data.platforms
-            }
-
-            let likedQuizzes = []
-            config.params = {
-                'likes.likedBy': user._id,
-                'expand': "platformId(select=name,icon)",
-            }
-            res = await axios.get(`${URL}/api/quizzes/`, config);
-            if (!res.data.errors) {
-                likedQuizzes = res.data.quizzes
-            }
-
-            let awards = []
-            for (const aid of user.awards) {
-                res = await axios.get(`${URL}/api/awards/${aid}`,);
-                if (!res.data.errors) {
-                    awards.push(res.data.award)
-                }
-            }
-
-            let createdPlatforms = []
-            config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    'owner': user._id
-                }
-            }
-            res = await axios.get(`${URL}/api/platforms`, config);
-            if (!res.data.errors) {
-                createdPlatforms = res.data.platforms
-            }
-
-            dispatch({
-                type: GET_PROFILE_SUCCESS,
-                payload: {
-                    profile: user,
-                    subscribedPlatforms: subscribedPlatforms,
-                    likedQuizzes: likedQuizzes,
-                    awards: awards,
-                    createdPlatforms: createdPlatforms
-                }
-            });
-        }
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_PROFILE_FAIL
         })
+    }
+
+    if (res.data.errors) {
+        dispatch({
+            type: GET_PROFILE_FAIL,
+            payload: res.data
+        })
+    }
+    else {
+        if (res.data.users.length !== 1) {
+            dispatch({
+                type: GET_PROFILE_FAIL,
+                payload: res.data
+            })
+        }
+        const user = res.data.users[0]
+
+        // get subscribedPlatforms, likedQuizzes, awards, createdPlatforms
+        let subscribedPlatforms = []
+        config = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params: {
+                'subscribers.userId': user._id
+            }
+        }
+        try {
+            res = await axios.get(`${URL}/api/platforms`, config);
+            if (!res.data.errors) {
+                subscribedPlatforms = res.data.platforms
+            }
+        } catch (error) {
+            subscribedPlatforms = []
+        }
+
+        let likedQuizzes = []
+        config.params = {
+            'likes.likedBy': user._id,
+            'expand': "platformId(select=name,icon)",
+        }
+        try {
+            res = await axios.get(`${URL}/api/quizzes/`, config);
+            if (!res.data.errors) {
+                likedQuizzes = res.data.quizzes
+            }
+
+        } catch (error) {
+            likedQuizzes = []
+        }
+
+        let awards = []
+        for (const aid of user.awards) {
+            try {
+                res = await axios.get(`${URL}/api/awards/${aid}`,);
+                if (!res.data.errors) {
+                    awards.push(res.data.award)
+                }
+
+            } catch (error) {
+                //do nothing 
+            }
+        }
+
+        let createdPlatforms = []
+        config = {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            params: {
+                'owner': user._id
+            }
+        }
+        try {
+            res = await axios.get(`${URL}/api/platforms`, config);
+            if (!res.data.errors) {
+                createdPlatforms = res.data.platforms
+            }
+
+        } catch (error){
+            createdPlatforms = [] 
+        }
+
+        dispatch({
+            type: GET_PROFILE_SUCCESS,
+            payload: {
+                profile: user,
+                subscribedPlatforms: subscribedPlatforms,
+                likedQuizzes: likedQuizzes,
+                awards: awards,
+                createdPlatforms: createdPlatforms
+            }
+        });
     }
 
 }

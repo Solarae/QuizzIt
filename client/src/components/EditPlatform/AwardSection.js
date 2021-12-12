@@ -31,7 +31,7 @@ function AwardSection({edit}) {
         if (page < pages)
             setPage(page + 1)
     }
-    if (isGetAwardsLoading && !awards) {
+    if (isGetAwardsLoading || !awards) {
         return (
             <Loading />
         )
