@@ -1,92 +1,126 @@
-import React, { useState } from 'react'
-import { Container, Form, Button, Row, Col, InputGroup, FormControl } from 'react-bootstrap'
-import { useSelector } from 'react-redux'
+import React, { useState, useEffect } from 'react'
+import { Container, Form, Button, Row, Col, InputGroup, FormControl, OverlayTrigger, Image, Tooltip } from 'react-bootstrap'
+import { useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router-dom'
 
-import EditProfile from '../components/Profile/EditProfile';
-import DeleteProfile from '../components/Profile/DeleteProfile';
+import Banner from '../components/Profile/Banner';
+import PlatformCard from '../components/Home/PlatformCard'
+import QuizCardMini from '../components/Cards/QuizCardMini'
+
+import { getProfile } from '../actions/profileActions'
 
 function Profile() {
+    const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
+    const { profile, subscribedPlatforms, likedQuizzes, awards, createdPlatforms, isGetProfileLoading } = useSelector((state) => state.profile)
 
-    const [showUsernameModal, setShowUsernameModal] = useState(false);
-    const handleCloseUsernameModal = () => { setShowUsernameModal(false) };
-    const handleShowUsernameModal = () => { setShowUsernameModal(true) };
+    let { id } = useParams();  // get the user ID from the url
 
-    const [showEmailModal, setShowEmailModal] = useState(false);
-    const handleCloseEmailModal = () => { setShowEmailModal(false) };
-    const handleShowEmailModal = () => { setShowEmailModal(true) };
+    useEffect(() => {
+        dispatch(getProfile({
+            id: id
+        }))
+    }, [id, dispatch]);
 
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
-    const handleClosePasswordModal = () => { setShowPasswordModal(false) };
-    const handleShowPasswordModal = () => { setShowPasswordModal(true) };
-
-    const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const handleCloseDeleteModal = () => { setShowDeleteModal(false) };
-    const handleShowDeleteModal = () => { setShowDeleteModal(true) };
-
-    if(!auth.user){
+    if (isGetProfileLoading || !profile) {
         return (
             <div>Loading...</div>
         )
     }
 
-
-
     return (
-        <Container>
-            <h2 className='text-center m-3'>{auth.user.username}'s Profile page</h2>
-            <Row className="justify-content-md-center">
-                <Col md={4}>
-                    <Form.Label>Username</Form.Label>
-                    <InputGroup className="mb-3">
+        <div className="justify-content-between">
+            <Banner user={profile}></Banner>
 
-                        <FormControl
-                            placeholder={auth.user.username}
-                            aria-label="username"
-                            readOnly
-                        />
-                        <Button onClick={handleShowUsernameModal} variant="outline-primary">Edit</Button>
-                    </InputGroup>
-                </Col>
-            </Row>
+            <div style={{ height: "80px" }}></div>
 
-            <Row className="justify-content-md-center">
-                <Col md={4}>
-                    <Form.Label>Email Address</Form.Label>
-                    <InputGroup className="mb-3">
+            <div >
+                <div className="row">
+                    <div className="col-9" style={{}}>
+                        <Container>
+                            <Row className="">
+                                <Col xs lg="6">
+                                    <h5><i class="bi bi-hand-thumbs-up-fill"></i> Subscribed Platforms</h5>
+                                </Col>
+                            </Row>
 
-                        <FormControl
-                            placeholder={auth.user.email}
-                            aria-label="email"
-                            readOnly
-                        />
-                        <Button onClick={handleShowEmailModal} variant="outline-primary">Edit</Button>
-                    </InputGroup>
-                </Col>
-            </Row>
+                            <Row xs={1} md={4} className="g-4 me-auto">
+                                {(!subscribedPlatforms || subscribedPlatforms.length === 0) && <p>No Subscribed Platforms</p>}
+                                {subscribedPlatforms && subscribedPlatforms.map((p, idx) => (
 
-            <br />
+                                    <Col align="center">
+                                        <PlatformCard platform={p} showSubscribe={false}></PlatformCard>
+                                    </Col>
+                                ))}
+                            </Row>
 
-            <Row className="justify-content-md-center">
-                <Col md={4}>
-                    <Button onClick={handleShowPasswordModal} variant="outline-primary">Edit Password</Button>
-                </Col>
-            </Row>
+                            <hr />
 
-            <br />
+                            <Row className="">
+                                <h5><i class="bi bi-hand-thumbs-up-fill"></i> Liked Quizzes</h5>
+                            </Row>
+                            <Row xs={1} md={4} className="g-4 me-auto">
+                                {(!likedQuizzes || likedQuizzes.length === 0) && <p>No Liked Quizzes</p>}
+                                {likedQuizzes && likedQuizzes.map((q, idx) => (
 
-            <Row className="justify-content-md-center">
-                <Col md={4}>
-                    <Button onClick={handleShowDeleteModal} variant="outline-danger">Delete Profile</Button>
-                </Col>
-            </Row>
+                                    <Col align="center">
+                                        <QuizCardMini quiz={q}></QuizCardMini>
+                                    </Col>
+                                ))}
+                            </Row>
 
-            <EditProfile type="Username" show={showUsernameModal} handleClose={handleCloseUsernameModal}></EditProfile>
-            <EditProfile type="Email" show={showEmailModal} handleClose={handleCloseEmailModal}></EditProfile>
-            <EditProfile type="Password" show={showPasswordModal} handleClose={handleClosePasswordModal}></EditProfile>
-            <DeleteProfile show={showDeleteModal} handleClose={handleCloseDeleteModal}></DeleteProfile>
+                        </Container>
 
-        </Container>
+                    </div>
+                    <div className="col" style={{}}>
+                        <Row>
+                            <Col align="center">
+                                <h3>Awards</h3>
+                            </Col>
+                        </Row>
+                        <Row xs={1} md={3} align='center' className="justify-content-center">
+                            {(!awards || awards.length === 0) && <p>No Awards</p>}
+                            {awards && awards.map((a, idx) => (
+                                <Col align='center' style={{ marginBottom: "10px" }}>
+                                    <OverlayTrigger
+                                        placement="bottom"
+                                        overlay={<Tooltip id="button-tooltip-2">{a.title}</Tooltip>}
+                                    >
+                                        {({ ref, ...triggerHandler }) => (
+                                            <Image
+                                                ref={ref}
+                                                rounded
+                                                style={{ width: '50px', height: '50px' }}
+                                                src={a.icon}
+                                                {...triggerHandler}
+                                            />
+                                        )}
+                                    </OverlayTrigger>
+                                </Col>
+                            ))}
+                        </Row>
+
+                        <Row>
+                            <Col align="center" >
+                                <h3 >Created Platforms</h3>
+                            </Col>
+                        </Row>
+                        <Row xs={1} md={1} align='center'>
+                            {(!createdPlatforms || createdPlatforms.length === 0) && <p>No created platforms</p>}
+                            {createdPlatforms && createdPlatforms.map((p, idx) => (
+                                <span>
+                                    <Col align='center' style={{ width: '50%', marginBottom: "10px" }}>
+                                        <PlatformCard platform={p} showSubscribe={false}></PlatformCard>
+                                    </Col>
+                                    <div class="w-100"></div>
+                                </span>
+                            ))}
+                        </Row>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     )
 }
 export default Profile

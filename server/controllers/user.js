@@ -40,6 +40,7 @@ export const signin = async (req, res) => {
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
+                icon: user.icon,
                 token
             }
         })
@@ -51,7 +52,7 @@ export const signin = async (req, res) => {
 export const tokenSignin = async (req, res) => {
     const { userToken } = req.body;
     const errors = {}
-            
+
     try {
         const decodedToken= jwtDecode(userToken)
         const user = await User.findById(decodedToken.user.id)
@@ -67,6 +68,7 @@ export const tokenSignin = async (req, res) => {
             token,
             user: {
                 id: user._id,
+                icon: user.icon,
                 username: user.username,
                 email: user.email,
                 likes: user.likes,
@@ -183,6 +185,7 @@ export const editAccount = async (req, res) => {
             success: true,
             user: {
                 id: newUser._id,
+                icon: newUser.icon,
                 username: newUser.username,
                 email: newUser.email,
                 likes: newUser.likes,
@@ -442,6 +445,7 @@ export const updateUser = async (req, res) => {
             {
                 user: {
                     id: updatedUser._id,
+                    icon: updatedUser.icon,
                     username: updatedUser.username,
                     email: updatedUser.email,
                     likes: updatedUser.likes,
@@ -461,12 +465,21 @@ export const uploadImage = async (req, res) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id, 
-            { $set: { thumbnail: cloud.secure_url, thumbnail_cloud_id: cloud.public_id } }, 
+            { $set: { icon: cloud.secure_url, icon_cloud_id: cloud.public_id } }, 
             { new: true }
         );
         if (!updatedUser) return res.status(200).json({ msg: "Something went wrong with updating quiz" });
 
-        res.status(200).json({ user: updatedUser });
+        res.status(200).json({
+            user: {
+                id: updatedUser._id,
+                icon: updatedUser.icon,
+                username: updatedUser.username,
+                email: updatedUser.email,
+                likes: updatedUser.likes,
+                friends: updatedUser.friends
+            }
+        });
     } catch (error) {
         console.log(error)
         res.status(404).json({ msg: error.message })

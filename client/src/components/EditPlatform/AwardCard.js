@@ -1,9 +1,21 @@
 import React, { useState } from 'react'
-import { Card } from 'react-bootstrap';
+import { Card, Popover, OverlayTrigger } from 'react-bootstrap';
 import EditAward from './EditAward.js'
 
 function AwardCard({ award, edit }) {
     const [showEdit, setShowEdit] = useState(false);
+
+    const popover = (showEditControls ? <span></span> :
+        <Popover id="popover-basic">
+            <Popover.Header as="h3">Description</Popover.Header>
+            <Popover.Body>
+                {award.description}
+                <hr />
+                <span className="text-muted">Requirement: {award.requirementCount + ' ' + (award.requirementType === 'Point' ? "Points" : "Quizzes")}</span>
+            </Popover.Body>
+        </Popover>
+
+    );
 
     return (
         <Card bg="white" style={{ width: "220px" }} >
