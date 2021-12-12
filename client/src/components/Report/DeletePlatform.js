@@ -14,7 +14,7 @@ function usePrevious(value) {
     return ref.current;
 }
 
-function DeletePlatform({ show, handleClose,id }) {
+function DeletePlatform({ show, handleClose,id,page }) {
     //   const context = useContext(AuthContext);
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch()
@@ -24,7 +24,7 @@ function DeletePlatform({ show, handleClose,id }) {
     const platformErrors = useSelector((state) => state.platforms.errors);
     const isDeleteLoading = useSelector((state) => state.platforms.isDeleteLoading)
     const prev_isDeleteLoading = usePrevious(isDeleteLoading)
-
+    const user = useSelector((state) => state.auth.user)
     const [values, setValues] = useState({
         password: "",
     });
@@ -65,6 +65,13 @@ function DeletePlatform({ show, handleClose,id }) {
                 userId: auth.user.id,
                 platformId: id,
                 confirmPassword: values.password,
+                query:{
+                    userId: user.id,
+                    expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                    sort: 'timeSubmitted desc',
+                    offset: 10 * (page - 1),
+                    limit: 10
+                }
             }
         ))
 

@@ -14,7 +14,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         option4: question.choices[3],
         answer: question.answer
     });
-    
+    const [optionState,setOptionState] = useState(question.answer)
     const closeModal = (err) => {
         if (err) {
             setErrors({ ...err })
@@ -54,7 +54,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                 _id: question._id, 
                 question: values.question, 
                 choices: optionValues, 
-                answer: values.answer
+                answer: optionState
             }, 
             callback: closeModal 
         }))
@@ -84,7 +84,12 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                         {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control type="text" defaultValue={values.answer} name="answer" onChange={onChange} />
+                        <Form.Control as="select" value={optionState} onChange={e=> setOptionState(e.target.value)}>
+                            <option value="a">Option 1</option>
+                            <option value="b">Option 2</option>
+                            <option value="c">Option 3</option>
+                            <option value="d">Option 4</option>
+                        </Form.Control>
                     </Form.Group>
                 </Modal.Body>
                 {Object.keys(errors).length > 0 && (

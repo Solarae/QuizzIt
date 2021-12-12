@@ -3,6 +3,7 @@ import User from '../models/User.js'
 import Platform from "../models/Platform.js"
 import { uploadImgToCloud, queryBuilder, paginateQuery, recaclulateScore } from "./util.js";
 import mongoose from 'mongoose'
+import Submission from "../models/Submission.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 export const createQuiz = async (req,res) =>{
@@ -63,19 +64,26 @@ export const getPlatformQuiz = async (req,res) =>{
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
     try {
+        console.log("ewioghoiweGOIWEGOIGEWGEWHOIGEWHOIEWGHIEWGHIOEW")
         console.log(quizId)
         let quiz = await Quiz.findById(quizId)
 
         if(!quiz) return res.status(500).json({message:"Quiz not found"})
 
-        await Platform.findByIdAndUpdate(platformId, { $inc: { 'quizCount': -1 } })
-    
+        await Platform.findByIdAndUpdate(quiz.platformId, { $inc: { 'quizCount': -1 } })
+        
+
+        //delete the submission that has the quiz
+        await Submission.deleteMany({quizId:quizId})
+
+
         //delete the quiz
         await quiz.remove()
 
         res.status(200).json({message:"Success"})
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({message:error.message})
     }
 
