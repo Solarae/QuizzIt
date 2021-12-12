@@ -389,15 +389,13 @@ export const receiveFriendRequest = (friendRequest) => (dispatch) => {
     })
 }
 
-export const getFriends = (id, page) => async (dispatch) => {
+export const getFriends = ({ id, query }) => async (dispatch) => {
     const config = {
         params: {
-            offset: 10 * (page - 1),
-            limit: 10
+           ...query
         }
     }
-    console.log(page)
-
+    
     dispatch({
         type: GET_FRIENDS_REQ
     })
@@ -421,7 +419,7 @@ export const getFriends = (id, page) => async (dispatch) => {
     }
 }
 
-export const unfriend = (id, userId) => async (dispatch) => {
+export const unfriend = ({ id, userId }) => async (dispatch) => {
     console.log(id)
     try {
         const res = await axios.post(`${URL}/api/users/${id}/friends/${userId}/unfriend`)
@@ -436,6 +434,7 @@ export const unfriend = (id, userId) => async (dispatch) => {
                 type: UNFRIEND_SUCCESS,
                 payload: res.data
             })
+            
         }
     } catch (error) {
         console.log("error message: " + error.message);

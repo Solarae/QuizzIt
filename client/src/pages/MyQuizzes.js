@@ -39,7 +39,7 @@ function MyQuizzes() {
         
     }, [search, dispatch]);
 
-    if (isSearchQuizLoading) {
+    if (isSearchQuizLoading && !quizzes) {
         return (<div>Loading...</div>)
     }
 
