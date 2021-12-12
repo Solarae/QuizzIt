@@ -100,6 +100,15 @@ function EditAward({ award, show, handleClose }) {
 
     const handleSubmit = ((e) => {
         e.preventDefault();
+
+        if (values.title==="" || values.description==="" || values.requirementCount===""){
+            setErrors({
+                'Empty Fields': "Fields must not be empty"
+            })
+            return
+        }
+        
+        
         dispatch(editAward(
             {
                 awardId: award._id,

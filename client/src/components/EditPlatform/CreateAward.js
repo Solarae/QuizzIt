@@ -75,6 +75,14 @@ function CreateAward({ show, handleClose }) {
 
     const handleSubmit = ((e) => {
         e.preventDefault();
+
+        if (values.title==="" || values.description==="" || !values.iconImage || values.requirementCount===""){
+            setErrors({
+                'Empty Fields': "Fields must not be empty"
+            })
+            return
+        }
+        
         dispatch(createAward(
             {
                 userId: auth.user.id,
