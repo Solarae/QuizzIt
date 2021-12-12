@@ -9,6 +9,7 @@ import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import Report from './Report.js'
 import Subscribe from '../Button/Subscribe';
+import CreateQuiz from '../EditPlatform/CreateQuiz'
 
 function Banner({ platform }) {
     const dispatch = useDispatch()
@@ -32,6 +33,8 @@ function Banner({ platform }) {
         }
         setShowReport(true)
     };
+
+    const [showCreateQuiz, setShowCreateQuiz] = useState(false);
 
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
@@ -62,6 +65,8 @@ function Banner({ platform }) {
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" style={{marginRight: "10px"}} >Edit</Button></Link> : <span></span>}
                                     <Subscribe platform={platform} />
+                                    <Button onClick={() => { setShowCreateQuiz(true) }} >Create Quiz</Button>
+                                    <CreateQuiz show={showCreateQuiz} handleClose={() => { setShowCreateQuiz(false) }}></CreateQuiz>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"
                                             ref={targetTooltip}

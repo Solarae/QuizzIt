@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
         default: 'User'
     },
     icon: {
-        type: String 
+        type: String
     },
     icon_cloud_id: {
         type: String

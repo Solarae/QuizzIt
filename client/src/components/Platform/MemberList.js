@@ -47,7 +47,7 @@ function MemberList({ platform }) {
                 </thead>
                 <tbody>
                     { memberList.sort(compareMember).map((m, index) =>
-                                <tr>
+                                <tr key={m._id}>
                                     <td>{(page - 1) * 10 + index +1}</td>
                                     <td>
                                         {m.userId.username}

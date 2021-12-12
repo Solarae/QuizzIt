@@ -2,8 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { editAward, deleteAward } from '../../actions/awardActions.js'
-import { getPlatform } from '../../actions/platformActions.js'
+import { editAward, deleteAward, getAwards } from '../../actions/awardActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -22,6 +21,7 @@ function EditAward({ award, show, handleClose }) {
     const history = useHistory()
 
     const awardErrors = useSelector((state) => state.awards.errors);
+    const platform = useSelector ((state)=> state.platforms.platform) 
     const isEditLoading = useSelector((state) => state.awards.isEditLoading)
     const prev_isEditLoading = usePrevious(isEditLoading)
 
@@ -69,11 +69,16 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal 
         handleClose();
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
 
-        // do a new getplatform request so that the editPlatform page displays the newly edited award
-        dispatch(getPlatform({
-            id: id
-        }))
+        
     }, [isEditLoading, history, handleClose]);
 
     // waits for DELETE AWARD request to update redux store 
@@ -88,14 +93,18 @@ function EditAward({ award, show, handleClose }) {
             setErrors({ ...awardErrors });
             return;
         }
-
+        
         // close the modal
         handleClose();
-
-        // do a new getplatform request so that the editPlatform page doesn't display the award anymore 
-        dispatch(getPlatform({
-            id: id
-        }))
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
+        
     }, [isDeleteLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
@@ -120,6 +129,7 @@ function EditAward({ award, show, handleClose }) {
                 requirementCount: Number(values.requirementCount)
             }
         ));
+        
     })
 
     const handleDelete = ((e) => {

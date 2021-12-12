@@ -7,7 +7,11 @@ import {
     EDIT_AWARD_FAIL,
     DELETE_AWARD_REQ,
     DELETE_AWARD_SUCCESS,
-    DELETE_AWARD_FAIL
+    DELETE_AWARD_FAIL,
+    GET_AWARDS_REQ,
+    GET_AWARDS_SUCCESS,
+    GET_AWARDS_FAIL,
+    SET_AWARD_PAGE
 } from '../actions/types'
 
 import axios from 'axios'
@@ -163,4 +167,38 @@ export const deleteAward = ({ userId, awardId }) => async (dispatch) => {
             type: DELETE_AWARD_FAIL
         })
     }
+}
+
+export const getAwards = (query) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+
+    console.log(query)
+    try {
+        dispatch({
+            type: GET_AWARDS_REQ
+        })
+        const res = await axios.get(`${URL}/api/awards`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_AWARDS_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_AWARDS_FAIL,
+            payload: {...error.response.data, awards: []}
+        })
+    }
+}
+
+export const setAwardPage = (page) => (dispatch) => {
+    dispatch({
+        type: SET_AWARD_PAGE,
+        payload: { awardPage: page }
+    })
 }

@@ -3,7 +3,6 @@ import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { createAward } from '../../actions/awardActions.js'
-import { getPlatform } from '../../actions/platformActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -67,10 +66,6 @@ function CreateAward({ show, handleClose }) {
         // close the modal
         handleClose();
 
-        // do a new getplatform request so that the editPlatform page displays the newly created award
-        dispatch(getPlatform({
-            id: id
-        }))
     }, [isCreateLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {

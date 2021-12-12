@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Banner from '../components/Platform/Banner.js'
 import Settings from '../components/EditPlatform/Settings.js'
 import AwardSection from '../components/EditPlatform/AwardSection.js'
-import QuizSection from '../components/EditPlatform/QuizSection.js'
+
 import NotFound from '../components/NotFound.js'
 import { getPlatform } from '../actions/platformActions'
 
@@ -14,8 +14,7 @@ function EditPlatform() {
     const [errors, setErrors] = useState({});
     const user = useSelector((state) => state.auth.user)
     const platform = useSelector((state) => state.platforms.platform)
-    const quizzesData = useSelector((state) => state.platforms.quizzesData)
-    const awardsData = useSelector((state) => state.platforms.awardsData)
+  
     const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
 
     let { id } = useParams();  // get the platform ID from the url
@@ -43,9 +42,8 @@ function EditPlatform() {
 
             <div >
                 <h2 className='text-center m-3'>Platform Edit page</h2>
-                <QuizSection quizzesData={quizzesData}></QuizSection>
                 <hr/>
-                <AwardSection awardsData={awardsData}></AwardSection>
+                <AwardSection edit={true}></AwardSection>
                 <hr/>
                 <Settings platform={platform}></Settings>
             </div>
