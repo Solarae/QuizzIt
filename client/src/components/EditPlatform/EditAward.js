@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap';
+import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { editAward, deleteAward } from '../../actions/awardActions.js'
@@ -91,7 +91,7 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal
         handleClose();
-        
+
         // do a new getplatform request so that the editPlatform page doesn't display the award anymore 
         dispatch(getPlatform({
             id: id
@@ -143,8 +143,17 @@ function EditAward({ award, show, handleClose }) {
                         <Form.Control as="textarea" rows={3} type="text" defaultValue={award.description} name="description" onChange={onChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formPoints">
-                        <Form.Label>Points Requirement</Form.Label>
-                        <Form.Control type="number" defaultValue={award.requirementCount} name="requirementCount" onChange={onChange} />
+                        <Form.Label>Requirement</Form.Label>
+                        <Col xs={3}>
+                            <Form.Select size="sm" defaultValue={award.requirementType} name="requirementType" onChange={onChange}>
+                                <option value="Point">Points</option>
+                                <option value="Quiz">Quizzes</option>
+                            </Form.Select>
+                        </Col>
+                        <br></br>
+                        <Col align='end' xs={6} >
+                            <Form.Control type="number" defaultValue={award.requirementCount} name="requirementCount" onChange={onChange} />
+                        </Col>
                     </Form.Group>
                     <br />
                     <Button variant="outline-danger" type="" onClick={handleDelete}>
