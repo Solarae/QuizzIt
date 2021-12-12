@@ -9,7 +9,7 @@ import { deletePlatformReport, deleteQuizReport } from '../../actions/reportActi
 import DeletePlatform from './DeletePlatform';
 import DeleteQuizModal from '../Quiz/Modal/deleteQuizModal';
 
-function ReportCard({ user, report }) {
+function ReportCard({ user, report,page }) {
 
 
     const [showDelete, setShowDelete] = useState(false);
@@ -24,6 +24,22 @@ function ReportCard({ user, report }) {
         dispatch(deleteQuizReport({
             id:report._id
         }))
+    }
+
+    const handleDeletePlatformReport = async (e) =>{
+        dispatch(deletePlatformReport({
+                    id:report._id,
+                    query:{
+                        userId: user.id,
+                        expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                        sort: 'timeSubmitted desc',
+                        offset: 10 * (page - 1),
+                        limit: 10
+                    }
+                }
+        ))
+
+
     }
     
 
@@ -60,7 +76,7 @@ function ReportCard({ user, report }) {
                 <Card.Title style={{fontSize: "16pt"}}>{report.description}</Card.Title>
 
                 
-                <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
+                <Button variant="warning" onClick={handleDeletePlatformReport}> Delete Report </Button> {' '}  
                 <Button variant="danger" onClick={handleShowDelete}> Delete Platform </Button>  
                 <DeletePlatform id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
                 

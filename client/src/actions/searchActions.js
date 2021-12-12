@@ -96,7 +96,7 @@ export const searchQuiz = ({ query, page, limit }) => async (dispatch) => {
             });
         }
     } catch (error) {
-        console.log("error message: " + error.message);
+        console.log("error message: " + error);
         dispatch({
             type: SEARCH_QUIZ_FAIL
         })

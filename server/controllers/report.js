@@ -3,6 +3,7 @@ import Platform from '../models/Platform.js'
 import User from '../models/User.js'
 import bcrypt from "bcryptjs";
 import Quiz from '../models/Quiz.js';
+import { paginateQuery, queryBuilder } from './util.js';
 
 export const reportPlatform = async (req,res) =>{
 
@@ -81,12 +82,24 @@ export const getReport = () =>{
 export const getPlatformReport =  async (req,res) =>{
 
     try {
-        let reports = await Report.find({type:"platformReport"}).populate("platformId").populate("submittedBy")
-        console.log(reports)
-        return res.status(200).json({report:reports})  
+        console.log(req.query)
+        var query = queryBuilder(null, req.query, Report)
+
+        const { q, page, pages, totalCount } = await paginateQuery(query, Report, req.query.limit, req.query.offset)
+
+        if (page > pages) 
+            return res.status(404).json({ msg: "Page doesn't exist" })
+
+        const reports = await q
+        res.status(200).json({ 
+            report: reports,
+            page,
+            pages,
+            totalCount
+        });  
 
     } catch (error) {
-        
+        console.log(error)
         return res.status(500).json({message:error.message})
     }
 
@@ -134,6 +147,7 @@ export const deleteReport = async(req,res) =>{
 
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({message:error.message})      
     }
 

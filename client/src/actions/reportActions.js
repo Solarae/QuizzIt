@@ -5,11 +5,13 @@ import { GET_PLATFORM_REPORT_FAIL, GET_PLATFORM_REPORT_SUCCESS ,DELETE_REPORT_SU
 
 
 
-export const getPlatformReport = () => async (dispatch) =>  {
-
-    let res = await axios.get(`${URL}/api/reports`)
-
-
+export const getPlatformReport = (query) => async (dispatch) =>  {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    let res = await axios.get(`${URL}/api/reports`,config)
     try {
         console.log(res.data)
         dispatch({
@@ -32,9 +34,15 @@ export const getPlatformReport = () => async (dispatch) =>  {
 }
 
 
-export const deletePlatformReport = ({id}) => async (dispatch) => {
-    let res = await axios.delete(`${URL}/api/reports/deleteReport/${id}`)
-
+export const deletePlatformReport = ({id,query}) => async (dispatch) => {
+    console.log(id)
+    await axios.delete(`${URL}/api/reports/deleteReport/${id}`)
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    let res = await axios.get(`${URL}/api/reports`,config)
 
     try {
         dispatch({

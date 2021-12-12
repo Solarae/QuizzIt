@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getOneSubmission, getSubmissions } from "../actions/submissionActions"
-import { Col, Container, ListGroup, Table } from "react-bootstrap"
+import { Col, Container, ListGroup, Table,Row } from "react-bootstrap"
 import { useParams } from "react-router"
 import axios from "axios"
 import { URL } from "../config"
 import SubmissionCard from "../components/Submission/SubmissionCard"
 import { getPlatformReport } from "../actions/reportActions"
 import ReportCard from "../components/Report/ReportCard"
+import Pagination from "../components/Pagination"
 
 
 function ViewPlatformReport() {
@@ -16,10 +17,11 @@ function ViewPlatformReport() {
 
     let user = useSelector((state)=> state.auth.user  )
     let reports = useSelector((state)=>state.report.report)
+    const pages = useSelector((state) => state.report.pages)
     
 
     let isLoading = useSelector((state)=> state.report.isLoading)
-
+    const [page, setPage] = useState(1)
 
 
     //fetch the reports that belong to the specified platform
@@ -30,17 +32,22 @@ function ViewPlatformReport() {
             if(user){
                 //check if user is admin
                 let res = await axios.get(`${URL}/api/users/checkIfAdmin/${user.id}`)
-
+                console.log("calling dispatch")
                 if (res.data && res.data.user){
-                    dispatch(getPlatformReport())
-                    console.log(reports)
+                    dispatch(getPlatformReport({
+                        userId: user.id,
+                        expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                        sort: 'timeSubmitted desc',
+                        offset: 10 * (page - 1),
+                        limit: 10,
+                    }))
                 }
             }
         }
 
         fetchData()
 
-    },[dispatch,user])
+    },[dispatch,user,page,pages])
 
 
     if (isLoading) {
@@ -49,6 +56,10 @@ function ViewPlatformReport() {
 
 
     console.log(reports)
+    console.log(pages)
+    console.log(page)
+
+
 
     return(
         <>
@@ -63,7 +74,7 @@ function ViewPlatformReport() {
                             return( 
                                 <>
                                     <Col>
-                                        <ReportCard user={user} report={report}  ></ReportCard>
+                                        <ReportCard page={page} user={user} report={report}  ></ReportCard>
                                     </Col>
                                 </>
                             )
@@ -72,7 +83,11 @@ function ViewPlatformReport() {
                     <h1>loading</h1>}
                     
                 </Col>
-
+                <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
+                    <Col>
+                        <Pagination page={page} pages={pages} changePage={setPage} />
+                    </Col>
+                </Row>
             </Container>
         </>
 
