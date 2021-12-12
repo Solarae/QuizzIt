@@ -8,6 +8,7 @@ import Platform from '../models/Platform.js'
 import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 import Quiz from "../models/Quiz.js";
 import Submission from "../models/Submission.js";
+import Award from "../models/Award.js";
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;

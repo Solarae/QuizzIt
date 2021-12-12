@@ -79,8 +79,8 @@ export const deleteQuizReport = ({id}) => async (dispatch) => {
 }
 
 
-export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>async(dispatch) =>{
-    const config = {
+export const deleteManyPlatformReport = ({platformId,userId,confirmPassword,query}) =>async(dispatch) =>{
+    let config = {
         headers: {
             'Content-Type': 'application/json'
         },
@@ -88,7 +88,13 @@ export const deleteManyPlatformReport = ({platformId,userId,confirmPassword}) =>
     const body = JSON.stringify({ userId, confirmPassword })
     
 
-    let res = await axios.post(`${URL}/api/reports/deleteManyPlatformReport/${platformId}`,body,config)   
+    await axios.post(`${URL}/api/reports/deleteManyPlatformReport/${platformId}`,body,config)  
+    config = {
+        params: {
+            ...query
+        }
+    }
+    let res = await axios.get(`${URL}/api/reports`,config) 
     console.log(res.data)
     try {
         dispatch({

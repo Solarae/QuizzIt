@@ -44,7 +44,7 @@ function ReportCard({ user, report,page }) {
     
 
 
-    if(report.quizId){
+    if(report.type=="quizReport"){
         return(
             <Card style={{ width: "70vw" }} >
                 <Card.Header>Quiz Reported : {report.quizId.name}  </Card.Header>
@@ -78,7 +78,7 @@ function ReportCard({ user, report,page }) {
                 
                 <Button variant="warning" onClick={handleDeletePlatformReport}> Delete Report </Button> {' '}  
                 <Button variant="danger" onClick={handleShowDelete}> Delete Platform </Button>  
-                <DeletePlatform id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
+                <DeletePlatform page={page} id={report.platformId._id} show={showDelete} handleClose={handleCloseDelete}></DeletePlatform>
                 
                 
 

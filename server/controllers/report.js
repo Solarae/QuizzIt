@@ -56,7 +56,8 @@ export const reportQuiz = async (req,res) =>{
             description: description,
             timeSubmitted: Date.now(),
             submittedBy:submittedBy,
-            type: "quizReport",    
+            type: "quizReport",  
+            platformId:quiz.platformId  
         })
     
     
@@ -83,12 +84,12 @@ export const getPlatformReport =  async (req,res) =>{
 
     try {
         console.log(req.query)
-        var query = queryBuilder(null, req.query, Report)
+        var query = queryBuilder(Report.find({type:"platformReport"}), req.query, Report)
 
         const { q, page, pages, totalCount } = await paginateQuery(query, Report, req.query.limit, req.query.offset)
-
-        if (page > pages) 
-            return res.status(404).json({ msg: "Page doesn't exist" })
+        console.log("page "+page+", pages "+pages)
+        // if (page > pages) 
+        //     return res.status(404).json({ msg: "Page doesn't exist" })
 
         const reports = await q
         res.status(200).json({ 

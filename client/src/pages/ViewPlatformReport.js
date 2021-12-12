@@ -69,16 +69,17 @@ function ViewPlatformReport() {
 
                 <Col xs={7} className="g-4">
                     {reports ? 
-                    
-                    reports.map( (report,idx) => {
-                            return( 
-                                <>
-                                    <Col>
-                                        <ReportCard page={page} user={user} report={report}  ></ReportCard>
-                                    </Col>
-                                </>
-                            )
-                    })
+                        reports.length>0 ?
+                            reports.map( (report,idx) => {
+                                    return( 
+                                        <>
+                                            <Col>
+                                                <ReportCard page={page} user={user} report={report}  ></ReportCard>
+                                            </Col>
+                                        </>
+                                    )
+                            }):
+                            <h1>No platform reports at this moment</h1>
                     :
                     <h1>loading</h1>}
                     
