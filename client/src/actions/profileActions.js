@@ -80,7 +80,9 @@ export const getProfile = ({ id }) => async (dispatch) => {
                 }
             }
             res = await axios.get(`${URL}/api/platforms`, config);
-            subscribedPlatforms = res.data.platforms
+            if (!res.data.errors) {
+                subscribedPlatforms = res.data.platforms
+            }
 
             let likedQuizzes = []
             config.params = {
@@ -110,7 +112,9 @@ export const getProfile = ({ id }) => async (dispatch) => {
                 }
             }
             res = await axios.get(`${URL}/api/platforms`, config);
-            createdPlatforms = res.data.platforms
+            if (!res.data.errors) {
+                createdPlatforms = res.data.platforms
+            }
 
             dispatch({
                 type: GET_PROFILE_SUCCESS,

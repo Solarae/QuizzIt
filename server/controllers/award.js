@@ -55,7 +55,7 @@ export const getAwardsByFilter = async (req, res) => {
         const { q, page, pages, totalCount } = await paginateQuery(query, Award, req.query.limit, req.query.offset)
 
         if (page > pages) 
-            return res.status(404).json({ msg: "Page doesn't exist" })
+            return res.status(200).json({ msg: "Page doesn't exist" })
         
         const awards = await q
 
