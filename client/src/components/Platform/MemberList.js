@@ -4,6 +4,7 @@ import { Table, Dropdown, Row, Col } from 'react-bootstrap';
 import RoleButton from './RoleButton.js'
 import Pagination from '../Pagination.js';
 import { getMemberList } from '../../actions/platformActions.js';
+import Loading from '../Loading'
 
 function MemberList({ platform }) {
     const dispatch = useDispatch()
@@ -22,7 +23,9 @@ function MemberList({ platform }) {
     }, [page, dispatch]);
     
     if (isGetMemberlistLoading) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
 
     const compareMember= (a, b) => {

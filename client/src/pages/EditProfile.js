@@ -8,6 +8,7 @@ import Banner from '../components/Profile/Banner';
 import EditProfileModal from '../components/Profile/EditProfile';
 import UploadImage from '../components/UploadImage';
 import DeleteProfile from '../components/Profile/DeleteProfile';
+import Loading from '../components/Loading'
 
 import { getProfile } from '../actions/profileActions'
 
@@ -47,7 +48,7 @@ function EditProfile() {
 
     if (!auth.user || isGetProfileLoading) {
         return (
-            <div>Loading...</div>
+            <Loading />
         )
     }
 

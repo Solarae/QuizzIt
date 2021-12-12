@@ -7,6 +7,7 @@ import { getPlatform } from '../../actions/platformActions';
 import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
 import EditQuizModal from "./Modal/editQuestionModal"
 import DeleteQuizModal from './Modal/deleteQuizModal';
+import Loading from '../Loading'
 
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
@@ -66,7 +67,9 @@ function Banner({ isEdit }) {
 
     const [showReportToast, setShowReportToast] = useState(false);
     if (isGetLoading || !platform) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
     
     const handleLike = () => {

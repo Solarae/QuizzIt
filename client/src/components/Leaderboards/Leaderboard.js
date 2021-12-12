@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Pagination from '../Pagination'
 import { useLocation, useHistory } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
+import Loading from '../Loading'
 
 function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPage, pages, errors, searchLeaderboard, getLeaderboard }) {
     const dispatch = useDispatch()
@@ -59,7 +60,7 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     }, [user, search, dispatch]);
 
     if (isGetLeaderboardLoading) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
 
     if (errors)

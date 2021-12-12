@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import PlatformCard from '../components/Home/PlatformCard'
 import QuizCardMini from '../components/Cards/QuizCardMini'
 import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard'
+import Loading from '../components/Loading'
 
 import { searchPlatform, searchQuiz } from '../actions/searchActions.js'
 import { getLeaderboard } from '../actions/globalActions.js'
@@ -74,7 +75,7 @@ function Home() {
     
 
     if (isSearchPlatformLoading || isSearchQuizLoading || !platforms || !quizzes) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
 
     return (

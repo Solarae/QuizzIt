@@ -4,6 +4,7 @@ import { Container, Row, Col, Button } from 'react-bootstrap';
 import AwardCard from './AwardCard.js'
 import CreateAward from './CreateAward.js'
 import { getAwards, setAwardPage } from '../../actions/awardActions.js';
+import Loading from '../Loading'
 
 function AwardSection({edit}) {
     const [showCreateAward, setShowCreateAward] = useState(false);
@@ -31,7 +32,9 @@ function AwardSection({edit}) {
             setPage(page + 1)
     }
     if (isGetAwardsLoading && !awards) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
 
     return (

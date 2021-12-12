@@ -3,6 +3,7 @@ import { Container, Row, Col } from 'react-bootstrap';
 import Banner from '../components/Platform/Banner.js'
 import Leaderboard from '../components/Leaderboards/Leaderboard.js'
 import { getPlatform, searchLeaderboard, getPlatformLeaderboard } from '../actions/platformActions'
+import Loading from '../components/Loading'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
@@ -40,7 +41,7 @@ function Platform() {
     }, [id, dispatch]);
 
     if (isGetLoading || !platform) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
     return (
         <div className="justify-content-between">

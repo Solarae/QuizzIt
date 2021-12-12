@@ -4,6 +4,7 @@ import { getSubmissions } from "../actions/submissionActions"
 import { Table, Row, Col } from "react-bootstrap"
 import { useHistory } from 'react-router-dom';
 import Pagination from '../components/Pagination'
+import Loading from '../components/Loading'
 
 function ViewSubmission() {
     const dispatch = useDispatch()
@@ -35,7 +36,7 @@ function ViewSubmission() {
     }
 
     if (isGetSubmissionLoading) {
-        return ( <div> Loading... </div> )
+        return (<Loading />)
     }
 
     return(

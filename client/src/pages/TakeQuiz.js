@@ -9,6 +9,7 @@ import { getQuiz } from '../actions/quizActions'
 import { makeSubmission } from '../actions/submissionActions';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 
 function TakeQuiz() {
@@ -37,7 +38,7 @@ function TakeQuiz() {
     }, [])
 
     if (isLoading) {
-        return ( <div> Loading... </div> )
+        return (<Loading />)
     }
     
     const questionInput = (e, idx, index) => {
