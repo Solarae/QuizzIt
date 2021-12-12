@@ -33,6 +33,7 @@ import ReviewSubmission from './pages/ReviewSubmission';
 import ViewPlatformReport from './pages/ViewPlatformReport.js';
 import ViewQuizReport from './pages/ViewQuizReport.js'
 import { URL } from './config'
+import MyQuizzes from './pages/MyQuizzes';
 
 function App() {
   const dispatch = useDispatch()
@@ -78,6 +79,7 @@ function App() {
         <Route path='/viewPlatformReport' exact component={ViewPlatformReport} />
         <Route path='/viewQuizReport/:id' exact component={ViewQuizReport} />
         <Route path='/leaderboard' exact component={GlobalLeaderboard} />
+        <Route path='/myQuizzes' exact component={MyQuizzes} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
     </BrowserRouter>

@@ -390,34 +390,37 @@ export const searchLeaderboard = async (req, res) => {
 }
 
 export const upvoteQuiz = async (req,res) =>{
-    const userId = req.body 
-
+    const { userId } = req.body 
+  
     try {
         const quiz = await Quiz.findById(req.params.id)
         if (!quiz) return res.status(404).json({ errors: { quizDNE: 'Quiz does not exist'} } )
 
-        if (quiz.likedBy.includes(userId)) {
+        if (quiz.likes.likedBy.includes(userId)) {
+            console.log("HELLO")
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $pull: { 'likes.likedBy': userId } },
-                { $inc: { 'likes.totalLikes': -1 }}, 
+                { $pull: { 'likes.likedBy': userId } ,
+                 $inc: { 'likes.totalLikes': -1 }}, 
                 { new: true } )
             return res.status(200).json({ quiz: updatedQuiz })
-        } else if (quiz.dislikedBy.includes(userId)) {
+        } else if (quiz.likes.dislikedBy.includes(userId)) {
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $pull: { 'likes.dislikedBy': userId } },
-                { $push: { 'likes.likedBy': userId } },
-                { $inc: { 'likes.totalDislikes': -1, 'likes.totalLikes': 1 }}, 
+                { $pull: { 'likes.dislikedBy': userId } ,
+                 $push: { 'likes.likedBy': userId } ,
+                 $inc: { 'likes.totalDislikes': -1, 'likes.totalLikes': 1 }}, 
                 { new: true } )
             return res.status(200).json({ quiz: updatedQuiz })
         } else {
+            console.log("HELLO")
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $push: { 'likes.likedBy': userId } },
-                { $inc: { 'likes.totalLikes': 1 }}, 
+                { $push: { 'likes.likedBy': userId } ,
+                 $inc: { 'likes.totalLikes': 1 } }, 
                 { new: true } 
             )
+            console.log(updatedQuiz)
             return res.status(200).json({ quiz:updatedQuiz })
         }
     } catch (error) {
@@ -426,32 +429,32 @@ export const upvoteQuiz = async (req,res) =>{
 }
 
 export const downvoteQuiz = async (req,res) => {
-    const userId = req.body
+    const { userId } = req.body
 
     try {
         const quiz = await Quiz.findById(req.params.id)
         if (!quiz) return res.status(404).json({ errors: { quizDNE: 'Quiz does not exist'} } )
 
-        if (quiz.dislikedBy.includes(userId)) {
+        if (quiz.likes.dislikedBy.includes(userId)) {
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $pull: { 'likes.dislikedBy': userId } },
-                { $inc: { 'likes.totalDislikes': -1 }}, 
+                { $pull: { 'likes.dislikedBy': userId } ,
+                 $inc: { 'likes.totalDislikes': -1 }}, 
                 { new: true } )
             return res.status(200).json({ quiz: updatedQuiz })
-        } else if (quiz.likedBy.includes(userId)) {
+        } else if (quiz.likes.likedBy.includes(userId)) {
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $pull: { 'likes.likedBy': userId } },
-                { $push: { 'likes.dislikedBy': userId } },
-                { $inc: { 'likes.totalDislikes': 1, 'likes.totalLikes': -1 }}, 
+                { $pull: { 'likes.likedBy': userId } ,
+                 $push: { 'likes.dislikedBy': userId } ,
+                 $inc: { 'likes.totalDislikes': 1, 'likes.totalLikes': -1 }}, 
                 { new: true } )
             return res.status(200).json({ quiz: updatedQuiz })
         } else {
             const updatedQuiz = await Quiz.findByIdAndUpdate(
                 req.params.id,
-                { $push: { 'likes.dislikedBy': userId } },
-                { $inc: { 'likes.totalDislikes': 1 }}, 
+                { $push: { 'likes.dislikedBy': userId } ,
+                 $inc: { 'likes.totalDislikes': 1 }}, 
                 { new: true } 
             )
             return res.status(200).json({ quiz:updatedQuiz })
