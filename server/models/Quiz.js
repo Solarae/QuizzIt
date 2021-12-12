@@ -24,10 +24,10 @@ const quizSchema = new mongoose.Schema ({
         ref: 'Platform',
         required: true 
     },
-    submissions: [{ 
-        type: mongoose.Schema.Types.ObjectId, 
-        ref: 'Submission' 
-    }],
+    submissionCount: { 
+        type: Number,
+        default: 0
+    },
     questions: [{
         question: {
             type: String,
@@ -88,18 +88,18 @@ const quizSchema = new mongoose.Schema ({
         },
     }],
     likes: {
-        likesThisHour: {
-            type: Number,
-            default: 0
-        },
-        dislikesThisHour: {
-            type: Number,
-            default: 0
-        },
+        likedBy: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
         totalLikes: {
             type: Number,
             default: 0
         },
+        dislikedBy: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User'
+        }],
         totalDislikes: {
             type: Number,
             default: 0

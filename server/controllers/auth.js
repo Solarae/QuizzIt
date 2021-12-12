@@ -25,9 +25,9 @@ export const getSignedIn = async (req, res) => {
                 id: loggedInUser._id,
                 username: loggedInUser.username,
                 email: loggedInUser.email,
-                likes: loggedInUser.likes,
                 friends: loggedInUser.friends,  
-                role: loggedInUser.role  
+                role: loggedInUser.role,
+                icon: loggedInUser.icon 
             }
         })
     } catch (error) {
@@ -68,9 +68,9 @@ export const signin = async (req, res) => {
                 id: user._id,
                 username: user.username,
                 email: user.email,
-                likes: user.likes,
                 friends: user.friends, 
-                role: user.role         
+                role: user.role,
+                icon: user.icon         
             }
         })
     } catch (error) {
@@ -125,9 +125,9 @@ export const signup = async (req, res) => {
                 id: newUser._id,
                 username: newUser.username,
                 email: newUser.email,
-                likes: newUser.likes,
                 friends: newUser.friends,
-                role: newUser.role
+                role: newUser.role,
+                icon: newUser.icon
             }
         })
 

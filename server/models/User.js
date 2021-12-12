@@ -27,12 +27,12 @@ const userSchema = new mongoose.Schema({
     icon_cloud_id: {
         type: String
     },
+    platformsJoined: {
+        type: Number,
+        default: 0
+    },
     awards: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'Award'
-    }],
-    platforms: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Platform'
     }],
     inbox: [{
         message: {
@@ -47,22 +47,7 @@ const userSchema = new mongoose.Schema({
     }],
     friendRequests: [{
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
-    }],
-    likes: {
-        likedPlatforms: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Platform'
-        }],
-        dislikedPlatforms: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Platform'
-        }],
-        likedQuizzes: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
-        }],
-        dislikedQuizzes: [{
-            type: mongoose.Schema.Types.ObjectId, ref: 'Quiz'
-        }]
-    }
-
+    }]
 })
 
 const User = mongoose.model('User', userSchema)

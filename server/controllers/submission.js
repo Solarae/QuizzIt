@@ -25,22 +25,37 @@ export const createSubmission = async (req,res) =>{
                 i+=1
             } 
         })
-        console.log(total_correct)
-        const newSubmission = new Submission({
-            quizId:quizId,
-            answers:answers,
-            platformId:platformId,
-            userId:userId,
-            timeTaken,
-            score:total_correct
-        })
+        
+        const count = await Submission.countDocuments({ quizId, userId })
+
+        var newSubmission
+        if (count) {
+            newSubmission = new Submission({
+                pointsAwarded: 0,
+                quizId:quizId,
+                answers:answers,
+                platformId:platformId,
+                userId:userId,
+                timeTaken,
+                score:total_correct,
+                attemptNumber: count + 1
+            })
+        } else {
+            newSubmission = new Submission({
+                pointsAwarded: total_correct,
+                quizId:quizId,
+                answers:answers,
+                platformId:platformId,
+                userId:userId,
+                timeTaken,
+                score:total_correct
+            })
+        }
         
         //save submission
         const created_submission = await newSubmission.save()
 
-        //save submission to quiz 
-        quiz.submissions.push(created_submission)
-        await quiz.save()
+        await Quiz.findById(quizId, { $inc: { 'submissionCount': 1 } })
 
         res.status(200).json({submission:created_submission})
         await assignAwards(userId, platformId)
@@ -50,9 +65,6 @@ export const createSubmission = async (req,res) =>{
     }    
 
 }
-
-
-
 
 export const getQuizSubmissions = async (req,res)=>{
 

@@ -1,56 +1,51 @@
 import React, { useState, useEffect } from 'react'
-import { Image, Button, Row, Table, Nav, Card } from 'react-bootstrap';
+import { Image, Button, Row, Col, Table, Nav, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
-import { getPlatformLeaderboard } from '../../actions/platformActions';
+import { useDispatch } from 'react-redux'
 
-function MiniLeaderboard({ lbType, doc }) {
+function MiniLeaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, errors, getLeaderboard }) {
     const history = useHistory()
     const dispatch = useDispatch()
     const [type, setType] = useState("daily")
+    
     const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
                     { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
                     { queryStr: 'allTime', type: 'All Time' } ]
-                    
-    const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
    
     useEffect(() => {
-        if (lbType === "platform" || lbType === "global") {
-            dispatch(getPlatformLeaderboard(
-                doc._id,
-                { type,
-                offset: 0,
-                limit: 10,
+        dispatch(getLeaderboard(
+            {
+                id,
+                query: { 
+                    type,
+                    offset: 0,
+                    limit: 10,
                 }
-            ))
-        }
+        }))
     }, [type, dispatch]);
 
-    const routeToLeaderboardPage = () => {
-        if (lbType === "global") {
-            history.push("/leaderboard/global")
-        }
-        else if (lbType === "platform") {
-            history.push(`/platform/${doc._id}/leaderboard`)
-        }
-        else if (lbType === "quiz") {
-            history.push(`/platform/${doc.platformId}/quiz/${doc._id}/leaderboard`)
-        }
-    }
+    const routeToLeaderboardPage = () => history.push(url)
 
-    if (isGetPlatLeaderboardLoading) {
+    if (isGetLeaderboardLoading) {
         return (<div>Loading...</div>)
     }
 
-    
+    if (errors)
+        return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
 
     return (
-        <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
+        <div className="col" style={{}}>
+            <Row>
+                <Col align="center">
+                    <h3 >{`${doc} Leaderboard`}</h3>
+                </Col>
+            </Row>
+            <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
                 <Nav fill variant="tabs">
                     {types.map((t) => 
-                        <Nav.Item>
-                            <Nav.Link onClick={() => setType(t.queryStr)} disabled={type === "daily"}>{t.type}</Nav.Link>
+                        <Nav.Item key={t.queryStr}>
+                            <Nav.Link onClick={() => setType(t.queryStr)} disabled={type === t.queryStr}>{t.type}</Nav.Link>
                         </Nav.Item>
                     )}
                 </Nav>
@@ -87,7 +82,9 @@ function MiniLeaderboard({ lbType, doc }) {
                 </Button>
             </Row>
 
+            </div>
         </div>
+
     )
 }
 export default MiniLeaderboard;

@@ -1,46 +1,33 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { Container, Row, Col } from 'react-bootstrap';
-import Banner from '../components/Platform/Banner.js'
 import Leaderboard from '../components/Leaderboards/Leaderboard.js'
-import { getPlatform } from '../actions/platformActions'
+import { searchLeaderboard, getLeaderboard } from '../actions/globalActions'
 
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 function GlobalLeaderboard() {
-    const dispatch = useDispatch()
-    const history = useHistory()
-    const [errors, setErrors] = useState({});
-    const platform = useSelector((state) => state.platforms.platform)
-    const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
+    const { isGetGlobalLeaderboardLoading, leaderboard, leaderboardPage, leaderboardPages, errors } = useSelector((state) => state.global);
 
-    const id = "" // id for platform that contains global leaderboards 
+    const url = `/leaderboard`
 
-    // dispatch the GET_PLATFORM request on initial render
-    useEffect(() => {
-        dispatch(getPlatform({
-            id: id
-        }))
-    }, [id, dispatch]);
-
-    if (isGetLoading || !platform) {
-        return (<div>Loading...</div>)
+    const leaderboardProps = {
+        doc: 'Global',
+        url,
+        isGetLeaderboardLoading: isGetGlobalLeaderboardLoading,
+        leaderboard,
+        apiPage: leaderboardPage,
+        pages: leaderboardPages,
+        errors,
+        searchLeaderboard,
+        getLeaderboard
     }
+
     return (
         <div className="justify-content-between">
+            <div style={{ height: "50px" }}></div>
             <Container>
-                <Row style={{}}>
-                    <Col className="justify-content-md-center" style={{}}>
-                        <Row>
-                            <Col align="center">
-                                <h3 >Global Leaderboard</h3>
-                            </Col>
-                        </Row>
-                        <Leaderboard></Leaderboard>
-                    </Col>
-                </Row>
+                <Leaderboard {...leaderboardProps}></Leaderboard>
             </Container >
-
         </div >
     )
 }

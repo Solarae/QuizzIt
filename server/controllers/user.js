@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import jwtDecode from 'jwt-decode'
 import User from '../models/User.js'
-import { queryBuilder, paginateQuery } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 
 import { JWT_SECRET } from '../config.js';
 import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
@@ -449,6 +449,26 @@ export const updateUser = async (req, res) => {
                 }
             });
     } catch (error) {
+        res.status(404).json({ msg: error.message })
+    }
+}
+
+export const uploadImage = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id)
+        if (!user) return res.status(404).json({ errors: { userDNE: 'User does not exist'} })
+        const cloud = await uploadImgToCloud(req.file.path)
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id, 
+            { $set: { thumbnail: cloud.secure_url, thumbnail_cloud_id: cloud.public_id } }, 
+            { new: true }
+        );
+        if (!updatedUser) return res.status(200).json({ msg: "Something went wrong with updating quiz" });
+
+        res.status(200).json({ user: updatedUser });
+    } catch (error) {
+        console.log(error)
         res.status(404).json({ msg: error.message })
     }
 }

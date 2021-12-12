@@ -12,8 +12,10 @@ import quizRoutes from './routes/quiz.js'
 import submissionRoutes from './routes/submission.js'
 import awardRoutes from './routes/award.js'
 import reportRoutes from './routes/report.js'
+import globalRoutes from './routes/global.js'
 
 import { updateLeaderboardsJob, duplicateDB } from './schedule.js'
+import { createGlobal } from './controllers/util.js'
 
 dotenv.config()
 
@@ -37,6 +39,8 @@ mongoose.connect(MONGO_URI, {useNewURLParser: true, useUnifiedTopology: true})
     .then(() => console.log(`MongoDB connected`))
     .catch(error => console.log(error.message));
 
+await createGlobal()
+
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/platforms', platformRoutes);
@@ -44,6 +48,7 @@ app.use('/api/submissions',submissionRoutes)
 app.use('/api/quizzes', quizRoutes);
 app.use('/api/awards', awardRoutes);
 app.use('/api/reports', reportRoutes)
+app.use('/api/global', globalRoutes)
 
 // Setup Server
 const PORT = process.env.PORT || 5000;

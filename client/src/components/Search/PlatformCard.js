@@ -4,7 +4,6 @@ import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
-import LikeDislike from '../Button/LikeDislike';
 import Subscribe from '../Button/Subscribe'
 import SignIn from '../SignIn';
 import SignUp from '../SignUp';
@@ -26,27 +25,6 @@ function PlatformCard({ platform }) {
         history.push(`/platform/${platform._id}`);
     }
 
-    const handleLike = () => {
-        if (user === null) {
-            handleShowSignIn()
-            return 
-        }
-        dispatch(upvotePlatform({
-            userId:user.id,
-            platformId: platform._id
-        }))        
-    }
-
-    const handleDislike = () => {
-        if (user === null) {
-            handleShowSignIn()
-            return 
-        }
-        dispatch(downvotePlatform({
-            userId:user.id,
-            platformId: platform._id
-        }))      
-    }
 
     // keep track of subscrbed status on frontend
     console.log(platform)
@@ -64,13 +42,12 @@ function PlatformCard({ platform }) {
                             <p className="fs-4 text" onClick={routeToPlatform} style={{ cursor: "pointer" }}>{platform.name}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizzes.length} Quizzes</p>
+                            <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizCount} Quizzes</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
                             <p>{platform.description}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                        <LikeDislike handleLike={handleLike} handleDislike={handleDislike} likedKey='likedPlatforms' dislikedKey="dislikedPlatforms" object={platform}> </LikeDislike>
                         </Row>
 
                     </Col >

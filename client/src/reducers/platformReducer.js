@@ -31,8 +31,6 @@ import {
     GET_PLAT_LEADERBOARD_FAIL,
     GET_MEMBERLIST_SUCCESS,
     GET_MEMBERLIST_FAIL,
-    UPVOTE_PLATFORM,
-    DOWNVOTE_PLATFORM,
     SEARCH_PLAT_LEADERBOARD_SUCCESS,
     SEARCH_PLAT_LEADERBOARD_FAIL
 } from '../actions/types'
@@ -264,16 +262,6 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isGetMemberlistLoading: true 
-            }
-        case UPVOTE_PLATFORM:
-            return {
-                ...state,
-                ...action.payload
-            }
-        case DOWNVOTE_PLATFORM:
-            return{
-                ...state,
-                ...action.payload
             }
         default:
             return state;

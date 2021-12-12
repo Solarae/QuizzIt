@@ -1,5 +1,13 @@
 import express from 'express';
-import { getUsersByFilter, getInbox, signin, tokenSignin, signup, editAccount, deleteAccount, updateUser, readNotification, getFriendRequests, sendFriendRequest, acceptFriendRequest, declineFriendRequest, getFriends, unfriend } from '../controllers/user.js';
+import upload from '../utils/multer.js'
+
+import { 
+    getUsersByFilter, getInbox, signin, 
+    tokenSignin, signup, editAccount, 
+    deleteAccount, updateUser, readNotification, 
+    getFriendRequests, sendFriendRequest, acceptFriendRequest, 
+    declineFriendRequest, getFriends, unfriend,
+    uploadImage } from '../controllers/user.js';
 import {checkIfAdmin, checkIfModeratorOfPlatform} from '../controllers/util.js'
 
 const router = express.Router();
@@ -19,6 +27,7 @@ router.post('/signup', signup);
 router.post('/edit', editAccount);
 router.post('/delete', deleteAccount);
 router.post('/update', updateUser);
+router.post('/:id/upload', upload.single("image"), uploadImage)
 router.get('/checkIfAdmin/:id',checkIfAdmin)
 router.get("/checkIfModeratorOfPlatform/:uid/:pid",checkIfModeratorOfPlatform)
 

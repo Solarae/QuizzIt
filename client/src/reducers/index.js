@@ -6,6 +6,7 @@ import awardReducer from './awardReducer'
 import searchReducer from './searchReducer'
 import submissionReducer from './submissionReducer'
 import reportReducer from './reportReducer'
+import globalReducer from './globalReducer'
 
 export default combineReducers({
     auth: authReducer,
@@ -14,5 +15,6 @@ export default combineReducers({
     awards: awardReducer,
     search: searchReducer,
     submission: submissionReducer,
-    report: reportReducer
+    report: reportReducer,
+    global: globalReducer
 })

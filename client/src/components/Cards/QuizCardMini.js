@@ -10,15 +10,15 @@ function QuizCardMini({ quiz }) {
     let location = useLocation()
 
     const routeToQuiz = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`);
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`);
     }
 
     const routeToQuizEdit = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/edit`);
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}/edit`);
     }
 
     const routeToPlatform = () => {
-        history.push(`/platform/${quiz.platformId}`);
+        history.push(`/platform/${quiz.platformId._id}`);
     }
 
     const createdAt = mongoose.Types.ObjectId(quiz._id).getTimestamp();
@@ -37,14 +37,14 @@ function QuizCardMini({ quiz }) {
                             {
                                 isHome &&
                                 <Col md={3} className="my-auto" style={{ padding: "0px" }}>
-                                    <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformIcon ? quiz.platformIcon : '/quizzit_logo.png'} thumbnail />
+                                    <Image style={{ width: "40px", height: "40px", cursor: 'pointer' }} onClick={routeToPlatform} className="bg-dark" src={quiz.platformId.icon ? quiz.platformId.icon : '/quizzit_logo.png'} thumbnail />
                                 </Col>
                                 
                             }
                             <Col align="start" style={{ padding: isHome ? "0px" : "" }}>
                                 <p className="fs-5 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
-                                {isHome && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformName}</p>}
-                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissions.length} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
+                                {isHome && <p className="text-muted" style={{ cursor: "pointer", marginTop: "-10px", fontSize: "11pt" }} onClick={routeToPlatform}>{quiz.platformId.name}</p>}
+                                <p className="text-muted" style={{ marginTop: "-10px", fontSize: "9pt" }}><i class="bi bi-people-fill"></i> {quiz.submissionCount} Taken<i class="bi bi-dot" />{moment(createdAt).fromNow()}</p>
                             </Col>
                         </Row>
                     </Col>
