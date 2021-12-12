@@ -50,7 +50,7 @@ function Friends() {
                                 <td>
                                 <i className="bi bi-x-circle" style={{float: 'right'}} onClick={() => {
                                     dispatch(unfriend({id: user.id, 
-                                        userId: f._id, }))
+                                        userId: f._id }))
                                     }
                                 }></i>
                                 </td>

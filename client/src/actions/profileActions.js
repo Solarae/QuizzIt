@@ -233,18 +233,13 @@ export const updateUser = ({ newValue, userId }) => async (dispatch) => {
     }
 }
 
-export const getInbox = (id, currMax) => async (dispatch) => {
+export const getInbox = (id, query) => async (dispatch) => {
     const config = {
         params: {
-            offset: currMax,
-            limit: 5
+            ...query
         }
     }
 
-    if (currMax === 0)
-        dispatch({
-            type: GET_INBOX_REQ
-        })
     try {
         const res = await axios.get(`${URL}/api/users/${id}/inbox`, config)
         if (res.data.errors) {
@@ -291,18 +286,12 @@ export const readNotification = (userId, notifId) => async (dispatch) => {
     }
 }
 
-export const getFriendRequests = (id, currMax) => async (dispatch) => {
+export const getFriendRequests = (id, query) => async (dispatch) => {
     const config = {
         params: {
-            offset: currMax,
-            limit: 5
+            ...query
         }
     }
-
-    if (currMax === 0)
-        dispatch({
-            type: GET_FRIENDREQUESTS_REQ
-        })
 
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)

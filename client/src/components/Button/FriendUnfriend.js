@@ -31,8 +31,8 @@ function FriendUnfriend({ uid }) {
 
     const handleUnfriend = () => {
         dispatch(unfriend(
-            user.id,
-            uid
+            { id: user.id, 
+            userId: uid }
         ))
     }
 

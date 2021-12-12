@@ -17,8 +17,8 @@ function AppNavbar() {
   const dispatch = useDispatch()
   const auth = useSelector((state) => state.auth)
   const socket = useSelector((state) => state.auth.socket)
-  const { isGetInboxLoading, inbox, inboxTotalUnreadCount, inboxTotalCount } = useSelector((state) => state.auth)
-  const { isGetFriendRequestsLoading, friendRequests, friendRequestsTotalCount } = useSelector((state) => state.auth)
+  const { isGetInboxLoading, inbox, inboxPage, inboxPages, inboxTotalUnreadCount, inboxTotalCount } = useSelector((state) => state.auth)
+  const { isGetFriendRequestsLoading, friendRequests, friendRequestsPage, friendRequestsPages, friendRequestsTotalCount } = useSelector((state) => state.auth)
   const history = useHistory()
 
   const [query, setQuery] = useState("");
@@ -40,11 +40,17 @@ function AppNavbar() {
     if (auth.user) {
       dispatch(getInbox(
         auth.user.id,
-        0
+        {
+          offset: 0,
+          limit: 5 * inboxPage
+        }
       ))
       dispatch(getFriendRequests(
         auth.user.id,
-        0
+        {
+          offset: 0,
+          limit: 5 * friendRequestsPage
+        }
       ))
     }
     
@@ -74,18 +80,25 @@ function AppNavbar() {
   const [showNotifications, setShowNotifications] = useState(false)
 
   const handleScroll = ((e, type) => {
+    console.log("SCROLLING")
     if (e.target.scrollHeight - e.target.scrollTop === e.target.clientHeight) {
-      if (type === 'notification' && inbox.length < inboxTotalCount) {
+      if (type === 'notification' && inboxPage < inboxPages) {
         console.log("CALL DISPATCH")
         dispatch(getInbox(
           auth.user.id,
-          inbox.length
+          {
+            offset: 0,
+            limit: 5 * (inboxPage + 1)
+          }
         )) 
-      } else if (type === 'friendRequests' && friendRequests.length < friendRequestsTotalCount) {
+      } else if (type === 'friendRequests' && friendRequestsPage < friendRequestsPages) {
         console.log("CALLING DISPATCH")
         dispatch(getFriendRequests(
           auth.user.id,
-          friendRequests.length
+          {
+            offset: 0,
+            limit: 5 * (friendRequestsPage + 1)
+          }
         )) 
       }
       
@@ -163,11 +176,12 @@ function AppNavbar() {
                 }
                 show={showFriendRequests}
                 onToggle={(isOpen, event) => {
+                  console.log(event.source)
                   if (event.source !== 'select')
                     setShowFriendRequests(isOpen)
                 }}
                 >
-                  <div style={{maxHeight: '200px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
+                  <div style={{maxHeight: '150px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
                   {friendRequests.map(u => <NavDropdown.Item key={u._id}>
                     {u.username}
                     <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
