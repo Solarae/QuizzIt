@@ -163,6 +163,7 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
         else {
             // get the platform quizzes
             const quizzes = [];
+            console.log(res.data)
             for (const qid of res.data.platform.quizzes) {
                 let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config);
                 if (quiz_res.data.errors) {
