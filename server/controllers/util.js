@@ -90,7 +90,7 @@ export const queryBuilder = (q, queries, model) => {
 export const paginateQuery = async (q, model, limit, offset) => {
     const pageSize = parseInt(limit) || 10
     const skip = parseInt(offset) || 0
-    const page = skip / pageSize
+    const page = (skip / pageSize) + 1
     const totalCount = await model.countDocuments(q)
     const pages = Math.ceil(totalCount / pageSize)
     
@@ -159,7 +159,6 @@ export const assignAwards = async (userId, platformId) => {
             { $match: { userId: ObjectId(userId), platformId: ObjectId(platformId) } },
             { $group: {
                 _id: "$quizId",
-                submissionCount: { $sum: 1 },
                 points: { $sum: "$score" }
             }},
             { $group: {
@@ -169,7 +168,7 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
-        
+        console.log(user_agg)
         // Get all awards for user
         const user = await User.findById(userId)
 
@@ -239,10 +238,11 @@ export const recaclulateScore = async (quizId) => {
         const quiz = await Quiz.findById(quizId)
         const questions = quiz.questions
         // Get all submissions
-        const submissions = await Submission.find()
+        const submissions = await Submission.find({quizId})
 
-        var userIds = []
-        for (s in submissions) {
+        var uniqueUsers = [...new Map(submissions.map(v => [v.userId.toString(), v])).values()]
+       
+        await Promise.all(submissions.map(async (s) => {
             var total_correct = 0
             var i = 0
             const answers = s.answers
@@ -260,17 +260,15 @@ export const recaclulateScore = async (quizId) => {
                     s._id,
                     { $set: { score: total_correct, pointsAwarded: total_correct } }
                 )
-                userIds.push(s.userId)
             } else {
                 await Submission.findByIdAndUpdate(s._id,
                     { $set: { score: total_correct } }
                 )
             }
-        }
+        }));
 
-        for (uid in userIds) {
-            await assignAwards(uid, quiz.platformId)
-        }
+        await Promise.all(uniqueUsers.map(async (user) => await assignAwards(user.userId, quiz.platformId)));
+        
     } catch (error) {
         console.log(error.message)
     }

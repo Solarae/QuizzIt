@@ -7,14 +7,22 @@ import {
     EDIT_AWARD_FAIL,
     DELETE_AWARD_REQ,
     DELETE_AWARD_SUCCESS,
-    DELETE_AWARD_FAIL
+    DELETE_AWARD_FAIL,
+    GET_AWARDS_REQ,
+    GET_AWARDS_SUCCESS,
+    GET_AWARDS_FAIL,
+    SET_AWARD_PAGE
 } from '../actions/types'
 
 const initialState = {
     isCreateLoading: false,
     isEditLoading: false,
     isDeleteLoading: false,
-    award: null,
+    isGetAwardsLoading: true,
+    awards: [],
+    awardPage: 1,
+    awardPages: 0,
+    awardTotalCount: 0,
     errors: null
 }
 
@@ -29,6 +37,9 @@ const awardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                awardPage: Math.ceil((state.awards.length + 1) / 4),
+                awardPages: Math.ceil((state.awardTotalCount + 1) / 4),
+                awardTotalCount: state.awardTotalCount + 1,
                 isCreateLoading: false,
                 errors: null
             }
@@ -65,6 +76,9 @@ const awardReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                awardPage: Math.ceil((state.awards.length - 1) / 4),
+                awardPages: Math.ceil((state.awardTotalCount - 1) / 4),
+                awardTotalCount: state.awardTotalCount - 1,
                 isDeleteLoading: false,
                 errors: null
             }
@@ -73,6 +87,32 @@ const awardReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isDeleteLoading: false
+            }
+        case GET_AWARDS_REQ:
+            return {
+                ...state,
+                isGetAwardsLoading: true 
+            }
+        case GET_AWARDS_SUCCESS:
+            console.log(action.payload)
+            return {
+                ...state,
+                awards: action.payload.awards,
+                awardPage: action.payload.page,
+                awardPages: action.payload.pages,
+                awardTotalCount: action.payload.totalCount,
+                isGetAwardsLoading: false,
+            }
+        case GET_AWARDS_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetAwardsLoading: false,
+            }
+        case SET_AWARD_PAGE:
+            return {
+                ...state,
+                ...action.payload
             }
         default:
             return state;

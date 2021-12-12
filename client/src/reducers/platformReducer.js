@@ -9,6 +9,7 @@ import {
     EDIT_MEMBER_ROLE_REQ,
     GET_PLAT_LEADERBOARD_REQ,
     GET_MEMBERLIST_REQ,
+    GET_PLAT_QUIZZES_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -32,7 +33,9 @@ import {
     GET_MEMBERLIST_SUCCESS,
     GET_MEMBERLIST_FAIL,
     SEARCH_PLAT_LEADERBOARD_SUCCESS,
-    SEARCH_PLAT_LEADERBOARD_FAIL
+    SEARCH_PLAT_LEADERBOARD_FAIL,
+    GET_PLAT_QUIZZES_SUCCESS,
+    GET_PLAT_QUIZZES_FAIL,
 } from '../actions/types'
 
 const initialState = {
@@ -45,10 +48,13 @@ const initialState = {
     isReportLoading: false,
     isEditRoleLoading: false,
     isGetPlatLeaderboardLoading: true,
+    isGetQuizzesLoading: true,
     isGetMemberListLoading: true,
     platform: null,
-    quizzesData: null,
-    awardsData: null,
+    quizzes: [],
+    quizPage: 0,
+    quizPages: 0,
+    quizTotalCount: 0,
     memberList: [],
     memberListPage: 0,
     memberListPages: 1,
@@ -213,6 +219,21 @@ const platformReducer = (state = initialState, action) => {
                 ...action.payload,
                 isGetMemberlistLoading: false,
             }
+        case GET_PLAT_QUIZZES_SUCCESS:
+            return {
+                ...state,
+                quizzes: action.payload.quizzes,
+                quizPage: action.payload.page,
+                quizPages: action.payload.pages,
+                quizTotalCount: action.payload.totalCount,
+                isGetQuizzesLoading: false,
+            }
+        case GET_PLAT_QUIZZES_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetQuizzesLoading: false,
+            }
         case GET_PLATFORM_REQ:
             return {
                 ...state,
@@ -262,6 +283,11 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isGetMemberlistLoading: true 
+            }
+        case GET_PLAT_QUIZZES_REQ:
+            return {
+                ...state,
+                isGetQuizzesLoading: true 
             }
         default:
             return state;

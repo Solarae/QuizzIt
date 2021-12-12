@@ -9,6 +9,7 @@ import {
     EDIT_MEMBER_ROLE_REQ,
     GET_PLAT_LEADERBOARD_REQ,
     GET_MEMBERLIST_REQ,
+    GET_PLAT_QUIZZES_REQ,
     GET_PLATFORM_SUCCESS,
     GET_PLATFORM_FAIL,
     CREATE_PLATFORM_SUCCESS,
@@ -33,7 +34,9 @@ import {
     GET_MEMBERLIST_FAIL,
     SEARCH_UPDATE_PLATFORM,
     SEARCH_PLAT_LEADERBOARD_SUCCESS,
-    SEARCH_PLAT_LEADERBOARD_FAIL
+    SEARCH_PLAT_LEADERBOARD_FAIL,
+    GET_PLAT_QUIZZES_SUCCESS,
+    GET_PLAT_QUIZZES_FAIL,
 } from '../actions/types'
 
 import axios from 'axios'
@@ -161,48 +164,25 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
             })
         }
         else {
-            // get the platform quizzes
-            const quizzes = [];
-            console.log(res.data)
-            for (const qid of res.data.platform.quizzes) {
-                let quiz_res = await axios.get(`${URL}/api/quizzes/${qid}`, config);
-                if (quiz_res.data.errors) {
-                    dispatch({
-                        type: GET_PLATFORM_FAIL,
-                        payload: quiz_res.data
-                    })
-                }
-                quizzes.push(quiz_res.data.quiz);
-            }
-
             // get the platform awards 
-            const awardsConfig = {
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                params: {
-                    'platformId': id 
-                }
-            }
-            let award_res = await axios.get(`${URL}/api/awards/`, awardsConfig);
-            if (award_res.data.errors) {
-                dispatch({
-                    type: GET_PLATFORM_FAIL,
-                    payload: award_res.data
-                })
-            }
-
-            // // get the memberlist 
-            // let member_res = await axios.get(`${URL}/api/platforms/${id}/getMemberList/`, config);
-            // if (member_res.data.errors) {
+            // const awardsConfig = {
+            //     headers: {
+            //         'Content-Type': 'application/json'
+            //     },
+            //     params: {
+            //         'platformId': id 
+            //     }
+            // }
+            // let award_res = await axios.get(`${URL}/api/awards/`, awardsConfig);
+            // if (award_res.data.errors) {
             //     dispatch({
             //         type: GET_PLATFORM_FAIL,
-            //         payload: member_res.data
+            //         payload: award_res.data
             //     })
             // }
 
-            res.data.quizzesData = quizzes; // pack the quizzes data with the platform
-            res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
+            // res.data.quizzesData = quizzes; // pack the quizzes data with the platform
+            // res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
             // res.data.memberList = member_res.data.members; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
@@ -461,6 +441,32 @@ export const getMemberList = (platformId, page) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_MEMBERLIST_FAIL
+        })
+    }
+}
+
+export const getQuizzes = (query) => async (dispatch) => {
+    const config = {
+        params: {
+            ...query
+        }
+    }
+
+    try {
+        dispatch({
+            type: GET_PLAT_QUIZZES_REQ
+        })
+        const res = await axios.get(`${URL}/api/quizzes`, config)
+        console.log(res.data)
+        dispatch({
+            type: GET_PLAT_QUIZZES_SUCCESS,
+            payload: res.data
+        })
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PLAT_QUIZZES_FAIL,
+            payload: error.response.data
         })
     }
 }
