@@ -40,7 +40,9 @@ function Quiz() {
     const handleTakeQuiz = () => {
         history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/take`)
     }
-    
+    const handleViewSubmission = () =>{
+        history.push(`/viewQuizSubmission/${quiz._id}`)
+    }
     return (
         <>
             <Banner isEdit={false}></Banner>      
@@ -61,7 +63,7 @@ function Quiz() {
                 </Table>
                 <div className="d-grid gap-1">
                     <Button variant="outline-primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleTakeQuiz}>Take Quiz</Button>
-                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }}>View Submissions</Button>
+                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleViewSubmission}>View Submissions</Button>
                 </div>
                 </Col>
                 <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>

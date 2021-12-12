@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getSubmissions } from "../actions/submissionActions"
+import { getQuizSubmission, getSubmissions } from "../actions/submissionActions"
 import { Table, Row, Col } from "react-bootstrap"
 import { useHistory, useParams } from 'react-router-dom';
 import Pagination from '../components/Pagination'
@@ -12,18 +12,15 @@ function ViewSubmission() {
     const isGetSubmissionLoading = useSelector((state) => state.submission.isGetSubmissionLoading)
     const pages = useSelector((state) => state.submission.pages)
     const [page, setPage] = useState(1)
-    const {quizId} = useParams()
-    console.log(quizId)
+    const {id} = useParams()
+    console.log(id)
     //fetch the submissions made by this user
     
     useEffect(()=>{
         if (user) {
-            dispatch(getSubmissions({
-                userId: user.id,
-                expand: 'platformId(select=name),quizId(select=name)',
-                sort: 'createdAt desc',
-                offset: 10 * (page - 1),
-                limit: 10,
+            dispatch(getQuizSubmission({
+                    userId:user.id,
+                    quizId:id
             }))
         }
     }, [page, user, dispatch])
