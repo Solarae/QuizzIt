@@ -1,4 +1,4 @@
-import { uploadImgToCloud } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
 
@@ -51,17 +51,20 @@ export const getAward = async (req, res) => {
 }
 
 export const getAwardsByFilter = async (req, res) => {
-    var query = {}
-    for (var key in req.query) {
-        query[key] = req.query[key];
-    }
+    var query = queryBuilder(null, req.query, Award)
+        const { q, page, pages, totalCount } = await paginateQuery(query, Award, req.query.limit, req.query.offset)
 
-    try {
-        const awards = await Award.find(query);
-        res.status(200).json({ awards: awards });
-    } catch (error) {
-        res.status(404).json({ msg: error.message })
-    }
+        if (page > pages) 
+            return res.status(404).json({ msg: "Page doesn't exist" })
+        
+        const awards = await q
+
+        res.status(200).json({ 
+            awards,
+            page,
+            pages,
+            totalCount
+        });
 }
 
 export const updateAward = async (req, res) => {
