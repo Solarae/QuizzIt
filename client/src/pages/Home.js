@@ -86,24 +86,6 @@ function Home() {
                     <div className="col-9" style={{}}>
                         <Container>
                             <Row className="">
-                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Platforms </h5>
-                            </Row>
-
-                            <Row xs={1} md={4} className="g-4 me-auto">
-                                {platforms.slice(0, platformLimit - 1).map((p, idx) => (
-
-                                    <Col align="center">
-                                        <PlatformCard platform={p}></PlatformCard>
-                                    </Col>
-                                ))}
-                            </Row>
-                            <Row>
-                                {platformLimit !== maxLimit && <Button variant="outline-light" onClick={showMorePlatforms} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
-                            </Row>
-
-                            <hr />
-
-                            <Row className="">
                                 <h5><i class="bi bi-graph-up-arrow"></i>  Trending Quizzes</h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
@@ -117,6 +99,24 @@ function Home() {
                             <Row >
                                 {quizLimit !== maxLimit && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
                             </Row>
+
+                            <hr />
+                            
+                            <Row className="">
+                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Platforms </h5>
+                            </Row>
+                            <Row xs={1} md={4} className="g-4 me-auto">
+                                {platforms.slice(0, platformLimit - 1).map((p, idx) => (
+
+                                    <Col align="center">
+                                        <PlatformCard platform={p}></PlatformCard>
+                                    </Col>
+                                ))}
+                            </Row>
+                            <Row>
+                                {platformLimit !== maxLimit && <Button variant="outline-light" onClick={showMorePlatforms} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                            </Row>
+
                         </Container>
 
 

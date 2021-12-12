@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap';
+import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
 import { createAward } from '../../actions/awardActions.js'
@@ -70,6 +70,14 @@ function CreateAward({ show, handleClose }) {
 
     const handleSubmit = ((e) => {
         e.preventDefault();
+
+        if (values.title==="" || values.description==="" || !values.iconImage || values.requirementCount===""){
+            setErrors({
+                'Empty Fields': "Fields must not be empty"
+            })
+            return
+        }
+        
         dispatch(createAward(
             {
                 userId: auth.user.id,
@@ -103,8 +111,17 @@ function CreateAward({ show, handleClose }) {
                         <Form.Control as="textarea" rows={3} type="text" placeholder="Award Description" name="description" onChange={onChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formPoints">
-                        <Form.Label>Points Requirement</Form.Label>
-                        <Form.Control type="number" placeholder="ex. 150" name="requirementCount" onChange={onChange} />
+                        <Form.Label>Requirement</Form.Label>
+                        <Col xs={3}>
+                            <Form.Select size="sm" defaultValue={'Point'} name="requirementType" onChange={onChange}>
+                                <option value="Point">Points</option>
+                                <option value="Quiz">Quizzes</option>
+                            </Form.Select>
+                        </Col>
+                        <br></br>
+                        <Col align='end' xs={6} >
+                            <Form.Control type="number" placeholder={values.requirementType==="Point" ? "Points Required" : "Quizzes Required"} name="requirementCount" onChange={onChange} />
+                        </Col>
                     </Form.Group>
 
                 </Modal.Body>

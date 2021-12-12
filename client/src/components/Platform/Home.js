@@ -23,7 +23,7 @@ function Home() {
                 limit: 4 * page
             }
         ))
-    }, [sort, page, dispatch]);
+    }, [sort, page, platform, dispatch]);
     
     const showMoreQuizzes = () => {
         if (page < pages)
@@ -54,7 +54,7 @@ function Home() {
                         <Row xs={1} md={4} className="g-4 me-auto">
                         {quizzes.map((quiz, idx) => (
                             <Col align="center">
-                                <QuizCardMini quiz={quiz}></QuizCardMini>
+                                <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
                             </Col>
                         ))}
                         </Row>

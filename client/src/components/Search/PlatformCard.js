@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Card, Image, Row, Col } from 'react-bootstrap';
-import { upvotePlatform, downvotePlatform } from '../../actions/platformActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 
@@ -25,7 +24,6 @@ function PlatformCard({ platform }) {
         history.push(`/platform/${platform._id}`);
     }
 
-
     // keep track of subscrbed status on frontend
     console.log(platform)
     // const [subscribed, setSubscribed] = useState(platform.subscribers.some((s) => s.userId===user.id));
@@ -38,16 +36,14 @@ function PlatformCard({ platform }) {
                         <Image style={{ width: "150px", height: "150px" }} className="bg-dark" src={platform.icon ? platform.icon : '/quizzit_logo.png'} thumbnail />
                     </Col>
                     <Col md={6}>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{ height: "33%" }}>
                             <p className="fs-4 text" onClick={routeToPlatform} style={{ cursor: "pointer" }}>{platform.name}</p>
                         </Row>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{ height: "33%" }}>
                             <p><i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers<i class="bi bi-dot" />{platform.quizCount} Quizzes</p>
                         </Row>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{ height: "33%" }}>
                             <p>{platform.description}</p>
-                        </Row>
-                        <Row style={{ height: "25%" }}>
                         </Row>
 
                     </Col >

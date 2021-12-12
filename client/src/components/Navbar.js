@@ -188,10 +188,12 @@ function AppNavbar() {
                   id="nav-dropdown"
                   title={
                     <div>
-                      <Image roundedCircle
-                        src="/favicon.ico"
-                        alt="user pic"
-                        style={{ height: "40px", width: "40px" }}
+                      <Image 
+                        className="bg-dark"
+                        src={auth.user.icon && auth.user.icon !== "" ? auth.user.icon : "/quizzit_logo.png"}
+                        style={{ height: "40px", width: "40px", border:'solid', borderColor: "white", padding:'0', marginRight:'5px' }}
+                        roundedCircle 
+                        fluid 
                       />
                       {auth.user.username}
                     </div>
@@ -199,7 +201,7 @@ function AppNavbar() {
                   }
                   menuVariant="dark"
                 >
-                  <NavDropdown.Item href="#"><LinkContainer to='/profile'><Nav.Link className="text-white">View Profile</Nav.Link></LinkContainer></NavDropdown.Item>
+                  <NavDropdown.Item href="#"><LinkContainer to={`/profile/${auth.user.id}`}><Nav.Link className="text-white">My Profile</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/friends'><Nav.Link className="text-white">Friends</Nav.Link></LinkContainer></NavDropdown.Item>
                   <NavDropdown.Item href="#"><Nav.Link onClick={handleShowCreatePlatform} className="text-white">Create Platform</Nav.Link></NavDropdown.Item>
                   <NavDropdown.Item href="#"><LinkContainer to='/viewSubmission'><Nav.Link className="text-white">View Submissions</Nav.Link></LinkContainer></NavDropdown.Item>

@@ -118,6 +118,11 @@ const quizSchema = new mongoose.Schema ({
             type: String 
         }
     }],
+    status: {
+        type: String,
+        enum: ['Draft', 'Published'],
+        default: 'Draft'
+    }
 })
 
 const Quiz = mongoose.model('Quiz', quizSchema)

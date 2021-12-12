@@ -1,8 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Form, Button, Modal, Alert } from 'react-bootstrap';
+import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { editAward, deleteAward } from '../../actions/awardActions.js'
+import { editAward, deleteAward, getAwards } from '../../actions/awardActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -21,6 +21,7 @@ function EditAward({ award, show, handleClose }) {
     const history = useHistory()
 
     const awardErrors = useSelector((state) => state.awards.errors);
+    const platform = useSelector ((state)=> state.platforms.platform) 
     const isEditLoading = useSelector((state) => state.awards.isEditLoading)
     const prev_isEditLoading = usePrevious(isEditLoading)
 
@@ -68,6 +69,14 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal 
         handleClose();
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
 
         
     }, [isEditLoading, history, handleClose]);
@@ -84,14 +93,31 @@ function EditAward({ award, show, handleClose }) {
             setErrors({ ...awardErrors });
             return;
         }
-
+        
         // close the modal
         handleClose();
+        
+        dispatch(getAwards(
+            {
+                platformId: platform._id,
+                offset: 0,
+                limit: 4 * 1 
+            }
+        ))
         
     }, [isDeleteLoading, history, handleClose]);
 
     const handleSubmit = ((e) => {
         e.preventDefault();
+
+        if (values.title==="" || values.description==="" || values.requirementCount===""){
+            setErrors({
+                'Empty Fields': "Fields must not be empty"
+            })
+            return
+        }
+        
+        
         dispatch(editAward(
             {
                 awardId: award._id,
@@ -103,6 +129,7 @@ function EditAward({ award, show, handleClose }) {
                 requirementCount: Number(values.requirementCount)
             }
         ));
+        
     })
 
     const handleDelete = ((e) => {
@@ -135,8 +162,17 @@ function EditAward({ award, show, handleClose }) {
                         <Form.Control as="textarea" rows={3} type="text" defaultValue={award.description} name="description" onChange={onChange} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formPoints">
-                        <Form.Label>Points Requirement</Form.Label>
-                        <Form.Control type="number" defaultValue={award.requirementCount} name="requirementCount" onChange={onChange} />
+                        <Form.Label>Requirement</Form.Label>
+                        <Col xs={3}>
+                            <Form.Select size="sm" defaultValue={award.requirementType} name="requirementType" onChange={onChange}>
+                                <option value="Point">Points</option>
+                                <option value="Quiz">Quizzes</option>
+                            </Form.Select>
+                        </Col>
+                        <br></br>
+                        <Col align='end' xs={6} >
+                            <Form.Control type="number" defaultValue={award.requirementCount} name="requirementCount" onChange={onChange} />
+                        </Col>
                     </Form.Group>
                     <br />
                     <Button variant="outline-danger" type="" onClick={handleDelete}>

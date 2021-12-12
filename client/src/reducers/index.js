@@ -6,6 +6,7 @@ import awardReducer from './awardReducer'
 import searchReducer from './searchReducer'
 import submissionReducer from './submissionReducer'
 import reportReducer from './reportReducer'
+import profileReducer from './profileReducer'
 import globalReducer from './globalReducer'
 
 export default combineReducers({
@@ -16,5 +17,6 @@ export default combineReducers({
     search: searchReducer,
     submission: submissionReducer,
     report: reportReducer,
+    profile: profileReducer,
     global: globalReducer
 })

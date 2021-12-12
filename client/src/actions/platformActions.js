@@ -164,26 +164,6 @@ export const getPlatform = ({ id, params }) => async (dispatch) => {
             })
         }
         else {
-            // get the platform awards 
-            // const awardsConfig = {
-            //     headers: {
-            //         'Content-Type': 'application/json'
-            //     },
-            //     params: {
-            //         'platformId': id 
-            //     }
-            // }
-            // let award_res = await axios.get(`${URL}/api/awards/`, awardsConfig);
-            // if (award_res.data.errors) {
-            //     dispatch({
-            //         type: GET_PLATFORM_FAIL,
-            //         payload: award_res.data
-            //     })
-            // }
-
-            // res.data.quizzesData = quizzes; // pack the quizzes data with the platform
-            // res.data.awardsData = award_res.data.awards; // pack the awards data with the platform
-            // res.data.memberList = member_res.data.members; // pack the awards data with the platform
             dispatch({
                 type: GET_PLATFORM_SUCCESS,
                 payload: res.data

@@ -1,18 +1,30 @@
-import { React, useEffect } from 'react'
+import { React, useEffect, useState } from 'react'
 import { Container, Col, Table, Button } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux'
+import { useHistory, useParams } from 'react-router-dom'
 
 import Banner from '../components/Quiz/Banner'
 import { getQuiz, getQuizLeaderboard } from '../actions/quizActions'
-import { useSelector, useDispatch } from 'react-redux'
-import { useHistory, useParams } from 'react-router-dom'
+import SignIn from '../components/SignIn'
+import SignUp from '../components/SignUp'
 import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
 
 
 function Quiz() {
     const dispatch = useDispatch()
 
+    const user = useSelector((state) => state.auth.user)
     const isLoading = useSelector((state) => state.quiz.isLoading)
     const quiz = useSelector((state) => state.quiz.quiz)
+
+    const [showSignIn, setShowSignIn] = useState(false);
+    const handleCloseSignIn = () => { setShowSignIn(false) };
+    const handleShowSignIn = () => { setShowSignIn(true) };
+
+    const [showSignUp, setShowSignUp] = useState(false);
+    const handleCloseSignUp = () => { setShowSignUp(false) };
+    const handleShowSignUp = () => { setShowSignIn(false); setShowSignUp(true) };
+
     const history = useHistory()
 
     const { isGetQuizLeaderboardLoading, leaderboard, errors} = useSelector((state) => state.quiz)
@@ -38,7 +50,11 @@ function Quiz() {
         return ( <div> Loading... </div> )
     }
     const handleTakeQuiz = () => {
+        if (user) {
         history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/take`)
+        } else {
+            handleShowSignIn()
+        }
     }
     const handleViewSubmission = () =>{
         history.push(`/viewQuizSubmission/${quiz._id}`)
@@ -68,6 +84,9 @@ function Quiz() {
                 </Col>
                 <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
                 </Container>
+
+                <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+                <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
         </>
     )
 }

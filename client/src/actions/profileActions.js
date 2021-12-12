@@ -1,4 +1,7 @@
 import {
+    GET_PROFILE_REQ,
+    GET_PROFILE_SUCCESS,
+    GET_PROFILE_FAIL,
     GET_INBOX_REQ,
     GET_INBOX_SUCCESS,
     GET_INBOX_FAIL,
@@ -33,6 +36,102 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
+export const getProfile = ({ id }) => async (dispatch) => {
+    console.log("Getting: " + id)
+    let config = {
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        params: {
+            _id: id,
+            offset: 0,
+            limit: 1
+        }
+    }
+    try {
+        dispatch({
+            type: GET_PROFILE_REQ
+        });
+        let res = await axios.get(`${URL}/api/users/`, config);
+
+        if (res.data.errors) {
+            dispatch({
+                type: GET_PROFILE_FAIL,
+                payload: res.data
+            })
+        }
+        else {
+            if (res.data.users.length !== 1) {
+                dispatch({
+                    type: GET_PROFILE_FAIL,
+                    payload: res.data
+                })
+            }
+            const user = res.data.users[0]
+
+            // get subscribedPlatforms, likedQuizzes, awards, createdPlatforms
+            let subscribedPlatforms = []
+            config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'subscribers.userId': user._id
+                }
+            }
+            res = await axios.get(`${URL}/api/platforms`, config);
+            subscribedPlatforms = res.data.platforms
+
+            let likedQuizzes = []
+            config.params = {
+                'likes.likedBy': user._id,
+                'expand': "platformId(select=name,icon)",
+            }
+            res = await axios.get(`${URL}/api/quizzes/`, config);
+            if (!res.data.errors) {
+                likedQuizzes = res.data.quizzes
+            }
+
+            let awards = []
+            for (const aid of user.awards) {
+                res = await axios.get(`${URL}/api/awards/${aid}`,);
+                if (!res.data.errors) {
+                    awards.push(res.data.award)
+                }
+            }
+
+            let createdPlatforms = []
+            config = {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                params: {
+                    'owner': user._id
+                }
+            }
+            res = await axios.get(`${URL}/api/platforms`, config);
+            createdPlatforms = res.data.platforms
+
+            dispatch({
+                type: GET_PROFILE_SUCCESS,
+                payload: {
+                    profile: user,
+                    subscribedPlatforms: subscribedPlatforms,
+                    likedQuizzes: likedQuizzes,
+                    awards: awards,
+                    createdPlatforms: createdPlatforms
+                }
+            });
+        }
+    } catch (error) {
+        console.log("error message: " + error.message);
+        dispatch({
+            type: GET_PROFILE_FAIL
+        })
+    }
+
+}
+
 export const editProfile = ({ id, username, email, password, currentPassword, history, callback }) => async (dispatch) => {
     const config = {
         headers: {
@@ -58,7 +157,7 @@ export const editProfile = ({ id, username, email, password, currentPassword, hi
         // send any request errors to callback function
         callback(res.data.errors);
 
-        history.push('/profile')
+        // history.push(`/profile/${id}/edit`)
     } catch (error) {
         console.log(error.message)
         dispatch({
@@ -175,7 +274,7 @@ export const receiveNotifications = (notifications) => (dispatch) => {
 export const readNotification = (userId, notifId) => async (dispatch) => {
     try {
         const res = await axios.post(`${URL}/api/users/${userId}/inbox/notification/${notifId}/read`)
-        
+
         if (res.data.errors) {
             dispatch({
                 type: READ_NOTIFICATION_FAIL,
@@ -200,11 +299,11 @@ export const getFriendRequests = (id, currMax) => async (dispatch) => {
         }
     }
 
-    if (currMax === 0) 
+    if (currMax === 0)
         dispatch({
             type: GET_FRIENDREQUESTS_REQ
         })
-   
+
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)
         if (res.data.errors) {
@@ -299,11 +398,11 @@ export const getFriends = (id, page) => async (dispatch) => {
         }
     }
     console.log(page)
-    
+
     dispatch({
         type: GET_FRIENDS_REQ
     })
-   
+
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friends`, config)
         if (res.data.errors) {
@@ -349,7 +448,7 @@ export const uploadImage = (id, image) => async (dispatch) => {
         const formData = new FormData()
         formData.append('image', image)
 
-        const res = await axios.post(`${URL}/api/users/${id}/upload`, formData); 
+        const res = await axios.post(`${URL}/api/users/${id}/upload`, formData);
         dispatch({
             type: EDIT_PROFILE_SUCCESS,
             payload: res.data
