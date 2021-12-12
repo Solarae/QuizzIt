@@ -22,7 +22,14 @@ function ReportCard({ user, report,page }) {
     const dispatch = useDispatch()
     const handleDeleteReport = async (e) =>{
         dispatch(deleteQuizReport({
-            id:report._id
+            id:report._id,
+            query:{
+                userId: user.id,
+                expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
+                sort: 'timeSubmitted desc',
+                offset: 10 * (page - 1),
+                limit: 10
+            }
         }))
     }
 
@@ -56,7 +63,7 @@ function ReportCard({ user, report,page }) {
                     <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
                     {/* <Button variant="danger" onClick={handleShowDelete}> Delete Quiz </Button>  */}
                     <Button variant="danger" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete Quiz</Button>
-                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={report.quizId} />
+                    <DeleteQuizModal user={user} page={page} show={deleteModal} setShow = {setDeleteModal} quiz={report.quizId} />
                     
                     
 

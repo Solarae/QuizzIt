@@ -212,8 +212,11 @@ export const deleteManyQuizReport = async(req,res) => {
         let id = req.params.id
         let {userId} = req.body
 
+        let quiz = await Quiz.findById(id)
+        if(!quiz) res.status(404).json({message:"Quiz does not exist"})
+
         await Report.deleteMany({quizId:id})
-        let newReport = await Report.find({type:"quizReport",quizId:id}).populate("quizId").populate("submittedBy")
+        let newReport = await Report.find({type:"quizReport",platformId:quiz.platformId}).populate("quizId").populate("submittedBy")
         
 
         return res.status(200).json({report:newReport})  
@@ -233,20 +236,37 @@ export const getQuizReport = async (req,res) =>{
 
     try {
         let platformId = req.params.id
+        console.log(req.query)
+        var query = queryBuilder(Report.find({type:"quizReport",platformId:platformId}), req.query, Report)
 
-        //get every quiz reports
-        let reports = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
+        const { q, page, pages, totalCount } = await paginateQuery(query, Report, req.query.limit, req.query.offset)
+        console.log("page "+page+", pages "+pages)
+        // if (page > pages) 
+        //     return res.status(404).json({ msg: "Page doesn't exist" })
+
+        const reports = await q
+        res.status(200).json({ 
+            report: reports,
+            page,
+            pages,
+            totalCount
+        });  
+
+
+
+        // //get every quiz reports
+        // let reports = await Report.find({type:"quizReport"}).populate("quizId").populate("submittedBy")
         
-        //filter out the quiz reports that belong to the given platformId
-        let newReport = reports.filter((report)=>{
+        // //filter out the quiz reports that belong to the given platformId
+        // let newReport = reports.filter((report)=>{
 
-            let platformIdOfQuiz = report.quizId.platformId
-            return platformId == platformIdOfQuiz
+        //     let platformIdOfQuiz = report.quizId.platformId
+        //     return platformId == platformIdOfQuiz
             
-        })
+        // })
 
 
-        return res.status(200).json({report:newReport})  
+        // return res.status(200).json({report:newReport})  
 
     } catch (error) {
         console.log(error)

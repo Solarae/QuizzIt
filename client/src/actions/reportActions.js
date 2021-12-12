@@ -59,8 +59,14 @@ export const deletePlatformReport = ({id,query}) => async (dispatch) => {
 
 }
 
-export const deleteQuizReport = ({id}) => async (dispatch) => {
-    let res = await axios.delete(`${URL}/api/reports/deleteQuizReport/${id}`)
+export const deleteQuizReport = ({id,query}) => async (dispatch) => {
+    await axios.delete(`${URL}/api/reports/deleteQuizReport/${id}`)
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    let res = await axios.get(`${URL}/api/reports/getQuizReport/${id}`,config)
 
 
     try {
@@ -142,9 +148,13 @@ export const deleteManyQuizReport = ({quizId,userId}) =>async(dispatch) =>{
 }
 
 
-export const getQuizReport = ({id})=> async(dispatch) =>{
-
-    let res = await axios.get(`${URL}/api/reports/getQuizReport/${id}`)
+export const getQuizReport = ({id,query})=> async(dispatch) =>{
+    const config = {
+        params: {
+            ...query
+        }
+    }
+    let res = await axios.get(`${URL}/api/reports/getQuizReport/${id}`,config)
     console.log(res.data)
     dispatch({
         type:GET_PLATFORM_REPORT_SUCCESS,
