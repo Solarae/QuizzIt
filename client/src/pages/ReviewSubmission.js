@@ -116,7 +116,7 @@ function ReviewSubmission() {
                                 ></Option>
                             </Col>
                         </Row>
-                        <Row className='my-auto' style={{ height: '25%' }} >
+                        <Row style={{ height: '25%' }} >
                             <Col xs={6}>
                                 <Option text={question.choices[2]}
                                     isAnswer={question.answer === 'c'}
@@ -132,7 +132,7 @@ function ReviewSubmission() {
                         </Row>
 
                         {/* <div style={{ height: "5vw" }}></div> */}
-                        <Row align='center' style={{ height:'10%' }}>
+                        <Row align='center' style={{ height: '10%' }}>
                             <Col xs={4} ></Col>
                             <Col className="d-flex justify-content-between" xs={4} style={{}} >
                                 <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%" }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
