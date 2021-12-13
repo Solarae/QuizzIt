@@ -44,7 +44,9 @@ function Quiz() {
     }
 
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,subscribers)'
+        }))
     }, [dispatch, qid])
 
     if (isLoading) {
