@@ -19,6 +19,7 @@ function Home() {
         dispatch(getQuizzes(
             {
                 platformId: platform._id,
+                'expand' : "platformId(select=name,icon)",
                 sort,
                 offset: 0,
                 limit: 4 * page
