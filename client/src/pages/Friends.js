@@ -3,7 +3,7 @@ import { Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getFriends, unfriend } from '../actions/profileActions';
 import Pagination from '../components/Pagination'
-import { useParams } from 'react-router-dom'
+import { useParams, useHistory, useLocation } from 'react-router-dom'
 import Loading from '../components/Loading'
 
 function Friends() {
