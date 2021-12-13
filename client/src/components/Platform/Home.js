@@ -62,7 +62,7 @@ function Home() {
                         ))}
                         </Row>
                         <Row >
-                            {quizzes < quizzes.length && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                            {quizzes.length < quizTotalCount && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
                         </Row>
                     </div>
                 )
