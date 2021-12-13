@@ -94,7 +94,7 @@ const platformSchema = new mongoose.Schema ({
             type: String 
         }
     }],
-})
+}, { timestamps: true })
 
 const Platform = mongoose.model('Platform', platformSchema)
 
