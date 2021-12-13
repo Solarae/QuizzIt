@@ -54,7 +54,7 @@ function Quiz() {
     }
     const handleTakeQuiz = () => {
         if (user) {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/take`)
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}/take`)
         } else {
             handleShowSignIn()
         }
