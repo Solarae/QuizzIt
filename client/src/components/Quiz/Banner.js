@@ -116,7 +116,7 @@ function Banner({ isEdit }) {
                         <Image style={{ width: "220px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
                         <div className="align-middle" style={{ marginLeft: "2%", marginTop: "0px", padding: "0px" }}>
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
-                                {quiz.submissionCount} submissions
+                            <i class="bi bi-people-fill"></i> {quiz.submissionCount} submissions
                                 <i class="bi bi-dot" />
                                 <LikeDislike style={{  }} handleLike={handleLike} handleDislike={handleDislike}> </LikeDislike>
                             </p>
