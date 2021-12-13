@@ -52,6 +52,7 @@ function Banner({ isEdit }) {
     const [isModerator,setIsModerator] = useState(false)
 
     const hasWritePermissions = (id) => {
+        console.log(quiz)
         return id === quiz.owner || id === quiz.platformId.owner 
             || quiz.platformId.subscribers.find(s => s.userId === id && s.role === 'Moderator') !== undefined
             ? true : false  

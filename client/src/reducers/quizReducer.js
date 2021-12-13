@@ -57,10 +57,11 @@ const quizReducer = (state = initialState, action) => {
                 quiz: null,
                 isLoading: false,
             }
-        case ADD_QUIZ_QUESTION: 
+        case ADD_QUIZ_QUESTION:
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId,
                 errors: null,
             }
         case ADD_QUIZ_QUESTION_FAIL: 
@@ -71,7 +72,9 @@ const quizReducer = (state = initialState, action) => {
         case EDIT_QUIZ:
             return {
                 ...state,
-                ...action.payload
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId,
+                errors: null
             }
         case EDIT_QUIZ_FAIL:
             return {
@@ -91,7 +94,8 @@ const quizReducer = (state = initialState, action) => {
         case EDIT_QUIZ_QUESTION: 
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId,
                 errors: null,
             }
         case EDIT_QUIZ_QUESTION_FAIL: 
@@ -102,7 +106,8 @@ const quizReducer = (state = initialState, action) => {
         case DELETE_QUIZ_QUESTION: 
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId,
                 errors: null,
             }
         case DELETE_QUIZ_QUESTION_FAIL: 
@@ -136,7 +141,8 @@ const quizReducer = (state = initialState, action) => {
         case UPVOTE_QUIZ:
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId
             }
         case UPVOTE_QUIZ_FAIL:
             return {
@@ -146,7 +152,8 @@ const quizReducer = (state = initialState, action) => {
         case DOWNVOTE_QUIZ:
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId,
             }
         case DOWNVOTE_QUIZ_FAIL:
             return {
@@ -156,7 +163,8 @@ const quizReducer = (state = initialState, action) => {
         case REPORT_QUIZ:
             return {
                 ...state,
-                ...action.payload,
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId
             }
         case REPORT_QUIZ_FAIL:
             return {
@@ -166,7 +174,8 @@ const quizReducer = (state = initialState, action) => {
         case EDIT_QUIZ_THUMBNAIL: 
             return {
                 ...state,
-                ...action.payload
+                ...action.payload.quiz,
+                platformId: state.quiz.platformId
             }
         case EDIT_QUIZ_THUMBNAIL_FAIL: 
             return {

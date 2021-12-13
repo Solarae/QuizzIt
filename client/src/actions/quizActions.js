@@ -113,6 +113,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
             })
         }
         else {
+            console.log(res.data)
             dispatch({
                 type: ADD_QUIZ_QUESTION,
                 payload: res.data
