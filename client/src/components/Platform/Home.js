@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import QuizCardMini from '../Cards/QuizCardMini.js';
 import { getQuizzes } from '../../actions/platformActions.js';
+import { useParams } from 'react-router-dom';
 import Loading from '../Loading'
 
 function Home() {
@@ -13,6 +14,8 @@ function Home() {
     const quizTotalCount = useSelector((state) => state.platforms.quizTotalCount)
     const [page, setPage] = useState(1)
     const [sort, setSort] = useState('submissionCount desc,createdAt asc')
+    
+    let { id } = useParams();  // get the platform id from the url
 
     useEffect(() => {
         console.log("CALLING API")
@@ -25,13 +28,14 @@ function Home() {
                 limit: 4 * page
             }
         ))
-    }, [sort, page, platform, dispatch]);
+    }, [sort, page, id, dispatch]);
     
     const showMoreQuizzes = () => {
         if (quizzes.length < quizTotalCount)
             setPage(page + 1)
     }
-    if (isGetQuizzesLoading && !quizzes) {
+                                            // need this condition to prevent quizzes from an old query from displaying (e.g. visit Platform A then visit Platform B; B briefly shows A's quizzes)
+    if (isGetQuizzesLoading || !quizzes || (quizzes.length > 0 && quizzes[0].platformId._id !== id)) {
         return (
             <Loading />
         )

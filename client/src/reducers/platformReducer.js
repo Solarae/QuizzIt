@@ -240,6 +240,7 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 ...action.payload,
+                quizzes:  [],
                 isGetQuizzesLoading: false,
             }
         case GET_PLATFORM_REQ:
