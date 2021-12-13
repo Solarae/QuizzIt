@@ -208,7 +208,7 @@ function Option({ text, selected, onClick }) {
                 className="questionOption"
                 border={selected ? "primary" : ""}
                 bg='Light'
-                style={{ marginBottom: "1vw" }}
+                style={{ marginBottom: "1vw", borderWidth:'3px' }}
             >
                 <Card.Body>
                     <Card.Text>
