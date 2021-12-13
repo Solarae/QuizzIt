@@ -33,6 +33,7 @@ function DeleteProfile({ show, handleClose }) {
         e.preventDefault();
 
         dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, callback: closeModal }));
+        history.push("/")
     })
 
     return (

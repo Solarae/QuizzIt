@@ -74,6 +74,32 @@ export const getSubmissions = (query) => async (dispatch) => {
     }
 }
 
+export const getQuizSubmission = ({userId,quizId}) => async (dispatch) => {
+    try {
+        dispatch({
+            type: GET_SUBMISSIONS_REQ
+        });
+
+        const res = await axios.get(`${URL}/api/submissions/getQuizSubmissions/${userId}/${quizId}`)
+
+        console.log(res.data)
+        if (res.data.errors){
+            dispatch({
+                type: GET_SUBMISSIONS_FAIL,
+                payload: res.errors
+            })
+        }
+        else {
+            dispatch({
+                type: GET_SUBMISSIONS_SUCCESS,
+                payload:res.data
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 export const getSubmission = ( {id, query} ) => async (dispatch) => {
     const config = {

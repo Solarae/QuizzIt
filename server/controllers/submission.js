@@ -68,16 +68,16 @@ export const createSubmission = async (req,res) =>{
 
 export const getQuizSubmissions = async (req,res)=>{
 
-    const userId = req.params.id
+    const userId = req.params.uid
+    const quizId = req.params.qid
     try {
-
-        const submissions = await Submission.find({userId:userId})
+        const submissions = await Submission.find({userId:userId,quizId:quizId})
         .populate("platformId")
         .populate("quizId")
 
         if(!submissions) return res.status(400).json({message:"User id is not found"})
     
-        return res.status(200).json({submission:submissions})     
+        return res.status(200).json({submissions:submissions})     
 
 
     } catch (error) {
@@ -91,7 +91,9 @@ export const getQuizSubmissions = async (req,res)=>{
 
 export const getSubmissions = async (req,res)=>{
     try {
-        console.log(req.query)
+        // console.log(req.query)
+        console.log("quiz Id "+req.quizId)
+        console.log()
         var query = queryBuilder(null, req.query, Submission)
         //console.log(query)
         const { q, page, pages, totalCount } = await paginateQuery(query, Submission, req.query.limit, req.query.offset)

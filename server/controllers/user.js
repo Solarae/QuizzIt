@@ -216,6 +216,14 @@ export const deleteAccount = async (req, res) => {
         const deletedUser = await User.findByIdAndDelete(id)
         if (!deletedUser) return res.status(404).json({ success: false })
 
+
+        //for platforms, check if user is owner, if is owner, then assign owner status to first moderator found
+        
+
+
+
+
+
         return res.status(200).json({
             success: true,
             user: {

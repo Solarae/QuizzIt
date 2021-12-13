@@ -31,6 +31,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { getSignedIn, connectSocket } from './actions/authActions'
 import ViewSubmission from './pages/ViewSubmission';
 import ReviewSubmission from './pages/ReviewSubmission';
+import ViewQuizSubmission from './pages/ViewQuizSubmission'
 import ViewPlatformReport from './pages/ViewPlatformReport.js';
 import ViewQuizReport from './pages/ViewQuizReport.js'
 import { URL } from './config'
@@ -75,6 +76,7 @@ function App() {
         <Route path='/upload' exact component={Upload} />
         <Route path='/countdown' exact component={CountDownTimer} />
         <Route path='/viewSubmission' exact component={ViewSubmission} />
+        <Route path='/viewQuizSubmission/:id' exact component={ViewQuizSubmission} />
         <Route path='/submission/reviewSubmission/:id' exact component={ReviewSubmission} />
         <Route path='/platform/:id/quiz/:qid/leaderboard' exact component={QuizLeaderboard} />
         <Route path='/viewPlatformReport' exact component={ViewPlatformReport} />
