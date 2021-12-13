@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Image, Row, Col } from 'react-bootstrap';
+import { Card, Image, Row, Col, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import moment from 'moment'
 import mongoose from 'mongoose'
@@ -9,6 +9,10 @@ function QuizCard({ quiz }) {
 
     const routeToQuiz = () => {
         history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`);
+    }
+
+    const routeToTakeQuiz = () => {
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}/take`);
     }
 
     const routeToPlatform = () => {
@@ -21,16 +25,16 @@ function QuizCard({ quiz }) {
         <Card style={{ marginBottom: "20px" }}>
             <Card.Body>
                 <Row>
-                    <Col md={3} className="my-auto" align="center" >
+                    <Col xs={3} className="my-auto" align="center" >
                         <Image style={{ width: "220px", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
-                        <p className="fs-6 text-muted" style={{marginBottom:"-10px"}}><i class="bi bi-stopwatch"></i> {quiz.time} min</p>
+                        <p className="fs-6 text-muted" style={{ marginBottom: "-10px" }}><i class="bi bi-stopwatch"></i> {quiz.time} min</p>
                     </Col>
-                    <Col style={{}}>
+                    <Col xs={6} style={{}}>
                         <Row style={{ height: "25%" }}>
                             <p className="fs-4 text" style={{ cursor: 'pointer' }} onClick={routeToQuiz}>{quiz.name}</p>
                         </Row>
                         <Row style={{ height: "25%" }}>
-                            <p><i class="bi bi-people-fill"></i> {quiz.submissionsCount} Taken
+                            <p><i class="bi bi-people-fill"></i> {quiz.submissionCount} Submissions
                                 <i class="bi bi-dot" />
                                 {moment(createdAt).fromNow()}
                                 <i class="bi bi-dot" />
@@ -45,8 +49,12 @@ function QuizCard({ quiz }) {
                             </Col>
                         </Row>
                         <Row style={{ height: "25%", marginTop: "10px", marginBottom: "-5px" }}>
-                            <p>{quiz.description}</p>
+                            {/* <p>{quiz.description}</p> */}
+                            <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>aasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfsdfasdfasdfsadfHello</p>
                         </Row>
+                    </Col >
+                    <Col xs={3} align="center" className="my-auto" >
+                        <Button variant="outline-primary" onClick={routeToTakeQuiz}>Take Quiz</Button>
                     </Col >
                 </Row>
             </Card.Body>

@@ -231,7 +231,7 @@ function AppNavbar() {
                   }} href="#">Logout</NavDropdown.Item>
                 </NavDropdown>
               </Nav>
-            ) : (<Nav.Link onClick={handleShowSignIn} href="">Sign In</Nav.Link>)}
+            ) : (<Nav.Link onClick={handleShowSignIn} href="" style={{color:'white'}}>Sign In</Nav.Link>)}
         </Navbar.Collapse>
 
         

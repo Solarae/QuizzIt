@@ -22,7 +22,7 @@ function EditQuiz() {
     
     useEffect(() => {
         dispatch(getQuiz(qid, {
-            expand: 'platformId(select=name,owner,icon,subscribers)'
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
         }))
     }, [dispatch, qid])
     

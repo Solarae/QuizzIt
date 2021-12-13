@@ -142,22 +142,24 @@ function TakeQuiz() {
                             ))}
                         </div>
                     </Col>
-                    <Col align='center' xs={8} style={{}}>
-                        <h2>Question {qno + 1}</h2>
-                        <hr />
-                        <Card
-                            border="dark"
-                            bg='Light'
-                        >
-                            <Card.Body>
-                                <Card.Text>
-                                    <h4>{question.question}</h4>
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
+                    <Col align='center' xs={8} style={{ height: "90%" }}>
+                        <Row style={{ height: '40%' }}>
+                            <h2>Question {qno + 1}</h2>
+                            <hr />
+                            <Card
+                                border="dark"
+                                bg='Light'
+                            >
+                                <Card.Body>
+                                    <Card.Text>
+                                        <h4>{question.question}</h4>
+                                    </Card.Text>
+                                </Card.Body>
+                            </Card>
+                        </Row>
 
                         <br />
-                        <Row >
+                        <Row style={{ height: "20%" }}>
                             <Col xs={6}>
                                 <Option text={question.choices[0]} selected={userAnswers[qno] === 'a'} onClick={() => { questionInput(qno, 'a') }}></Option>
                             </Col>
@@ -165,7 +167,7 @@ function TakeQuiz() {
                                 <Option text={question.choices[1]} selected={userAnswers[qno] === 'b'} onClick={() => { questionInput(qno, 'b') }}></Option>
                             </Col>
                         </Row>
-                        <Row >
+                        <Row style={{ height: "25%" }}>
                             <Col xs={6}>
                                 <Option text={question.choices[2]} selected={userAnswers[qno] === 'c'} onClick={() => { questionInput(qno, 'c') }}></Option>
                             </Col>
@@ -174,8 +176,7 @@ function TakeQuiz() {
                             </Col>
                         </Row>
 
-                        <div style={{ height: "5vw" }}></div>
-                        <Row align='center' style={{}}>
+                        <Row align='center' style={{ height: '10%' }}>
                             <Col xs={4} ></Col>
                             <Col className="d-flex justify-content-between" xs={4} >
                                 <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%" }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
@@ -208,7 +209,7 @@ function Option({ text, selected, onClick }) {
                 className="questionOption"
                 border={selected ? "primary" : ""}
                 bg='Light'
-                style={{ marginBottom: "1vw" }}
+                style={{ marginBottom: "1vw", borderWidth: '3px' }}
             >
                 <Card.Body>
                     <Card.Text>

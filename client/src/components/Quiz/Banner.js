@@ -1,5 +1,5 @@
-import React,{useState, useEffect, useCallback, useRef } from 'react'
-import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
+import React, { useState, useEffect, useCallback, useRef } from 'react'
+import { Image, Button, Overlay, Tooltip, Toast, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -12,7 +12,7 @@ import Loading from '../Loading'
 import SignUp from '../SignUp.js';
 import SignIn from '../SignIn.js';
 import LikeDislike from '../Button/LikeDislike';
-import { useHistory,Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import Report from './Report';
 import axios from "axios"
 import { URL } from '../../config';
@@ -21,6 +21,8 @@ function Banner({ isEdit }) {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const quiz = useSelector((state) => state.quiz.quiz)
+    let platform = null
+    if (quiz) platform = quiz.platformId
     const history = useHistory()
 
     const [showSignIn, setShowSignIn] = useState(false);
@@ -60,7 +62,7 @@ function Banner({ isEdit }) {
     const handleLike = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
         dispatch(upvoteQuiz({
             userId: auth.user.id,
@@ -71,7 +73,7 @@ function Banner({ isEdit }) {
     const handleDislike = () => {
         if (auth.user === null) {
             handleShowSignIn()
-            return 
+            return
         }
         dispatch(downvoteQuiz({
             userId: auth.user.id,
@@ -79,26 +81,31 @@ function Banner({ isEdit }) {
         }))
     }
 
+    const routeToPlatform = () => {
+        history.push(`/platform/${platform._id}`)
+    }
+
     const redirectEdit = () => {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/edit`)
+        history.push(`/platform/${platform._id}/quiz/${quiz._id}/edit`)
     }
     
     return (
-        <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ background: "#227093"  }}>
+        <div style={{ height: "330px" }} className="position-relative">
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ backgroundImage: `url(${platform.banner}` }}>
             </div>
-            <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{overflowWrap: "break-word"}} >
+            <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{ overflowWrap: "break-word" }} >
                 <div className="row">
                     <div className="col-6 d-flex justify-content-start" style={{}} >
-                        <Image style={{ width: "220px", height: "150px", marginTop: "-82px"}}  className="position-relative ms-5 bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
-                        <div style={{ marginLeft: "2%"}}>
-                            <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
-                            <p className="lead fw-normal" style={{marginBottom:"10px"}}>
-                                {quiz.submissionCount} submissions
-                                <LikeDislike handleLike={handleLike} handleDislike={handleDislike}> </LikeDislike>
+                        <Image style={{ width: "220px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
+                        <div className="align-middle" style={{ marginLeft: "2%", marginTop: "0px", padding: "0px" }}>
+                            <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
+                            <i class="bi bi-people-fill"></i> {quiz.submissionCount} submissions
+                                <i class="bi bi-dot" />
+                                <LikeDislike style={{  }} handleLike={handleLike} handleDislike={handleDislike}> </LikeDislike>
                             </p>
-                            <p className="lead fw-normal">
-                                {quiz.description}
+                            <p className="text-muted " style={{ cursor: 'pointer' }} onClick={routeToPlatform}>
+                                <Image style={{ marginRight:"3px", width: "35px", height: "35px", cursor: 'pointer' }} className="bg-dark" src={platform.icon ? platform.icon : '/quizzit_logo.png'} thumbnail />
+                                {platform.name}
                             </p>
                         </div>
                     </div>
@@ -134,21 +141,21 @@ function Banner({ isEdit }) {
                     </div>
                 </div>
             </div>
-            <div className="ms-5 mt-1" style={{ width: '220px', textAlign: "center"}}>
-                <h4>{quiz.platformId.name}</h4>
+            <div className="ms-5 mt-1" style={{ width: '220px', textAlign: "center" }}>
+                <h4>{quiz.name}</h4>
             </div>
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
-            
+
             <Report setShowReportToast={setShowReportToast} quizId={quiz._id} show={showReport} handleClose={handleCloseReport}></Report>
             <Toast
                 show={showReportToast}
                 animation
                 autohide={true}
                 delay={2500}
-                onClose={()=>{setShowReportToast(false)}}
+                onClose={() => { setShowReportToast(false) }}
                 className="position-absolute top-0 end-0"
-                style={{ marginRight: "5px", marginTop: "5px", width:"auto", fontSize:"12pt" }}
+                style={{ marginRight: "5px", marginTop: "5px", width: "auto", fontSize: "12pt" }}
             >
                 <Toast.Body>Report Submitted</Toast.Body>
             </Toast>
