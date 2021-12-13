@@ -10,9 +10,9 @@ function Home() {
     const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
     const { isGetQuizzesLoading, quizzes } = useSelector((state) => state.platforms);
-    const pages = useSelector((state) => state.platforms.quizPages)
+    const quizTotalCount = useSelector((state) => state.platforms.quizTotalCount)
     const [page, setPage] = useState(1)
-    const [sort, setSort] = useState('submissionCount desc')
+    const [sort, setSort] = useState('submissionCount desc,createdAt asc')
 
     useEffect(() => {
         console.log("CALLING API")
@@ -27,7 +27,7 @@ function Home() {
     }, [sort, page, platform, dispatch]);
     
     const showMoreQuizzes = () => {
-        if (page < pages)
+        if (quizzes.length < quizTotalCount)
             setPage(page + 1)
     }
     if (isGetQuizzesLoading && !quizzes) {
@@ -46,8 +46,8 @@ function Home() {
 
                 <Dropdown.Menu>
                 <Dropdown.Item href="" onClick={() => { setSort("submissionCount desc") }}>Popular {sort === "submissionCount desc" && <i class="bi bi-check"></i>}</Dropdown.Item>
-                    <Dropdown.Item href="" onClick={() => { setSort("_id desc") }}>Oldest {sort === "_id desc" && <i class="bi bi-check"></i>}</Dropdown.Item>
-                    <Dropdown.Item href="" onClick={() => { setSort("_id asc") }}>Newest {sort === "_id asc" && <i class="bi bi-check"></i>}</Dropdown.Item>
+                    <Dropdown.Item href="" onClick={() => { setSort("createdAt desc") }}>Oldest {sort === "_id desc" && <i class="bi bi-check"></i>}</Dropdown.Item>
+                    <Dropdown.Item href="" onClick={() => { setSort("createdAt asc") }}>Newest {sort === "_id asc" && <i class="bi bi-check"></i>}</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
             {console.log(quizzes)}
@@ -62,7 +62,7 @@ function Home() {
                         ))}
                         </Row>
                         <Row >
-                            {page < pages && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                            {quizzes < quizzes.length && <Button variant="outline-light" onClick={showMoreQuizzes} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
                         </Row>
                     </div>
                 )
