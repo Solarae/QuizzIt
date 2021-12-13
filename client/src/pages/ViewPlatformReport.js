@@ -9,6 +9,7 @@ import SubmissionCard from "../components/Submission/SubmissionCard"
 import { getPlatformReport } from "../actions/reportActions"
 import ReportCard from "../components/Report/ReportCard"
 import Pagination from "../components/Pagination"
+import Loading from '../components/Loading'
 
 
 function ViewPlatformReport() {
@@ -51,7 +52,7 @@ function ViewPlatformReport() {
 
 
     if (isLoading) {
-        return ( <div> Loading... </div> )
+        return (<Loading />)
     }
 
 

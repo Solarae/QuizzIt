@@ -4,6 +4,7 @@ import { getSubmission } from "../actions/submissionActions"
 import { Col, Container } from "react-bootstrap"
 import { useParams } from "react-router"
 import SubmissionCard from "../components/Submission/SubmissionCard"
+import Loading from '../components/Loading'
 
 function ReviewSubmission() {
     const dispatch = useDispatch()
@@ -26,7 +27,7 @@ function ReviewSubmission() {
     },[dispatch,user])
 
     if (isGetSubmissionLoading || submission==null) {
-        return ( <div> Loading... </div> )
+        return (<Loading />)
     }
     console.log(submission)
     return(

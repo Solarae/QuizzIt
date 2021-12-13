@@ -8,6 +8,7 @@ import Banner from '../components/Profile/Banner';
 import EditProfileModal from '../components/Profile/EditProfile';
 import UploadImage from '../components/UploadImage';
 import DeleteProfile from '../components/Profile/DeleteProfile';
+import Loading from '../components/Loading'
 
 import { getProfile } from '../actions/profileActions'
 
@@ -45,9 +46,13 @@ function EditProfile() {
         dispatch(uploadImage(id, image))
     }
 
+    if (!auth.user || auth.user.id !==id){
+        return <div>You do not have permisison to access this page.</div>
+    }
+    
     if (!auth.user || isGetProfileLoading) {
         return (
-            <div>Loading...</div>
+            <Loading />
         )
     }
 

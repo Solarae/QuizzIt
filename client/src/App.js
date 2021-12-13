@@ -2,6 +2,7 @@
 import React, { useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import AppNavbar from './components/Navbar';
+import Footer from './components/Footer';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 
@@ -39,7 +40,7 @@ function App() {
   const dispatch = useDispatch()
   const user = useSelector((state) => state.auth.user)
   const socket = useSelector((state) => state.auth.socket)
-  
+
   // Try logging in wth token and setup socket
   useEffect(() => {
     dispatch(getSignedIn())
@@ -53,7 +54,7 @@ function App() {
         console.log("RECEIVED MESSAGE FROM SERVER")
       });
     }
-      
+
   }, [socket, user]);
 
   return (
@@ -82,6 +83,7 @@ function App() {
         <Route path='/myQuizzes' exact component={MyQuizzes} />
         {/* <Route path='/todos' exact component={TodoList}/> */}
       </Switch>
+      <Footer />
     </BrowserRouter>
   );
 }

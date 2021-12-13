@@ -446,7 +446,7 @@ export const getQuizzes = (query) => async (dispatch) => {
         console.log("error message: " + error.message);
         dispatch({
             type: GET_PLAT_QUIZZES_FAIL,
-            payload: error.response.data
+            payload: {...error.response.data, quizzes:[]}
         })
     }
 }

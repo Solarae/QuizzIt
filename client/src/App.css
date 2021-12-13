@@ -1,5 +1,6 @@
 body {
-  overflow-y: scroll; /* Show vertical scrollbar */
+  overflow-y: scroll;
+  /* Show vertical scrollbar */
 }
 
 .dropdown-toggle::after {
@@ -10,22 +11,22 @@ body {
   height: 70px;
 }
 
-/* START of CSS for platfoorm navbar */ 
+/* START of CSS for platfoorm navbar */
 
-.tabNav > .nav-item > * > a >  i{
+.tabNav>.nav-item>*>a>i {
   color: black;
 }
 
-.tabNav > .nav-item > * > .active >  i{
+.tabNav>.nav-item>*>.active>i {
   color: #1DA1F2;
 }
 
-.tabNav > .nav-item > * >  a{
+.tabNav>.nav-item>*>a {
   outline: None;
   border: None;
 }
 
-.tabNav > .nav-item > * > .active{
+.tabNav>.nav-item>*>.active {
   outline: None;
   border: None;
   background-color: white;
@@ -33,7 +34,7 @@ body {
   bottom: -10px;
 }
 
-.tabNav > .nav-item > * > a{
+.tabNav>.nav-item>*>a {
   outline: None;
   border: None;
   background-color: white;
@@ -41,7 +42,8 @@ body {
   bottom: -10px;
 }
 
-.tabNav > .nav-item > * > a:hover, .tabNav > .nav-item > a:focus{
+.tabNav>.nav-item>*>a:hover,
+.tabNav>.nav-item>a:focus {
   outline: None;
   border: None;
   background-color: white;
@@ -49,14 +51,34 @@ body {
   bottom: -10px;
 }
 
-/* END of CSS for platfoorm navbar */ 
+/* END of CSS for platfoorm navbar */
 
-/* START of CSS for view submissions page */ 
+/* START of CSS for view submissions page */
 
-tr{
-  cursor:pointer
+tr {
+  cursor: pointer
 }
 
 
 
-/* END of CSS for view submissions page*/ 
+/* END of CSS for view submissions page*/
+
+
+.questionOption:hover {
+  box-shadow: 4px 4px 4px gray;
+  transform: scale(1.1);
+}
+
+.questionOption{
+  transition: .3s;
+  margin: 2rem;
+}
+
+.questionScroll::-webkit-scrollbar {
+  width: 2px;  /* Remove scrollbar space */
+  background: transparent;  /* Optional: just make scrollbar invisible */
+}
+/* show position indicator in team color */
+ .questionScroll::-webkit-scrollbar-thumb {
+  background: #227093;
+}

@@ -3,7 +3,8 @@ import { Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getFriends, unfriend } from '../actions/profileActions';
 import Pagination from '../components/Pagination'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 function Friends() {
     const dispatch = useDispatch()
@@ -34,7 +35,7 @@ function Friends() {
     
 
     if (isGetFriendsLoading && friends.length === 0) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
     
     return (

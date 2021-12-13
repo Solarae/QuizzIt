@@ -3,7 +3,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AwardCard from './AwardCard.js'
 import CreateAward from './CreateAward.js'
-import { getAwards } from '../../actions/awardActions.js';
+import { getAwards, setAwardPage } from '../../actions/awardActions.js';
+import Loading from '../Loading'
 
 function AwardSection({edit}) {
     const [showCreateAward, setShowCreateAward] = useState(false);
@@ -32,8 +33,10 @@ function AwardSection({edit}) {
         }
             
     }
-    if (isGetAwardsLoading && !awards) {
-        return (<div>Loading...</div>)
+    if (isGetAwardsLoading || !awards) {
+        return (
+            <Loading />
+        )
     }
 
     return (
@@ -52,7 +55,8 @@ function AwardSection({edit}) {
                 ))}
             </Row>
             <Row >
-                {awards.length < awardTotalCount && <Button variant="outline-light" onClick={showMoreAwards} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                {awards.length !== 0 && awards.length < awardTotalCount && <Button variant="outline-light" onClick={showMoreAwards} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                {awards.length === 0 && <span><br/><Row className='justify-content-center'>No Awards Yet</Row></span>}
             </Row>
             {edit && <CreateAward show={showCreateAward} handleClose={() => { setShowCreateAward(false) }}></CreateAward>}
         </Container >

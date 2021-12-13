@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom'
 import PlatformCard from '../components/Search/PlatformCard.js'
 import QuizCard from '../components/Search/QuizCard'
 import UserCard from '../components/Search/UserCard'
+import Loading from '../components/Loading'
 
 import { searchPlatform, searchQuiz, searchUser } from '../actions/searchActions.js'
 import {
@@ -81,7 +82,9 @@ function Search() {
 
 
     if (isSearchPlatformLoading || isSearchQuizLoading || isSearchUserLoading) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        ) 
     }
     return (
         <div className="justify-content-between">

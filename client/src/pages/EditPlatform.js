@@ -8,6 +8,7 @@ import { getPlatform } from '../actions/platformActions'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 function EditPlatform() {
     const dispatch = useDispatch()
@@ -28,7 +29,9 @@ function EditPlatform() {
 
 
     if (isGetLoading || !platform) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
 
     if (user == null || user.id !== platform.owner) 

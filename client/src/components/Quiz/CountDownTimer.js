@@ -34,7 +34,7 @@ function CountDownTimer({ duration, counter }) {
 
     return (
         <div style={{display:'flex', justifyContent: 'center'}}>
-            <p>{time.hrs}:{time.mins}:{time.secs}</p>
+            <p><i class="bi bi-alarm"></i> {time.mins}:{time.secs < 10 ? '0'+time.secs : time.secs}</p>
         </div>
     )
 }
