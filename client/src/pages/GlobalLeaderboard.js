@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import Leaderboard from '../components/Leaderboards/Leaderboard.js'
 import { searchLeaderboard, getLeaderboard } from '../actions/globalActions'
 

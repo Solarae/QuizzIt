@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { Container, Col, Table, Button } from 'react-bootstrap';
+import { Container, Col, Table, Button, Row } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
 
@@ -28,7 +28,7 @@ function Quiz() {
 
     const history = useHistory()
 
-    const { isGetQuizLeaderboardLoading, leaderboard, errors} = useSelector((state) => state.quiz)
+    const { isGetQuizLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.quiz)
 
     const { id, qid } = useParams();  // get the platform ID from the url
     const url = `/platform/${id}/quiz/${qid}/leaderboard`
@@ -44,50 +44,71 @@ function Quiz() {
     }
 
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
     }, [dispatch, qid])
 
     if (isLoading) {
         return (<Loading />)
     }
+
     const handleTakeQuiz = () => {
         if (user) {
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/take`)
+        history.push(`/platform/${id}/quiz/${quiz._id}/take`)
         } else {
             handleShowSignIn()
         }
     }
-    const handleViewSubmission = () =>{
+    const handleViewSubmission = () => {
         history.push(`/viewQuizSubmission/${quiz._id}`)
     }
+
     return (
         <>
-            <Banner isEdit={false}></Banner>      
+            <Banner isEdit={false}></Banner>
 
             <div style={{ height: "10vh" }}></div>
-                <Container>
-                <Col>
-                <Table striped bordered hover>
-                    <tr><th>Quiz Rules</th></tr>
-                    <tr>
-                        <th>Time</th>
-                        <th>{quiz.time}</th>
-                    </tr>
-                    <tr>
-                        <th>Number of Questions</th>
-                        <th>{quiz.questions.length}</th>
-                    </tr>
-                </Table>
-                <div className="d-grid gap-1">
-                    <Button variant="outline-primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleTakeQuiz}>Take Quiz</Button>
-                    <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleViewSubmission}>View Submissions</Button>
-                </div>
-                </Col>
-                <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
-                </Container>
+            <Container>
+                <Row style={{marginBottom: '2vw'}}>
+                    <Col align='center'>
+                        <h3>Description</h3>
+                        <p className='text-muted' style={{ wordBreak: 'break-all', whiteSpace: 'normal' }}>
+                            {quiz.description}
+                        </p>
+                        <hr />
+                        <h4>Quiz Rules</h4>
+                        <Table striped bordered hover style={{ width: '50%' }}>
+                            <tr>
+                            </tr>
+                            <tr>
+                                <th>Time</th>
+                                <th>{quiz.time} min</th>
+                            </tr>
+                            <tr>
+                                <th>Number of Questions</th>
+                                <th>{quiz.questions.length}</th>
+                            </tr>
+                        </Table>
 
-                <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
-                <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
+                        <br />
+
+                        <div className="d-grid gap-1" style={{ width: "50%" }}>
+                            <Button variant="outline-primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleTakeQuiz}>Take Quiz</Button>
+                            <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={handleViewSubmission}>View My Submissions</Button>
+                        </div>
+                    </Col>
+                </Row>
+                <hr />
+                <Row >
+                    <Col style={{marginTop:'2vw'}}>
+                        <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    </Col>
+                </Row>
+            </Container>
+
+            <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
+            <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
         </>
     )
 }

@@ -505,7 +505,10 @@ export const editMemberRole = async (req,res) => {
             { $set: { "subscribers.$.role": role } },
             { new: true }
         )
-        return res.status(200).json( { platform: updatedPlatform } )   
+        return res.status(200).json( { member: {
+            userId: memberId,
+            role
+        } } )   
            
     } catch (error) {
         res.status(404).json({ msg: error.message })

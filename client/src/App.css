@@ -1,6 +1,8 @@
 body {
-  overflow-y: scroll;
-  /* Show vertical scrollbar */
+  overflow-y: scroll; /* Show vertical scrollbar */
+
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .dropdown-toggle::after {
@@ -69,7 +71,19 @@ tr {
   transform: scale(1.1);
 }
 
-.questionOption{
+.questionOption {
   transition: .3s;
   margin: 2rem;
+}
+
+.questionScroll::-webkit-scrollbar {
+  width: 2px;
+  /* Remove scrollbar space */
+  background: transparent;
+  /* Optional: just make scrollbar invisible */
+}
+
+/* show position indicator in team color */
+.questionScroll::-webkit-scrollbar-thumb {
+  background: #227093;
 }

@@ -40,11 +40,11 @@ const DeleteQuizModal = ({ quiz, show, setShow,user,page }) => {
 
   return (
     <Modal show={show} onHide = {closeModal}>
-      <Modal.Header closeButton> <Modal.Title>Edit Question</Modal.Title> </Modal.Header>
+      <Modal.Header closeButton> <Modal.Title>Delete Quiz</Modal.Title> </Modal.Header>
       <Form onSubmit={handleSubmit}>
           <Modal.Body>
               Are you sure you want to delete this quiz? This action cannot be undone!
-              Note:deleting this quiz also deletes the reports associated with this quiz!
+              Deleting this quiz deletes all submissions associated with this quiz.
           </Modal.Body>
           <Modal.Footer className="justify-content-between"> 
               <Button variant="primary" type="submit"> Delete </Button> 

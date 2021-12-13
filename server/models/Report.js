@@ -33,7 +33,7 @@ const report = new mongoose.Schema({
         ref:"User"
     }
 
-})
+}, { timestamps: true })
 
 
 const Report = mongoose.model('Report',report)

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom'
 
@@ -23,7 +23,6 @@ function QuizCardMini({ quiz, showPlatform = true }) {
 
     const createdAt = mongoose.Types.ObjectId(quiz._id).getTimestamp();
     const isEdit = location.pathname.endsWith("edit")
-    const isHome = location.pathname.endsWith("/")
 
     return (
         <Card>
@@ -31,7 +30,7 @@ function QuizCardMini({ quiz, showPlatform = true }) {
                 <Row>
                     <Col className="my-auto" align="center" >
                         {isEdit && (<i className="bi bi-pencil-square position-absolute top-0 start-100 translate-middle" style={{ fontSize: "1.3rem" }}></i>)}
-                        <Image style={{ width: "100%", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
+                        <Image style={{ width: "220px", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
 
                         <Row>
                             {

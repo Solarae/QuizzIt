@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getOneSubmission, getSubmissions } from "../actions/submissionActions"
-import { Col, Container, ListGroup, Table,Row } from "react-bootstrap"
+import { Col, Container, Row } from "react-bootstrap"
 import { useParams } from "react-router"
 import axios from "axios"
 import { URL } from "../config"
-import SubmissionCard from "../components/Submission/SubmissionCard"
-import { getPlatformReport, getQuizReport } from "../actions/reportActions"
+import { getQuizReport } from "../actions/reportActions"
 import ReportCard from "../components/Report/ReportCard"
 import Pagination from "../components/Pagination"
 import Loading from '../components/Loading'
@@ -98,21 +96,6 @@ function ViewQuizReport() {
         </>
 
     )
-    
-
-   
-    
-
-
-    return(
-        <>
-            hi
-        </>
-    )
-
-   
-
-
 }
 
 export default ViewQuizReport

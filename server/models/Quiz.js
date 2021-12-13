@@ -123,7 +123,7 @@ const quizSchema = new mongoose.Schema ({
         enum: ['draft', 'published'],
         default: 'draft'
     }
-})
+}, { timestamps: true })
 
 const Quiz = mongoose.model('Quiz', quizSchema)
 

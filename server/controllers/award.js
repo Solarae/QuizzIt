@@ -68,7 +68,6 @@ export const getAwardsByFilter = async (req, res) => {
 }
 
 export const updateAward = async (req, res) => {
-    console.log(req.file.path)
     console.log("INSIDE UPDATE AWARds")
     const { userId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
 
@@ -87,8 +86,8 @@ export const updateAward = async (req, res) => {
         }
 
         var updatedAward
-        console.log(req.file)
-        if (req.file.path) {
+        console.log(`Req file is ${req.file}`)
+        if (req.file) {
             const cloud = await uploadImgToCloud(req.file.path)
             updatedAward = await Award.findByIdAndUpdate(
                 req.params.id,
@@ -97,6 +96,7 @@ export const updateAward = async (req, res) => {
                 { new: true }
             );
         } else {
+            console.log(req.body)
             updatedAward = await Award.findByIdAndUpdate(
                 req.params.id,
                 { $set: req.body },

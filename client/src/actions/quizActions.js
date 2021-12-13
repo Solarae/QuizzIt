@@ -19,7 +19,6 @@ import {
     DOWNVOTE_QUIZ_FAIL,
     REPORT_QUIZ,
     REPORT_QUIZ_FAIL,
-    EDIT_PROFILE_SUCCESS,
     EDIT_QUIZ_THUMBNAIL,
     EDIT_QUIZ_THUMBNAIL_FAIL,
     GET_QUIZ_LEADERBOARD_REQ,
@@ -34,11 +33,14 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
-export const getQuiz = (id) => async (dispatch) => {
+export const getQuiz = (id, query) => async (dispatch) => {
     dispatch(setQuizLoading());
     const config = {
         headers: {
             'Content-Type': 'application/json'
+        },
+        params: {
+            ...query 
         }
     }
     
@@ -111,6 +113,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
             })
         }
         else {
+            console.log(res.data)
             dispatch({
                 type: ADD_QUIZ_QUESTION,
                 payload: res.data
@@ -122,7 +125,7 @@ export const addQuizQuestion = ({ id, question, choices, answer, callback }) => 
     }
 }
 
-export const editQuiz = ({ id, name, description, time }) => async (dispatch) => {
+export const editQuiz = ({ id, name, description, time, status }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -130,7 +133,7 @@ export const editQuiz = ({ id, name, description, time }) => async (dispatch) =>
     }
 
     try {
-        const body = JSON.stringify({ name, description, time })
+        const body = JSON.stringify({ name, description, time, status })
         console.log(body)
         console.log(id)
         const res = await axios.post(`${URL}/api/quizzes/${id}/editQuiz`, body, config)
@@ -230,6 +233,7 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
                 type: UPVOTE_QUIZ,
                 payload: res.data
             })
+            console.log(res.data.quiz)
         }
     } catch (errors) {
         console.log(errors)
@@ -255,6 +259,7 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
             })
         }
         else {
+            console.log(res.data.quiz)
             dispatch({
                 type: DOWNVOTE_QUIZ,
                 payload: res.data

@@ -21,9 +21,12 @@ function EditQuiz() {
     let { qid } = useParams()
     
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
     }, [dispatch, qid])
     
+    console.log(quiz)
     // useEffect(() => {
         //     if (!platform) dispatch(getQuiz(id))
         // }, [dispatch, platform])
@@ -36,7 +39,13 @@ function EditQuiz() {
         return (<Loading/>)
     }
 
-    if (user == null || user.id !== quiz.owner) 
+    const hasWritePermissions = (id) => {
+        return id === quiz.owner || id === quiz.platformId.owner 
+            || quiz.platformId.subscribers.find(s => s.userId === id && s.role === 'Moderator') !== undefined
+            ? true : false  
+    }
+
+    if (user == null || !hasWritePermissions(user.id)) 
         return <NotFound/>
 
     return (
@@ -47,12 +56,12 @@ function EditQuiz() {
 
             <Container className="row justify-content-center">
                 <Col xs={1} md={4} className="g-4">
-                    <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Add Question</Button>
+                    {quiz.status === 'draft' && <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{ marginLeft: "10px" }}>Add Question</Button>}
                     <div style={{ height: "3vh" }}></div>
                     {quiz.questions.map((question, idx) => (
                         <>
                             <Col>
-                                <EditQuestionCard quizId={qid} question={question}></EditQuestionCard>
+                                <EditQuestionCard key={idx} quizId={qid} question={question}></EditQuestionCard>
                             </Col>
                             <div style={{ height: '20px'}}></div>
                         </>
