@@ -1,6 +1,10 @@
-import Submission from './models/Submission.js'
-import Platform from './models/Platform.js'
+import Award from './models/Award.js'
 import Global from './models/Global.js'
+import Platform from './models/Platform.js'
+import Quiz from './models/Quiz.js'
+import Report from './models/Report.js'
+import Submission from './models/Submission.js'
+import User from './models/User.js'
 import cron from 'node-cron'
 
 import { startOfYesterday, startOfToday, endOfToday, startOfWeek, startOfMonth, startOfYear } from 'date-fns'
@@ -111,7 +115,13 @@ const updateLeaderboard = async (type, time) => {
 }
 
 export const duplicateDB = async () => {
-    await Platform.aggregate([ { $match: {} }, { $out: "platformDup" } ])
+    await Award.aggregate([ { $match: {} }, { $out: "awardDuplicate" } ])
+    await Global.aggregate([ { $match: {} }, { $out: "globalDuplicate" } ])
+    await Platform.aggregate([ { $match: {} }, { $out: "platformDuplicate" } ])
+    await Quiz.aggregate([ { $match: {} }, { $out: "quizDuplicate" } ])
+    await Report.aggregate([ { $match: {} }, { $out: "reportDuplicate" } ])
+    await Submission.aggregate([ { $match: {} }, { $out: "submissionDuplicate" } ])
+    await User.aggregate([ { $match: {} }, { $out: "userDuplicate" } ])
 }
 
 export const updateLeaderboardsJob = cron.schedule('0 0 * * *', updateLeaderboards);

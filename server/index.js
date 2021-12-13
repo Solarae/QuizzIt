@@ -93,3 +93,5 @@ io.on('connection', (socket) => {
 })
 
 export { io, onlineUsers }
+
+// await duplicateDB()
