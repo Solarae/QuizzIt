@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Image, Button, Row, Col, Table, Nav, Card } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import Loading from '../Loading'
 
 function MiniLeaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, errors, getLeaderboard }) {
     const history = useHistory()
@@ -27,7 +28,7 @@ function MiniLeaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, e
     const routeToLeaderboardPage = () => history.push(url)
 
     if (isGetLeaderboardLoading) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
 
     if (errors)

@@ -6,6 +6,7 @@ import { getQuiz, getQuizLeaderboard, searchLeaderboard } from '../actions/quizA
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 function QuizLeaderboard() {
     const dispatch = useDispatch()
@@ -36,7 +37,7 @@ function QuizLeaderboard() {
     }, [qid, dispatch]);
 
     if (isLoading || !quiz) {
-        return (<div>Loading...</div>)
+        return (<Loading />)
     }
     return (
         <div className="justify-content-between">

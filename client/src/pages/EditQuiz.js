@@ -8,6 +8,7 @@ import NotFound from '../components/NotFound';
 import { getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
+import Loading from '../components/Loading'
 
 
 function EditQuiz() {
@@ -32,7 +33,7 @@ function EditQuiz() {
     const handleCloseAddQuestion = () => { setShowAddQuestion(false) };
         
     if (isLoading) {
-        return ( <div> Loading... </div> )
+        return (<Loading/>)
     }
 
     if (user == null || user.id !== quiz.owner) 

@@ -8,6 +8,7 @@ import { getQuiz, getQuizLeaderboard } from '../actions/quizActions'
 import SignIn from '../components/SignIn'
 import SignUp from '../components/SignUp'
 import MiniLeaderboard from '../components/Leaderboards/MiniLeaderboard.js'
+import Loading from '../components/Loading'
 
 
 function Quiz() {
@@ -47,7 +48,7 @@ function Quiz() {
     }, [dispatch, qid])
 
     if (isLoading) {
-        return ( <div> Loading... </div> )
+        return (<Loading />)
     }
     const handleTakeQuiz = () => {
         if (user) {

@@ -73,7 +73,7 @@ function Banner({ platform }) {
                             <p className="lead fw-normal" style={{ marginBottom: "10px" }}>
                                 <i class="bi bi-people-fill"></i> {platform.subscribers.length} Subscribers
                             </p>
-                            <p className="lead fw-normal">
+                            <p className="lead fw-normal" style={{whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis'}}>
                                 {platform.description}
                             </p>
                         </div>

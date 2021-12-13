@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Form, Button, Row, Col, InputGroup, FormControl, OverlayTrigger, Image, Tooltip } from 'react-bootstrap'
+import { Container, Form, Button, Row, Col, InputGroup, Spinner, FormControl, OverlayTrigger, Image, Tooltip } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import Banner from '../components/Profile/Banner';
 import PlatformCard from '../components/Home/PlatformCard'
 import QuizCardMini from '../components/Cards/QuizCardMini'
+import Loading from '../components/Loading'
 
 import { getProfile } from '../actions/profileActions'
 
@@ -24,7 +25,7 @@ function Profile() {
 
     if (isGetProfileLoading || !profile) {
         return (
-            <div>Loading...</div>
+            <Loading />
         )
     }
 

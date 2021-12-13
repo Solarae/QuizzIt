@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Button, Row, Col, Dropdown } from 'react-bootstrap';
 import QuizCardMini from '../Cards/QuizCardMini.js';
 import { getQuizzes } from '../../actions/platformActions.js';
+import Loading from '../Loading'
 
 function Home() {
     const dispatch = useDispatch()
@@ -30,7 +31,9 @@ function Home() {
             setPage(page + 1)
     }
     if (isGetQuizzesLoading && !quizzes) {
-        return (<div>Loading...</div>)
+        return (
+            <Loading />
+        )
     }
 
     return (
