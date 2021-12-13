@@ -6,7 +6,6 @@ import {
     JOIN_PLATFORM_REQ,
     LEAVE_PLATFORM_REQ,
     REPORT_PLATFORM_REQ,
-    EDIT_MEMBER_ROLE_REQ,
     GET_PLAT_LEADERBOARD_REQ,
     GET_MEMBERLIST_REQ,
     GET_PLAT_QUIZZES_REQ,
@@ -171,17 +170,26 @@ const platformReducer = (state = initialState, action) => {
                 isReportLoading: false
             }
         case EDIT_MEMBER_ROLE_SUCCESS:
+            const newSubscribers = [...state.platform.subscribers]
+            const index = state.platform.subscribers.findIndex((s => s.userId === action.payload.member.userId))
+            newSubscribers[index].role = action.payload.member.role
+
+            const newMemberList = [...state.memberList]
+            const indexMemberList = state.memberList.findIndex((m => m.userId._id === action.payload.member.userId))
+            newMemberList[indexMemberList].role = action.payload.member.role  
             return {
                 ...state,
-                ...action.payload,
-                isEditRoleLoading: false,
+                platform: {
+                    ...state.platform,
+                    newSubscribers
+                },
+                memberList: newMemberList,
                 errors: null 
             }
         case EDIT_MEMBER_ROLE_FAIL:
             return {
                 ...state,
-                ...action.payload,
-                isEditRoleLoading: false,
+                ...action.payload
             }
         case GET_PLAT_LEADERBOARD_SUCCESS:
             return {
@@ -268,11 +276,6 @@ const platformReducer = (state = initialState, action) => {
             return {
                 ...state,
                 isReportLoading: true 
-            }
-        case EDIT_MEMBER_ROLE_REQ:
-            return {
-                ...state,
-                isEditRoleLoading: true 
             }
         case GET_PLAT_LEADERBOARD_REQ:
             return {

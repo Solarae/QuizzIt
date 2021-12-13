@@ -44,7 +44,9 @@ function Quiz() {
     }
 
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
     }, [dispatch, qid])
 
     if (isLoading) {
@@ -53,7 +55,7 @@ function Quiz() {
 
     const handleTakeQuiz = () => {
         if (user) {
-            history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/take`)
+        history.push(`/platform/${id}/quiz/${quiz._id}/take`)
         } else {
             handleShowSignIn()
         }

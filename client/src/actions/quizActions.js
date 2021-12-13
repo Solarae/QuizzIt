@@ -33,11 +33,14 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
-export const getQuiz = (id) => async (dispatch) => {
+export const getQuiz = (id, query) => async (dispatch) => {
     dispatch(setQuizLoading());
     const config = {
         headers: {
             'Content-Type': 'application/json'
+        },
+        params: {
+            ...query 
         }
     }
     

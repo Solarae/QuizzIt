@@ -324,11 +324,9 @@ export const editRole = ({ platformId, memberId, senderId, role }) => async (dis
     }
     const body = JSON.stringify({ memberId, senderId, role })
     try {
-        dispatch({
-            type: EDIT_MEMBER_ROLE_REQ,
-        })
         const res = await axios.post(`${URL}/api/platforms/${platformId}/editRole`, body, config);
-
+        console.log(`API call returns`)
+        console.log(res.data)
         if (res.data.errors) {
             dispatch({
                 type: EDIT_MEMBER_ROLE_FAIL,
