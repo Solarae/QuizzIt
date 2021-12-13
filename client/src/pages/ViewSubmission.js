@@ -37,6 +37,9 @@ function ViewSubmission() {
         history.push(`/submission/reviewSubmission/${submissionId}`)
     }
 
+    const handlePlatformClick = (id) => history.push(`/platform/${id}`)
+    
+ 
     if (isGetSubmissionLoading) {
         return (<Loading />)
     }
@@ -57,10 +60,10 @@ function ViewSubmission() {
                 <tbody>
                     {submissions.map((submission)=>{
                         return( 
-                                <tr submissionId={submission._id} onClick={handleOnclick}>
+                                <tr submissionId={submission._id}>
                                         <td className="display:block" submissionId={submission._id} >{moment(submission.createdAt).fromNow()}</td>
-                                        <td submissionId={submission._id}>{submission.quizId.name}</td>
-                                        <td submissionId={submission._id}>{submission.platformId.name}</td>
+                                        <td submissionId={submission._id} onClick={handleOnclick}>{submission.quizId.name}</td>
+                                        <td submissionId={submission._id} onClick={() => handlePlatformClick(submission.platformId._id)}>{submission.platformId.name}</td>
                                         <td submissionId={submission._id}>{submission.score}</td>
                                         <td submissionId={submission._id}>{moment().startOf('day').seconds(submission.timeTaken).format('m:ss')}</td>
                                         <td submissionId={submission._id}>{submission.point}</td>
