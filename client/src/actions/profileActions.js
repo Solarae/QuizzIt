@@ -259,18 +259,13 @@ export const updateUser = ({ newValue, userId }) => async (dispatch) => {
     }
 }
 
-export const getInbox = (id, currMax) => async (dispatch) => {
+export const getInbox = (id, query) => async (dispatch) => {
     const config = {
         params: {
-            offset: currMax,
-            limit: 5
+            ...query
         }
     }
 
-    if (currMax === 0)
-        dispatch({
-            type: GET_INBOX_REQ
-        })
     try {
         const res = await axios.get(`${URL}/api/users/${id}/inbox`, config)
         if (res.data.errors) {
@@ -317,18 +312,12 @@ export const readNotification = (userId, notifId) => async (dispatch) => {
     }
 }
 
-export const getFriendRequests = (id, currMax) => async (dispatch) => {
+export const getFriendRequests = (id, query) => async (dispatch) => {
     const config = {
         params: {
-            offset: currMax,
-            limit: 5
+            ...query
         }
     }
-
-    if (currMax === 0)
-        dispatch({
-            type: GET_FRIENDREQUESTS_REQ
-        })
 
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)
@@ -416,15 +405,13 @@ export const receiveFriendRequest = (friendRequest) => (dispatch) => {
     })
 }
 
-export const getFriends = (id, page) => async (dispatch) => {
+export const getFriends = ({ id, query }) => async (dispatch) => {
     const config = {
         params: {
-            offset: 10 * (page - 1),
-            limit: 10
+           ...query
         }
     }
-    console.log(page)
-
+    
     dispatch({
         type: GET_FRIENDS_REQ
     })
@@ -448,7 +435,7 @@ export const getFriends = (id, page) => async (dispatch) => {
     }
 }
 
-export const unfriend = (id, userId) => async (dispatch) => {
+export const unfriend = ({ id, userId }) => async (dispatch) => {
     console.log(id)
     try {
         const res = await axios.post(`${URL}/api/users/${id}/friends/${userId}/unfriend`)
@@ -463,6 +450,7 @@ export const unfriend = (id, userId) => async (dispatch) => {
                 type: UNFRIEND_SUCCESS,
                 payload: res.data
             })
+            
         }
     } catch (error) {
         console.log("error message: " + error.message);

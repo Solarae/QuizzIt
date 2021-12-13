@@ -69,16 +69,7 @@ function EditAward({ award, show, handleClose }) {
 
         // close the modal 
         handleClose();
-        
-        dispatch(getAwards(
-            {
-                platformId: platform._id,
-                offset: 0,
-                limit: 4 * 1 
-            }
-        ))
 
-        
     }, [isEditLoading, history, handleClose]);
 
     // waits for DELETE AWARD request to update redux store 
@@ -96,14 +87,6 @@ function EditAward({ award, show, handleClose }) {
         
         // close the modal
         handleClose();
-        
-        dispatch(getAwards(
-            {
-                platformId: platform._id,
-                offset: 0,
-                limit: 4 * 1 
-            }
-        ))
         
     }, [isDeleteLoading, history, handleClose]);
 

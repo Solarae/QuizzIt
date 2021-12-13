@@ -269,6 +269,8 @@ export const getInbox = async (req, res) => {
 
         res.status(200).json({ 
             inbox: slicedUser.inbox,
+            inboxPage: (skip / limit) + 1,
+            inboxPages: Math.ceil(user.inbox.length / limit),
             inboxTotalUnreadCount: user.inbox.filter(i => !i.read).length,
             inboxTotalCount: user.inbox.length });
     } catch (error) {
@@ -304,9 +306,12 @@ export const getFriendRequests = async (req, res) => {
         const user = await User.findById(req.params.id).slice('friendRequests', [skip,limit]).populate('friendRequests', 'username')
         const u = await User.findById(req.params.id)
 
-        res.status(200).json({ 
-            friendRequests: user.friendRequests, 
-            friendRequestsTotalCount: u.friendRequests.length });
+        const friendRequestsTotalCount = u.friendRequests.length
+        const friendRequestsPages = Math.ceil(friendRequestsTotalCount / limit)
+        const friendRequestsPage = (skip / limit) + 1
+
+        res.status(200).json({ friendRequests: user.friendRequests, friendRequestsPage, friendRequestsPages, friendRequestsTotalCount });
+
     } catch (error) {
         res.status(404).json({ msg: error.message }) 
     }

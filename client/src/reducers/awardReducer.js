@@ -36,9 +36,7 @@ const awardReducer = (state = initialState, action) => {
         case CREATE_AWARD_SUCCESS:
             return {
                 ...state,
-                ...action.payload,
-                awardPage: Math.ceil((state.awards.length + 1) / 4),
-                awardPages: Math.ceil((state.awardTotalCount + 1) / 4),
+                awards: [action.payload, ...state.awards],
                 awardTotalCount: state.awardTotalCount + 1,
                 isCreateLoading: false,
                 errors: null
@@ -55,9 +53,12 @@ const awardReducer = (state = initialState, action) => {
                 isEditLoading: true
             }
         case EDIT_AWARD_SUCCESS:
+            const newAwards = [...state.awards]
+            const index = newAwards.findIndex(a => a._id === action.payload.award._id);
+            newAwards[index] = action.payload.award;
             return {
                 ...state,
-                ...action.payload,
+                awards: newAwards,
                 isEditLoading: false,
                 errors: null
             }
@@ -75,9 +76,7 @@ const awardReducer = (state = initialState, action) => {
         case DELETE_AWARD_SUCCESS:
             return {
                 ...state,
-                ...action.payload,
-                awardPage: Math.ceil((state.awards.length - 1) / 4),
-                awardPages: Math.ceil((state.awardTotalCount - 1) / 4),
+                awards: state.awards.filter(a => a._id !== action.payload.award._id),
                 awardTotalCount: state.awardTotalCount - 1,
                 isDeleteLoading: false,
                 errors: null
