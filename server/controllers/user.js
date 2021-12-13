@@ -13,6 +13,7 @@ import Platform from "../models/Platform.js";
 import Report from "../models/Report.js";
 import Quiz from "../models/Quiz.js";
 import Award from "../models/Award.js";
+import Submission from "../models/Submission.js";
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -258,10 +259,24 @@ export const deleteAccount = async (req, res) => {
 
         //delete all the reports 
         await Report.deleteMany({submittedBy:id})
+
+        //delete all submissions
+        await Submission.deleteMany({userId:id})
+
+        //delete all the quizzes made
+
+        let ownedQuizzes = await Quiz.find({owner:id})
+
+        ownedQuizzes.forEach(async (quiz)=>{
+
+            //for every quiz, delete the submissions and reports that utilizes those quiz
+            await Submission.deleteMany({quizId:quiz._id})
+            await Report.deleteMany({submittedBy:quiz._id})
+        })
+
+        //delete quizzes
+        await Quiz.deleteMany({owner:id})
         
-
-
-
 
         // finally, delete the user
         const deletedUser = await User.findByIdAndDelete(id)
