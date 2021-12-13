@@ -1,10 +1,11 @@
 import React, { useState } from 'react'
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { editQuizQuestion } from '../../actions/quizActions'
 
 function EditQuizQuestion({ quizId, show, handleClose, question }) {
     const dispatch = useDispatch();
+    const quiz = useSelector((state) => state.quiz.quiz)
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
         question: question.question,
@@ -66,7 +67,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         optionList.push( 
             <Form.Group className="mb-3">
                 <Form.Label>Option {index+1} </Form.Label>
-                <Form.Control type="text" placeholder="Option" defaultValue={values[option]} name={option} onChange={onChange} />
+                <Form.Control type="text" placeholder="Option" disabled={quiz.status === 'published'} defaultValue={values[option]} name={option} onChange={onChange} />
             </Form.Group>
         )
     })
@@ -79,7 +80,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>Question</Form.Label>
-                        <Form.Control type="text" defaultValue={values.question} name="question" onChange={onChange} />
+                        <Form.Control type="text" disabled={quiz.status === 'published'} defaultValue={values.question} name="question" onChange={onChange} />
                     </Form.Group>
                         {optionList}
                     <Form.Group className="mb-3">

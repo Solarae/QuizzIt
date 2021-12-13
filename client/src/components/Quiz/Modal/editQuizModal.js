@@ -23,7 +23,6 @@ const EditQuestionModal = ({ quiz, show, setShow }) => {
   }
 
   const closeModal = (err) =>{
-    console.log(show)
     setShow(!show)
   }
 
@@ -42,7 +41,7 @@ const EditQuestionModal = ({ quiz, show, setShow }) => {
  
   return (
     <Modal show={show} onHide = {closeModal}>
-      <Modal.Header closeButton> <Modal.Title>Edit Question</Modal.Title> </Modal.Header>
+      <Modal.Header closeButton> <Modal.Title>Edit Quiz Details</Modal.Title> </Modal.Header>
       <Form onSubmit={handleSubmit}>
           <Modal.Body>
               <Form.Group className="mb-3">
@@ -55,7 +54,7 @@ const EditQuestionModal = ({ quiz, show, setShow }) => {
               </Form.Group>
               <Form.Group className="mb-3">
                   <Form.Label>Time</Form.Label>
-                  <Form.Control type="text" defaultValue={values.time} name="time" onChange={onChange}  required/>
+                  <Form.Control type="text" defaultValue={values.time} disabled={quiz.status === 'published'} name="time" onChange={onChange}  required/>
               </Form.Group>
               <Form.Group controlId="formBannerFile" className="mb-3">
                   <Form.Label>Quiz Banner</Form.Label>

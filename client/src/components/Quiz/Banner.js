@@ -5,8 +5,9 @@ import { CopyToClipboard } from 'react-copy-to-clipboard'
 
 import { getPlatform } from '../../actions/platformActions';
 import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
-import EditQuizModal from "./Modal/editQuestionModal"
+import EditQuizModal from "./Modal/editQuizModal"
 import DeleteQuizModal from './Modal/deleteQuizModal';
+import PublishQuizModal from './Modal/publishQuizModal'
 import Loading from '../Loading'
 
 import SignUp from '../SignUp.js';
@@ -38,6 +39,9 @@ function Banner({ isEdit }) {
 
     const [editModal, setEditModal] = useState(false);
     const ToggleEditModal = () => setEditModal(!editModal)
+
+    const [publishModal, setPublishModal] = useState(false);
+    const TogglePublishModal = () => setPublishModal(!publishModal)
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
@@ -121,9 +125,11 @@ function Banner({ isEdit }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?(isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>):<div></div>}
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner)?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>:<div></div>}
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner) && (isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>)}
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner && quiz.status === 'draft') && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>TogglePublishModal()}>Publish</Button>}
+                                    {(auth.isAuthenticated && auth.user.id === platform.owner) && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
+                                    <PublishQuizModal show={publishModal} setShow = {setPublishModal} quiz={quiz} />
                                     <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
                                     {/* { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> } */}
                                     <CopyToClipboard text={window.location.href}>
