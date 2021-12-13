@@ -53,7 +53,8 @@ function AwardSection({edit}) {
                 ))}
             </Row>
             <Row >
-                {awards.length < awardTotalCount && <Button variant="outline-light" onClick={showMoreAwards} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                {awards.length !== 0 && awards.length < awardTotalCount && <Button variant="outline-light" onClick={showMoreAwards} style={{ color: "black", marginTop: "10px" }}>View More</Button>}
+                {awards.length === 0 && <span><br/><Row className='justify-content-center'>No Awards Yet</Row></span>}
             </Row>
             {edit && <CreateAward show={showCreateAward} handleClose={() => { setShowCreateAward(false) }}></CreateAward>}
         </Container >
