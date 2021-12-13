@@ -16,13 +16,6 @@ import { URL } from '../config.js'
 axios.defaults.withCredentials = true;
 
 export const login = ({ username, password, history, callback }) => async (dispatch) => {
-    const config = {
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    }
-
-    const body = JSON.stringify({ username, password })
     try {
         const res = await axios.post(`${URL}/api/auth/signin`, {username, password})
 

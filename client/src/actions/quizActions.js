@@ -19,7 +19,6 @@ import {
     DOWNVOTE_QUIZ_FAIL,
     REPORT_QUIZ,
     REPORT_QUIZ_FAIL,
-    EDIT_PROFILE_SUCCESS,
     EDIT_QUIZ_THUMBNAIL,
     EDIT_QUIZ_THUMBNAIL_FAIL,
     GET_QUIZ_LEADERBOARD_REQ,
@@ -219,8 +218,7 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
         const body = JSON.stringify({ userId })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/upvote/${id}`, body, config)
-        let quizPayload = {quiz:res.data.quiz}
-        let userPayload = {user:res.data.user}
+       
         if (res.data.errors) {
             dispatch({
                 type: UPVOTE_QUIZ_FAIL
@@ -229,11 +227,7 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
         else {
             dispatch({
                 type: UPVOTE_QUIZ,
-                payload: quizPayload
-            })
-            dispatch({
-                type:EDIT_PROFILE_SUCCESS,
-                payload:userPayload
+                payload: res.data
             })
         }
     } catch (errors) {
@@ -252,8 +246,7 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
         const body = JSON.stringify({ userId })
         console.log(body)
         const res = await axios.post(`${URL}/api/quizzes/downvote/${id}`, body, config)
-        let quizPayload = {quiz:res.data.quiz}
-        let userPayload = {user:res.data.user}
+        
 
         if (res.data.errors) {
             dispatch({
@@ -263,12 +256,7 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
         else {
             dispatch({
                 type: DOWNVOTE_QUIZ,
-                payload: quizPayload
-            })
-
-            dispatch({
-                type:EDIT_PROFILE_SUCCESS,
-                payload:userPayload
+                payload: res.data
             })
         }
     } catch (errors) {

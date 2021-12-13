@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { Image, Row, Col, Table, Nav, Button, Form, FormControl, Card, NavItem } from 'react-bootstrap';
+import React, { useEffect } from 'react'
+import { Dropdown, Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import Pagination from '../Pagination'
+import Pagination from '../components/Pagination'
 import { useLocation, useHistory } from 'react-router-dom'
-import { LinkContainer } from 'react-router-bootstrap';
-import { getQuizzes } from '../actions/searchActions'
+import { searchQuiz } from '../actions/searchActions'
 
 function MyQuizzes() {
     const dispatch = useDispatch()
@@ -12,104 +11,84 @@ function MyQuizzes() {
     const { search } = useLocation()
     const searchParams = new URLSearchParams(search)
     const page = parseInt(searchParams.get('page')) || 1
-
+    const url = "/myQuizzes"
     const filter = searchParams.get('filter') || ''
 
     const { user } = useSelector((state) => state.auth)
+    const { isSearchQuizLoading, quizzes, quizPages, errors } = useSelector((state) => state.search) 
 
     const setPage = (page) => {
         history.push(`${url}?filter=${filter}&page=${page}`)}
     
     useEffect(() => {
+        console.log(page)
+        console.log(typeof page)
         var query = (filter === 'draft' || filter === 'published') ? {
             userId: user.id,
-            status: 'Draft',
-            offset: 10 * (page - 1),
-            limit: 10,
+            status: filter
         } : {
             userId: user.id,
-            offset: 10 * (page - 1),
-            limit: 10
         }
         
-        dispatch(getLeaderboard({
-            id,
-            query
+        dispatch(searchQuiz({
+            query,
+            page,
+            limit: 10
         }))
         
     }, [search, dispatch]);
 
-    if (isGetLeaderboardLoading) {
+    if (isSearchQuizLoading && !quizzes) {
         return (<div>Loading...</div>)
     }
 
     if (errors)
         return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
     
-    return (
-        <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
-            <Row>
-                <Col align="center">
-                    <h3>{`${doc} Leaderboard`}</h3>
-                </Col>
-                <Col>
-                <Form className="d-flex me-auto" style={{ marginLeft: "2%", width: "30%" }} onSubmit={handleSearch}>
-                    <FormControl
-                        type="search"
-                        placeholder="Search"
-                        value={queryName}
-                        className="me-2"
-                        aria-label="Search"
-                        onChange={onQueryChange}
-                    />
-                    <i class="bi bi-search" onClick={handleSearch} style={{ color: "black", fontSize: "1.5rem", marginLeft: "2px", marginTop: "2px", cursor: "pointer" }} ></i>
-        </Form>
-                </Col>
-            </Row>
-            <Row>
-                <Nav fill variant="tabs"
-                >   
-                    {types.map((t) => 
-                        <Nav.Item key={t.queryStr}>
-                            <LinkContainer to={`${url}?type=${t.queryStr}&filter=${filter}`}><Nav.Link>{t.type}</Nav.Link></LinkContainer>
-                        </Nav.Item>
-                    )}
-                </Nav>
-                <br />
-            </Row>
-            <Row><Button onClick={() => history.push(`${url}?type=${type}&filter=friends`)}>Friends Only</Button></Row>
-            <Row style={{ marginTop: "10px" }}>
-                <Table hover>
+        return (
+            <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
+                <Dropdown className="ms-auto">
+                                <Dropdown.Toggle variant="white" id="dropdown-basic" style={{ fontSize: "1.4rem", marginBottom: "-20px" }}>
+                                    <i class="bi bi-filter"></i>Filter
+                                </Dropdown.Toggle>
+
+                                <Dropdown.Menu>
+                                    <Dropdown.Item href="" onClick={() => history.push(`${url}?filter=&page=${page}`)}>No Filter {filter === '' && <i class="bi bi-check"></i>}</Dropdown.Item>
+                                    <Dropdown.Item href="" onClick={() => history.push(`${url}?filter=draft&page=${page}`)}>Draft {filter === 'Draft' && <i class="bi bi-check"></i>}</Dropdown.Item>
+                                    <Dropdown.Item href="" onClick={() => history.push(`${url}?filter=published&page=${page}`)}>Published {filter === 'Published' && <i class="bi bi-check"></i>}</Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                <Row style={{ marginTop: "10px" }}>
+                    <Table hover>
                     <thead>
                         <tr>
-                            <th>Rank</th>
-                            <th>User</th>
-                            <th>Points</th>
+                            <th>Quiz Name</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        {leaderboard.map((rank, index) =>
-                            <tr key={rank._id}>
-                                <td>{name === '' ? (page - 1) * 10 + index + 1 : (apiPage - 1) * 10 + index +1}</td>
-                                <td>
-                                    {rank.username}
-                                </td>
-                                <td>
-                                    {rank.points}
-                                </td>
-                            </tr>
-                        )}
-                    </tbody>
-                </Table>
-            </Row>
-
-            <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
-                <Col>
-                    <Pagination page={name === '' ? page : apiPage} pages={pages} changePage={setPage} />
-                </Col>
-            </Row>
-
-        </div>
-    )
+                        <tbody>
+                            {quizzes?.map((q) =>
+                                <tr>
+                                    <td>
+                                        {q.name}
+                                    </td>
+                                    <td>
+                                        {q.status}
+                                    </td>
+                                    
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Row>
+    
+                <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
+                    <Col>
+                        <Pagination page={page} pages={quizPages} changePage={setPage} />
+                    </Col>
+                </Row>
+    
+            </div>
+        )
 }
 export default MyQuizzes;

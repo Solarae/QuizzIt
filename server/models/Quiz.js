@@ -120,10 +120,10 @@ const quizSchema = new mongoose.Schema ({
     }],
     status: {
         type: String,
-        enum: ['Draft', 'Published'],
-        default: 'Draft'
+        enum: ['draft', 'published'],
+        default: 'draft'
     }
-})
+}, { timestamps: true })
 
 const Quiz = mongoose.model('Quiz', quizSchema)
 

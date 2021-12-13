@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getSubmission } from "../actions/submissionActions"
-import { Col, Container, ListGroup, Table } from "react-bootstrap"
+import { Col, Container } from "react-bootstrap"
 import { useParams } from "react-router"
 import SubmissionCard from "../components/Submission/SubmissionCard"
 import Loading from '../components/Loading'

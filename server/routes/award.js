@@ -8,7 +8,7 @@ const router = express.Router();
 router.get('/:id', getAward);
 router.get('/', getAwardsByFilter);
 router.post('/', upload.single("image"), createAward);
-router.post('/:id/update', updateAward);
+router.post('/:id/update', upload.single("image"), updateAward);
 router.delete('/:id', deleteAward);
 
 export default router;

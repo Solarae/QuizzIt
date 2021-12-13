@@ -31,7 +31,7 @@ const awardSchema = new mongoose.Schema ({
         type: Number,
         required: true
     }
-})
+}, { timestamps: true })
 
 const Award = mongoose.model('Award', awardSchema)
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useEffect } from 'react'
+import { Container } from 'react-bootstrap';
 import Banner from '../components/Platform/Banner.js'
 import Leaderboard from '../components/Leaderboards/Leaderboard.js'
 import { getPlatform, searchLeaderboard, getPlatformLeaderboard } from '../actions/platformActions'

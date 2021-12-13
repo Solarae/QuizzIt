@@ -10,10 +10,8 @@ function AwardSection({edit}) {
     const [showCreateAward, setShowCreateAward] = useState(false);
 
     const dispatch = useDispatch()
-    const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
     const { isGetAwardsLoading, awards, awardTotalCount } = useSelector((state) => state.awards);
-    const pages = useSelector((state) => state.awards.awardPages)
     const [page, setPage] = useState(1)
 
     useEffect(() => {
@@ -22,14 +20,18 @@ function AwardSection({edit}) {
             {
                 platformId: platform._id,
                 offset: 0,
-                limit: 4 * page
+                limit: 4 * page,
+                sort: "_id asc",
             }
         ))
-    }, [page, platform, dispatch]);
+    }, [page, dispatch]);
     
     const showMoreAwards = () => {
-        if (page < pages)
+        if (awards.length < awardTotalCount) {
+            console.log("CALLING MORE")
             setPage(page + 1)
+        }
+            
     }
     if (isGetAwardsLoading || !awards) {
         return (
