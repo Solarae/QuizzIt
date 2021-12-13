@@ -68,7 +68,10 @@ export const getAwardsByFilter = async (req, res) => {
 }
 
 export const updateAward = async (req, res) => {
-    const { newValue, userId } = req.body
+    console.log(req.file.path)
+    console.log("INSIDE UPDATE AWARds")
+    const { userId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
+
     const errors = {}
     try {
         const award = await Award.findById(req.params.id);
@@ -83,12 +86,26 @@ export const updateAward = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        const updatedAward = await Award.findByIdAndUpdate(
-            req.params.id,
-            { $set: newValue },
-            { new: true }
-        );
+        var updatedAward
+        console.log(req.file)
+        if (req.file.path) {
+            const cloud = await uploadImgToCloud(req.file.path)
+            updatedAward = await Award.findByIdAndUpdate(
+                req.params.id,
+                { $set: {...req.body,  icon: cloud.secure_url,
+                    icon_cloud_id: cloud.public_id} },
+                { new: true }
+            );
+        } else {
+            updatedAward = await Award.findByIdAndUpdate(
+                req.params.id,
+                { $set: req.body },
+                { new: true }
+            );
+        }
+        
         if (!updatedAward) return res.status(404).json({ msg: "Something went wrong with updating the award" });
+        console.log(updatedAward)
         res.status(200).json({ award: updatedAward });
     } catch (error) {
         res.status(404).json({ msg: error.message })

@@ -50,6 +50,7 @@ export const createAward = ({ userId, title, description, iconImage, platformId,
             })
         }
         else {
+            console.log(res.data)
             dispatch({
                 type: CREATE_AWARD_SUCCESS,
                 payload: res.data
@@ -64,73 +65,109 @@ export const createAward = ({ userId, title, description, iconImage, platformId,
     }
 }
 
-export const editAward = ({ awardId, userId, title, description, iconImage, requirementType, requirementCount }) => async (dispatch) => {
-    // upload the icon image  
-    let icon = null;
-    if (iconImage) {
-        const formData = new FormData();
-        formData.append('file', iconImage)
-        formData.append('upload_preset', "jxf92wae")
-        try {
-            const res = await axios.post(CLOUDINARY_URL, formData);
-            const version = res.data.version
-            const public_id = res.data.public_id
-            icon = `${CLOUDINARY_IMG_URL}/v${version}/${public_id}.png`
-        } catch (error) {
-            console.log(error)
-            dispatch({
-                type: CREATE_AWARD_FAIL
-            })
-        }
-    }
 
+export const editAward = ({ awardId, userId, title, description, iconImage, platformId, requirementType, requirementCount }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
+    const formData = new FormData()
+    formData.append('userId', userId)
+    formData.append('title', title)
+    formData.append('description', description)
+    formData.append('image', iconImage)
+    formData.append('platformId', platformId)
+    formData.append('requirementType', requirementType)
+    formData.append('requirementCount', requirementCount)
 
-    const newValue = icon ?
-        {
-            title: title,
-            description: description,
-            icon: icon,
-            requirementType: requirementType,
-            requirementCount: requirementCount
-        } :
-        {
-            title: title,
-            description: description,
-            requirementType: requirementType,
-            requirementCount: requirementCount
-        }
-    const body = JSON.stringify({ newValue, userId })
     try {
         dispatch({
             type: EDIT_AWARD_REQ
         });
-        const res = await axios.post(`${URL}/api/awards/${awardId}/update`, body, config);
+        const res = await axios.post(`${URL}/api/awards/${awardId}/update`, formData, config);
 
-        if (res.data.errors) {
-            dispatch({
-                type: EDIT_AWARD_FAIL,
-                payload: res.data
-            })
-        }
-        else {
-            dispatch({
-                type: EDIT_AWARD_SUCCESS,
-                payload: res.data
-            })
-        }
-
+        console.log(res.data)
+        dispatch({
+            type: EDIT_AWARD_SUCCESS,
+            payload: res.data
+        })
     } catch (error) {
         console.log("error message: " + error.message);
         dispatch({
-            type: EDIT_AWARD_FAIL
+            type: EDIT_AWARD_FAIL,
+            payload: error.response.data
         })
     }
 }
+
+// export const editAward = ({ awardId, userId, title, description, iconImage, requirementType, requirementCount }) => async (dispatch) => {
+//     // upload the icon image  
+//     let icon = null;
+//     if (iconImage) {
+//         const formData = new FormData();
+//         formData.append('file', iconImage)
+//         formData.append('upload_preset', "jxf92wae")
+//         try {
+//             const res = await axios.post(CLOUDINARY_URL, formData);
+//             const version = res.data.version
+//             const public_id = res.data.public_id
+//             icon = `${CLOUDINARY_IMG_URL}/v${version}/${public_id}.png`
+//         } catch (error) {
+//             console.log(error)
+//             dispatch({
+//                 type: CREATE_AWARD_FAIL
+//             })
+//         }
+//     }
+
+//     const config = {
+//         headers: {
+//             'Content-Type': 'application/json'
+//         }
+//     }
+
+//     const newValue = icon ?
+//         {
+//             title: title,
+//             description: description,
+//             icon: icon,
+//             requirementType: requirementType,
+//             requirementCount: requirementCount
+//         } :
+//         {
+//             title: title,
+//             description: description,
+//             requirementType: requirementType,
+//             requirementCount: requirementCount
+//         }
+//     const body = JSON.stringify({ newValue, userId })
+//     try {
+//         dispatch({
+//             type: EDIT_AWARD_REQ
+//         });
+//         const res = await axios.post(`${URL}/api/awards/${awardId}/update`, body, config);
+
+//         if (res.data.errors) {
+//             dispatch({
+//                 type: EDIT_AWARD_FAIL,
+//                 payload: res.data
+//             })
+//         }
+//         else {
+//             dispatch({
+//                 type: EDIT_AWARD_SUCCESS,
+//                 payload: res.data
+//             })
+//         }
+
+//     } catch (error) {
+//         console.log("error message: " + error.message);
+//         dispatch({
+//             type: EDIT_AWARD_FAIL
+//         })
+//     }
+// }
 
 export const deleteAward = ({ userId, awardId }) => async (dispatch) => {
     const config = {
@@ -148,6 +185,7 @@ export const deleteAward = ({ userId, awardId }) => async (dispatch) => {
         });
         const res = await axios.delete(`${URL}/api/awards/${awardId}`, config);
 
+        console.log(res.data)
         if (res.data.errors) {
             dispatch({
                 type: DELETE_AWARD_FAIL,
