@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from 'react'
+import { React, useEffect, useState, createRef } from 'react'
 import { Container, Col, Button, Card, Row } from 'react-bootstrap';
 
 import TakeQuestionCard from '../components/Question/TakeQuestionCard'
@@ -15,6 +15,9 @@ import Loading from '../components/Loading'
 
 function TakeQuiz() {
     const dispatch = useDispatch()
+
+    // ref to div that has scrollbar for quesiton button list 
+    const btnListRef = createRef()
 
     const user = useSelector((state) => state.auth.user)
     const quiz = useSelector((state) => state.quiz.quiz)
@@ -99,16 +102,22 @@ function TakeQuiz() {
     const handlePrev = () => {
         setqno(qno - 1)
         setQuestion(quiz.questions[qno - 1])
+        btnListRef.current.scrollTop = 20 * (qno - 1) // scrolls to the button in the button list
     }
 
     const handleNext = () => {
         setqno(qno + 1)
         setQuestion(quiz.questions[qno + 1])
+        btnListRef.current.scrollTop = 20 * (qno + 1) // scrolls to the button in the button list
     }
 
     const handleJumpto = (idx) => {
         setqno(idx)
         setQuestion(quiz.questions[idx])
+    }
+
+    if (!user) {
+        return (<Row align='center'><div>Please Sign In</div></Row>)
     }
 
     return (
@@ -119,25 +128,30 @@ function TakeQuiz() {
             <CountDownTimer duration={calculateTime} counter={timerIncrement}></CountDownTimer>
 
             <Container style={{ width: "100%" }}>
-                <Row>
-                    <Col className="my-auto" xs={2} style={{  }}>
-                        {quiz.questions.map((question, idx) => (
-                            <>
-                                <Col>
-                                    <Button disabled={idx === qno} onClick={() => { handleJumpto(idx) }}>{idx + 1}</Button>
-                                </Col>
-                                <div style={{ height: '20px' }}></div>
-                            </>
-                        ))}
+                <Row style={{ 'height': '40vw' }}>
+                    <Col className="my-auto" xs={2} style={{ height: "80%" }} >
+                        <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
+
+                            {quiz.questions.map((question, idx) => (
+                                <>
+                                    <Col>
+                                        <Button disabled={idx === qno} variant={idx === qno ? 'secondary' : 'primary'} onClick={() => { handleJumpto(idx) }}>{idx + 1}</Button>
+                                    </Col>
+                                    <div style={{ height: '20px' }}></div>
+                                </>
+                            ))}
+                        </div>
                     </Col>
-                    <Col align='center' xs={8} style={{  }}>
+                    <Col align='center' xs={8} style={{}}>
+                        <h2>Question {qno + 1}</h2>
+                        <hr />
                         <Card
                             border="dark"
                             bg='Light'
                         >
                             <Card.Body>
                                 <Card.Text>
-                                    <h3>{question.question}</h3>
+                                    <h4>{question.question}</h4>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
@@ -151,7 +165,7 @@ function TakeQuiz() {
                                 <Option text={question.choices[1]} selected={userAnswers[qno] === 'b'} onClick={() => { questionInput(qno, 'b') }}></Option>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row >
                             <Col xs={6}>
                                 <Option text={question.choices[2]} selected={userAnswers[qno] === 'c'} onClick={() => { questionInput(qno, 'c') }}></Option>
                             </Col>
@@ -161,19 +175,19 @@ function TakeQuiz() {
                         </Row>
 
                         <div style={{ height: "5vw" }}></div>
-                        <Row align='center'>
+                        <Row align='center' style={{}}>
                             <Col xs={4} ></Col>
                             <Col className="d-flex justify-content-between" xs={4} >
-                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0}>Previous</Button>
-                                <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} >Next</Button>
+                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%" }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
+                                <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} style={{ width: "45%" }} >Next <i class="bi bi-caret-right-fill"></i></Button>
                             </Col>
                             <Col xs={4} ></Col>
                         </Row>
 
-                        <div style={{ height: "5vw" }}></div>
-                        <Row>
-                            <Col>
-                                <Button variant="primary" onClick={handleSubmit}>Submit Quiz</Button>
+                        <div style={{ height: "4vw" }}></div>
+                        <Row align='center'>
+                            <Col align='center' style={{}}>
+                                <Button variant="success" onClick={handleSubmit}>Submit Quiz</Button>
                             </Col>
                         </Row>
 
