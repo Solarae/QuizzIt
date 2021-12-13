@@ -21,9 +21,12 @@ function EditQuiz() {
     let { qid } = useParams()
     
     useEffect(() => {
-        dispatch(getQuiz(qid))
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,subscribers)'
+        }))
     }, [dispatch, qid])
     
+    console.log(quiz)
     // useEffect(() => {
         //     if (!platform) dispatch(getQuiz(id))
         // }, [dispatch, platform])
@@ -36,7 +39,13 @@ function EditQuiz() {
         return (<Loading/>)
     }
 
-    if (user == null || user.id !== quiz.owner) 
+    const hasWritePermissions = (id) => {
+        return id === quiz.owner || id === quiz.platformId.owner 
+            || quiz.platformId.subscribers.find(s => s.userId === id && s.role === 'Moderator') !== undefined
+            ? true : false  
+    }
+
+    if (user == null || !hasWritePermissions(user.id)) 
         return <NotFound/>
 
     return (

@@ -21,13 +21,11 @@ function MyQuizzes() {
         history.push(`${url}?filter=${filter}&page=${page}`)}
     
     useEffect(() => {
-        console.log(page)
-        console.log(typeof page)
         var query = (filter === 'draft' || filter === 'published') ? {
-            userId: user.id,
+            owner: user.id,
             status: filter
         } : {
-            userId: user.id,
+            owner: user.id,
         }
         
         dispatch(searchQuiz({

@@ -3,7 +3,6 @@ import { Image, Button, Overlay, Tooltip, Toast } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import { getPlatform } from '../../actions/platformActions';
 import { downvoteQuiz, upvoteQuiz } from '../../actions/quizActions';
 import EditQuizModal from "./Modal/editQuizModal"
 import DeleteQuizModal from './Modal/deleteQuizModal';
@@ -22,8 +21,6 @@ function Banner({ isEdit }) {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const quiz = useSelector((state) => state.quiz.quiz)
-    const platform = useSelector((state) => state.platforms.platform)
-    const isGetLoading = useSelector((state) => state.platforms.isGetLoading);
     const history = useHistory()
 
     const [showSignIn, setShowSignIn] = useState(false);
@@ -51,30 +48,14 @@ function Banner({ isEdit }) {
     const [showTooltip, setShowTooltip] = useState(false);
     const targetTooltip = useRef(null);
     const [isModerator,setIsModerator] = useState(false)
-    useEffect(() => {
 
-        // const fetchRole = async () =>{
-        //     if(auth.user && platform){
-        //         //check if user is moderator of platform
-        //         console.log(platform)
-        //         let res = await axios.get(`${URL}/api/users/checkIfModeratorOfPlatform/${auth.user.id}/${platform._id}`)
-        //         console.log(res.data)
-        //         if (res.data && res.data.user){
-        //             setIsModerator(true)
-        //         }
-        //     }
-        // }
-        // fetchRole()
-        console.log(quiz.platformId)
-        dispatch(getPlatform({ id: quiz.platformId}))
-    }, [dispatch, quiz,auth.user])    
+    const hasWritePermissions = (id) => {
+        return id === quiz.owner || id === quiz.platformId.owner 
+            || quiz.platformId.subscribers.find(s => s.userId === id && s.role === 'Moderator') !== undefined
+            ? true : false  
+    }
 
     const [showReportToast, setShowReportToast] = useState(false);
-    if (isGetLoading || !platform) {
-        return (
-            <Loading />
-        )
-    }
     
     const handleLike = () => {
         if (auth.user === null) {
@@ -101,7 +82,7 @@ function Banner({ isEdit }) {
     const redirectEdit = () => {
         history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}/edit`)
     }
-    console.log(platform)
+    
     return (
         <div style={{ height: "300px" }} className="position-relative">
             <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ background: "#227093"  }}>
@@ -125,9 +106,9 @@ function Banner({ isEdit }) {
                         <div className="mt-2 justify-content-center" style={{ marginRight: "3%" }}>
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner) && (isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>)}
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner && quiz.status === 'draft') && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>TogglePublishModal()}>Publish</Button>}
-                                    {(auth.isAuthenticated && auth.user.id === platform.owner) && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
+                                    {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && (isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>)}
+                                    {(auth.isAuthenticated && auth.user.id === quiz.owner && quiz.status === 'draft') && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>TogglePublishModal()}>Publish</Button>}
+                                    {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <PublishQuizModal show={publishModal} setShow = {setPublishModal} quiz={quiz} />
                                     <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
@@ -154,7 +135,7 @@ function Banner({ isEdit }) {
                 </div>
             </div>
             <div className="ms-5 mt-1" style={{ width: '220px', textAlign: "center"}}>
-                <h4>{quiz.name}</h4>
+                <h4>{quiz.platformId.name}</h4>
             </div>
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
