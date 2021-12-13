@@ -44,7 +44,7 @@ function App() {
   useEffect(() => {
     dispatch(getSignedIn())
     dispatch(connectSocket(io(URL)))
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (socket && user) {

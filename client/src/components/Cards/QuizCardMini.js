@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card, Image, Row, Col } from 'react-bootstrap';
 import { useHistory, useLocation } from 'react-router-dom'
 
@@ -23,7 +23,6 @@ function QuizCardMini({ quiz, showPlatform = true }) {
 
     const createdAt = mongoose.Types.ObjectId(quiz._id).getTimestamp();
     const isEdit = location.pathname.endsWith("edit")
-    const isHome = location.pathname.endsWith("/")
 
     return (
         <Card>

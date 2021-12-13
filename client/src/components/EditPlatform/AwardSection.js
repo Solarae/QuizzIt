@@ -3,13 +3,12 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AwardCard from './AwardCard.js'
 import CreateAward from './CreateAward.js'
-import { getAwards, setAwardPage } from '../../actions/awardActions.js';
+import { getAwards } from '../../actions/awardActions.js';
 
 function AwardSection({edit}) {
     const [showCreateAward, setShowCreateAward] = useState(false);
 
     const dispatch = useDispatch()
-    const auth = useSelector((state) => state.auth)
     const platform = useSelector((state) => state.platforms.platform)
     const { isGetAwardsLoading, awards, awardTotalCount } = useSelector((state) => state.awards);
     const [page, setPage] = useState(1)

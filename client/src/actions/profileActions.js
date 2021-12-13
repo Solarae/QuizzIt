@@ -239,7 +239,9 @@ export const getInbox = (id, query) => async (dispatch) => {
             ...query
         }
     }
-
+    dispatch({
+        type: GET_INBOX_REQ
+    })
     try {
         const res = await axios.get(`${URL}/api/users/${id}/inbox`, config)
         if (res.data.errors) {
@@ -292,6 +294,10 @@ export const getFriendRequests = (id, query) => async (dispatch) => {
             ...query
         }
     }
+    
+    dispatch({
+        type: GET_FRIENDREQUESTS_REQ
+    })
 
     try {
         const res = await axios.get(`${URL}/api/users/${id}/friendRequests`, config)

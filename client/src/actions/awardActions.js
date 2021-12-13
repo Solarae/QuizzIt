@@ -16,8 +16,6 @@ import {
 
 import axios from 'axios'
 
-import { CLOUDINARY_URL, CLOUDINARY_IMG_URL } from '../config.js'
-
 import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;

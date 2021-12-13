@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Form, Button, Modal, Alert, Col } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { useHistory, useParams } from 'react-router-dom';
-import { editAward, deleteAward, getAwards } from '../../actions/awardActions.js'
+import { editAward, deleteAward } from '../../actions/awardActions.js'
 
 // custom hook for getting reference to previous values/props
 function usePrevious(value) {
@@ -21,7 +21,6 @@ function EditAward({ award, show, handleClose }) {
     const history = useHistory()
 
     const awardErrors = useSelector((state) => state.awards.errors);
-    const platform = useSelector ((state)=> state.platforms.platform) 
     const isEditLoading = useSelector((state) => state.awards.isEditLoading)
     const prev_isEditLoading = usePrevious(isEditLoading)
 

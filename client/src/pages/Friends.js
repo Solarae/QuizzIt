@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react'
-import { Image, Row, Col, Table, Nav, Card } from 'react-bootstrap';
+import React, { useEffect } from 'react'
+import { Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getFriends, unfriend } from '../actions/profileActions';
 import Pagination from '../components/Pagination'
-import { useParams, useHistory, useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 
 function Friends() {
     const dispatch = useDispatch()

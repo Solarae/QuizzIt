@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Image, Dropdown, Row, Col, Table, Nav, Button, Form, FormControl, Card, NavItem } from 'react-bootstrap';
+import React, { useEffect } from 'react'
+import { Dropdown, Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import Pagination from '../components/Pagination'
 import { useLocation, useHistory } from 'react-router-dom'
-import { LinkContainer } from 'react-router-bootstrap';
 import { searchQuiz } from '../actions/searchActions'
 
 function MyQuizzes() {
@@ -16,7 +15,7 @@ function MyQuizzes() {
     const filter = searchParams.get('filter') || ''
 
     const { user } = useSelector((state) => state.auth)
-    const { isSearchQuizLoading, quizzes, quizPages, totalCount, errors } = useSelector((state) => state.search) 
+    const { isSearchQuizLoading, quizzes, quizPages, errors } = useSelector((state) => state.search) 
 
     const setPage = (page) => {
         history.push(`${url}?filter=${filter}&page=${page}`)}
