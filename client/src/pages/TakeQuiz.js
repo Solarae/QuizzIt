@@ -21,7 +21,7 @@ function TakeQuiz() {
     const [questionsAttempted, setQuestionsAttempted] = useState([])
     const [timer, setTimer] = useState(0)
     const [qno, setqno] = useState(0)
-    const [question, setQuestion] = useState(quiz.questions[qno])
+    const [question, setQuestion] = useState(null)
 
     const history = useHistory()
     const timerIncrement = () => { setTimer(timer + 1) }
@@ -33,11 +33,18 @@ function TakeQuiz() {
         }
     }, [timer])
     
+    // load the quiz
     useEffect(() => {
-        console.log(quiz.questions)
+        dispatch(getQuiz(qid))
     }, [])
 
-    if (isLoading) {
+    // set question when quiz loads
+    useEffect(() => {
+        if (quiz) setQuestion(quiz.questions[qno])
+    }, [quiz])
+        
+
+    if (isLoading || !quiz || !question) {
         return (<Loading />)
     }
     
