@@ -100,11 +100,12 @@ function Banner({ isEdit }) {
     console.log(platform)
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${quiz.thumbnail})` }}></div>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ background: "#227093"  }}>
+            </div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{overflowWrap: "break-word"}} >
                 <div className="row">
-                    <div className="col-6 d-flex justify-content-start" >
-                        <Image style={{ width: "150px", height: "150px", marginTop: "-82px" }} className="position-relative ms-5 bg-dark" src={platform.icon && platform.icon !== "" ? platform.icon : "/quizzit_logo.png"} thumbnail />
+                    <div className="col-6 d-flex justify-content-start" style={{}} >
+                        <Image style={{ width: "220px", height: "150px", marginTop: "-82px"}}  className="position-relative ms-5 bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
                         <div style={{ marginLeft: "2%"}}>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}> {quiz.name} </p>
                             <p className="lead fw-normal" style={{marginBottom:"10px"}}>
@@ -146,8 +147,8 @@ function Banner({ isEdit }) {
                     </div>
                 </div>
             </div>
-            <div>
-                <h5 className="ms-5">{platform.name}</h5>
+            <div className="ms-5 mt-1" style={{ width: '220px', textAlign: "center"}}>
+                <h4>{quiz.name}</h4>
             </div>
             <SignIn show={showSignIn} handleShowSignUp={handleShowSignUp} handleClose={handleCloseSignIn} />
             <SignUp show={showSignUp} handleClose={handleCloseSignUp} />
