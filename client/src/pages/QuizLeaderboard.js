@@ -33,8 +33,10 @@ function QuizLeaderboard() {
         getLeaderboard: getQuizLeaderboard
     }
     useEffect(() => {
-        dispatch(getQuiz(qid))
-    }, [qid, dispatch]);
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
+    }, [dispatch, qid])
 
     if (isLoading || !quiz) {
         return (<Loading />)

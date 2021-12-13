@@ -1,10 +1,11 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { getSubmissions } from "../actions/submissionActions"
-import { Table, Row, Col } from "react-bootstrap"
+import { Container, Table, Row, Col } from "react-bootstrap"
 import { useHistory, useParams } from 'react-router-dom';
 import Pagination from '../components/Pagination'
 import Loading from '../components/Loading'
+import moment from 'moment'
 
 function ViewSubmission() {
     const dispatch = useDispatch()
@@ -41,12 +42,11 @@ function ViewSubmission() {
     }
 
     return(
-        <div>
-            <Row>
+        <Container>
             <Table striped bordered hover className='mt-5'>
-                <thead>
+                <thead style={{textAlign: 'center'}}>
                     <tr>
-                    <th>Time submitted</th>
+                    <th>Time Submitted</th>
                     <th>Quiz</th>
                     <th>Platform</th>
                     <th>Score</th>
@@ -58,11 +58,11 @@ function ViewSubmission() {
                     {submissions.map((submission)=>{
                         return( 
                                 <tr submissionId={submission._id} onClick={handleOnclick}>
-                                        <td className="display:block" submissionId={submission._id} >{submission.createdAt}</td>
+                                        <td className="display:block" submissionId={submission._id} >{moment(submission.createdAt).fromNow()}</td>
                                         <td submissionId={submission._id}>{submission.quizId.name}</td>
                                         <td submissionId={submission._id}>{submission.platformId.name}</td>
                                         <td submissionId={submission._id}>{submission.score}</td>
-                                        <td submissionId={submission._id}>{submission.timeTaken} seconds</td>
+                                        <td submissionId={submission._id}>{moment().startOf('day').seconds(submission.timeTaken).format('m:ss')}</td>
                                         <td submissionId={submission._id}>{submission.point}</td>
                                 </tr>
                             )
@@ -70,7 +70,6 @@ function ViewSubmission() {
                     }
                 </tbody>
             </Table>
-            </Row>
 
             <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                 <Col>
@@ -78,7 +77,7 @@ function ViewSubmission() {
                 </Col>
             </Row>
             
-        </div>
+        </Container>
     )
 }
 
