@@ -31,7 +31,7 @@ function QuizCardMini({ quiz, showPlatform = true }) {
                 <Row>
                     <Col className="my-auto" align="center" >
                         {isEdit && (<i className="bi bi-pencil-square position-absolute top-0 start-100 translate-middle" style={{ fontSize: "1.3rem" }}></i>)}
-                        <Image style={{ width: "100%", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
+                        <Image style={{ width: "220px", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
 
                         <Row>
                             {

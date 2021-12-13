@@ -22,7 +22,7 @@ function QuizCard({ quiz }) {
             <Card.Body>
                 <Row>
                     <Col md={3} className="my-auto" align="center" >
-                        <Image style={{ width: "150px", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
+                        <Image style={{ width: "220px", height: "150px", cursor: 'pointer' }} onClick={routeToQuiz} className="bg-dark" src={quiz.thumbnail ? quiz.thumbnail : "/quizzit_logo.png"} thumbnail />
                         <p className="fs-6 text-muted" style={{marginBottom:"-10px"}}><i class="bi bi-stopwatch"></i> {quiz.time} min</p>
                     </Col>
                     <Col style={{}}>
