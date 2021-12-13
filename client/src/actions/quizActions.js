@@ -233,6 +233,7 @@ export const upvoteQuiz = ({ id, userId }) => async (dispatch) => {
                 type: UPVOTE_QUIZ,
                 payload: res.data
             })
+            console.log(res.data.quiz)
         }
     } catch (errors) {
         console.log(errors)
@@ -258,6 +259,7 @@ export const downvoteQuiz = ({ id, userId }) => async (dispatch) => {
             })
         }
         else {
+            console.log(res.data.quiz)
             dispatch({
                 type: DOWNVOTE_QUIZ,
                 payload: res.data
