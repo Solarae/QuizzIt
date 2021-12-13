@@ -1,5 +1,5 @@
 import { React, useEffect, useState } from 'react'
-import { Container, Col, Button } from 'react-bootstrap';
+import { Container, Col, Button, Card, Row } from 'react-bootstrap';
 
 import TakeQuestionCard from '../components/Question/TakeQuestionCard'
 import TakeQuizBanner from '../components/Quiz/TakeQuizBanner'
@@ -12,13 +12,14 @@ import { useHistory, useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
 
 
+
 function TakeQuiz() {
     const dispatch = useDispatch()
-    
-    const user = useSelector((state)=>state.auth.user)
+
+    const user = useSelector((state) => state.auth.user)
     const quiz = useSelector((state) => state.quiz.quiz)
     const isLoading = useSelector((state) => state.quiz.isLoading)
-    const [questionsAttempted, setQuestionsAttempted] = useState([])
+    const [userAnswers, setUserAnswers] = useState({})
     const [timer, setTimer] = useState(0)
     const [qno, setqno] = useState(0)
     const [question, setQuestion] = useState(null)
@@ -28,46 +29,43 @@ function TakeQuiz() {
     let { qid } = useParams()
 
     useEffect(() => {
-        if (!isLoading && quiz.time == (timer/60)) {
+        if (!isLoading && quiz.time == (timer / 60)) {
             handleSubmit()
         }
     }, [timer])
-    
+
     // load the quiz
     useEffect(() => {
         dispatch(getQuiz(qid))
     }, [])
 
-    // set question when quiz loads
     useEffect(() => {
-        if (quiz) setQuestion(quiz.questions[qno])
+        if (quiz) {
+            setQuestion(quiz.questions[qno])
+            setUserAnswers(Array(quiz.questions.length).fill(-1))
+        }
     }, [quiz])
-        
+
 
     if (isLoading || !quiz || !question) {
         return (<Loading />)
     }
-    
-    const questionInput = (e, idx, index) => {
-        // e.preventDefault()
-        const newQuestionsAttempted = {...questionsAttempted}
-        newQuestionsAttempted[index] = idx
-        setQuestionsAttempted(newQuestionsAttempted)
-        console.log(questionsAttempted)
+
+    const questionInput = (qIndex, answer) => {
+        let newAnswers = [...userAnswers]
+        newAnswers[qIndex] = answer
+        setUserAnswers(newAnswers)
+        console.log(newAnswers)
+
     }
 
     const handleSubmit = () => {
-
-        let answers = Array(quiz.questions.length).fill(-1)
-        
-        for (var key in questionsAttempted) {
-            answers[key] = String.fromCharCode(questionsAttempted[key] + 97) 
-        }        
+        let answers = userAnswers
 
         if (answers.includes(-1)) {
-            if (timer/60 >= quiz.time) {
-                dispatch(makeSubmission({ 
-                    quizId: qid, 
+            if (timer / 60 >= quiz.time) {
+                dispatch(makeSubmission({
+                    quizId: qid,
                     answers: answers,
                     platformId: quiz.platformId,
                     userId: user.id,
@@ -78,8 +76,8 @@ function TakeQuiz() {
             return;
         }
 
-        dispatch(makeSubmission({ 
-            quizId: qid, 
+        dispatch(makeSubmission({
+            quizId: qid,
             answers: answers,
             platformId: quiz.platformId,
             userId: user.id,
@@ -91,60 +89,122 @@ function TakeQuiz() {
 
     const calculateTime = () => {
         const time = quiz.time
-        const hrs = Math.floor(time/60)
+        const hrs = Math.floor(time / 60)
         // console.log(hrs)
-        const mins = time%60
+        const mins = time % 60
         const secs = 0
-        return {hrs, mins, secs}
+        return { hrs, mins, secs }
     }
-    
+
     const handlePrev = () => {
-        setqno(qno-1)
-        setQuestion(quiz.questions[qno-1])       
+        setqno(qno - 1)
+        setQuestion(quiz.questions[qno - 1])
     }
 
     const handleNext = () => {
-        setqno(qno+1)
-        setQuestion(quiz.questions[qno+1])
+        setqno(qno + 1)
+        setQuestion(quiz.questions[qno + 1])
     }
-    
+
     const handleJumpto = (idx) => {
         setqno(idx)
         setQuestion(quiz.questions[idx])
     }
 
     return (
-        <>
+        <div className="justify-content-between">
             <TakeQuizBanner></TakeQuizBanner>
             <div style={{ height: "10vh" }}></div>
-           
+
             <CountDownTimer duration={calculateTime} counter={timerIncrement}></CountDownTimer>
 
-            <Container className="row justify-content-center">
-                    <div style={{ height: "3vh" }}></div>
-                <Col xs={3}>
-                    {quiz.questions.map((question, idx) => (
-                        <>
-                            <Col>
-                                <Button variant={idx==qno?"secondary":"primary"} onClick={() => {handleJumpto(idx)}}>{idx+1}</Button>
-                            </Col>
-                            <div style={{ height: '20px'}}></div>
-                        </>
+            <Container style={{ width: "100%" }}>
+                <Row>
+                    <Col className="my-auto" xs={2} style={{  }}>
+                        {quiz.questions.map((question, idx) => (
+                            <>
+                                <Col>
+                                    <Button disabled={idx === qno} onClick={() => { handleJumpto(idx) }}>{idx + 1}</Button>
+                                </Col>
+                                <div style={{ height: '20px' }}></div>
+                            </>
                         ))}
-                </Col>
-                <Col>
-                    <TakeQuestionCard quizId={qid} question={question} questionNumber={qno} questionInput={questionInput} answers={questionsAttempted}></TakeQuestionCard>
+                    </Col>
+                    <Col align='center' xs={8} style={{  }}>
+                        <Card
+                            border="dark"
+                            bg='Light'
+                        >
+                            <Card.Body>
+                                <Card.Text>
+                                    <h3>{question.question}</h3>
+                                </Card.Text>
+                            </Card.Body>
+                        </Card>
 
-                    <Button variant="primary" onClick={handleNext} disabled={qno==quiz.questions.length-1} >Next</Button>
+                        <br />
+                        <Row >
+                            <Col xs={6}>
+                                <Option text={question.choices[0]} selected={userAnswers[qno] === 'a'} onClick={() => { questionInput(qno, 'a') }}></Option>
+                            </Col>
+                            <Col xs={6}>
+                                <Option text={question.choices[1]} selected={userAnswers[qno] === 'b'} onClick={() => { questionInput(qno, 'b') }}></Option>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col xs={6}>
+                                <Option text={question.choices[2]} selected={userAnswers[qno] === 'c'} onClick={() => { questionInput(qno, 'c') }}></Option>
+                            </Col>
+                            <Col xs={6}>
+                                <Option text={question.choices[3]} selected={userAnswers[qno] === 'd'} onClick={() => { questionInput(qno, 'd') }}></Option>
+                            </Col>
+                        </Row>
 
-                    <Button variant="primary" onClick={handlePrev} disabled={qno==0}>Previous</Button>
+                        <div style={{ height: "5vw" }}></div>
+                        <Row align='center'>
+                            <Col xs={4} ></Col>
+                            <Col className="d-flex justify-content-between" xs={4} >
+                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0}>Previous</Button>
+                                <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} >Next</Button>
+                            </Col>
+                            <Col xs={4} ></Col>
+                        </Row>
 
-                    <Button variant="primary" onClick={handleSubmit}>Submit</Button>
+                        <div style={{ height: "5vw" }}></div>
+                        <Row>
+                            <Col>
+                                <Button variant="primary" onClick={handleSubmit}>Submit Quiz</Button>
+                            </Col>
+                        </Row>
 
-                </Col>
+                    </Col>
+
+                    <Col xs={2} >
+                    </Col>
+                </Row>
             </Container>
-        </>
+        </div>
     )
+}
+
+function Option({ text, selected, onClick }) {
+    return (
+        <span onClick={(e) => { e.preventDefault(); onClick() }}>
+            <Card
+                className="questionOption"
+                border={selected ? "primary" : ""}
+                bg='Light'
+                style={{ marginBottom: "1vw" }}
+            >
+                <Card.Body>
+                    <Card.Text>
+                        {text}
+                    </Card.Text>
+                </Card.Body>
+            </Card>
+        </span>
+    )
+
 }
 
 export default TakeQuiz
