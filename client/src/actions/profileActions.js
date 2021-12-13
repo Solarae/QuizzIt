@@ -192,13 +192,14 @@ export const editProfile = ({ id, username, email, password, currentPassword, hi
     }
 }
 
-export const deleteProfile = ({ id, password, history, callback }) => async (dispatch) => {
+export const deleteProfile = ({ id, password, history, callback,createdPlatforms,subscribedPlatforms }) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
         }
     }
-    const body = JSON.stringify({ id, password })
+    console.log(subscribedPlatforms)
+    const body = JSON.stringify({ id, password,createdPlatforms,subscribedPlatforms})
     try {
         const res = await axios.post(`${URL}/api/users/delete`, body, config)
         if (res.data.errors) {

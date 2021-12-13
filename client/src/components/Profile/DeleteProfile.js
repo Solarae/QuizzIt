@@ -10,7 +10,7 @@ function DeleteProfile({ show, handleClose }) {
     const dispatch = useDispatch()
     const auth = useSelector((state) => state.auth)
     const history = useHistory()
-
+    const profile = useSelector((state)=>state.profile)
     const [values, setValues] = useState({
         password: "",
     });
@@ -32,8 +32,12 @@ function DeleteProfile({ show, handleClose }) {
     const handleSubmit = ((e) => {
         e.preventDefault();
 
-        dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, callback: closeModal }));
-        history.push("/")
+        if(profile){
+            console.log(profile.subscribedPlatforms)
+            dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, createdPlatforms:profile.createdPlatforms , subscribedPlatforms:profile.subscribedPlatforms, callback: closeModal }));
+            history.push("/")
+        }
+
     })
 
     return (
