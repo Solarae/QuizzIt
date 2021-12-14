@@ -61,7 +61,13 @@ function Quiz() {
         }
     }
     const handleViewSubmission = () => {
-        history.push(`/viewQuizSubmission/${quiz._id}`)
+        if (user){
+          history.push(`/viewQuizSubmission/${quiz._id}`)  
+        } 
+        else{
+           handleShowSignIn() 
+        }
+
     }
 
     return (
