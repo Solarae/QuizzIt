@@ -48,7 +48,7 @@ function Home() {
         console.log("searching");
 
         dispatch(searchPlatform({
-            query: { 'sort': "likes.totalLikes desc" },
+            query: { 'sort': "subscribers.size desc" },
             page: 1,
             limit: platformLimit
         }))
@@ -56,7 +56,7 @@ function Home() {
         dispatch(searchQuiz({
             query: {
                 'expand' : "platformId(select=name,icon)",
-                'sort': "likes.totalLikes desc" 
+                'sort': "submissionCount desc" 
             },
             page: 1,
             limit: quizLimit
@@ -87,7 +87,7 @@ function Home() {
                     <div className="col-9" style={{}}>
                         <Container>
                             <Row className="">
-                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Quizzes</h5>
+                                <h5><i class="bi bi-graph-up-arrow"></i>  Popular Quizzes</h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
                                 {quizzes.slice(0, quizLimit - 1).map((q, idx) => (
@@ -104,7 +104,7 @@ function Home() {
                             <hr />
                             
                             <Row className="">
-                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Platforms </h5>
+                                <h5><i class="bi bi-graph-up-arrow"></i>  Popular Platforms </h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
                                 {platforms.slice(0, platformLimit - 1).map((p, idx) => (
