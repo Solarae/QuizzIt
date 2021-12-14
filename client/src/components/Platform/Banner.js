@@ -63,7 +63,7 @@ function Banner({ platform }) {
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${platform.banner})` }}>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ backgroundImage: `url(${platform.banner})` }}>
             </div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{ overflowWrap: "break-word" }} >
                 <div className="row">
