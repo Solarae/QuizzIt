@@ -66,7 +66,7 @@ function ViewSubmission() {
                                         <td submissionId={submission._id} onClick={() => handlePlatformClick(submission.platformId._id)}>{submission.platformId.name}</td>
                                         <td submissionId={submission._id}>{submission.score}</td>
                                         <td submissionId={submission._id}>{moment().startOf('day').seconds(submission.timeTaken).format('m:ss')}</td>
-                                        <td submissionId={submission._id}>{submission.point}</td>
+                                        <td submissionId={submission._id}>{submission.pointsAwarded}</td>
                                 </tr>
                             )
                     })
