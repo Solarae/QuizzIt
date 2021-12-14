@@ -14,6 +14,7 @@ import Report from "../models/Report.js";
 import Quiz from "../models/Quiz.js";
 import Award from "../models/Award.js";
 import Submission from "../models/Submission.js";
+import Global from "../models/Global.js";
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -228,6 +229,17 @@ export const deleteAccount = async (req, res) => {
                 $inc: { 'subscriberCount': -1 },  
             })
         })
+
+
+        //remove from global leaderboard
+        await Global.findOneAndUpdate(
+            {},
+            { $pull: {daily_leaderboard:{userId:id}  , monthly_leaderboard:{userId:id}  ,   weekly_leaderboard:{userId:id}  , yearly_leaderboard:{userId:id}  , allTime_leaderboard:{userId:id} , reports:{userId:id} }
+        })
+
+
+
+
 
         //for created platforms, transfer ownership to moderator,if no moderator, transfer to consumer, if no consumer, simply delete platform
         createdPlatforms.forEach(async (element)=>{
