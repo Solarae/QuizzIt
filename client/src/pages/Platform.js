@@ -44,7 +44,7 @@ function Platform() {
     // used to determine whether to show the home or memberlist based on which tab is selected 
     const [tab, setTab] = useState('home');
 
-    if (isGetLoading || !platform) {
+    if (isGetLoading || !platform || platform._id !== id) {
         return (
             <Loading />
         )
@@ -77,7 +77,7 @@ function Platform() {
                         </Container>
 
                         {tab === 'home' && <Home ></Home>}
-                        {tab === 'awards' &&  <AwardSection showEdit={false} ></AwardSection>}
+                        {tab === 'awards' && <AwardSection showEdit={false} ></AwardSection>}
                         {tab === 'memberlist' && <MemberList platform={platform} memberList={memberList}></MemberList>}
 
                     </div>
