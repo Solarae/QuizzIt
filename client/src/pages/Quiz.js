@@ -87,8 +87,8 @@ function Quiz() {
                             </tr>
                             <tr>
                                 <th>Number of Questions</th>
-                                {console.log(quiz)}
-                                {/* <th>{quiz.questions.length}</th> */}
+                                {/* {console.log(quiz)} */}
+                                <th>{quiz.questions.length}</th>
                             </tr>
                         </Table>
 
