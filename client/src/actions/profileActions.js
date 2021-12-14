@@ -63,13 +63,13 @@ export const getProfile = ({ id }) => async (dispatch) => {
         })
     }
 
-    if (res.data.errors) {
+    if (res && res.data.errors) {
         dispatch({
             type: GET_PROFILE_FAIL,
             payload: res.data
         })
     }
-    else {
+    else if(res){
         if (res.data.users.length !== 1) {
             dispatch({
                 type: GET_PROFILE_FAIL,

@@ -35,7 +35,6 @@ function DeleteProfile({ show, handleClose }) {
         if(profile){
             console.log(profile.subscribedPlatforms)
             dispatch(deleteProfile({ id: auth.user.id, password: values.password, history: history, createdPlatforms:profile.createdPlatforms , subscribedPlatforms:profile.subscribedPlatforms, callback: closeModal }));
-            history.push("/")
         }
 
     })
