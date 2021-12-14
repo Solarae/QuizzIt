@@ -5,7 +5,7 @@ import {
     GET_INBOX_REQ,
     GET_INBOX_SUCCESS,
     GET_INBOX_FAIL,
-    RECEIVE_NOTIFICATIONS,
+    // RECEIVE_NOTIFICATIONS,
     READ_NOTIFICATION_SUCCESS,
     READ_NOTIFICATION_FAIL,
     GET_FRIENDREQUESTS_REQ,
@@ -21,7 +21,7 @@ import {
     EDIT_PROFILE_FAIL,
     DELETE_PROFILE_SUCCESS,
     DELETE_PROFILE_FAIL,
-    RECEIVE_FRIENDREQUEST,
+    // RECEIVE_FRIENDREQUEST,
     GET_FRIENDS_REQ,
     GET_FRIENDS_SUCCESS,
     GET_FRIENDS_FAIL,
@@ -287,12 +287,12 @@ export const getInbox = (id, query) => async (dispatch) => {
     }
 }
 
-export const receiveNotifications = (notifications) => (dispatch) => {
-    dispatch({
-        type: RECEIVE_NOTIFICATIONS,
-        payload: notifications
-    })
-}
+// export const receiveNotifications = (notifications) => (dispatch) => {
+//     dispatch({
+//         type: RECEIVE_NOTIFICATIONS,
+//         payload: notifications
+//     })
+// }
 
 export const readNotification = (userId, notifId) => async (dispatch) => {
     try {
@@ -404,12 +404,12 @@ export const declineFriendRequest = (id, userId) => async (dispatch) => {
     }
 }
 
-export const receiveFriendRequest = (friendRequest) => (dispatch) => {
-    dispatch({
-        type: RECEIVE_FRIENDREQUEST,
-        payload: friendRequest
-    })
-}
+// export const receiveFriendRequest = (friendRequest) => (dispatch) => {
+//     dispatch({
+//         type: RECEIVE_FRIENDREQUEST,
+//         payload: friendRequest
+//     })
+// }
 
 export const getFriends = ({ id, query }) => async (dispatch) => {
     const config = {
