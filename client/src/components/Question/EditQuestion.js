@@ -16,20 +16,16 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         answer: question.answer
     });
 
-
     useEffect(() => {
         if (question) {
 
             setValues({
-
                 question: question.question,
                 option1: question.choices[0],
                 option2: question.choices[1],
                 option3: question.choices[2],
                 option4: question.choices[3],
-                answer: question.answer
             })
-            setOptionState(question.answer)
         }
     }, [dispatch, question, show])
 
