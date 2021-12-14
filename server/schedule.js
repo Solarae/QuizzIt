@@ -51,7 +51,7 @@ const updateLeaderboard = async (type, time) => {
                 userId: "$userId",
             },
             points: {
-                $sum: "$score"
+                $sum: "$pointsAwarded"
             }
         } :
         {
@@ -60,7 +60,7 @@ const updateLeaderboard = async (type, time) => {
                 userId: "$userId",
             },
             points: {
-                $sum: "$score"
+                $sum: "$pointsAwarded"
             }
         }
 

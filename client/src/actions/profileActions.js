@@ -290,6 +290,7 @@ export const getInbox = (id, query) => async (dispatch) => {
 }
 
 export const receiveNotifications = (notifications) => (dispatch) => {
+    console.log(notifications)
     dispatch({
         type: RECEIVE_NOTIFICATIONS,
         payload: notifications

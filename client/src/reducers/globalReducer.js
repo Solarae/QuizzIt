@@ -23,8 +23,25 @@ const globalReducer = (state = initialState, action) => {
                 isGetGlobalLeaderboardLoading: true
             }
         case GET_GLOBAL_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetGlobalLeaderboardLoading: false,
+                errors: null
+            }
         case GET_GLOBAL_LEADERBOARD_FAIL:
+            return {
+                ...state,
+                ...action.payload,
+                isGetGlobalLeaderboardLoading: false,
+            }
         case SEARCH_GLOBAL_LEADERBOARD_SUCCESS:
+            return {
+                ...state,
+                ...action.payload,
+                isGetGlobalLeaderboardLoading: false,
+                errors: null
+            }
         case SEARCH_GLOBAL_LEADERBOARD_FAIL:
             return {
                 ...state,

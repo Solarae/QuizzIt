@@ -182,11 +182,12 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
+        console.log(awards)
         var awardsObtained = []
         var messages = []
         awards.forEach((award) => {
             if ((award.requirementType === 'Point' && user_agg.totalPoints >= award.requirementCount) ||
-                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount ) {
+                award.requirementType === 'Quiz' && user_agg.submissionCount >= award.requirementCount ) {
                     awardsObtained.push(award._id)
                     messages.push({
                         message: `You've received earned the ${award.title}`,
@@ -194,7 +195,9 @@ export const assignAwards = async (userId, platformId) => {
                     })
                 }
         })
-        
+
+        console.log(awards)
+        console.log(awardsObtained)
         if (awardsObtained.length) {
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
@@ -205,10 +208,9 @@ export const assignAwards = async (userId, platformId) => {
     
             
             if (onlineUsers.get(userId)) {
-                const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
-                
+                console.log("SENDING INBOXES")
                 io.to(onlineUsers.get(userId)).emit('getInbox', {
-                    inbox: slicedUser.inbox,
+                    inbox: messages
                 })
             }
                 
@@ -256,9 +258,11 @@ export const recaclulateScore = async (quizId) => {
             })
             // First Attempt; Recalculate points awarded
             if (s.attemptNumber === 1) {
+                const points = s.timeTaken === 0 ? (total_correct * (total_correct / quiz.questions.length)) / (1 / (quiz.time * 60)) :
+                (total_correct * (total_correct / quiz.questions.length)) / (s.timeTaken / (quiz.time * 60))
                 await Submission.findByIdAndUpdate(
                     s._id,
-                    { $set: { score: total_correct, pointsAwarded: total_correct } }
+                    { $set: { score: total_correct, pointsAwarded: Math.floor(points) } }
                 )
             } else {
                 await Submission.findByIdAndUpdate(s._id,

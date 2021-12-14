@@ -295,7 +295,7 @@ export const getLeaderboard = async (req, res) => {
                     _id: 1,
                     points: 1,
                     username: 1,
-                    icon
+                    icon: 1
                 }
             }}
         ])
@@ -382,7 +382,7 @@ export const searchLeaderboard = async (req, res) => {
                     _id: 1,
                     points: 1,
                     username: 1,
-                    icon
+                    icon: 1
                 }
             }} 
         ])
