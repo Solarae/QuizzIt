@@ -70,7 +70,7 @@ function ReviewSubmission() {
                 <h2>Correct: {submission.score}/{submission.quizId.questions.length}</h2>
                 <h2>Time Spent: {submission.timeTaken} seconds </h2>
                 <div style={{ height: "10vh" }}></div>
-                <Row style={{ 'height': '40vw' }}>
+                <Row style={{ 'height': '60vw' }}>
                     <Col className="my-auto" xs={2} style={{ height: "80%" }} >
                         <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
 
@@ -101,7 +101,7 @@ function ReviewSubmission() {
                         </Row>
 
                         <br />
-                        <Row style={{ height: '20%' }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
                                 <Option text={question.choices[0]}
                                     isAnswer={question.answer === 'a'}
@@ -116,7 +116,7 @@ function ReviewSubmission() {
                                 ></Option>
                             </Col>
                         </Row>
-                        <Row style={{ height: '25%' }} >
+                        <Row style={{  }} >
                             <Col xs={6}>
                                 <Option text={question.choices[2]}
                                     isAnswer={question.answer === 'c'}

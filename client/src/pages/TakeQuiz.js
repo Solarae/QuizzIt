@@ -130,7 +130,7 @@ function TakeQuiz() {
             <CountDownTimer duration={calculateTime} counter={timerIncrement}></CountDownTimer>
 
             <Container style={{ width: "100%" }}>
-                <Row style={{ 'height': '40vw' }}>
+                <Row style={{ 'height': '60vw' }}>
                     <Col className="my-auto" xs={2} style={{ height: "80%" }} >
                         <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
 
@@ -161,7 +161,7 @@ function TakeQuiz() {
                         </Row>
 
                         <br />
-                        <Row style={{ height: "20%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
                                 <Option text={question.choices[0]} selected={userAnswers[qno] === 'a'} onClick={() => { questionInput(qno, 'a') }}></Option>
                             </Col>
@@ -169,7 +169,7 @@ function TakeQuiz() {
                                 <Option text={question.choices[1]} selected={userAnswers[qno] === 'b'} onClick={() => { questionInput(qno, 'b') }}></Option>
                             </Col>
                         </Row>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
                                 <Option text={question.choices[2]} selected={userAnswers[qno] === 'c'} onClick={() => { questionInput(qno, 'c') }}></Option>
                             </Col>
