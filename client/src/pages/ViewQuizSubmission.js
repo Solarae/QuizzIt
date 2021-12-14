@@ -67,7 +67,7 @@ function ViewSubmission() {
                                         <td submissionId={submission._id}>{submission.platformId.name}</td>
                                         <td submissionId={submission._id}>{submission.score}</td>
                                         <td submissionId={submission._id}>{submission.timeTaken} seconds</td>
-                                        <td submissionId={submission._id}>{submission.point}</td>
+                                        <td submissionId={submission._id}>{submission.pointsAwarded}</td>
                                 </tr>
                             )
                     })

@@ -68,6 +68,7 @@ function ReviewSubmission() {
             <br></br>
             <Container style={{ width: "100%" }}>
                 <h2>Correct: {submission.score}/{submission.quizId.questions.length}</h2>
+                <h2>Points Awarded: {submission.pointsAwarded}</h2>
                 <h2>Time Spent: {submission.timeTaken} seconds </h2>
                 <div style={{ height: "10vh" }}></div>
                 <Row style={{ 'height': '60vw' }}>
