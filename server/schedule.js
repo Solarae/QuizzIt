@@ -125,4 +125,4 @@ export const duplicateDB = async () => {
 }
 
 export const updateLeaderboardsJob = cron.schedule('0 0 * * *', updateLeaderboards);
-//export const updateLeaderboardsJob = cron.schedule('*/1 * * * *', updateLeaderboards);
+// export const updateLeaderboardsJob = cron.schedule('*/1 * * * *', updateLeaderboards);
