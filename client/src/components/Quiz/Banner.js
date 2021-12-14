@@ -116,7 +116,7 @@ function Banner({ isEdit }) {
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && (isEdit?<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleEditModal()}>Edit</Button>:<Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>redirectEdit()}>Edit</Button>)}
                                     {(auth.isAuthenticated && auth.user.id === quiz.owner && quiz.status === 'draft') && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>TogglePublishModal()}>Publish</Button>}
-                                    {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && <Button variant="primary btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
+                                    {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && <Button variant="danger btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <PublishQuizModal show={publishModal} setShow = {setPublishModal} quiz={quiz} />
                                     <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />

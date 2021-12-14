@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { addQuizQuestion } from '../../actions/quizActions'
@@ -7,36 +7,46 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
     const dispatch = useDispatch();
     const [errors, setErrors] = useState({});
     const [values, setValues] = useState({
-        question: "",
-        option1:"",
-        option2:"",
-        option3:"",
-        option4:"",
-        answer:""
     });
-    const [optionState,setOptionState] = useState("a")
-    
+
+    useEffect(() => {
+
+        setValues({
+            question: "",
+            option1: "",
+            option2: "",
+            option3: "",
+            option4: "",
+            answer: ""
+
+        })
+
+        setOptionState('a')
+    }, [dispatch, show])
+
+    const [optionState, setOptionState] = useState("a")
+
     const closeModal = (err) => {
         if (err) {
             setErrors({ ...err })
             return;
         }
-        setValues({ 
-            ...values, 
-            question: "", 
-            option1:"", 
-            option2:"", 
-            option3:"", 
-            option4:"", 
-            answer:"" 
+        setValues({
+            ...values,
+            question: "",
+            option1: "",
+            option2: "",
+            option3: "",
+            option4: "",
+            answer: ""
         });
         setErrors({});
         handleClose();
         setError()
     }
-    const [error,setError] = useState()
+    const [error, setError] = useState()
     const onChange = (e) => {
-        setValues({...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value });
     }
 
     const handleSubmit = (e) => {
@@ -51,29 +61,29 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
         }
 
         var bool = true
-        optionValues.forEach((choice)=>{
-            if(set.has(choice)){
+        optionValues.forEach((choice) => {
+            if (set.has(choice)) {
                 setError("Choices cannot have the same value")
-                bool=false
+                bool = false
             }
             set.add(choice)
         })
 
-        if(bool===true)
+        if (bool === true)
             dispatch(addQuizQuestion({ id: quizId, question: values.question, choices: optionValues, answer: optionState, callback: closeModal }))
     }
-    
+
     let options = ['option1', 'option2', 'option3', 'option4']
     let optionList = []
     options.forEach((option, index) => {
-        optionList.push( 
+        optionList.push(
             <Form.Group className="mb-3">
-                <Form.Label>Option {index+1} </Form.Label>
+                <Form.Label>Option {index + 1} </Form.Label>
                 <Form.Control type="text" placeholder="Option" name={option} onChange={onChange} />
             </Form.Group>
         )
     })
-    
+
     console.log('modal add question')
     return (
         <Modal show={show} onHide={closeModal}>
@@ -82,13 +92,13 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
                 <Modal.Body>
                     <Form.Group className="mb-3">
                         <Form.Label>Question</Form.Label>
-                        <Form.Control type="text" placeholder="Quesiton" name="question" onChange={onChange} />
+                        <Form.Control type="text" placeholder="Question" name="question" onChange={onChange} />
                     </Form.Group>
-                        {optionList}
+                    {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer:</Form.Label>
                         {/* <Form.Control type="text" placeholder="Answer" name="answer" onChange={onChange} /> */}
-                        <Form.Control as="select" value={optionState} onChange={e=> setOptionState(e.target.value)}>
+                        <Form.Control as="select" value={optionState} onChange={e => setOptionState(e.target.value)}>
                             <option value="a">Option 1</option>
                             <option value="b">Option 2</option>
                             <option value="c">Option 3</option>
@@ -108,14 +118,14 @@ function AddQuizQuestion({ quizId, show, handleClose }) {
                     </Form.Text>
                 )}
                 {error ? <Form.Text className="text-muted">
-                            <Alert variant={'danger'}>
-                                {error}
-                            </Alert>
-                          </Form.Text>:
-                          <></>
+                    <Alert variant={'danger'}>
+                        {error}
+                    </Alert>
+                </Form.Text> :
+                    <></>
                 }
-                <Modal.Footer className="justify-content-between"> 
-                    <Button variant="primary" type="submit"> Add </Button> 
+                <Modal.Footer className="justify-content-between">
+                    <Button variant="primary" type="submit"> Add </Button>
                 </Modal.Footer>
             </Form>
         </Modal>

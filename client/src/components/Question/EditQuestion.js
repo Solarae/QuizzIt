@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Form, Button, Modal, Alert } from 'react-bootstrap'
 import { useSelector, useDispatch } from 'react-redux'
 import { editQuizQuestion } from '../../actions/quizActions'
@@ -15,27 +15,45 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         option4: question.choices[3],
         answer: question.answer
     });
-    const [optionState,setOptionState] = useState(question.answer)
+
+
+    useEffect(() => {
+        if (question) {
+
+            setValues({
+
+                question: question.question,
+                option1: question.choices[0],
+                option2: question.choices[1],
+                option3: question.choices[2],
+                option4: question.choices[3],
+                answer: question.answer
+            })
+            setOptionState(question.answer)
+        }
+    }, [dispatch, question])
+
+    const [optionState, setOptionState] = useState(question.answer)
     const closeModal = (err) => {
         if (err) {
             setErrors({ ...err })
             return;
         }
-        setValues({ 
-            ...values, 
-            question: "", 
-            option1:"", 
-            option2:"", 
-            option3:"", 
-            option4:"", 
-            answer:"" 
+        setValues({
+            ...values,
+            question: "",
+            option1: "",
+            option2: "",
+            option3: "",
+            option4: "",
+            answer: ""
         });
         setErrors({});
         handleClose();
     }
-    
+
     const onChange = (e) => {
-        setValues({...values, [e.target.name]: e.target.value });
+        setValues({ ...values, [e.target.name]: e.target.value });
     }
 
     const handleSubmit = (e) => {
@@ -49,29 +67,29 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         console.log(optionValues)
 
 
-        dispatch(editQuizQuestion({ 
-            id: quizId, 
+        dispatch(editQuizQuestion({
+            id: quizId,
             question: {
-                _id: question._id, 
-                question: values.question, 
-                choices: optionValues, 
+                _id: question._id,
+                question: values.question,
+                choices: optionValues,
                 answer: optionState
-            }, 
-            callback: closeModal 
+            },
+            callback: closeModal
         }))
     }
-    
+
     let options = ['option1', 'option2', 'option3', 'option4']
     let optionList = []
     options.forEach((option, index) => {
-        optionList.push( 
+        optionList.push(
             <Form.Group className="mb-3">
-                <Form.Label>Option {index+1} </Form.Label>
+                <Form.Label>Option {index + 1} </Form.Label>
                 <Form.Control type="text" placeholder="Option" disabled={quiz.status === 'published'} defaultValue={values[option]} name={option} onChange={onChange} />
             </Form.Group>
         )
     })
-    
+
     console.log('modal edit question')
     return (
         <Modal show={show} onHide={closeModal}>
@@ -82,10 +100,10 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                         <Form.Label>Question</Form.Label>
                         <Form.Control type="text" disabled={quiz.status === 'published'} defaultValue={values.question} name="question" onChange={onChange} />
                     </Form.Group>
-                        {optionList}
+                    {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control as="select" value={optionState} onChange={e=> setOptionState(e.target.value)}>
+                        <Form.Control as="select" value={values.answer} onChange={e => setOptionState(e.target.value)}>
                             <option value="a">Option 1</option>
                             <option value="b">Option 2</option>
                             <option value="c">Option 3</option>
@@ -104,8 +122,8 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                         </Alert>
                     </Form.Text>
                 )}
-                <Modal.Footer className="justify-content-between"> 
-                    <Button variant="primary" type="submit"> Add </Button> 
+                <Modal.Footer className="justify-content-between">
+                    <Button variant="primary" type="submit"> Save </Button>
                 </Modal.Footer>
             </Form>
         </Modal>

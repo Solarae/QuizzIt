@@ -47,7 +47,7 @@ const DeleteQuizModal = ({ quiz, show, setShow,user,page }) => {
               Deleting this quiz deletes all submissions associated with this quiz.
           </Modal.Body>
           <Modal.Footer className="justify-content-between"> 
-              <Button variant="primary" type="submit"> Delete </Button> 
+              <Button variant="danger" type="submit"> Delete </Button> 
           </Modal.Footer>
       </Form>
     </Modal>

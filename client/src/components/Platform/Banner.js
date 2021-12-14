@@ -83,9 +83,9 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" style={{marginRight: "10px"}} >Edit</Button></Link> : <span></span>}
-                                    { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> }{' '}
+                                    { (isModerator == true || auth.user.id === platform.owner) ? <Link to={`/viewQuizReport/${platform._id}`}> <Button variant="primary btn-lg" >View Quiz Reports</Button></Link> : <></> }{' '}
                                     <Subscribe platform={platform} />
-                                    <Button onClick={() => { setShowCreateQuiz(true) }} >Create Quiz</Button>
+                                    <Button onClick={() => { setShowCreateQuiz(true) }} variant="primary btn-lg" >Create Quiz</Button>
                                     <CreateQuiz show={showCreateQuiz} handleClose={() => { setShowCreateQuiz(false) }}></CreateQuiz>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"

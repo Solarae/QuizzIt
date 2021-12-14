@@ -13,9 +13,9 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     const searchParams = new URLSearchParams(search)
     const page = parseInt(searchParams.get('page')) || 1
 
-    const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
-                    { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
-                    { queryStr: 'allTime', type: 'All Time' } ]
+    const types = [{ queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
+    { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
+    { queryStr: 'allTime', type: 'All Time' }]
     const type = searchParams.get('type') || "daily"
     const filter = searchParams.get('filter') || ''
 
@@ -31,12 +31,13 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
 
     const setPage = (page) => {
         console.log(page)
-        history.push(`${url}?type=${type}&filter=${filter}&page=${page}`)}
-    
+        history.push(`${url}?type=${type}&filter=${filter}&page=${page}`)
+    }
+
     useEffect(() => {
         if (name) {
             dispatch(searchLeaderboard({
-                id, 
+                id,
                 query: { type, name }
             }))
         } else {
@@ -50,13 +51,13 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
                 offset: 10 * (page - 1),
                 limit: 10
             }
-            
+
             dispatch(getLeaderboard({
                 id,
                 query
             }))
         }
-        
+
     }, [user, search, dispatch]);
 
     if (isGetLeaderboardLoading) {
@@ -64,32 +65,37 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     }
 
     if (errors)
-        return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
-    
+        return (Object.values(errors).map(v => (<div key={v}>{v}</div>)))
+
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row>
                 <Col align="center">
                     <h3>{`${doc} Leaderboard`}</h3>
                 </Col>
-                <Col>
-                <Form className="d-flex me-auto" style={{ marginLeft: "2%", width: "30%" }} onSubmit={handleSearch}>
-                    <FormControl
-                        type="search"
-                        placeholder="Search"
-                        value={queryName}
-                        className="me-2"
-                        aria-label="Search"
-                        onChange={onQueryChange}
-                    />
-                    <i class="bi bi-search" onClick={handleSearch} style={{ color: "black", fontSize: "1.5rem", marginLeft: "2px", marginTop: "2px", cursor: "pointer" }} ></i>
-        </Form>
+            </Row>
+            <Row align='center' style={{ }}>
+                <Col style={{  }} align='center' className="justify-content-center" xs={12}>
+                    <Form className="d-flex " style={{ marginLeft: "2%", width: "30%" }} onSubmit={handleSearch}>
+                        <FormControl
+                            type="search"
+                            placeholder="Search User"
+                            value={queryName}
+                            className="me-2"
+                            aria-label="Search"
+                            onChange={onQueryChange}
+                        />
+                        <i class="bi bi-search" onClick={handleSearch} style={{ color: "black", fontSize: "1.5rem", marginLeft: "2px", marginTop: "2px", cursor: "pointer" }} ></i>
+                    </Form>
                 </Col>
             </Row>
+        <br />
+            <Row align='center' style={{}}><Col xs={12}><Button onClick={() => history.push(`${url}?type=${type}&filter=friends`)}>Show Friends Only</Button></Col></Row>
+        <br />
             <Row>
                 <Nav fill variant="tabs"
-                >   
-                    {types.map((t) => 
+                >
+                    {types.map((t) =>
                         <Nav.Item key={t.queryStr}>
                             <LinkContainer to={`${url}?type=${t.queryStr}&filter=${filter}`}><Nav.Link>{t.type}</Nav.Link></LinkContainer>
                         </Nav.Item>
@@ -97,9 +103,8 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
                 </Nav>
                 <br />
             </Row>
-            <Row><Button onClick={() => history.push(`${url}?type=${type}&filter=friends`)}>Friends Only</Button></Row>
             <Row style={{ marginTop: "10px" }}>
-                <Table hover>
+                <Table hover className='mt-2'>
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -107,12 +112,21 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
                             <th>Points</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{ verticalAlign: 'middle' }} >
                         {leaderboard.map((rank, index) =>
                             <tr key={rank._id}>
-                                <td>{name === '' ? (page - 1) * 10 + index + 1 : (apiPage - 1) * 10 + index +1}</td>
+                                <td>{name === '' ? (page - 1) * 10 + index + 1 : (apiPage - 1) * 10 + index + 1}</td>
                                 <td>
-                                    {rank.username}
+                                    <div onClick={() => history.push(`/profile/${rank._id}`)}>
+                                        <Image
+                                            className="bg-dark"
+                                            src={rank.icon !== "" ? rank.icon : "/quizzit_logo.png"}
+                                            style={{ height: "50px", width: "50px", border: 'solid', borderColor: "white", padding: '0', marginRight: '5px' }}
+                                            roundedCircle
+                                            fluid
+                                        />
+                                        {rank.username}
+                                    </div>
                                 </td>
                                 <td>
                                     {rank.points}
@@ -135,21 +149,21 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     // const dispatch = useDispatch()
     // const history = useHistory()
     // let { id } = useParams();  // get the platform ID and quiz ID from the url
-    
+
     // const { search } = useLocation()
     // const searchParams = new URLSearchParams(search);
     // for (let p of searchParams) {
     //     console.log(p)
     // }
-    
+
     // const { isGetPlatLeaderboardLoading, leaderboard, errors } = useSelector((state) => state.platforms);
-    
+
     // const types = [ { queryStr: 'daily', type: 'Daily' }, { queryStr: 'weekly', type: 'Weekly' },
     //                 { queryStr: 'monthly', type: 'Monthly' }, { queryStr: 'year', type: 'Yearly' },
     //                 { queryStr: 'allTime', type: 'All Time' } ]
     // const type = searchParams.get('type') || "daily"
     // const filter = searchParams.get('filter') || ''
-    
+
     // const page = parseInt(searchParams.get('page')) || -1
     // const { user } = useSelector((state) => state.auth)
     // const apiPage = useSelector((state) => state.platforms.leaderboardPage)
@@ -158,7 +172,7 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     //     console.log(page)
     //     history.push(`/platform/${id}/leaderboard?type=${type}&filter=${filter}&page=${page}`)
     // }
-    
+
     // console.log(searchParams.get('userName') || '')
     // const [name, setQueryName] = useState(searchParams.get('userName') || '');
     // console.log(name)
@@ -189,16 +203,16 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
     //             query
     //         ))
     //     }
-        
+
     // }, [user, useLocation().search, dispatch]);
-    
+
     // if (isGetPlatLeaderboardLoading) {
     //     return (<div>Loading...</div>)
     // }
 
     // if (errors)
     //     return (Object.values(errors).map(v => ( <div key={v}>{v}</div>)))
-    
+
     // return (
     //     <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
     //         <Row>
