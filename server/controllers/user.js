@@ -303,7 +303,7 @@ export const getFriendRequests = async (req, res) => {
     const limit = parseInt(req.query.limit) || 5 
 
     try {
-        const user = await User.findById(req.params.id).slice('friendRequests', [skip,limit]).populate('friendRequests', 'username')
+        const user = await User.findById(req.params.id).slice('friendRequests', [skip,limit]).populate('friendRequests', 'username email icon')
         const u = await User.findById(req.params.id)
 
         const friendRequestsTotalCount = u.friendRequests.length
@@ -402,7 +402,7 @@ export const getFriends = async (req, res) => {
     const limit = parseInt(req.query.limit) || 10
 
     try {
-        const user = await User.findById(req.params.id).slice('friends', [skip,limit]).populate('friends', 'username')
+        const user = await User.findById(req.params.id).slice('friends', [skip,limit]).populate('friends', 'username email icon')
         const u = await User.findById(req.params.id)
 
         const friendsTotalCount = u.friends.length
