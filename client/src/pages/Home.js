@@ -48,7 +48,7 @@ function Home() {
         console.log("searching");
 
         dispatch(searchPlatform({
-            query: { 'sort': "subscribers.size desc" },
+            query: { 'sort': "subscriberCount desc" },
             page: 1,
             limit: platformLimit
         }))
