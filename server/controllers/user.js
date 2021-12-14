@@ -224,7 +224,8 @@ export const deleteAccount = async (req, res) => {
         subscribedPlatforms.forEach(async (platform)=>{
             await Platform.findByIdAndUpdate(
                 platform._id,
-                { $pull: { subscribers: { userId: id }  , daily_leaderboard:{userId:id}  , monthly_leaderboard:{userId:id}  ,   weekly_leaderboard:{userId:id}  , yearly_leaderboard:{userId:id}  , allTime_leaderboard:{userId:id} , reports:{userId:id}  },  
+                { $pull: { subscribers: { userId: id }  , daily_leaderboard:{userId:id}  , monthly_leaderboard:{userId:id}  ,   weekly_leaderboard:{userId:id}  , yearly_leaderboard:{userId:id}  , allTime_leaderboard:{userId:id} , reports:{userId:id}  },
+                $inc: { 'subscriberCount': -1 },  
             })
         })
 
