@@ -185,7 +185,7 @@ function AppNavbar() {
                     setShowFriendRequests(isOpen)
                 }}
                 >
-                  <div style={{width: '400px' ,maxHeight: '150px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
+                  <div style={{width: '270px' ,maxHeight: '150px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
                   {friendRequests.map(u => <NavDropdown.Item key={u._id}>
                     <div onClick={() => history.push(`/profile/${u._id}`)}>
                       <Image
