@@ -196,6 +196,7 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isGetPlatLeaderboardLoading: false,
+                errors: null
             }
         case GET_PLAT_LEADERBOARD_FAIL:
             return {
@@ -208,6 +209,7 @@ const platformReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isGetPlatLeaderboardLoading: false,
+                errors: null
             }
         case SEARCH_PLAT_LEADERBOARD_FAIL:
             return {

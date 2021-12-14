@@ -204,6 +204,7 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isGetQuizLeaderboardLoading: false,
+                errors: null
             }
         case GET_QUIZ_LEADERBOARD_FAIL:
             return {
@@ -216,6 +217,7 @@ const quizReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload,
                 isGetQuizLeaderboardLoading: false,
+                errors: null
             }
         case SEARCH_QUIZ_LEADERBOARD_FAIL:
             return {
