@@ -72,7 +72,7 @@ function TakeQuiz() {
                 dispatch(makeSubmission({
                     quizId: qid,
                     answers: answers,
-                    platformId: quiz.platformId,
+                    platformId: quiz.platformId._id,
                     userId: user.id,
                     timeTaken: timer,
                 }))
@@ -84,7 +84,7 @@ function TakeQuiz() {
         dispatch(makeSubmission({
             quizId: qid,
             answers: answers,
-            platformId: quiz.platformId,
+            platformId: quiz.platformId._id,
             userId: user.id,
             timeTaken: timer,
         }))
