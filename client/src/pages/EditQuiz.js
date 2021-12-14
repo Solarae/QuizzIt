@@ -200,9 +200,9 @@ function EditQuiz() {
     )
 }
 
-function Option({ text, selected, onClick }) {
+function Option({ text, selected }) {
     return (
-        <span onClick={(e) => { e.preventDefault(); onClick() }}>
+        <span>
             <Card
                 className=""
                 border={selected ? "success" : ""}
