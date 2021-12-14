@@ -278,6 +278,16 @@ export const deleteAccount = async (req, res) => {
         await Quiz.deleteMany({owner:id})
         
 
+        //for every friend, delete the friend
+        user.friends.forEach(async (friend)=>{
+
+            await User.findByIdAndUpdate(
+                friend._id,
+                { $pull: { friends: { userId: id } },  
+            })
+        })
+
+
         // finally, delete the user
         const deletedUser = await User.findByIdAndDelete(id)
         if (!deletedUser) return res.status(404).json({ success: false })
