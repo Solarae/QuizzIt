@@ -9,6 +9,7 @@ import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 import Quiz from "../models/Quiz.js";
 import Submission from "../models/Submission.js";
 import Award from "../models/Award.js";
+import Report from "../models/Report.js";
 
 export const createPlatform = async (req, res) => {
     const { userId, name, description } = req.body;
@@ -94,6 +95,10 @@ export const deletePlatform = async (req, res) => {
 
         //delete all the submissions from same platform
         await Submission.deleteMany({platformId:req.params.id})
+
+
+        //delete all reports associated with this platfom
+        await Report.deleteMany({platformId:req.params.id})
 
         //proceed to remove platform
         await platform.remove();
