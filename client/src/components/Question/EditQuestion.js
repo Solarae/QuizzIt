@@ -16,22 +16,18 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
         answer: question.answer
     });
 
-
     useEffect(() => {
         if (question) {
 
             setValues({
-
                 question: question.question,
                 option1: question.choices[0],
                 option2: question.choices[1],
                 option3: question.choices[2],
                 option4: question.choices[3],
-                answer: question.answer
             })
-            setOptionState(question.answer)
         }
-    }, [dispatch, question])
+    }, [dispatch, question,show])
 
     const [optionState, setOptionState] = useState(question.answer)
     const closeModal = (err) => {
@@ -103,7 +99,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                     {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control as="select" value={values.answer} onChange={e => setOptionState(e.target.value)}>
+                        <Form.Control as="select" value={optionState} onChange={e => setOptionState(e.target.value)}>
                             <option value="a">Option 1</option>
                             <option value="b">Option 2</option>
                             <option value="c">Option 3</option>
