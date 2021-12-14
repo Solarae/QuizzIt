@@ -89,7 +89,7 @@ function TakeQuiz() {
             timeTaken: timer,
         }))
 
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`)
     }
 
     const calculateTime = () => {
