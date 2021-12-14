@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Table, Dropdown, Row, Col, Container } from 'react-bootstrap';
 import RoleButton from './RoleButton.js'
-import Pagination from '../Pagination.js';
+import Pagination from './OriginalPagination.js';
 import { getMemberList } from '../../actions/platformActions.js';
 import Loading from '../Loading'
 
