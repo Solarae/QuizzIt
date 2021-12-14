@@ -100,7 +100,7 @@ function CreateAward({ show, handleClose }) {
                 <Modal.Body>
                     <Form.Group controlId="formFile" className="mb-3">
                         <Form.Label>Award Icon</Form.Label>
-                        <Form.Control type="file" onChange={(e) => setValues({ ...values, iconImage: e.target.files[0] })} />
+                        <Form.Control type="file" accept=".png, .jpg, .jpeg" onChange={(e) => setValues({ ...values, iconImage: e.target.files[0] })} />
                     </Form.Group>
                     <Form.Group className="mb-3" controlId="formAwardName">
                         <Form.Label>Award Name</Form.Label>
