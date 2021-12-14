@@ -46,7 +46,7 @@ function UploadImage({ type="circle", handleUpload, show, handleClose, defaultIm
             >
                 <Modal.Body>
                     <Form.Group controlId="formIconFile" className="mb-3">
-                        <Form.Control type="file"
+                        <Form.Control type="file" accept=".png, .jpeg, .jpg"
                             onChange={(e) => {
                                 e.preventDefault()
                                 setImage(e.target.files[0]);
