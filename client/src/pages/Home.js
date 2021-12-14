@@ -55,8 +55,8 @@ function Home() {
 
         dispatch(searchQuiz({
             query: {
-                'expand' : "platformId(select=name,icon)",
-                'sort': "submissionCount desc" 
+                'expand': "platformId(select=name,icon)",
+                'sort': "submissionCount desc"
             },
             page: 1,
             limit: quizLimit
@@ -72,7 +72,7 @@ function Home() {
     useEffect(() => {
         if (quizzes && quizzes.length !== quizLimit) setQuizLimit(maxLimit)
     }, [quizzes]);
-    
+
 
     if (isSearchPlatformLoading || isSearchQuizLoading || !platforms || !quizzes) {
         return (<Loading />)
@@ -102,7 +102,7 @@ function Home() {
                             </Row>
 
                             <hr />
-                            
+
                             <Row className="">
                                 <h5><i class="bi bi-graph-up-arrow"></i>  Popular Platforms </h5>
                             </Row>
@@ -122,7 +122,9 @@ function Home() {
 
 
                     </div>
-                    <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    <div className="col-3" style={{}}>
+                        <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    </div>
                 </div>
             </div>
         </div >
