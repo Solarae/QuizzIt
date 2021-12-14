@@ -76,8 +76,8 @@ function TakeQuiz() {
                     userId: user.id,
                     timeTaken: timer,
                 }))
+                history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             }
-            history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             return;
         }
 
