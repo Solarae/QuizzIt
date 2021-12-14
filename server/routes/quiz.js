@@ -29,7 +29,7 @@ router.post('/:id/report',reportQuiz)
 //crud on quiz questions
 router.get("/:id/getQuestion",getQuestion)
 router.post('/:id/addQuestion', addQuizQuestion);
-router.delete('/:id/deleteQuestion', deleteQuizQuestion);
+router.post('/:id/deleteQuestion', deleteQuizQuestion);
 router.post('/:id/editQuizQuestion', editQuizQuestion);
 
 export default router;

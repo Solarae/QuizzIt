@@ -375,3 +375,29 @@ export const searchLeaderboard = ({id, query }) => async (dispatch) => {
         })
     }
 }
+
+
+export const deleteQuizQuestion = ({quizId,questionId}) => async (dispatch) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }
+    const body = JSON.stringify({ questionId})
+
+    try {
+        let res = await axios.post(`${URL}/api/quizzes/${quizId}/deleteQuestion`,body,config)
+
+        dispatch({
+            type:EDIT_QUIZ_QUESTION,
+            payload:res.data
+        })
+        
+    } catch (error) {
+        
+    }
+
+
+
+
+}
