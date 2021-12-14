@@ -38,6 +38,7 @@ export const getLeaderboard = ({ query }) => async (dispatch) => {
 }
 
 export const searchLeaderboard = ({ query }) => async (dispatch) => {
+    console.log("CALLING SEARCH GLOBAL LEADERBOARD")
     const config = {
         params: {
             ...query

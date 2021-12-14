@@ -126,7 +126,7 @@ export const searchLeaderboard = async (req, res) => {
         if (!info) return res.status(404).json({ msg: "Global doesn't exist "} )
 
         const skip = Math.floor(info.index / 10) * 10
-
+        console.log(info.index)
         const [ leaderboardInfo ] = await Global.aggregate([
             { $match: { _id: ObjectId(id) } },
             { $project: {
@@ -167,7 +167,7 @@ export const searchLeaderboard = async (req, res) => {
                     _id: 1,
                     points: 1,
                     username: 1,
-                    icon
+                    icon: 1
                 }
             }} 
         ])
@@ -176,7 +176,10 @@ export const searchLeaderboard = async (req, res) => {
 
         const leaderboardPage = (skip / 10) + 1
         const leaderboardPages = Math.ceil(leaderboardInfo.totalCount / 10 )
-
+        console.log("CALLING LEADERBOARD INFO")
+        console.log(leaderboardInfo)
+        console.log("AFTER LEADERBOARD INFO")
+        console.log(leaderboardInfo.leaderboard)
         res.status(200).json({ 
             leaderboard: leaderboardInfo.leaderboard, 
             leaderboardPage, 
