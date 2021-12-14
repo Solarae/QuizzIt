@@ -64,6 +64,10 @@ function TakeQuiz() {
 
     }
 
+    const routeAfterSubmit = () => {
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`)
+    }
+
     const handleSubmit = () => {
         let answers = userAnswers
 
@@ -87,9 +91,8 @@ function TakeQuiz() {
             platformId: quiz.platformId._id,
             userId: user.id,
             timeTaken: timer,
-        }))
+        }, routeAfterSubmit))
 
-        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`)
     }
 
     const calculateTime = () => {
@@ -149,7 +152,7 @@ function TakeQuiz() {
                             <h2>Question {qno + 1}</h2>
                             <hr />
                         </Row>
-                        <Row style={{ minHeight:'15%' }}>
+                        <Row style={{ minHeight: '15%' }}>
                             <Card
                                 border="dark"
                                 bg='Light'

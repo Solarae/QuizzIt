@@ -14,7 +14,7 @@ import { URL } from '../config.js'
 
 axios.defaults.withCredentials = true;
 
-export const makeSubmission = ({ quizId, answers, platformId, userId, timeTaken }) => async (dispatch) => {
+export const makeSubmission = ({ quizId, answers, platformId, userId, timeTaken }, callback) => async (dispatch) => {
     const config = {
         headers: {
             'Content-Type': 'application/json'
@@ -37,6 +37,7 @@ export const makeSubmission = ({ quizId, answers, platformId, userId, timeTaken 
                 payload: res.data
             })
         }
+        callback() 
     } catch (errors) {
         console.log(errors)
     }
