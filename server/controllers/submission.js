@@ -98,8 +98,8 @@ export const getSubmissions = async (req,res)=>{
         //console.log(query)
         const { q, page, pages, totalCount } = await paginateQuery(query, Submission, req.query.limit, req.query.offset)
 
-        if (page > pages) 
-            return res.status(404).json({ msg: "Page doesn't exist" })
+        // if (page > pages) 
+        //     return res.status(404).json({ msg: "Page doesn't exist" })
         
         const submissions = await q
         res.status(200).json({ 
