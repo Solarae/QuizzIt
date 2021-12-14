@@ -22,6 +22,7 @@ function Home() {
         dispatch(getQuizzes(
             {
                 platformId: platform._id,
+                'status' : 'published',
                 'expand' : "platformId(select=name,icon)",
                 sort,
                 offset: 0,

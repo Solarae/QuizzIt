@@ -55,6 +55,7 @@ function Home() {
 
         dispatch(searchQuiz({
             query: {
+                'status': 'published',
                 'expand': "platformId(select=name,icon)",
                 'sort': "submissionCount desc"
             },
