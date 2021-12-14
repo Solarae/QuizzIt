@@ -40,6 +40,10 @@ const platformSchema = new mongoose.Schema ({
         type: Number,
         default: 0
     },
+    subscriberCount: {
+        type: Number,
+        default: 0
+    },
     daily_leaderboard: [{
         userId: {
             type: mongoose.Schema.Types.ObjectId,
