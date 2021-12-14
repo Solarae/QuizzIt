@@ -39,8 +39,10 @@ function TakeQuiz() {
 
     // load the quiz
     useEffect(() => {
-        dispatch(getQuiz(qid))
-    }, [])
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
+    }, [dispatch, qid])
 
     useEffect(() => {
         if (quiz) {
