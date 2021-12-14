@@ -44,7 +44,13 @@ function Banner({ isEdit }) {
 
     const [showReport, setShowReport] = useState(false);
     const handleCloseReport = useCallback(() => { setShowReport(false) }, []);
-    const handleShowReport = () => { setShowReport(true) };
+    const handleShowReport = () => { 
+        if (auth.user === null) {
+            handleShowSignIn()
+            return
+        }
+        setShowReport(true)
+     };
 
     // used to show tooltip after clicking "share" button
     const [showTooltip, setShowTooltip] = useState(false);
@@ -119,7 +125,7 @@ function Banner({ isEdit }) {
                                     {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && <Button variant="danger btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <PublishQuizModal show={publishModal} setShow = {setPublishModal} quiz={quiz} />
-                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} />
+                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} user={auth.user} />
                                     {/* { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> } */}
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"

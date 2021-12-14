@@ -63,7 +63,7 @@ export const reportQuiz = async (req,res) =>{
     
         let createdReport = await report.save()
         
-        return res.status(200).json({createdReport:createdReport})        
+        return res.status(200).json({})        
 
 
 

@@ -4,6 +4,7 @@ import Platform from "../models/Platform.js"
 import { uploadImgToCloud, queryBuilder, paginateQuery, recaclulateScore } from "./util.js";
 import mongoose from 'mongoose'
 import Submission from "../models/Submission.js";
+import Report from "../models/Report.js";
 const ObjectId = mongoose.Types.ObjectId;
 
 export const createQuiz = async (req,res) =>{
@@ -64,7 +65,6 @@ export const getPlatformQuiz = async (req,res) =>{
 export const deleteQuiz = async (req,res) =>{
     let quizId = req.params.id
     try {
-        console.log("ewioghoiweGOIWEGOIGEWGEWHOIGEWHOIEWGHIEWGHIOEW")
         console.log(quizId)
         let quiz = await Quiz.findById(quizId)
 
@@ -75,6 +75,9 @@ export const deleteQuiz = async (req,res) =>{
 
         //delete the submission that has the quiz
         await Submission.deleteMany({quizId:quizId})
+
+        //delete the reports that has the quiz
+        await Report.deleteMany({quizId:quizId})
 
 
         //delete the quiz

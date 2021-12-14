@@ -175,10 +175,6 @@ const quizReducer = (state = initialState, action) => {
         case REPORT_QUIZ:
             return {
                 ...state,
-                quiz: {
-                    ...action.payload.quiz,
-                    platformId: state.quiz.platformId
-                }
             }
         case REPORT_QUIZ_FAIL:
             return {

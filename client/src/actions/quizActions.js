@@ -154,7 +154,7 @@ export const editQuiz = ({ id, name, description, time, status }) => async (disp
     }
 }
 
-export const deleteQuiz = ({ id,query }) => async (dispatch) => {
+export const deleteQuiz = ({ id,query,history,platformId }) => async (dispatch) => {
     try {
         
         await axios.delete(`${URL}/api/quizzes/${id}`)
@@ -177,6 +177,7 @@ export const deleteQuiz = ({ id,query }) => async (dispatch) => {
                 payload: res.data
             })
         }
+        history.push(`/platform/${platformId}`)
     } catch (errors) {
         console.log(errors)
     }

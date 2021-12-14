@@ -12,7 +12,7 @@ const DeleteQuizModal = ({ quiz, show, setShow,user,page }) => {
     setShow(!show)
   }
   
-  const id = quiz.platformId
+  const id = quiz.platformId._id
   const auth = useSelector((state)=>state.auth)
   const handleSubmit = (e) =>{
     e.preventDefault()
@@ -34,7 +34,9 @@ const DeleteQuizModal = ({ quiz, show, setShow,user,page }) => {
         sort: 'timeSubmitted desc',
         offset: 10 * (page - 1),
         limit: 10
-    } 
+      },
+      history:history,
+      platformId:id
     }))
   }
 
