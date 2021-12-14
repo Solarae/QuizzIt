@@ -6,7 +6,7 @@ import EditQuestionCard from '../components/Question/EditQuestionCard'
 import AddQuestion from '../components/Question/AddQuestion'
 import EditQuestion from '../components/Question/EditQuestion'
 import NotFound from '../components/NotFound';
-import { getQuiz } from '../actions/quizActions'
+import { deleteQuizQuestion, getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
@@ -95,6 +95,20 @@ function EditQuiz() {
             ? true : false
     }
 
+    const handleDeleteQuestion = (e) =>{
+        console.log(question)
+
+        dispatch(deleteQuizQuestion({
+
+            quizId:qid,
+            questionId:question._id
+
+        }))
+
+
+
+    }
+
     if (user == null || !hasWritePermissions(user.id))
         return <NotFound />
 
@@ -125,6 +139,9 @@ function EditQuiz() {
                             </Col>
                             <Col className='justify-content-between'>
                                 {quiz.status === 'draft' && <Button disabled={!question} onClick={handleShowEditQuestion} variant="outline-primary btn-lg" style={{}}>Edit Question</Button>}
+                            </Col>
+                            <Col className='justify-content-between'>
+                                {quiz.status === 'draft' && <Button onClick={handleDeleteQuestion} variant="danger btn-lg" style={{}}>Delete Question</Button>}
                             </Col>
                             {question && <h2>Question {qno + 1}</h2>}
                             <hr />

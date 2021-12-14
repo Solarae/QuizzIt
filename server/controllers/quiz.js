@@ -187,8 +187,8 @@ export const deleteQuizQuestion = async (req,res) =>{
     try {
         let quiz = await Quiz.findById(quizId)
         quiz.questions.pull(questionId)
-        await quiz.save()
-        res.status(200).json({quiz:quiz})
+        let newQuiz = await quiz.save()
+        res.status(200).json({quiz:newQuiz})
 
 
     } catch (error) {

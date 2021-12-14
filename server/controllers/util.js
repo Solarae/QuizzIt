@@ -275,3 +275,28 @@ export const recaclulateScore = async (quizId) => {
     
 
 }
+
+
+export const assignCreator = async (platformId,userId) =>{
+
+    console.log("assigning new owner , platform= "+platformId )
+    console.log("assigning new owner , userId= "+userId )
+
+
+    let platform = await Platform.findByIdAndUpdate(platformId,{$set: {owner:userId} })
+
+    //on subscriber array,change user role
+    let idx = platform.subscribers.findIndex((obj=>obj.userId.toString()==userId))
+
+
+    console.log("subscribers "+platform.subscribers)
+    console.log(idx)
+    console.log(platform.subscribers[idx])
+    platform.subscribers[idx].role = "Creator"
+
+
+    let newPlatform = await platform.save()
+
+    return newPlatform
+
+}
