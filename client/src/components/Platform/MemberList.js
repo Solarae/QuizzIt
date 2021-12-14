@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Table, Dropdown, Row, Col } from 'react-bootstrap';
+import { Table, Dropdown, Row, Col, Container } from 'react-bootstrap';
 import RoleButton from './RoleButton.js'
 import Pagination from '../Pagination.js';
 import { getMemberList } from '../../actions/platformActions.js';
@@ -21,47 +21,48 @@ function MemberList({ platform }) {
             page
         ))
     }, [page, dispatch]);
-    
+
     if (isGetMemberlistLoading) {
         return (
             <Loading />
         )
     }
 
-    const compareMember= (a, b) => {
-        if (a.role==="Creator"){
+    const compareMember = (a, b) => {
+        if (a.role === "Creator") {
             return -2
         }
-        if (a.role==="Moderator"){
+        if (a.role === "Moderator") {
             return -1
         }
         return 0;
     }
 
     return (
-        <div className="position-relative container d-flex justify-content-center" style={{ marginTop: "13px" }}>
+        <Container className="justify-content-center" style={{ marginTop: "13px" }}>
             <Row>
-            <Table hover>
-                <thead>
-                    <tr>
-                        <th>Username</th>
-                        <th>Role</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    { memberList.sort(compareMember).map((m, index) =>
-                                <tr key={m._id}>
-                                    <td>{(page - 1) * 10 + index +1}</td>
-                                    <td>
-                                        {m.userId.username}
-                                    </td>
-                                    <td>
-                                    { auth.user && auth.user.id===platform.owner ? <RoleButton platform={platform} member={m} ></RoleButton> : (m.role==="Consumer" ? "Member" : m.role)}
-                                    </td>
-                                </tr>
-                            )}
-                </tbody>
-            </Table>
+                <Table hover>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Username</th>
+                            <th>Role</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {memberList.sort(compareMember).map((m, index) =>
+                            <tr key={m._id}>
+                                <td>{(page - 1) * 10 + index + 1}</td>
+                                <td>
+                                    {m.userId.username}
+                                </td>
+                                <td>
+                                    {auth.user && auth.user.id === platform.owner ? <RoleButton platform={platform} member={m} ></RoleButton> : (m.role === "Consumer" ? "Member" : m.role)}
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </Table>
             </Row>
 
             <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
@@ -69,7 +70,7 @@ function MemberList({ platform }) {
                     <Pagination page={page} pages={pages} changePage={setPage} />
                 </Col>
             </Row>
-        </div>
+        </Container>
     )
 }
 export default MemberList;

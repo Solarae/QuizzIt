@@ -82,7 +82,9 @@ function Platform() {
 
                     </div>
 
+                    <div className="col-3" style={{}}>
                     <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    </div>
 
                 </div>
             </div>

@@ -137,7 +137,7 @@ function ReviewSubmission() {
                         <Row align='center' style={{ height: '10%' }}>
                             <Col xs={4} ></Col>
                             <Col className="d-flex justify-content-between" xs={4} style={{}} >
-                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%", height: '60%' }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
+                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%", height: '60%' }}><i class="bi bi-caret-left-fill"></i> Prev</Button>
                                 <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} style={{ width: "45%", height: '60%' }} >Next <i class="bi bi-caret-right-fill"></i></Button>
                             </Col>
                             <Col xs={4} ></Col>

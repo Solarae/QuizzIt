@@ -50,7 +50,7 @@ function QuizCard({ quiz }) {
                         </Row>
                         <Row style={{ height: "25%", marginTop: "10px", marginBottom: "-5px" }}>
                             {/* <p>{quiz.description}</p> */}
-                            <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>aasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfasdfasdfasdfsadfsdfasdfasdfsadfHello</p>
+                            <p style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{quiz.description}</p>
                         </Row>
                     </Col >
                     <Col xs={3} align="center" className="my-auto" >
