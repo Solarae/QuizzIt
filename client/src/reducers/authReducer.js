@@ -13,7 +13,7 @@ import {
     GET_INBOX_REQ,
     GET_INBOX_SUCCESS,
     GET_INBOX_FAIL,
-    RECEIVE_NOTIFICATIONS,
+    // RECEIVE_NOTIFICATIONS,
     READ_NOTIFICATION_SUCCESS,
     READ_NOTIFICATION_FAIL,
     GET_FRIENDREQUESTS_REQ,
@@ -25,7 +25,7 @@ import {
     ACCEPT_FRIENDREQUEST_FAIL,
     DECLINE_FRIENDREQUEST_SUCCESS,
     DECLINE_FRIENDREQUEST_FAIL,
-    RECEIVE_FRIENDREQUEST,
+    // RECEIVE_FRIENDREQUEST,
     GET_FRIENDS_REQ,
     GET_FRIENDS_SUCCESS,
     GET_FRIENDS_FAIL,
@@ -125,13 +125,13 @@ const authReducer = (state = initialState, action) => {
                 ...action.payload,
                 isGetInboxLoading: false
             }
-        case RECEIVE_NOTIFICATIONS:
-            return {
-                ...state,
-                inbox: [...action.payload.inbox, ...state.inbox],
-                inboxTotalUnreadCount: state.inboxTotalUnreadCount + action.payload.inbox.length,
-                inboxTotalCount: state.inboxTotalCount + action.payload.inbox.length,
-            }
+        // case RECEIVE_NOTIFICATIONS:
+        //     return {
+        //         ...state,
+        //         inbox: [...action.payload.inbox, ...state.inbox],
+        //         inboxTotalUnreadCount: state.inboxTotalUnreadCount + action.payload.inbox.length,
+        //         inboxTotalCount: state.inboxTotalCount + action.payload.inbox.length,
+        //     }
         case READ_NOTIFICATION_SUCCESS:
             const newInbox = [...state.inbox]
             newInbox[action.payload.index] = action.payload.updatedNotification
@@ -195,12 +195,12 @@ const authReducer = (state = initialState, action) => {
                 ...state,
                 ...action.payload
             }
-        case RECEIVE_FRIENDREQUEST:
-            return {
-                ...state,
-                friendRequests: [action.payload.friendRequest, ...state.friendRequests],
-                friendRequestsTotalCount: state.friendRequestsTotalCount + 1
-            }
+        // case RECEIVE_FRIENDREQUEST:
+        //     return {
+        //         ...state,
+        //         friendRequests: [action.payload.friendRequest, ...state.friendRequests],
+        //         friendRequestsTotalCount: state.friendRequestsTotalCount + 1
+        //     }
         case GET_FRIENDS_REQ:
             return {
                 ...state,

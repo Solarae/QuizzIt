@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Row, Col, Table } from 'react-bootstrap';
+import { Image, Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
 import { getFriends, unfriend } from '../actions/profileActions';
 import Pagination from '../components/Pagination'
@@ -27,8 +27,8 @@ function Friends() {
             dispatch(getFriends({
                 id: user.id,
                 query: {
-                    offset: 2 * (page - 1),
-                    limit: 2
+                    offset: 10 * (page - 1),
+                    limit: 10
                 }
             }))
     }, [user, search, dispatch]);
@@ -41,12 +41,30 @@ function Friends() {
     return (
         <div className="position-relative container justify-content-center" style={{ marginTop: "13px", marginRight: "100px" }}>
             <Row style={{ marginTop: "10px" }}>
-                <Table hover>
-                    <tbody>
+            <Table striped bordered hover className='mt-5'>
+                    <thead thead style={{textAlign: 'center'}}>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody style={{ verticalAlign: 'middle' }} >
                         {friends.map((f) =>
                             <tr>
                                 <td>
-                                    {f.username}
+                                    <div onClick={() => history.push(`/profile/${f._id}`)}>
+                                        <Image
+                                            className="bg-dark"
+                                            src={f.icon !== "" ? f.icon : "/quizzit_logo.png"}
+                                            style={{ height: "50px", width: "50px", border: 'solid', borderColor: "white", padding: '0', marginRight: '5px' }}
+                                            roundedCircle
+                                            fluid
+                                        />
+                                        {f.username}
+                                    </div>
+                                </td>
+                                <td>
+                                    {f.email}
                                 </td>
                                 <td>
                                 <i className="bi bi-x-circle" style={{float: 'right'}} onClick={() => {

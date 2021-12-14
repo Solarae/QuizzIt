@@ -24,14 +24,22 @@ function AppNavbar() {
   const [query, setQuery] = useState("");
   useEffect(() => {
     socket?.on('getInbox', (notifications) => {
-      dispatch((
-        receiveNotifications(notifications)
-        ))
+      dispatch(getInbox(
+        auth.user.id,
+        {
+          offset: 0,
+          limit: 5 * inboxPage
+        }
+      ))
     })
     socket?.on('receiveFriendRequest', (friendRequest) => {
-      dispatch((
-        receiveFriendRequest(friendRequest)
-        ))
+      dispatch(getFriendRequests(
+        auth.user.id,
+        {
+          offset: 0,
+          limit: 5 * friendRequestsPage
+        }
+      ))
     })
   
   }, [socket])
@@ -183,9 +191,18 @@ function AppNavbar() {
                 >
                   <div style={{maxHeight: '150px', overflowY: 'scroll'}} onScroll={(e) => handleScroll(e, 'friendRequests')}>
                   {friendRequests.map(u => <NavDropdown.Item key={u._id}>
-                    {u.username}
-                    <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
-                    <i className="bi bi-check2-circle" style={{float: 'right'}} onClick={() => dispatch(acceptFriendRequest(auth.user.id, u._id))}></i>
+                    <div onClick={() => history.push(`/profile/${u._id}`)}>
+                      <Image
+                          className="bg-dark"
+                          src={u.icon !== "" ? u.icon : "/quizzit_logo.png"}
+                          style={{ height: "50px", width: "50px", border: 'solid', borderColor: "white", padding: '0', marginRight: '5px' }}
+                          roundedCircle
+                          fluid
+                      />
+                      {u.username}
+                      <i className="bi bi-x-circle" style={{float: 'right', marginLeft: '10px'}} onClick={() => dispatch(declineFriendRequest(auth.user.id, u._id))}></i>
+                      <i className="bi bi-check2-circle" style={{float: 'right'}} onClick={() => dispatch(acceptFriendRequest(auth.user.id, u._id))}></i>
+                    </div>
                     </NavDropdown.Item>)}
                   </div>
 

@@ -76,8 +76,8 @@ function TakeQuiz() {
                     userId: user.id,
                     timeTaken: timer,
                 }))
+                history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             }
-            history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
             return;
         }
 
@@ -190,7 +190,7 @@ function TakeQuiz() {
                         <div style={{ height: "4vw" }}></div>
                         <Row align='center'>
                             <Col align='center' style={{}}>
-                                <Button variant="success" onClick={handleSubmit}>Submit Quiz</Button>
+                                <Button variant="success" disabled={userAnswers.includes(-1)} onClick={handleSubmit}>Submit Quiz</Button>
                             </Col>
                         </Row>
 
