@@ -39,8 +39,10 @@ function TakeQuiz() {
 
     // load the quiz
     useEffect(() => {
-        dispatch(getQuiz(qid))
-    }, [])
+        dispatch(getQuiz(qid, {
+            expand: 'platformId(select=name,owner,icon,banner,subscribers)'
+        }))
+    }, [dispatch, qid])
 
     useEffect(() => {
         if (quiz) {
@@ -87,7 +89,7 @@ function TakeQuiz() {
             timeTaken: timer,
         }))
 
-        history.push(`/platform/${quiz.platformId}/quiz/${quiz._id}`)
+        history.push(`/platform/${quiz.platformId._id}/quiz/${quiz._id}`)
     }
 
     const calculateTime = () => {

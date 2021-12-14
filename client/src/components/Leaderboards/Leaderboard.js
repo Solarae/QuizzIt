@@ -99,7 +99,7 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
             </Row>
             <Row><Button onClick={() => history.push(`${url}?type=${type}&filter=friends`)}>Friends Only</Button></Row>
             <Row style={{ marginTop: "10px" }}>
-                <Table hover>
+                <Table hover className='mt-2'>
                     <thead>
                         <tr>
                             <th>Rank</th>
@@ -107,12 +107,21 @@ function Leaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, apiPa
                             <th>Points</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{verticalAlign: 'middle'}} >
                         {leaderboard.map((rank, index) =>
                             <tr key={rank._id}>
                                 <td>{name === '' ? (page - 1) * 10 + index + 1 : (apiPage - 1) * 10 + index +1}</td>
                                 <td>
+                                <div onClick={() => history.push(`/profile/${rank._id}`)}>
+                                    <Image 
+                                        className="bg-dark"
+                                        src={rank.icon !== "" ? rank.icon : "/quizzit_logo.png"}
+                                        style={{ height: "50px", width: "50px", border:'solid', borderColor: "white", padding:'0', marginRight:'5px' }}
+                                        roundedCircle 
+                                        fluid 
+                                    />
                                     {rank.username}
+                                </div>
                                 </td>
                                 <td>
                                     {rank.points}

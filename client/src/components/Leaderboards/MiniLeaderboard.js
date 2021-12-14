@@ -62,12 +62,21 @@ function MiniLeaderboard({ doc, id, url, isGetLeaderboardLoading, leaderboard, e
                             <th>Points</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{verticalAlign: 'middle'}}>
                         {leaderboard.map((rank, index) =>
                             <tr>
-                                <td>{index + 1}</td>
+                                <td >{index + 1}</td>
                                 <td>
+                                <div onClick={() => history.push(`/profile/${rank._id}`)}>
+                                    <Image 
+                                        className="bg-dark"
+                                        src={rank.icon !== "" ? rank.icon : "/quizzit_logo.png"}
+                                        style={{ height: "50px", width: "50px", border:'solid', borderColor: "white", padding:'0', marginRight:'5px' }}
+                                        roundedCircle 
+                                        fluid 
+                                    />
                                     {rank.username}
+                                </div>
                                 </td>
                                 <td>
                                     {rank.points}

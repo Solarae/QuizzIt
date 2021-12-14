@@ -23,9 +23,11 @@ function MyQuizzes() {
     useEffect(() => {
         var query = (filter === 'draft' || filter === 'published') ? {
             owner: user.id,
-            status: filter
+            status: filter,
+            expand: 'platformId(select=name)'
         } : {
             owner: user.id,
+            expand: 'platformId(select=name)'
         }
         
         dispatch(searchQuiz({
@@ -56,11 +58,12 @@ function MyQuizzes() {
                                     <Dropdown.Item href="" onClick={() => history.push(`${url}?filter=published&page=${page}`)}>Published {filter === 'Published' && <i class="bi bi-check"></i>}</Dropdown.Item>
                                 </Dropdown.Menu>
                             </Dropdown>
-                <Row style={{ marginTop: "10px" }}>
-                    <Table hover>
-                    <thead>
+                
+                    <Table striped bordered hover className='mt-5'>
+                    <thead thead style={{textAlign: 'center'}}>
                         <tr>
                             <th>Quiz Name</th>
+                            <th>Platform Name</th>
                             <th>Status</th>
                         </tr>
                     </thead>
@@ -70,6 +73,9 @@ function MyQuizzes() {
                                     <td>
                                         {q.name}
                                     </td>
+                                    <td onClick={() => history.push(`/platform/${q.platformId._id}`)}>
+                                        {q.platformId.name}
+                                    </td>
                                     <td>
                                         {q.status}
                                     </td>
@@ -78,7 +84,6 @@ function MyQuizzes() {
                             )}
                         </tbody>
                     </Table>
-                </Row>
     
                 <Row style={{ marginTop: "20px", marginBottom: "20px" }}>
                     <Col>
