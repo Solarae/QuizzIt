@@ -37,12 +37,14 @@ export const createSubmission = async (req,res) =>{
                 platformId:platformId,
                 userId:userId,
                 timeTaken,
-                score:total_correct,
+                score: total_correct,
                 attemptNumber: count + 1
             })
         } else {
+            const calculatedPoints = timeTaken === 0 ? (total_correct * (total_correct / quiz.questions.length)) / (1 / (quiz.time * 60)) :
+                (total_correct * (total_correct / quiz.questions.length)) / (timeTaken / (quiz.time * 60))
             newSubmission = new Submission({
-                pointsAwarded: total_correct,
+                pointsAwarded: Math.floor(calculatedPoints),
                 quizId:quizId,
                 answers:answers,
                 platformId:platformId,

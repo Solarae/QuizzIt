@@ -258,9 +258,11 @@ export const recaclulateScore = async (quizId) => {
             })
             // First Attempt; Recalculate points awarded
             if (s.attemptNumber === 1) {
+                const points = s.timeTaken === 0 ? (total_correct * (total_correct / quiz.questions.length)) / (1 / (quiz.time * 60)) :
+                (total_correct * (total_correct / quiz.questions.length)) / (s.timeTaken / (quiz.time * 60))
                 await Submission.findByIdAndUpdate(
                     s._id,
-                    { $set: { score: total_correct, pointsAwarded: total_correct } }
+                    { $set: { score: total_correct, pointsAwarded: Math.floor(points) } }
                 )
             } else {
                 await Submission.findByIdAndUpdate(s._id,
