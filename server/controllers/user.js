@@ -401,7 +401,7 @@ export const sendFriendRequest = async (req, res) => {
             userId: req.params.uid });
         
         if (onlineUsers.get(req.params.id)) {
-            const sender = await User.findById(req.params.uid).select('username')
+            const sender = await User.findById(req.params.uid).select('username icon')
             io.to(onlineUsers.get(req.params.id)).emit('receiveFriendRequest', {
                 friendRequest: sender
             })

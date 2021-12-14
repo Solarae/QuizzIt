@@ -328,7 +328,8 @@ export const searchLeaderboard = async (req, res) => {
                 leaderboard: {
                     _id: 1,
                     points: 1,
-                    username: 1
+                    username: 1,
+                    icon
                 }
             }} 
         ])
