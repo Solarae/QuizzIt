@@ -256,7 +256,7 @@ export const getPlatformMemberlist = async (req,res) => {
     const skip = parseInt(req.query.offset) || 0
     const limit = parseInt(req.query.limit) || 10 
     try {
-        const platform = await Platform.findById(req.params.id).slice(`subscribers`, [skip,limit]).populate('subscribers.userId', 'username')
+        const platform = await Platform.findById(req.params.id).slice(`subscribers`, [skip,limit]).populate('subscribers.userId', 'username icon')
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
         const memberListTotalCount = platform.subscriberCount

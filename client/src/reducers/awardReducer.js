@@ -36,7 +36,7 @@ const awardReducer = (state = initialState, action) => {
         case CREATE_AWARD_SUCCESS:
             return {
                 ...state,
-                awards: [action.payload, ...state.awards],
+                awards: [action.payload.award, ...state.awards],
                 awardTotalCount: state.awardTotalCount + 1,
                 isCreateLoading: false,
                 errors: null
