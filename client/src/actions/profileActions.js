@@ -221,6 +221,7 @@ export const deleteProfile = ({ id, password, history, callback,createdPlatforms
         // redirect to home page if no errors 
         if (!res.data.errors) {
             history.push('/');
+            window.location.reload()
         }
     } catch (error) {
         dispatch({
