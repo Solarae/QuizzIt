@@ -51,7 +51,7 @@ function Search() {
             dispatch(searchPlatform({
                 query: { 'name': query, 'sort': sortQuery },
                 page: page,
-                limit: 4
+                limit: 20 
             }))
         }
 
@@ -59,7 +59,7 @@ function Search() {
             dispatch(searchQuiz({
                 query: { 'name': query, 'status':'published', 'sort': sortQuery, 'expand' : "platformId(select=name,icon)" },
                 page: page,
-                limit: 4
+                limit: 20 
             }))
         }
 
@@ -67,7 +67,7 @@ function Search() {
             dispatch(searchUser({
                 query: { 'username': query, 'sort': sortQuery },
                 page: page,
-                limit: 4
+                limit: 20 
             }))
         }
     }, [query, filter, sort, page, dispatch]);
