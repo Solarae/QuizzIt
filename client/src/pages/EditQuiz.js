@@ -118,7 +118,7 @@ function EditQuiz() {
             <div style={{ height: "10vh" }}></div>
 
             <Container style={{ width: "100%" }}>
-                <Row style={{ 'height': '40vw' }}>
+                <Row style={{ 'height': '60vw' }}>
                     <Col className="my-auto" xs={2} style={{ height: "80%" }} >
                         <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
 
@@ -158,7 +158,7 @@ function EditQuiz() {
                         </Row>
 
                         <br />
-                        <Row style={{ height: "20%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
                                 <Option selected={question && question.answer === 'a'} text={question && question.choices[0]} ></Option>
                             </Col>
@@ -166,7 +166,7 @@ function EditQuiz() {
                                 <Option selected={question && question.answer === 'b'} text={question && question.choices[1]} ></Option>
                             </Col>
                         </Row>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
                                 <Option selected={question && question.answer === 'c'} text={question && question.choices[2]} ></Option>
                             </Col>
@@ -200,9 +200,9 @@ function EditQuiz() {
     )
 }
 
-function Option({ text, selected, onClick }) {
+function Option({ text, selected }) {
     return (
-        <span onClick={(e) => { e.preventDefault(); onClick() }}>
+        <span>
             <Card
                 className=""
                 border={selected ? "success" : ""}
