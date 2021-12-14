@@ -39,7 +39,8 @@ export const createPlatform = async (req, res) => {
             subscribers: [{
                 userId,
                 role: 'Creator'
-            }]
+            }],
+            subscriberCount: 1
         });
         const createdPlatform = await newPlatform.save();
         if (!createdPlatform) return res.status(404).json({ msg: "Something went wrong with creating the platform" });
@@ -164,7 +165,8 @@ export const joinPlatform = async (req, res) => {
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id,
-            { $addToSet: { subscribers: {userId, role: 'Consumer'} }},
+            { $addToSet: { subscribers: {userId, role: 'Consumer'} },
+            $inc: { 'subscriberCount': 1 }},
             { new: true }
         )
 
@@ -188,7 +190,8 @@ export const leavePlatform = async (req, res) => {
 
         const updatedPlatform = await Platform.findByIdAndUpdate(
             req.params.id,
-            { $pull: { subscribers: { userId: user._id } } },
+            { $pull: { subscribers: { userId: user._id } } ,
+            $inc: { 'subscriberCount': -1 }},
             { new: true }
         )
 
@@ -251,10 +254,9 @@ export const getPlatformMemberlist = async (req,res) => {
         const platform = await Platform.findById(req.params.id).slice(`subscribers`, [skip,limit]).populate('subscribers.userId', 'username')
         if (!platform) return res.status(400).json({msg:"Platform ID does not exist"})
 
-        const plat = await Platform.findById(req.params.id)
-        const memberListTotalCount = plat.subscribers.length
+        const memberListTotalCount = platform.subscriberCount
         const memberListPages = Math.ceil(memberListTotalCount / limit )
-        const memberListPage = skip / limit
+        const memberListPage = (skip / limit) + 1
 
         return res.status(200).json( { memberList: platform.subscribers, memberListPage, memberListPages, memberListTotalCount } )
 
