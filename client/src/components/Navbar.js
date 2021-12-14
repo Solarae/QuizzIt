@@ -24,6 +24,8 @@ function AppNavbar() {
   const [query, setQuery] = useState("");
   useEffect(() => {
     socket?.on('getInbox', (notifications) => {
+      console.log("RECEIVED NOTIFICATIONS")
+      console.log(notifications)
       dispatch((
         receiveNotifications(notifications)
         ))

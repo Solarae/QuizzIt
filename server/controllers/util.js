@@ -182,11 +182,12 @@ export const assignAwards = async (userId, platformId) => {
             }}
         ])
 
+        console.log(awards)
         var awardsObtained = []
         var messages = []
         awards.forEach((award) => {
             if ((award.requirementType === 'Point' && user_agg.totalPoints >= award.requirementCount) ||
-                award.requirementType === 'Quiz' && user_agg.submissionCount >= awards[a].requirementCount ) {
+                award.requirementType === 'Quiz' && user_agg.submissionCount >= award.requirementCount ) {
                     awardsObtained.push(award._id)
                     messages.push({
                         message: `You've received earned the ${award.title}`,
@@ -194,7 +195,9 @@ export const assignAwards = async (userId, platformId) => {
                     })
                 }
         })
-        
+
+        console.log(awards)
+        console.log(awardsObtained)
         if (awardsObtained.length) {
             const updatedUser = await User.findByIdAndUpdate(
                 userId,
@@ -205,10 +208,9 @@ export const assignAwards = async (userId, platformId) => {
     
             
             if (onlineUsers.get(userId)) {
-                const slicedUser = await User.findById(userId).slice(`inbox`, [0,5])
-                
+                console.log("SENDING INBOXES")
                 io.to(onlineUsers.get(userId)).emit('getInbox', {
-                    inbox: slicedUser.inbox,
+                    inbox: messages
                 })
             }
                 

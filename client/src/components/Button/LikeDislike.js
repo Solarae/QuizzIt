@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux'
 function LikeDislike({ handleLike, handleDislike, style }) {
     const user = useSelector((state) => state.auth.user)
     const quiz = useSelector((state) => state.quiz.quiz)
-    console.log(quiz)
+    
     return user ? 
         <span style={style}>
             <i className={quiz.likes.likedBy.includes(user.id) ? "bi bi-hand-thumbs-up-fill" : "bi bi-hand-thumbs-up"} onClick={handleLike} style={{ cursor: "pointer" }}>
