@@ -6,7 +6,7 @@ import EditQuestionCard from '../components/Question/EditQuestionCard'
 import AddQuestion from '../components/Question/AddQuestion'
 import EditQuestion from '../components/Question/EditQuestion'
 import NotFound from '../components/NotFound';
-import { getQuiz } from '../actions/quizActions'
+import { deleteQuizQuestion, getQuiz } from '../actions/quizActions'
 import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router-dom'
 import Loading from '../components/Loading'
@@ -30,7 +30,6 @@ function EditQuiz() {
     const quiz = useSelector((state) => state.quiz.quiz)
     const [qno, setqno] = useState(quiz && quiz.questions.length !== 0 ? 0 : -1)
     const prevQuizLength = usePrevious(quiz ? quiz.questions.length : 0)
-    const [question, setQuestion] = useState(null)
     // const platform = useSelector((state) => state.platform.platform)
 
     let { qid } = useParams()
@@ -56,19 +55,16 @@ function EditQuiz() {
 
     const handlePrev = () => {
         setqno(qno - 1)
-        setQuestion(quiz.questions[qno - 1])
         btnListRef.current.scrollTop = 20 * (qno - 1) // scrolls to the button in the button list
     }
 
     const handleNext = () => {
         setqno(qno + 1)
-        setQuestion(quiz.questions[qno + 1])
         btnListRef.current.scrollTop = 20 * (qno + 1) // scrolls to the button in the button list
     }
 
     const handleJumpto = (idx) => {
         setqno(idx)
-        setQuestion(quiz.questions[idx])
     }
 
     // jumps to last question when this page loads
@@ -77,7 +73,6 @@ function EditQuiz() {
 
         if (quiz.questions.length === 0) {
             setqno(-1)
-            setQuestion(null)
             return
         }
         if (quiz.questions.length !== prevQuizLength) {
@@ -95,6 +90,27 @@ function EditQuiz() {
             ? true : false
     }
 
+    const handleDeleteQuestion = (e) =>{
+
+        if (quiz.questions.length===1){
+            setqno(-1)
+        }
+        else{
+            setqno(qno-1)
+        }
+
+        dispatch(deleteQuizQuestion({
+
+            quizId:qid,
+            questionId:quiz.questions[qno]._id
+
+        }))
+
+
+
+
+    }
+
     if (user == null || !hasWritePermissions(user.id))
         return <NotFound />
 
@@ -104,7 +120,7 @@ function EditQuiz() {
             <div style={{ height: "10vh" }}></div>
 
             <Container style={{ width: "100%" }}>
-                <Row style={{ 'height': '40vw' }}>
+                <Row style={{ 'height': '60vw' }}>
                     <Col className="my-auto" xs={2} style={{ height: "80%" }} >
                         <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
 
@@ -124,9 +140,12 @@ function EditQuiz() {
                                 {quiz.status === 'draft' && <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{}}>Add Question</Button>}
                             </Col>
                             <Col className='justify-content-between'>
-                                {quiz.status === 'draft' && <Button disabled={!question} onClick={handleShowEditQuestion} variant="outline-primary btn-lg" style={{}}>Edit Question</Button>}
+                                {quiz.status === 'draft' && <Button disabled={qno===-1} onClick={handleShowEditQuestion} variant="outline-primary btn-lg" style={{}}>Edit Question</Button>}
                             </Col>
-                            {question && <h2>Question {qno + 1}</h2>}
+                            <Col className='justify-content-between'>
+                                {quiz.status === 'draft' && <Button onClick={handleDeleteQuestion} disabled={qno===-1} variant="danger btn-lg" style={{}}>Delete Question</Button>}
+                            </Col>
+                            {qno!==-1 && <h2>Question {qno + 1}</h2>}
                             <hr />
                             <Card
                                 border="dark"
@@ -134,27 +153,27 @@ function EditQuiz() {
                             >
                                 <Card.Body>
                                     <Card.Text>
-                                        <h4>{question && question.question}</h4>
+                                        <h4>{qno!==-1 && quiz.questions[qno].question}</h4>
                                     </Card.Text>
                                 </Card.Body>
                             </Card>
                         </Row>
 
                         <br />
-                        <Row style={{ height: "20%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
-                                <Option selected={question && question.answer === 'a'} text={question && question.choices[0]} ></Option>
+                                <Option selected={qno!==-1 && quiz.questions[qno].answer === 'a'} text={qno!== -1 && quiz.questions[qno].choices[0]} ></Option>
                             </Col>
                             <Col xs={6}>
-                                <Option selected={question && question.answer === 'b'} text={question && question.choices[1]} ></Option>
+                                <Option selected={qno!==-1 && quiz.questions[qno].answer === 'b'} text={qno!== -1 && quiz.questions[qno].choices[1]} ></Option>
                             </Col>
                         </Row>
-                        <Row style={{ height: "25%" }}>
+                        <Row style={{  }}>
                             <Col xs={6}>
-                                <Option selected={question && question.answer === 'c'} text={question && question.choices[2]} ></Option>
+                                <Option selected={qno!==-1 && quiz.questions[qno].answer === 'c'} text={qno!== -1 && quiz.questions[qno].choices[2]} ></Option>
                             </Col>
                             <Col xs={6}>
-                                <Option selected={question && question.answer === 'd'} text={question && question.choices[3]} ></Option>
+                                <Option selected={qno!==-1 && quiz.questions[qno].answer === 'd'} text={qno!== -1 && quiz.questions[qno].choices[3]} ></Option>
                             </Col>
                         </Row>
 
@@ -178,14 +197,14 @@ function EditQuiz() {
 
             <AddQuestion quizId={qid} show={showAddQuestion} handleClose={handleCloseAddQuestion} ></AddQuestion>
 
-            {question && <EditQuestion quizId={qid} show={showEditQuestion} handleClose={handleCloseEditQuestion} question={question} ></EditQuestion>}
+            {qno!==-1 && <EditQuestion quizId={qid} show={showEditQuestion} handleClose={handleCloseEditQuestion} question={quiz.questions[qno]} ></EditQuestion>}
         </div>
     )
 }
 
-function Option({ text, selected, onClick }) {
+function Option({ text, selected }) {
     return (
-        <span onClick={(e) => { e.preventDefault(); onClick() }}>
+        <span>
             <Card
                 className=""
                 border={selected ? "success" : ""}

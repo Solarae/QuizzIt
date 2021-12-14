@@ -63,7 +63,7 @@ function Banner({ platform }) {
 
     return (
         <div style={{ height: "300px" }} className="position-relative">
-            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center bg-danger" style={{ backgroundImage: `url(${platform.banner})` }}>
+            <div className="h-75 position-relative overflow-hidden p-3 p-md-5 text-center" style={{ backgroundImage: `url(${platform.banner})` }}>
             </div>
             <div className="h-25 position-relative p-3 p-md-1 bg-light" style={{ overflowWrap: "break-word" }} >
                 <div className="row">
@@ -83,9 +83,9 @@ function Banner({ platform }) {
                             <div className="position-relative" >
                                 <p className="lead fw-normal justify-content-between">
                                     {(auth.user && auth.user.id === platform.owner && !location.pathname.endsWith("edit")) ? <Link to={`/platform/${platform._id}/edit`}><Button variant="primary btn-lg" style={{marginRight: "10px"}} >Edit</Button></Link> : <span></span>}
-                                    { (isModerator == true || auth.user.id === platform.owner) ? <Link to={`/viewQuizReport/${platform._id}`}> <Button variant="primary btn-lg" >View Quiz Reports</Button></Link> : <></> }{' '}
-                                    <Subscribe platform={platform} />
-                                    <Button onClick={() => { setShowCreateQuiz(true) }} variant="primary btn-lg" >Create Quiz</Button>
+                                    { (isModerator == true || (auth.user && auth.user.id === platform.owner)) ? <Link to={`/viewQuizReport/${platform._id}`}> <Button variant="primary btn-lg" >View Quiz Reports</Button></Link> : <></> }{' '}
+                                    <Subscribe platform={platform} style={{marginRight:"5px"}}/>
+                                    {auth.user && <Button onClick={() => { setShowCreateQuiz(true) }}  variant="primary btn-lg" >Create Quiz</Button>}
                                     <CreateQuiz show={showCreateQuiz} handleClose={() => { setShowCreateQuiz(false) }}></CreateQuiz>
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"

@@ -22,7 +22,7 @@ function Home() {
         dispatch(getQuizzes(
             {
                 platformId: platform._id,
-                'expand' : "platformId(select=name,icon)",
+                'expand' : "platformId(select=name,icon,owner,subscribers)",
                 sort,
                 offset: 0,
                 limit: 4 * page
@@ -33,6 +33,12 @@ function Home() {
     const showMoreQuizzes = () => {
         if (quizzes.length < quizTotalCount)
             setPage(page + 1)
+    }
+    
+    const hasWritePermissions = (id, quiz) => {
+        return id === quiz.owner || id === quiz.platformId.owner 
+            || quiz.platformId.subscribers.find(s => s.userId === id && s.role === 'Moderator') !== undefined
+            ? true : false  
     }
                                             // need this condition to prevent quizzes from an old query from displaying (e.g. visit Platform A then visit Platform B; B briefly shows A's quizzes)
     if (isGetQuizzesLoading || !quizzes || (quizzes.length > 0 && quizzes[0].platformId._id !== id)) {
@@ -60,10 +66,10 @@ function Home() {
                 (
                     <div>
                         <Row xs={1} md={4} className="g-4 me-auto">
-                        {quizzes.map((quiz, idx) => (
+                        {quizzes.map((quiz, idx) => ( quiz.status==='published' || (quiz.status==='draft' && auth.user && (hasWritePermissions(auth.user.id, quiz))) ? 
                             <Col align="center">
                                 <QuizCardMini quiz={quiz} showPlatform={false}></QuizCardMini>
-                            </Col>
+                            </Col>:<></>
                         ))}
                         </Row>
                         <Row >

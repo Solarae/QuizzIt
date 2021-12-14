@@ -2,12 +2,18 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import jwtDecode from 'jwt-decode'
 import User from '../models/User.js'
-import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
+import { uploadImgToCloud, queryBuilder, paginateQuery, assignCreator } from "./util.js";
 
 import { JWT_SECRET } from '../config.js';
 import { validateSignUpInput, validateSignInInput, validateEmail } from '../utils/validators.js';
 
 import { io, onlineUsers } from '../index.js'
+import { deletePlatform } from "./platform.js";
+import Platform from "../models/Platform.js";
+import Report from "../models/Report.js";
+import Quiz from "../models/Quiz.js";
+import Award from "../models/Award.js";
+import Submission from "../models/Submission.js";
 
 export const signin = async (req, res) => {
     const { username, password } = req.body;
@@ -198,7 +204,9 @@ export const editAccount = async (req, res) => {
 }
 
 export const deleteAccount = async (req, res) => {
-    const { id, password } = req.body
+    const { id, password,createdPlatforms,subscribedPlatforms} = req.body
+    console.log("createdPlatforms                          "+createdPlatforms)
+    console.log("subscribed platforms                      "+subscribedPlatforms)
     const errors = {}
 
     try {
@@ -212,16 +220,67 @@ export const deleteAccount = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
-        // delete the user
-        const deletedUser = await User.findByIdAndDelete(id)
-        if (!deletedUser) return res.status(404).json({ success: false })
+        //for each subscribed platform, remove subscriptions, leaderboard info
+        subscribedPlatforms.forEach(async (platform)=>{
+            await Platform.findByIdAndUpdate(
+                platform._id,
+                { $pull: { subscribers: { userId: id }  , daily_leaderboard:{userId:id}  , monthly_leaderboard:{userId:id}  ,   weekly_leaderboard:{userId:id}  , yearly_leaderboard:{userId:id}  , allTime_leaderboard:{userId:id} , reports:{userId:id}  },  
+            })
+        })
+
+        //for created platforms, transfer ownership to moderator,if no moderator, transfer to consumer, if no consumer, simply delete platform
+        createdPlatforms.forEach(async (element)=>{
+
+            let platform = await Platform.findById(element._id)
+            let moderators = platform.subscribers.find(s=>s.role=="Moderator")
+            //assign creator
 
 
-        //for platforms, check if user is owner, if is owner, then assign owner status to first moderator found
+            if(moderators){
+                //assign creator to one of the moderator
+                assignCreator(platform._id, moderators.userId)
+            }
+            //assign to consumer
+            else if(platform.subscribers && platform.subscribers.length>1){
+                let consumer = platform.subscribers.find(s=>s.role=="Consumer")
+                assignCreator(platform._id,consumer.userId)
+            }
+            //no one to assign. Delete platform
+            else{
+                await Report.deleteMany({platformId:platform._id})
+                await Quiz.deleteMany({platformId:platform._id})
+                await Award.deleteMany({platformId:platform._id})
+
+                await Platform.findByIdAndDelete(platform._id)
+            }
+        })
+
+
+
+        //delete all the reports 
+        await Report.deleteMany({submittedBy:id})
+
+        //delete all submissions
+        await Submission.deleteMany({userId:id})
+
+        //delete all the quizzes made
+
+        let ownedQuizzes = await Quiz.find({owner:id})
+
+        ownedQuizzes.forEach(async (quiz)=>{
+
+            //for every quiz, delete the submissions and reports that utilizes those quiz
+            await Submission.deleteMany({quizId:quiz._id})
+            await Report.deleteMany({submittedBy:quiz._id})
+        })
+
+        //delete quizzes
+        await Quiz.deleteMany({owner:id})
         
 
-
-
+        // finally, delete the user
+        const deletedUser = await User.findByIdAndDelete(id)
+        if (!deletedUser) return res.status(404).json({ success: false })
 
 
         return res.status(200).json({

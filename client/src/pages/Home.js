@@ -48,15 +48,16 @@ function Home() {
         console.log("searching");
 
         dispatch(searchPlatform({
-            query: { 'sort': "likes.totalLikes desc" },
+            query: { 'sort': "subscribers.size desc" },
             page: 1,
             limit: platformLimit
         }))
 
         dispatch(searchQuiz({
             query: {
-                'expand' : "platformId(select=name,icon)",
-                'sort': "likes.totalLikes desc" 
+                'status': 'published',
+                'expand': "platformId(select=name,icon)",
+                'sort': "submissionCount desc"
             },
             page: 1,
             limit: quizLimit
@@ -72,7 +73,7 @@ function Home() {
     useEffect(() => {
         if (quizzes && quizzes.length !== quizLimit) setQuizLimit(maxLimit)
     }, [quizzes]);
-    
+
 
     if (isSearchPlatformLoading || isSearchQuizLoading || !platforms || !quizzes) {
         return (<Loading />)
@@ -87,7 +88,7 @@ function Home() {
                     <div className="col-9" style={{}}>
                         <Container>
                             <Row className="">
-                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Quizzes</h5>
+                                <h5><i class="bi bi-graph-up-arrow"></i>  Popular Quizzes</h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
                                 {quizzes.slice(0, quizLimit - 1).map((q, idx) => (
@@ -102,9 +103,9 @@ function Home() {
                             </Row>
 
                             <hr />
-                            
+
                             <Row className="">
-                                <h5><i class="bi bi-graph-up-arrow"></i>  Trending Platforms </h5>
+                                <h5><i class="bi bi-graph-up-arrow"></i>  Popular Platforms </h5>
                             </Row>
                             <Row xs={1} md={4} className="g-4 me-auto">
                                 {platforms.slice(0, platformLimit - 1).map((p, idx) => (
@@ -122,7 +123,9 @@ function Home() {
 
 
                     </div>
-                    <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    <div className="col-3" style={{}}>
+                        <MiniLeaderboard {...leaderboardProps}></MiniLeaderboard>
+                    </div>
                 </div>
             </div>
         </div >
