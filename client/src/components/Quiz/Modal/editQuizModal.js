@@ -57,8 +57,8 @@ const EditQuestionModal = ({ quiz, show, setShow }) => {
                   <Form.Control type="text" defaultValue={values.time} disabled={quiz.status === 'published'} name="time" onChange={onChange}  required/>
               </Form.Group>
               <Form.Group controlId="formBannerFile" className="mb-3">
-                  <Form.Label>Quiz Banner</Form.Label>
-                  <Form.Control type="file" onChange={onImageChange}/>
+                  <Form.Label>Quiz Thumbnail</Form.Label>
+                  <Form.Control type="file" onChange={onImageChange} accept=".png, .jpg, .jpeg"/>
               </Form.Group>
           </Modal.Body>
           <Modal.Footer className="justify-content-between"> 
