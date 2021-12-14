@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { getQuizSubmission, getSubmissions } from "../actions/submissionActions"
 import Pagination from '../components/Pagination'
 import Loading from "../components/Loading";
+import  NotFound  from '../components/NotFound'
 
 function ViewSubmission() {
     const dispatch = useDispatch()
@@ -32,6 +33,11 @@ function ViewSubmission() {
     const handleOnclick = (e) =>{
         const submissionId = e.target.getAttribute('submissionId')
         history.push(`/submission/reviewSubmission/${submissionId}`)
+    }
+
+
+    if (!user){
+        return <NotFound></NotFound>
     }
 
     if (isGetSubmissionLoading) {

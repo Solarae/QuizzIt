@@ -61,7 +61,13 @@ function Quiz() {
         }
     }
     const handleViewSubmission = () => {
-        history.push(`/viewQuizSubmission/${quiz._id}`)
+        if (user){
+          history.push(`/viewQuizSubmission/${quiz._id}`)  
+        } 
+        else{
+           handleShowSignIn() 
+        }
+
     }
 
     return (
@@ -87,8 +93,8 @@ function Quiz() {
                             </tr>
                             <tr>
                                 <th>Number of Questions</th>
-                                {console.log(quiz)}
-                                {/* <th>{quiz.questions.length}</th> */}
+                                {/* {console.log(quiz)} */}
+                                <th>{quiz.questions.length}</th>
                             </tr>
                         </Table>
 
