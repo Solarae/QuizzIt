@@ -39,7 +39,7 @@ function ViewQuizReport() {
                         id,
                         query:{
                             userId: user.id,
-                            expand: 'platformId(select=name),quizId(select=name,platformId),submittedBy(select=username)',
+                            expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
                             sort: 'timeSubmitted desc',
                             offset: 10 * (page - 1),
                             limit: 10,

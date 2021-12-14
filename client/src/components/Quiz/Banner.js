@@ -125,7 +125,7 @@ function Banner({ isEdit }) {
                                     {(auth.isAuthenticated && hasWritePermissions(auth.user.id)) && <Button variant="danger btn-lg" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete</Button>}
                                     <EditQuizModal show={editModal} setShow = {setEditModal} quiz = {quiz} />
                                     <PublishQuizModal show={publishModal} setShow = {setPublishModal} quiz={quiz} />
-                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quiz={quiz} user={auth.user} />
+                                    <DeleteQuizModal show={deleteModal} setShow = {setDeleteModal} quizId={quiz._id} platformId={quiz.platformId._id} user={auth.user} />
                                     {/* { isModerator == true ? <Link to={`/viewQuizReport/${platform._id}`}> <Button >View Quiz Reports</Button></Link> : <></> } */}
                                     <CopyToClipboard text={window.location.href}>
                                         <i className="bi bi-share"

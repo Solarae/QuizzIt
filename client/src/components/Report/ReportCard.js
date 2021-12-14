@@ -63,7 +63,7 @@ function ReportCard({ user, report,page }) {
                     <Button variant="warning" onClick={handleDeleteReport}> Delete Report </Button> {' '}  
                     {/* <Button variant="danger" onClick={handleShowDelete}> Delete Quiz </Button>  */}
                     <Button variant="danger" style={{ marginLeft: "10px" }} onClick={()=>ToggleDeleteModal()}>Delete Quiz</Button>
-                    <DeleteQuizModal user={user} page={page} show={deleteModal} setShow = {setDeleteModal} quiz={report.quizId} />
+                    <DeleteQuizModal user={user} page={page} show={deleteModal} setShow = {setDeleteModal} quizId={report.quizId._id} platformId={report.platformId._id} />
                     
                     
 

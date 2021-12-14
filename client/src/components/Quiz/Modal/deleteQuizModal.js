@@ -5,38 +5,37 @@ import { deleteQuiz } from '../../../actions/quizActions';
 import { useHistory } from 'react-router-dom'
 import { deleteManyPlatformReport, deleteManyQuizReport } from '../../../actions/reportActions';
 
-const DeleteQuizModal = ({ quiz, show, setShow,user,page }) => {
+const DeleteQuizModal = ({ quizId,platformId, show, setShow,user,page }) => {
   const dispatch = useDispatch()
   const history = useHistory()
   const closeModal = (err) =>{
     setShow(!show)
   }
-  
-  const id = quiz.platformId._id
   const auth = useSelector((state)=>state.auth)
   const handleSubmit = (e) =>{
     e.preventDefault()
     setShow(!show)
 
-
+    console.log("quizId "+quizId)
+    console.log("platformId "+platformId)
     //delete all reports associated with quiz
     dispatch(deleteManyQuizReport(
       {
           userId: auth.user.id,
-          quizId: quiz._id,
+          quizId: quizId,
       }
     ))
     dispatch(deleteQuiz({ 
-      id:quiz._id,
+      id:quizId,
       query:{
         userId: user.id,
-        expand: 'platformId(select=name),quizId(select=name,platformId),submittedBy(select=username)',
+        expand: 'platformId(select=name),quizId(select=name),submittedBy(select=username)',
         sort: 'timeSubmitted desc',
         offset: 10 * (page - 1),
         limit: 10
       },
       history:history,
-      platformId:id
+      platformId:platformId
     }))
   }
 
