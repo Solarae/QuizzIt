@@ -140,7 +140,7 @@ function EditQuiz() {
                                 {quiz.status === 'draft' && <Button onClick={handleShowAddQuestion} variant="primary btn-lg" style={{}}>Add Question</Button>}
                             </Col>
                             <Col className='justify-content-between'>
-                                {quiz.status === 'draft' && <Button disabled={qno===-1} onClick={handleShowEditQuestion} variant="outline-primary btn-lg" style={{}}>Edit Question</Button>}
+                                {<Button disabled={qno===-1} onClick={handleShowEditQuestion} variant="outline-primary btn-lg" style={{}}>Edit Question</Button>}
                             </Col>
                             <Col className='justify-content-between'>
                                 {quiz.status === 'draft' && <Button onClick={handleDeleteQuestion} disabled={qno===-1} variant="danger btn-lg" style={{}}>Delete Question</Button>}
