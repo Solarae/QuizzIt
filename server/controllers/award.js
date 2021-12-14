@@ -1,6 +1,7 @@
 import { uploadImgToCloud, queryBuilder, paginateQuery } from "./util.js";
 import Platform from '../models/Platform.js'
 import Award from '../models/Award.js'
+import User from "../models/User.js";
 
 export const createAward = async (req, res) => {
     const { userId, title, description, icon, platformId, requirementType, requirementCount } = req.body;
@@ -129,10 +130,38 @@ export const deleteAward = async (req, res) => {
             return res.status(200).json({ errors: errors });
         }
 
+
+
+        //find list of id of user that has this award
+
+        let ids = []
+
+        let users = await User.find({})
+
+        users.forEach((user)=>{
+            let awards = user.awards
+
+            let awd = awards.find((awdId)=>awdId == req.params.id)
+
+            if(awd) ids.push(user._id)
+        })
+
+        console.log("The ids needed fix are " + ids)
+
+        //for every user id that has the award, remove it
+        ids.forEach(async (id)=>{
+            await User.findByIdAndUpdate(
+                id,
+                { $pull: { awards: req.params.id }}
+            )
+        })
+
+
         const deletedAward = await Award.findByIdAndDelete(req.params.id);
         if (!deletedAward) return res.status(404).json({ msg: "Something went wrong with deleting the award" });
         res.status(200).json({ award: award })
     } catch (error) {
+        console.log(error)
         res.status(404).json({ msg: error.message })
     }
 }
