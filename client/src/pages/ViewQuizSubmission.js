@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { getQuizSubmission, getSubmissions } from "../actions/submissionActions"
 import { Table, Row, Col } from "react-bootstrap"
 import { useHistory, useParams } from 'react-router-dom';
+
+import { getQuizSubmission, getSubmissions } from "../actions/submissionActions"
 import Pagination from '../components/Pagination'
+import Loading from "../components/Loading";
 import  NotFound  from '../components/NotFound'
 
 function ViewSubmission() {
@@ -39,7 +41,7 @@ function ViewSubmission() {
     }
 
     if (isGetSubmissionLoading) {
-        return ( <div> Loading... </div> )
+        return ( <Loading/> )
     }
 
     return(

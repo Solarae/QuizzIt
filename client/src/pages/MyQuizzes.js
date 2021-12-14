@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react'
 import { Dropdown, Row, Col, Table } from 'react-bootstrap';
 import { useSelector, useDispatch } from 'react-redux'
-import Pagination from '../components/Pagination'
 import { useLocation, useHistory } from 'react-router-dom'
+
+import Pagination from '../components/Pagination'
 import { searchQuiz } from '../actions/searchActions'
+import Loading from '../components/Loading'
+
 
 function MyQuizzes() {
     const dispatch = useDispatch()
@@ -39,7 +42,7 @@ function MyQuizzes() {
     }, [search, dispatch]);
 
     if (isSearchQuizLoading && !quizzes) {
-        return (<div>Loading...</div>)
+        return (<Loading/>)
     }
 
     if (errors)
