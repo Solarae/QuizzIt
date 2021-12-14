@@ -71,7 +71,7 @@ function ReviewSubmission() {
                 <h2>Time Spent: {submission.timeTaken} seconds </h2>
                 <div style={{ height: "10vh" }}></div>
                 <Row style={{ 'height': '60vw' }}>
-                    <Col className="my-auto" xs={2} style={{ height: "80%" }} >
+                    <Col className="my-50" xs={2} style={{ height: "60%" }} >
                         <div ref={btnListRef} className="overflow-auto my-auto questionScroll" style={{ height: "100%", borderRight: 'solid', borderWidth: "1px", borderColor: '#bfbfbf', display: 'inline-block', paddingRight: '3vw', paddingTop: '1vw', paddingBottom: '1vw' }}>
 
                             {quiz.questions.map((question, idx) => (
@@ -85,9 +85,11 @@ function ReviewSubmission() {
                         </div>
                     </Col>
                     <Col align='center' xs={8} style={{ height: "90%" }}>
-                        <Row style={{ height: '40%' }}>
+                        <Row>
                             <h2>Question {qno + 1}</h2>
                             <hr />
+                        </Row>
+                        <Row style={{ minHeight: '15%' }}>
                             <Card
                                 border="dark"
                                 bg='Light'
@@ -101,7 +103,7 @@ function ReviewSubmission() {
                         </Row>
 
                         <br />
-                        <Row style={{  }}>
+                        <Row style={{}}>
                             <Col xs={6}>
                                 <Option text={question.choices[0]}
                                     isAnswer={question.answer === 'a'}
@@ -116,7 +118,7 @@ function ReviewSubmission() {
                                 ></Option>
                             </Col>
                         </Row>
-                        <Row style={{  }} >
+                        <Row style={{}} >
                             <Col xs={6}>
                                 <Option text={question.choices[2]}
                                     isAnswer={question.answer === 'c'}
@@ -131,12 +133,12 @@ function ReviewSubmission() {
                             </Col>
                         </Row>
 
-                        {/* <div style={{ height: "5vw" }}></div> */}
+                        <div style={{ height: "1vw" }}></div>
                         <Row align='center' style={{ height: '10%' }}>
                             <Col xs={4} ></Col>
                             <Col className="d-flex justify-content-between" xs={4} style={{}} >
-                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%" }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
-                                <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} style={{ width: "45%" }} >Next <i class="bi bi-caret-right-fill"></i></Button>
+                                <Button variant="primary" onClick={handlePrev} disabled={qno == 0} style={{ width: "45%", height: '60%' }}><i class="bi bi-caret-left-fill"></i> Previous</Button>
+                                <Button variant="primary" onClick={handleNext} disabled={qno == quiz.questions.length - 1} style={{ width: "45%", height: '60%' }} >Next <i class="bi bi-caret-right-fill"></i></Button>
                             </Col>
                             <Col xs={4} ></Col>
                         </Row>
