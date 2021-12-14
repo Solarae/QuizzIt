@@ -27,7 +27,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                 option4: question.choices[3],
             })
         }
-    }, [dispatch, question,show])
+    }, [dispatch, question, show])
 
     const [optionState, setOptionState] = useState(question.answer)
     const closeModal = (err) => {

@@ -56,6 +56,7 @@ export const createAward = ({ userId, title, description, iconImage, platformId,
         }
 
     } catch (error) {
+        console.log(error.response)
         console.log("error message: " + error.message);
         dispatch({
             type: CREATE_AWARD_FAIL
