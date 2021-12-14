@@ -103,7 +103,7 @@ function EditQuizQuestion({ quizId, show, handleClose, question }) {
                     {optionList}
                     <Form.Group className="mb-3">
                         <Form.Label>Answer</Form.Label>
-                        <Form.Control as="select" value={values.answer} onChange={e => setOptionState(e.target.value)}>
+                        <Form.Control as="select" value={optionState} onChange={e => setOptionState(e.target.value)}>
                             <option value="a">Option 1</option>
                             <option value="b">Option 2</option>
                             <option value="c">Option 3</option>
