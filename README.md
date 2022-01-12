@@ -82,4 +82,4 @@ Distributed under the MIT License.
 
 Email: [ronnie.chen.rc@gmail.com](ronnie.chen.rc@gmail.com)
 
-Project Repoistory: [https://github.com/Solarae/Schedule-Builder](https://github.com/Solarae/Schedule-Builder)
+Project Repoistory: [https://github.com/Solarae/QuizzIt](https://github.com/Solarae/QuizzIt)
